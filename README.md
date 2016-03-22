@@ -1,5 +1,7 @@
 # React Keys
 
+[![Build Status](https://travis-ci.org/canalplus/react-keys.svg?branch=master)](https://travis-ci.org/canalplus/react-keys)
+
 Simple way to bind keyboard to react thinking with flux. (< 4ko gizped)
 
 ## Why ?
