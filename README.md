@@ -1,6 +1,7 @@
 # React Keys
 
 [![Build Status](https://travis-ci.org/canalplus/react-keys.svg?branch=master)](https://travis-ci.org/canalplus/react-keys)
+[![codecov.io](https://codecov.io/github/canalplus/react-keys/coverage.svg?branch=master)](https://codecov.io/github/canalplus/react-keys?branch=master)
 
 Simple way to bind keyboard to react thinking with flux. (< 4ko gizped)
 
