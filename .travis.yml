@@ -1,7 +1,14 @@
 language: node_js
 node_js:
-  - "4"
+  - '4'
 before_install:
-  - 'npm i react && npm i react-dom'
+  - npm i react && npm i react-dom
 after_success:
-  - 'npm run coverage && ./node_modules/.bin/codecov'
+  - npm run coverage && ./node_modules/.bin/codecov
+deploy:
+  provider: npm
+  email: florent.duveau@canal-plus.com
+  on:
+    tags: true
+  api_key:
+    secure: pmHYsvZGtFrIC0hARWKv/z3KkvDvFgDsOgJV7CigTJWtj0f8SWGzv3NAx/4go2BjoIUwsKuTJUOna0m3cel9Ntr7PfM2mL+TvQprBe70bjqKpfJmzNqYUQjoL4vASQ1Zoj7FzqnqzohhF3yP3D+kGxBb4ZYfFHm1XOOu5jDF3uC3X/+PnbyQUDhirW3JoOSLEONYWLplAXCncALi2pNvK4tmbx3KCywN61gImm4o8uzacBhynjzEWj1slbWAfnFdxeWc6s358kJWuaqJ8vWONb2dOYw9V+Ek95SdIZl4FQ17WGuMz5s7Igmpyab269ZHN0kotLVLjn3F/gWJ5J8pga9pNgswudJoSrMXlsWN9G0kHKFN9zdWF9H3AvQWyR2dccExKX+WatDdgoBGc59lXzrkkhiqFfu5OfIWIGqmY43jRo2aFk/19F/VtX/n+7r/wFKAwlVVe3Dm/hhwyCzrdyr0cDgtcFcZYsBbxMaLENLPXBoTjRlz5PtGm1+/ZWH0wBcst7KFvqfvhfMrUMwEWuAnX3BgO+d3MLT5vwyRFcoVwT8UvnB8B3i1WTvfDDjW4GPE6OoFXX3/dD8wAYpwFQ0YB7HdNKBWu6I4FIUU0njq+ugnD74J9xfISs77XY4C2ZT23pgKCiHwMyDsfIjWcpdKc8yzYwM6b1qh3GH+X9M=
