@@ -3,21 +3,22 @@
 [![Build Status](https://travis-ci.org/canalplus/react-keys.svg?branch=master)](https://travis-ci.org/canalplus/react-keys)
 [![codecov.io](https://codecov.io/github/canalplus/react-keys/coverage.svg?branch=master)](https://codecov.io/github/canalplus/react-keys?branch=master)
 
-Simple way to bind keyboard to react thinking with flux. (< 4ko gizped)
+Simple way to bind keyboard to react with flux in mind. (< 4ko gzipped)
 
 ## Why ?
 
-Need non intrusive and fast way to bind keys to react UI.
+The need of a non-intrusive and fast way to bind keys to a react-powered UI.
 
-##Dependences
+## Dependencies
 
-`react` and `react-dom` need to be installed :
+While not having direct dependencies, react-keys have to be used with `react` and `react-dom`:
+
 ```javscript
 npm i react -S
 npm i react-dom -S
 ```
 
-## Exemple
+## Example
 
 ```javascript
 import {KeyBinder} from 'react-keys';
@@ -45,6 +46,7 @@ function onLeftKey(element) {
   dispatch.action(element.id); //new element id focused
 }
 ```
+
 ## API
 
 ### KeyBinder (React Component)
