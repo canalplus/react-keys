@@ -9,6 +9,10 @@ Simple way to bind keyboard to react with flux in mind. (< 4ko gzipped)
 
 The need of a non-intrusive and fast way to bind keys to a react-powered UI.
 
+## Install
+
+`npm i react-keys -S`
+
 ## Dependencies
 
 While not having direct dependencies, react-keys have to be used with `react` and `react-dom`:
