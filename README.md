@@ -26,6 +26,9 @@ npm i react-dom -S
 
 ```javascript
 import {KeyBinder} from 'react-keys';
+import {keysInit} from 'react-keys';
+
+keysInit(); // must call it once at the app starting to enable the triggering
 
 const Component = () => {
   return (
@@ -108,7 +111,7 @@ register('strape:update', (elements) => {
 
 + `strape:update` --> triggered everytime strape structure is updated
 
-### keysUnit (function)
+### keysInit (function)
 
 By default `react-keys` use `keydown` event to trigger actions, but you can overwride the behavior to suite better your needs.
 
