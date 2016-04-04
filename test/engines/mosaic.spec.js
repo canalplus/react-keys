@@ -41,13 +41,30 @@ describe('engine/mosaic.js', () => {
     },
   ];
 
-  it('findRightElement should find first id element at right', () => {
-    const secondEl = {
-      id: 2,
+  it('findRightElement shoud return first element on right when not align', () => {
+    const exempleCoords = [
+      {
+        id: '1',
+        left: 100,
+        top: 0,
+      },
+      {
+        id: '2',
+        left: 200,
+        top: 0,
+      },
+      {
+        id: '3',
+        left: 300,
+        top: 0,
+      },
+    ];
+    const selectedElement = {
+      id: '1',
+      left: 100,
       top: 0,
-      left: 10,
     };
-    findRightElement(secondEl, mosaicCoords).should.equal(3);
+    findRightElement(selectedElement, exempleCoords).should.equal('2');
   });
 
   it('findRightElement should return undefined when there is no elements at right', () => {
@@ -57,6 +74,32 @@ describe('engine/mosaic.js', () => {
       left: 20,
     };
     expect(findRightElement(thirdEl, mosaicCoords)).to.be.undefined;
+  });
+
+  it('findRightElement shoud return first element on right when not align', () => {
+    const exempleCoords = [
+      {
+        id: '1',
+        left: 200,
+        top: 0,
+      },
+      {
+        id: '2',
+        left: 200,
+        top: 100,
+      },
+      {
+        id: '3',
+        left: 0,
+        top: 300,
+      },
+    ];
+    const selectedElement = {
+      id: '3',
+      left: 0,
+      top: 300,
+    };
+    findRightElement(selectedElement, exempleCoords).should.equal('2');
   });
 
   it('findLeftElement should find first element id at left', () => {
@@ -77,6 +120,58 @@ describe('engine/mosaic.js', () => {
     expect(findLeftElement(firstEl, mosaicCoords)).to.be.undefined;
   });
 
+  it('findLeftElement shoud return first element on left when not align on bottom', () => {
+    const porfilesCoords = [
+      {
+        id: '1',
+        left: 300,
+        top: 0,
+      },
+      {
+        id: '2',
+        left: 100,
+        top: 100,
+      },
+      {
+        id: '3',
+        left: 100,
+        top: 300,
+      },
+    ];
+    const selectedElement = {
+      id: '1',
+      left: 300,
+      top: 0,
+    };
+    findLeftElement(selectedElement, porfilesCoords).should.equal('2');
+  });
+
+  it('findLeftElement shoud return first element on left when not align on top', () => {
+    const porfilesCoords = [
+      {
+        id: '1',
+        left: 300,
+        top: 400,
+      },
+      {
+        id: '2',
+        left: 100,
+        top: 100,
+      },
+      {
+        id: '3',
+        left: 100,
+        top: 300,
+      },
+    ];
+    const selectedElement = {
+      id: '1',
+      left: 300,
+      top: 400,
+    };
+    findLeftElement(selectedElement, porfilesCoords).should.equal('3');
+  });
+
   it('findDownElement should return first element id at down', () => {
     const secondEl = {
       id: 2,
@@ -86,6 +181,32 @@ describe('engine/mosaic.js', () => {
     findDownElement(secondEl, mosaicCoords).should.equal(5);
   });
 
+  it('findDownElement should return first element id at down #2', () => {
+    const exempleCoords = [
+      {
+        id: '1',
+        left: 0,
+        top: 0,
+      },
+      {
+        id: '2',
+        left: 0,
+        top: 100,
+      },
+      {
+        id: '3',
+        left: 0,
+        top: 200,
+      },
+    ];
+    const selectedElement = {
+      id: '1',
+      left: 0,
+      top: 0,
+    };
+    findDownElement(selectedElement, exempleCoords).should.equal('2');
+  });
+
   it('findDownElement should return undefined when there is no elements at down', () => {
     const fifthEl = {
       id: 5,
@@ -93,6 +214,32 @@ describe('engine/mosaic.js', () => {
       left: 10,
     };
     expect(findDownElement(fifthEl, mosaicCoords)).to.be.undefined;
+  });
+
+  it('findDownElement shoud return first element on top when not align', () => {
+    const exampleCoords = [
+      {
+        id: '1',
+        left: 0,
+        top: 100,
+      },
+      {
+        id: '2',
+        left: 200,
+        top: 300,
+      },
+      {
+        id: '3',
+        left: 300,
+        top: 300,
+      },
+    ];
+    const selectedElement = {
+      id: '1',
+      left: 0,
+      top: 100,
+    };
+    findDownElement(selectedElement, exampleCoords).should.equal('2');
   });
 
   it('findUpElement should return first element id at up', () => {
@@ -111,5 +258,57 @@ describe('engine/mosaic.js', () => {
       left: 10,
     };
     expect(findUpElement(secondEl, mosaicCoords)).to.be.undefined;
+  });
+
+  it('findUpElement shoud return first element on top when not align', () => {
+    const porfilesCoords = [
+      {
+        id: '1',
+        left: 100,
+        top: 100,
+      },
+      {
+        id: '2',
+        left: 200,
+        top: 100,
+      },
+      {
+        id: '3',
+        left: 0,
+        top: 200,
+      },
+    ];
+    const selectedElement = {
+      id: '3',
+      left: 0,
+      top: 200,
+    };
+    findUpElement(selectedElement, porfilesCoords).should.equal('1');
+  });
+
+  it('findUpElement shoud return first element on top on colunm', () => {
+    const exampleCoords = [
+      {
+        id: '1',
+        left: 0,
+        top: 100,
+      },
+      {
+        id: '2',
+        left: 0,
+        top: 200,
+      },
+      {
+        id: '3',
+        left: 0,
+        top: 300,
+      },
+    ];
+    const selectedElement = {
+      id: '3',
+      left: 0,
+      top: 300,
+    };
+    findUpElement(selectedElement, exampleCoords).should.equal('2');
   });
 });

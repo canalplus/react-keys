@@ -10,31 +10,38 @@ function createCoordsObject(el) {
 }
 
 export function findRightElement(elCoords, mosaicCoords) {
-  const rightElement = mosaicCoords
-    .filter(el => el.top === elCoords.top && el.left > elCoords.left)
-    .sort((prev, next) => prev.left - next.left);
-  return rightElement[0] ? rightElement[0].id : undefined;
+  const rightElements = mosaicCoords
+    .filter(el => el.left > elCoords.left)
+    .sort((prev, next) =>
+    (Math.abs(prev.top - elCoords.top) - Math.abs(next.top - elCoords.top))
+    - (next.left - prev.left));
+  return rightElements[0] ? rightElements[0].id : undefined;
 }
 
 export function findLeftElement(elCoords, mosaicCoords) {
-  const leftElement = mosaicCoords
-    .filter(el => el.top === elCoords.top && el.left < elCoords.left)
-    .sort((prev, next) => next.left - prev.left);
-  return leftElement[0] ? leftElement[0].id : undefined;
+  const leftElements = mosaicCoords
+    .filter(el => el.left < elCoords.left)
+    .sort((prev, next) => prev.left +
+    (Math.abs(prev.top - elCoords.top) - Math.abs(next.top - elCoords.top)));
+  return leftElements[0] ? leftElements[0].id : undefined;
 }
 
 export function findDownElement(elCoords, mosaicCoords) {
-  const downElement = mosaicCoords
-    .filter(el => el.left <= elCoords.left && el.top > elCoords.top)
-    .sort((prev, next) => (prev.top - next.top) - (prev.left - next.left));
-  return downElement[0] ? downElement[0].id : undefined;
+  const downElements = mosaicCoords
+    .filter(el => el.top > elCoords.top)
+    .sort((prev, next) =>
+    (Math.abs(prev.left - elCoords.left) - Math.abs(next.left - elCoords.left))
+    - (next.top - prev.top));
+  return downElements[0] ? downElements[0].id : undefined;
 }
 
 export function findUpElement(elCoords, mosaicCoords) {
-  const upElement = mosaicCoords
-    .filter(el => el.left <= elCoords.left && el.top < elCoords.top)
-    .sort((prev, next) => (next.top + next.left) - (prev.top + prev.left));
-  return upElement[0] ? upElement[0].id : undefined;
+  const upElements = mosaicCoords
+    .filter(el => el.top < elCoords.top)
+    .sort((prev, next) =>
+    prev.top +
+    (Math.abs(prev.left - elCoords.left) - Math.abs(next.left - elCoords.left)));
+  return upElements[0] ? upElements[0].id : undefined;
 }
 
 
