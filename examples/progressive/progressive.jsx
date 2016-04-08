@@ -30,6 +30,7 @@ const Strape = ({selectedId, marginLeft}) => {
       options={{
         strategy: 'progressive',
         gap: 30,
+        circular: true,
       }}
       wrapper="#wrapper"
       keys={{onRightKey, onLeftKey, onDownKey, onUpKey, onEnterKey}}>

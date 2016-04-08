@@ -1,6 +1,7 @@
 # React Keys
 
 [![Build Status](https://travis-ci.org/canalplus/react-keys.svg?branch=master)](https://travis-ci.org/canalplus/react-keys)
+[![npm version](https://badge.fury.io/js/react-keys.svg)](https://badge.fury.io/js/react-keys)
 [![codecov.io](https://codecov.io/github/canalplus/react-keys/coverage.svg?branch=master)](https://codecov.io/github/canalplus/react-keys?branch=master)
 
 Simple way to bind keyboard to react with flux in mind. (< 4ko gzipped)
@@ -80,7 +81,8 @@ Available modes :
 #### `options` : object
 
 + `strategy` : string (progressive|cut) (default : "progressive") Useful with strape mode. Change navigation behavior.
-+ `ga£p : integer (default : 0) Useful with strape mode. Indicate a gap for margin.
++ `gap` : integer (default : 0) Useful with strape mode. Indicate a gap for margin.
++ `circular` : boolean (default : false) Useful with strape mode. Indicate if the strape is circular.
 
 #### `active` : boolean (default : true)
 
