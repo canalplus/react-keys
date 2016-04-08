@@ -56,9 +56,9 @@ function onLeftKey(element) {
 
 ## API
 
-### KeyBinder (React Component)
+### `KeyBinder` (React Component)
 
-#### keys : object
+#### `keys` : object
 
 Object of functions triggered by each actions
 
@@ -69,31 +69,36 @@ Available actions :
 + `onLeftKey`
 + `onEnterKey`
 
-#### mode: string (default : "mosaic")
+#### `mode` : string (default : "mosaic")
 
 Mode used to calculate actions
 
 Available modes :
-+ mosaic : regular table
-+ strape : horizontal list scrollable
++ `mosaic` : regular table
++ `strape` : horizontal list scrollable
 
-#### active: boolean (default : true)
+#### `options` : object
+
++ `strategy` : string (progressive|cut) (default : "progressive") Useful with strape mode. Change navigation behavior.
++ `ga£p : integer (default : 0) Useful with strape mode. Indicate a gap for margin.
+
+#### `active` : boolean (default : true)
 
 Determine whether the keys are active or not for one KeyBinder. You can put many KeyBinder on one view but usually just one should be active.
 
-#### selector: string  (default "li") useful with mosaic mode
+#### `selector` : string  (default "li") useful with mosaic mode
 
 DOM element to define selected elements
 
-#### wrapper: string (default : "ul") useful with strape mode
+#### `wrapper` : string (default : "ul") useful with strape mode
 
 DOM element to define wrapper
 
-#### wChildren: string  (default "li") useful with strape mode
+#### `wChildren` : string  (default "li") useful with strape mode
 
 DOM element to define children elements
 
-### register (function)
+### `register` (function)
 
 React keys send some events when some stuff have been done with infos like geo positions. You can listen these events with `register`
 
@@ -111,7 +116,7 @@ register('strape:update', (elements) => {
 
 + `strape:update` --> triggered everytime strape structure is updated
 
-### keysInit (function)
+### `keysInit` (function)
 
 By default `react-keys` use `keydown` event to trigger actions, but you can overwride the behavior to suite better your needs.
 
@@ -127,7 +132,7 @@ keysInit((cb) => {
   });
 ```
 
-### keys
+### `keys`
 
 list of available keys triggered :
 + LEFT

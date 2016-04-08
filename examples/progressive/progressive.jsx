@@ -27,10 +27,11 @@ const Strape = ({selectedId, marginLeft}) => {
   return (
     <KeyBinder
       mode="strape"
-      wrapper="#wrapper"
       options={{
-        strategy: 'cut',
+        strategy: 'progressive',
+        gap: 30,
       }}
+      wrapper="#wrapper"
       keys={{onRightKey, onLeftKey, onDownKey, onUpKey, onEnterKey}}>
       <div id="wrapper">
         <ul style={listStyle}>
