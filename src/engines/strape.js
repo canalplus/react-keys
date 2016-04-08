@@ -17,6 +17,30 @@ export function defineMarginLeft(card, wrapper, marginLeft, options) {
   return margin;
 }
 
+export function findRightElement(cards, index, circular) {
+  let elementId = undefined;
+  if (index + 1 === cards.length) {
+    if (circular) {
+      elementId = cards[0].id;
+    }
+  } else {
+    elementId = cards[index + 1].id;
+  }
+  return elementId;
+}
+
+export function findLeftElement(cards, index, circular) {
+  let elementId = undefined;
+  if (index - 1 < 0) {
+    if (circular) {
+      elementId = cards[cards.length - 1].id;
+    }
+  } else {
+    elementId = cards[index - 1].id;
+  }
+  return elementId;
+}
+
 export function calculate(wrapper, cards, options) {
   const builtList = [];
   let marginLeft = 0;
@@ -26,10 +50,8 @@ export function calculate(wrapper, cards, options) {
     const coords = {
       id: card.id,
       marginLeft: marginLeft,
-      right: index + 1 === cards.length ?
-        cards[0].id : cards[index + 1].id,
-      left: index - 1 < 0 ?
-        cards[cards.length - 1].id : cards[index - 1].id,
+      right: findRightElement(cards, index, options.circular),
+      left: findLeftElement(cards, index, options.circular),
     };
 
     builtList.push(coords);

@@ -2,7 +2,10 @@
 import {
   calculate,
   defineMarginLeft,
+  findLeftElement,
+  findRightElement,
 } from '../../src/engines/strape';
+import {expect} from 'chai';
 
 describe('engine/strape', () => {
   describe('strategy : progressive', () => {
@@ -80,21 +83,21 @@ describe('engine/strape', () => {
     });
   });
   describe('strategy : cut', () => {
-    it('should defineMarginLeft return 60 when first card is outside with gap of 10', () => {
+    it('should defineMarginLeft return 100 when first card is outside', () => {
       const card = {id: 0, width: 50, left: 200};
       const wrapper = {width: 100, left: 100};
       const options = {strategy: 'cut', gap: 0};
       defineMarginLeft(card, wrapper, 0, options).should.equal(100);
     });
 
-    it('should defineMarginLeft return 60 when first card is outside with gap of 10', () => {
+    it('should defineMarginLeft return 200 when first card is outside twice', () => {
       const card = {id: 0, width: 50, left: 300};
       const wrapper = {width: 100, left: 100};
       const options = {strategy: 'cut', gap: 0};
       defineMarginLeft(card, wrapper, 0, options).should.equal(200);
     });
 
-    it('should defineMarginLeft return 60 when first card is outside with gap of 10', () => {
+    it('should defineMarginLeft return 200 when first card is outside twice with gap of 10', () => {
       const card = {id: 0, width: 50, left: 300};
       const wrapper = {width: 100, left: 100};
       const options = {strategy: 'cut', gap: 10};
@@ -108,4 +111,54 @@ describe('engine/strape', () => {
       defineMarginLeft(card, wrapper, 100, options).should.equal(100);
     });
   });
+
+  it('should findRightElement return next element', () => {
+    const cards = [
+      {id: 1},
+      {id: 2},
+    ];
+    findRightElement(cards, 0, false).should.equal(2);
+  });
+
+  it('should findRightElement return undefined on last element', () => {
+    const cards = [
+      {id: 1},
+      {id: 2},
+    ];
+    expect(findRightElement(cards, 1, false)).to.be.undefined;
+  });
+
+  it('should findRightElement return first id when circular on last element', () => {
+    const cards = [
+      {id: 1},
+      {id: 2},
+    ];
+    findRightElement(cards, 1, true).should.equal(1);
+  });
+
+  it('should findLeftElement return previous element', () => {
+    const cards = [
+      {id: 1},
+      {id: 2},
+    ];
+    findLeftElement(cards, 1, false).should.equal(1);
+  });
+
+  it('should findLeftElement return undefined on first element', () => {
+    const cards = [
+      {id: 1},
+      {id: 2},
+    ];
+    expect(findLeftElement(cards, 0, false)).to.be.undefined;
+  });
+
+  it('should findLeftElement return last id when circular on first element', () => {
+    const cards = [
+      {id: 1},
+      {id: 2},
+    ];
+    findRightElement(cards, 0, true).should.equal(2);
+  });
+
+
 });
