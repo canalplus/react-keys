@@ -3,12 +3,16 @@ import {hasDiff} from '../hasDiff';
 
 export function defineMarginLeft(card, wrapper, marginLeft, options) {
   let margin = marginLeft;
-  switch (options.strategy) {
-    default:
-      if (card.width + card.left - wrapper.left >
-        wrapper.width + marginLeft) {
+  if (card.width + card.left - wrapper.left >
+    wrapper.width + marginLeft) {
+    switch (options.strategy) {
+      case 'cut':
+        margin = card.left - wrapper.left + options.gap;
+        break;
+      case 'progressive':
+      default:
         margin = card.left + card.width - (wrapper.width + wrapper.left) + options.gap;
-      }
+    }
   }
   return margin;
 }
