@@ -159,6 +159,4 @@ describe('engine/strape', () => {
     ];
     findRightElement(cards, 0, true).should.equal(2);
   });
-
-
 });
