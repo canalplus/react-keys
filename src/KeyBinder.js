@@ -40,6 +40,10 @@ class KeyBinder extends Component {
       selector: 'li',
       wrapper: 'ul',
       wChildren: 'li',
+      options: {
+        strategy: 'progressive',
+        gap: 0,
+      },
     };
   }
 
@@ -94,7 +98,12 @@ class KeyBinder extends Component {
     let value = {};
     switch (this.props.mode) {
       case 'strape':
-        value = refreshStrape(dom, this.elements, this.props.wrapper, this.props.wChildren);
+        value = refreshStrape(
+          dom,
+          this.elements,
+          this.props.wrapper,
+          this.props.wChildren,
+          this.props.options);
         break;
       default:
         value = refreshMosaic(dom, this.elements, this.props.selector, this.props.focusedElementId);

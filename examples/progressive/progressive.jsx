@@ -27,6 +27,10 @@ const Strape = ({selectedId, marginLeft}) => {
   return (
     <KeyBinder
       mode="strape"
+      options={{
+        strategy: 'progressive',
+        gap: 30,
+      }}
       wrapper="#wrapper"
       keys={{onRightKey, onLeftKey, onDownKey, onUpKey, onEnterKey}}>
       <div id="wrapper">
