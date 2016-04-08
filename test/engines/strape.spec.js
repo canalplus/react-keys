@@ -101,7 +101,7 @@ describe('engine/strape', () => {
       defineMarginLeft(card, wrapper, 0, options).should.equal(210);
     });
 
-    it.only('should add margin to marginLeft param', () => {
+    it('should add margin to marginLeft param', () => {
       const card = {id: 0, width: 50, left: 200};
       const wrapper = {width: 100, left: 100};
       const options = {strategy: 'cut', gap: 10};

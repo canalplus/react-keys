@@ -19,6 +19,12 @@ class KeyBinder extends Component {
     this.prevFocusedElement = null;
     this.nextFocusedElement = null;
     this.listenerId = addListener(this.keysHandler, this);
+    this.keysOptions = {
+      ...{
+        strategy: 'progressive',
+        gap: 0,
+      }, ...this.props.options,
+    };
   }
 
   static get propTypes() {
@@ -40,10 +46,6 @@ class KeyBinder extends Component {
       selector: 'li',
       wrapper: 'ul',
       wChildren: 'li',
-      options: {
-        strategy: 'progressive',
-        gap: 0,
-      },
     };
   }
 
@@ -103,7 +105,7 @@ class KeyBinder extends Component {
           this.elements,
           this.props.wrapper,
           this.props.wChildren,
-          this.props.options);
+          this.keysOptions);
         break;
       default:
         value = refreshMosaic(dom, this.elements, this.props.selector, this.props.focusedElementId);
