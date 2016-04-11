@@ -3,8 +3,8 @@ import {_init, cb, addListener, removeListener, keysListeners} from '../src/list
 import sinon from 'sinon';
 
 describe('listener.js', () => {
-  afterEach(() => {
-    keysListeners.pop();
+  beforeEach(() => {
+    keysListeners.length = 0;
   });
 
   it('_init should listen on keydown event by default', sinon.test(function() {
