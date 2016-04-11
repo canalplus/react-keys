@@ -18,6 +18,7 @@ class KeyBinder extends Component {
     this.elements = [];
     this.prevFocusedElement = null;
     this.nextFocusedElement = null;
+    this.previousDirection = null;
     this.listenerId = addListener(this.keysHandler, this);
     this.keysOptions = {
       ...{
@@ -117,14 +118,50 @@ class KeyBinder extends Component {
     this.nextFocusedElement = selectedElement || this.nextFocusedElement;
   }
 
-  _giveFocusTo(direction) {
-    this.prevFocusedElement = this.nextFocusedElement;
-    if (!this.prevFocusedElement) {
-      return null;
+  _flipflop(direction) {
+    let previousDirection = null;
+    switch (direction) {
+      case 'up':
+        previousDirection = this.previousDirection === 'down' ? 'up' : null;
+        break;
+      case 'right':
+        previousDirection = this.previousDirection === 'left' ? 'right' : null;
+        break;
+      case 'down':
+        previousDirection = this.previousDirection === 'up' ? 'down' : null;
+        break;
+      case 'left':
+        previousDirection = this.previousDirection === 'right' ? 'left' : null;
+        break;
+      default:
     }
-    if (this.prevFocusedElement[direction]) {
-      this.nextFocusedElement =
-        this.elements.find(e => e.id === this.prevFocusedElement[direction]);
+    if (previousDirection) {
+      this._updateElements(this.prevFocusedElement, this.nextFocusedElement, previousDirection);
+    }
+    return !!previousDirection;
+  }
+
+  _updateElements(prevFocusElement, nextFocusedElement, previousDirection) {
+    const intermediate = prevFocusElement;
+    this.prevFocusedElement = nextFocusedElement;
+    this.nextFocusedElement = intermediate;
+    this.previousDirection = previousDirection;
+  }
+
+  _giveFocusTo(direction) {
+    if (!this._flipflop(direction)) {
+      const intermediate = this.nextFocusedElement;
+      if (!intermediate) {
+        return null;
+      }
+      if (intermediate[direction]) {
+        this.nextFocusedElement =
+          this.elements.find(e => e.id === intermediate[direction]);
+      }
+      if (this.nextFocusedElement.id !== intermediate.id) {
+        this.prevFocusedElement = intermediate;
+        this.previousDirection = direction;
+      }
     }
     return this.nextFocusedElement;
   }
