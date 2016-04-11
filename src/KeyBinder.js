@@ -38,6 +38,7 @@ class KeyBinder extends Component {
       keys: PropTypes.object,
       wrapper: PropTypes.string,
       wChildren: PropTypes.string,
+      options: PropTypes.object,
     };
   }
 
@@ -49,6 +50,7 @@ class KeyBinder extends Component {
       selector: 'li',
       wrapper: 'ul',
       wChildren: 'li',
+      options: {},
     };
   }
 
