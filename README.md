@@ -82,6 +82,7 @@ Available modes :
 
 + `strategy` : string (progressive|cut) (default : "progressive") Useful with strape mode. Change navigation behavior.
 + `gap` : integer (default : 0) Useful with strape mode. Indicate a gap for margin.
++ `lastGap` : integer (default : 0) Useful with strape mode. Indicate a gap of last element.
 + `circular` : boolean (default : false) Useful with strape mode. Indicate if the strape is circular.
 
 #### `active` : boolean (default : true)
