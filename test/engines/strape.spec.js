@@ -5,10 +5,27 @@ import {
   gapCorrection,
   findLeftElement,
   findRightElement,
+  createList,
+  build,
 } from '../../src/engines/strape';
 import {expect} from 'chai';
+import jsdom from 'jsdom';
 
 describe('engine/strape', () => {
+  it('build should return an array', () => {
+    const dom = jsdom.jsdom('<div id="wrapper"><li id="1"></li><li id="2"></li></div>');
+    const list = [];
+    const options = {};
+    build(dom, '#wrapper', list, options).should.be.an.array;
+  });
+
+  it('createList should return a list from dom', () => {
+    const dom = jsdom.jsdom('<div><li id="1"></li><li id="2"></li></div>');
+    const list = createList(dom, 'li');
+    list.should.have.lengthOf(2);
+    list[0].should.be.instanceOf(HTMLLIElement);
+  });
+
   describe('strategy : progressive', () => {
     it('should set margin when card is outside the wrapper', () => {
       const wrapper = {width: 200, left: 100};
@@ -197,6 +214,6 @@ describe('engine/strape', () => {
       {id: 1},
       {id: 2},
     ];
-    findRightElement(cards, 0, true).should.equal(2);
+    findLeftElement(cards, 0, true).should.equal(2);
   });
 });

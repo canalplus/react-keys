@@ -81,13 +81,13 @@ function buildCardStructure(card) {
   };
 }
 
-function build(dom, wrapper, list, options) {
+export function build(dom, wrapper, list, options) {
   const wrapperPosition = dom.querySelector(wrapper).getBoundingClientRect();
   const cards = list.map(buildCardStructure);
   return calculate(wrapperPosition, cards, options);
 }
 
-function createList(dom, children) {
+export function createList(dom, children) {
   const elements = dom.querySelectorAll(children);
   return elements ? [].slice.call(elements) : [];
 }
