@@ -2,6 +2,7 @@
 import {
   calculate,
   defineMarginLeft,
+  gapCorrection,
   findLeftElement,
   findRightElement,
 } from '../../src/engines/strape';
@@ -91,6 +92,30 @@ describe('engine/strape', () => {
       const wrapper = {width: 100, left: 100};
       const options = {strategy: 'progressive', gap: 10};
       defineMarginLeft(card, wrapper, 100, lastCard, options).should.equal(100);
+    });
+    describe('gapCorrection()', () => {
+      it('should return gap passed has option', () => {
+        const card = {id: 0, width: 50, left: 200};
+        const lastCard = {id: 1, width: 50, left: 1000};
+        const wrapper = {width: 100, left: 100};
+        const options = {strategy: 'progressive', gap: 10};
+        gapCorrection(card, wrapper, lastCard, options).should.equal(10);
+      });
+
+      it('should return lastGap passed has option if last card', () => {
+        const card = {id: 0, width: 50, left: 200};
+        const wrapper = {width: 100, left: 100};
+        const options = {strategy: 'progressive', gap: 10, lastGap: 20};
+        gapCorrection(card, wrapper, card, options).should.equal(20);
+      });
+
+      it('should correct gap if gap on card is superior of max size', () => {
+        const card = {id: 0, width: 50, left: 900};
+        const lastCard = {id: 1, width: 50, left: 1000};
+        const wrapper = {width: 100, left: 100};
+        const options = {strategy: 'progressive', gap: 200, lastGap: 20};
+        gapCorrection(card, wrapper, lastCard, options).should.equal(120);
+      });
     });
   });
   describe('strategy : cut', () => {
