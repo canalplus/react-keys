@@ -17,7 +17,7 @@ describe('engine/strape', () => {
         {id: 3, width: 100, left: 300},
         {id: 4, width: 100, left: 400},
       ];
-      const result = calculate(wrapper, cards, {strategy: 'progressive', gap: 0});
+      const result = calculate(wrapper, cards, {strategy: 'progressive', gap: 0, lastGap: 0});
       result[0].marginLeft.should.equal(0);
       result[1].marginLeft.should.equal(0);
       result[2].marginLeft.should.equal(100);
@@ -32,7 +32,7 @@ describe('engine/strape', () => {
         {id: 3, width: 50, left: 220},
         {id: 4, width: 50, left: 280},
       ];
-      const result = calculate(wrapper, cards, {strategy: 'progressive', gap: 0});
+      const result = calculate(wrapper, cards, {strategy: 'progressive', gap: 0, lastGap: 0});
       result[0].marginLeft.should.equal(0);
       result[1].marginLeft.should.equal(0);
       result[2].marginLeft.should.equal(20);
@@ -47,68 +47,83 @@ describe('engine/strape', () => {
         {id: 3, width: 50, left: 220},
         {id: 4, width: 50, left: 280},
       ];
-      const result = calculate(wrapper, cards, {strategy: 'progressive', gap: 10});
+      const result = calculate(wrapper, cards, {strategy: 'progressive', gap: 10, lastGap: 0});
       result[0].marginLeft.should.equal(0);
       result[1].marginLeft.should.equal(0);
       result[2].marginLeft.should.equal(30);
-      result[3].marginLeft.should.equal(90);
+      result[3].marginLeft.should.equal(80); // lastGap = 0
     });
 
     it('should defineMarginLeft return 0 when card is inside display', () => {
       const card = {id: 0, width: 50, left: 100};
+      const lastCard = {id: 1, width: 50, left: 1000};
       const wrapper = {width: 100, left: 50};
       const options = {strategy: 'progressive', gap: 0};
-      defineMarginLeft(card, wrapper, 0, options).should.equal(0);
+      defineMarginLeft(card, wrapper, 0, lastCard, options).should.equal(0);
+    });
+
+    it('should defineMarginLeft return add lastGap if last element', () => {
+      const card = {id: 0, width: 50, left: 200};
+      const wrapper = {width: 100, left: 100};
+      const options = {strategy: 'progressive', gap: 50, lastGap: 10};
+      defineMarginLeft(card, wrapper, 0, card, options).should.equal(60);
     });
 
     it('should defineMarginLeft return 50 when first card is outside', () => {
       const card = {id: 0, width: 50, left: 200};
+      const lastCard = {id: 1, width: 50, left: 1000};
       const wrapper = {width: 100, left: 100};
       const options = {strategy: 'progressive', gap: 0};
-      defineMarginLeft(card, wrapper, 0, options).should.equal(50);
+      defineMarginLeft(card, wrapper, 0, lastCard, options).should.equal(50);
     });
 
     it('should defineMarginLeft return 60 when first card is outside with gap of 10', () => {
       const card = {id: 0, width: 50, left: 200};
+      const lastCard = {id: 1, width: 50, left: 1000};
       const wrapper = {width: 100, left: 100};
       const options = {strategy: 'progressive', gap: 10};
-      defineMarginLeft(card, wrapper, 0, options).should.equal(60);
+      defineMarginLeft(card, wrapper, 0, lastCard, options).should.equal(60);
     });
 
     it('should add margin to marginLeft param', () => {
       const card = {id: 0, width: 50, left: 200};
+      const lastCard = {id: 1, width: 50, left: 1000};
       const wrapper = {width: 100, left: 100};
       const options = {strategy: 'progressive', gap: 10};
-      defineMarginLeft(card, wrapper, 100, options).should.equal(100);
+      defineMarginLeft(card, wrapper, 100, lastCard, options).should.equal(100);
     });
   });
   describe('strategy : cut', () => {
     it('should defineMarginLeft return 100 when first card is outside', () => {
       const card = {id: 0, width: 50, left: 200};
+      const lastCard = {id: 1, width: 50, left: 1000};
       const wrapper = {width: 100, left: 100};
       const options = {strategy: 'cut', gap: 0};
-      defineMarginLeft(card, wrapper, 0, options).should.equal(100);
+      defineMarginLeft(card, wrapper, 0, lastCard, options).should.equal(100);
     });
 
     it('should defineMarginLeft return 200 when first card is outside twice', () => {
       const card = {id: 0, width: 50, left: 300};
+      const lastCard = {id: 1, width: 50, left: 1000};
       const wrapper = {width: 100, left: 100};
       const options = {strategy: 'cut', gap: 0};
-      defineMarginLeft(card, wrapper, 0, options).should.equal(200);
+      defineMarginLeft(card, wrapper, 0, lastCard, options).should.equal(200);
     });
 
     it('should defineMarginLeft return 200 when first card is outside twice with gap of 10', () => {
       const card = {id: 0, width: 50, left: 300};
+      const lastCard = {id: 1, width: 50, left: 1000};
       const wrapper = {width: 100, left: 100};
       const options = {strategy: 'cut', gap: 10};
-      defineMarginLeft(card, wrapper, 0, options).should.equal(210);
+      defineMarginLeft(card, wrapper, 0, lastCard, options).should.equal(210);
     });
 
     it('should add margin to marginLeft param', () => {
       const card = {id: 0, width: 50, left: 200};
+      const lastCard = {id: 1, width: 50, left: 1000};
       const wrapper = {width: 100, left: 100};
       const options = {strategy: 'cut', gap: 10};
-      defineMarginLeft(card, wrapper, 100, options).should.equal(100);
+      defineMarginLeft(card, wrapper, 100, lastCard, options).should.equal(100);
     });
   });
 

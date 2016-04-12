@@ -25,6 +25,7 @@ class KeyBinder extends Component {
       ...{
         strategy: 'progressive',
         gap: 0,
+        lastGap: 0,
         circular: false,
       }, ...this.props.options,
     };

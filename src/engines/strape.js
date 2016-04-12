@@ -1,17 +1,30 @@
 import {trigger} from '../events';
 import {hasDiff} from '../hasDiff';
 
-export function defineMarginLeft(card, wrapper, marginLeft, options) {
+export function gapCorrection(card, wrapper, lastCard, options) {
+  let gap = card.id === lastCard.id ? options.lastGap : options.gap;
+  const maxSize = lastCard.left + lastCard.width;
+  if (card.width + card.left + gap > maxSize) {
+    const lastMarginLeft = lastCard.left + lastCard.width + options.lastGap
+      - (wrapper.width + wrapper.left);
+    const currentMarginLeft = card.left + card.width - (wrapper.width + wrapper.left);
+    gap = lastMarginLeft - currentMarginLeft;
+  }
+  return gap;
+}
+
+export function defineMarginLeft(card, wrapper, marginLeft, lastCard, options) {
   let margin = marginLeft;
+  const gap = gapCorrection(card, wrapper, lastCard, options);
   if (card.width + card.left - wrapper.left >
-    wrapper.width + marginLeft) {
+    wrapper.width + marginLeft - gap) {
     switch (options.strategy) {
       case 'cut':
-        margin = card.left - wrapper.left + options.gap;
+        margin = card.left - wrapper.left + gap;
         break;
       case 'progressive':
       default:
-        margin = card.left + card.width - (wrapper.width + wrapper.left) + options.gap;
+        margin = card.left + card.width - (wrapper.width + wrapper.left) + gap;
     }
   }
   return margin;
@@ -44,19 +57,17 @@ export function findLeftElement(cards, index, circular) {
 export function calculate(wrapper, cards, options) {
   const builtList = [];
   let marginLeft = 0;
-
+  const lastCard = cards[cards.length - 1];
   cards.forEach((card, index) => {
-    marginLeft = defineMarginLeft(card, wrapper, marginLeft, options);
+    marginLeft = defineMarginLeft(card, wrapper, marginLeft, lastCard, options);
     const coords = {
       id: card.id,
       marginLeft: marginLeft,
       right: findRightElement(cards, index, options.circular),
       left: findLeftElement(cards, index, options.circular),
     };
-
     builtList.push(coords);
   });
-
   return builtList;
 }
 
