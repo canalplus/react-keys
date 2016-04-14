@@ -46,7 +46,7 @@ export function findUpElement(elCoords, mosaicCoords, options) {
 }
 
 
-function build(mosaic, options) {
+export function build(mosaic, options) {
   const builtMosaic = [];
   const mosaicCoords = mosaic.map(createCoordsObject);
 
@@ -65,12 +65,12 @@ function build(mosaic, options) {
   return builtMosaic;
 }
 
-function createList(dom, selector) {
+export function createList(dom, selector) {
   const elements = dom.querySelectorAll(selector);
   return [].slice.call(elements);
 }
 
-function selectedElement(elements, focusedElementId) {
+export function selectedElement(elements, focusedElementId) {
   const focusedElement = focusedElementId
     ? elements.find(e => e.id === focusedElementId) : null;
   return focusedElement || elements[0];

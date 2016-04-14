@@ -5,10 +5,28 @@ import {
   findDownElement,
   findUpElement,
   isBetween,
+  createList,
+  selectedElement,
+  build,
 } from '../../src/engines/mosaic';
 import {expect} from 'chai';
+import jsdom from 'jsdom';
 
 describe('engine/mosaic.js', () => {
+  it('createList should return an array', () => {
+    const dom = jsdom.jsdom('<li id="0"></li><li id="1"></li><li id="2"></li>');
+    createList(dom, 'li').should.be.an.array;
+    createList(dom, 'li').should.have.lengthOf(3);
+  });
+  it('build should return an array', () => {
+    const dom = jsdom.jsdom('<li id="0"></li><li id="1"></li><li id="2"></li>');
+    const list = createList(dom, 'li');
+    const options = {};
+    const builded = build(list, options);
+    builded[0].id.should.equal('0');
+    builded[1].id.should.equal('1');
+    builded[2].id.should.equal('2');
+  });
   const mosaicCoords = [
     {
       id: 1,
@@ -133,6 +151,18 @@ describe('engine/mosaic.js', () => {
       isBetween(5, 4, 3).should.be.false;
       isBetween(5, 2, 5).should.be.false;
       isBetween('5', 10, 1).should.be.false;
+    });
+  });
+
+  describe('selectedElement', () => {
+    it('should return element from id when it exists in array', () => {
+      const array = [{id: '1'}, {id: '2'}];
+      selectedElement(array, '2').id.should.equal('2');
+    });
+    it('should should return first element when id is not found', () => {
+      const array = [{id: '1'}, {id: '2'}];
+      selectedElement(array, '3').id.should.equal('1');
+      selectedElement(array, null).id.should.equal('1');
     });
   });
 });
