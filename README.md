@@ -84,6 +84,7 @@ Available modes :
 + `gap` : integer (default : 0) Useful with strape mode. Indicate a gap for margin.
 + `lastGap` : integer (default : 0) Useful with strape mode. Indicate a gap of last element.
 + `circular` : boolean (default : false) Useful with strape mode. Indicate if the strape is circular.
++ `accuracy` : number (default : 0) Useful with mosaic. Pixel value to accept a margin scope when your mosaic isn't stricly aligned.
 
 #### `active` : boolean (default : true)
 

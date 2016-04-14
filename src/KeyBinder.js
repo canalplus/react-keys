@@ -26,6 +26,7 @@ class KeyBinder extends Component {
         strategy: 'progressive',
         gap: 0,
         lastGap: 0,
+        accuracy: 0,
         circular: false,
       }, ...this.props.options,
     };
@@ -111,10 +112,17 @@ class KeyBinder extends Component {
           this.elements,
           this.props.wrapper,
           this.props.wChildren,
-          this.keysOptions);
+          this.keysOptions,
+        );
         break;
       default:
-        value = refreshMosaic(dom, this.elements, this.props.selector, this.props.focusedElementId);
+        value = refreshMosaic(
+          dom,
+          this.elements,
+          this.props.selector,
+          this.props.focusedElementId,
+          this.keysOptions,
+        );
         break;
     }
     const {elements, selectedElement} = value;
