@@ -6,7 +6,7 @@ keysInit();
 function selectedId(state = {selectedId: 1}, action) {
   switch (action.type) {
     case 'UPDATE_SELECT':
-      return {...state, ...{selectedId: action.selectedId}};
+      return {...state, ...{selectedId: action.selectedKeyId}};
     default:
       return state;
   }
@@ -15,7 +15,7 @@ function selectedId(state = {selectedId: 1}, action) {
 let store = createStore(selectedId);
 
 store.subscribe(() => {
-  ReactDOM.render(<Mosaic selectedId={store.getState().selectedId}/>,
+  ReactDOM.render(<Mosaic selectedId={store.getState().selectedKeyId}/>,
     document.getElementById('body'));
 });
 

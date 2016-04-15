@@ -1,5 +1,5 @@
 export let keysListeners = [];
-export let keyStore;
+export let globalStore;
 
 export function cb(e) {
   const keyCode = e.keyCode ? e.keyCode : e;
@@ -9,7 +9,7 @@ export function cb(e) {
 }
 
 export function _init(ops) {
-  keyStore = ops && ops.store ? ops.store : null;
+  globalStore = ops && ops.store ? ops.store : null;
   if (!ops || (ops && !ops.bindkeys)) {
     document.addEventListener('keydown', cb);
   } else {

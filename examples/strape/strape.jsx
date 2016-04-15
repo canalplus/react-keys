@@ -6,7 +6,7 @@ keysInit();
 function selectedId(state = {selectedId: 1, marginLeft: 0}, action) {
   switch (action.type) {
     case 'UPDATE_SELECT':
-      return {...state, ...{selectedId: action.selectedId, marginLeft: action.marginLeft}};
+      return {...state, ...{selectedId: action.selectedKeyId, marginLeft: action.marginLeft}};
     default:
       return state;
   }
@@ -15,7 +15,7 @@ function selectedId(state = {selectedId: 1, marginLeft: 0}, action) {
 const store = createStore(selectedId);
 
 store.subscribe(() => {
-  ReactDOM.render(<Strape selectedId={store.getState().selectedId}
+  ReactDOM.render(<Strape selectedId={store.getState().selectedKeyId}
                           marginLeft={store.getState().marginLeft}/>,
     document.getElementById('body'));
 });

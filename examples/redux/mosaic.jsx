@@ -4,7 +4,7 @@ const {createStore, applyMiddleware, combineReducers} = Redux;
 function selectedId(state = {selectedId: 1}, action) {
   switch (action.type) {
     case 'UPDATE_SELECT':
-      return {...state, ...{selectedId: action.selectedId}};
+      return {...state, ...{selectedId: action.selectedKeyId}};
     default:
       return state;
   }
@@ -28,7 +28,7 @@ keysInit({
 });
 
 store.subscribe(() => {
-  ReactDOM.render(<Mosaic selectedId={store.getState().ID.selectedId}/>,
+  ReactDOM.render(<Mosaic selectedId={store.getState().ID.selectedKeyId}/>,
     document.getElementById('body'));
 });
 
