@@ -37,4 +37,4 @@ export const _updateSelectedId = (selectedKeyId, marginLeft) => {
       marginLeft: marginLeft,
     });
   }
-}
+};

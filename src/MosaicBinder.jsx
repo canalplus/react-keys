@@ -1,14 +1,14 @@
 /* eslint no-unused-vars:0 */
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
+import {refresh} from './engines/mosaic';
 import {UP, DOWN, LEFT, RIGHT, ENTER} from './keys';
-import {C_LEFT, C_RIGHT} from './constants';
-import {refresh} from './engines/strape';
+import {C_UP, C_DOWN, C_LEFT, C_RIGHT} from './constants';
 import {isBlocked, block} from './clock';
 import {addListener, removeListener, globalStore} from './listener';
 import {_addKeyBinderToStore, _updateSelectedId, _activeKeyBinder} from './redux/actions';
 
-class StrapeBinder extends Component {
+class MosaicBinder extends Component {
 
   constructor(props) {
     super(props);
@@ -23,10 +23,14 @@ class StrapeBinder extends Component {
   static get propTypes() {
     return {
       binderId: PropTypes.string.isRequired,
+      selector: PropTypes.string,
       focusedElementId: PropTypes.string,
       context: PropTypes.object,
+      accuracy: PropTypes.number,
       onRight: PropTypes.func,
       onLeft: PropTypes.func,
+      onUp: PropTypes.func,
+      onDown: PropTypes.func,
       onEnter: PropTypes.func,
       onLeftExit: React.PropTypes.oneOfType([
         React.PropTypes.string,
@@ -44,30 +48,20 @@ class StrapeBinder extends Component {
         React.PropTypes.string,
         React.PropTypes.func,
       ]),
-      strategy: PropTypes.string,
-      gap: PropTypes.number,
-      lastGap: PropTypes.number,
-      circular: PropTypes.bool,
-      wrapper: PropTypes.string,
-      wChildren: PropTypes.string,
     };
   }
 
   static get defaultProps() {
     return {
-      strategy: 'progressive',
-      gap: 0,
-      lastGap: 0,
+      selector: 'li',
       accuracy: 0,
-      circular: false,
-      wrapper: 'ul',
-      wChildren: 'li',
     };
   }
 
   executeFunctionAction(functionAction) {
     functionAction.call(this,
       this.nextFocusedElement || {},
+      this.prevFocusedElement || {},
       this.props.context);
   }
 
@@ -93,6 +87,36 @@ class StrapeBinder extends Component {
           }
 
           break;
+        case UP:
+          this._giveFocusTo(C_UP);
+          if (this.hasMoved) {
+            _updateSelectedId(this.nextFocusedElement.id, this.nextFocusedElement.marginLeft);
+            if (this.props.onUp) {
+              this.executeFunctionAction(this.props.onUp);
+            }
+          } else if (this.props.onUpExit) {
+            if (typeof this.props.onUpExit === 'string') {
+              _activeKeyBinder(this.props.onUpExit);
+            } else {
+              this.props.onUpExit();
+            }
+          }
+          break;
+        case DOWN:
+          this._giveFocusTo(C_DOWN);
+          if (this.hasMoved) {
+            _updateSelectedId(this.nextFocusedElement.id, this.nextFocusedElement.marginLeft);
+            if (this.props.onDown) {
+              this.executeFunctionAction(this.props.onDown);
+            }
+          } else if (this.props.onDownExit) {
+            if (typeof this.props.onDownExit === 'string') {
+              _activeKeyBinder(this.props.onDownExit);
+            } else {
+              this.props.onDownExit();
+            }
+          }
+          break;
         case RIGHT:
           this._giveFocusTo(C_RIGHT);
           if (this.hasMoved) {
@@ -113,24 +137,6 @@ class StrapeBinder extends Component {
             this.executeFunctionAction(this.props.onEnter);
           }
           break;
-        case UP:
-          if (this.props.onUpExit) {
-            if (typeof this.props.onUpExit === 'string') {
-              _activeKeyBinder(this.props.onUpExit);
-            } else {
-              this.props.onUpExit();
-            }
-          }
-          break;
-        case DOWN:
-          if (this.props.onDownExit) {
-            if (typeof this.props.onDownExit === 'string') {
-              _activeKeyBinder(this.props.onDownExit);
-            } else {
-              this.props.onDownExit();
-            }
-          }
-          break;
         default:
           break;
       }
@@ -142,37 +148,60 @@ class StrapeBinder extends Component {
     const value = refresh(
       dom,
       this.elements,
-      this.props.wrapper,
-      this.props.wChildren,
-      {
-        gap: this.props.gap,
-        lastGap: this.props.lastGap,
-        strategy: this.props.strategy,
-        cicrular: this.props.circular,
-      }
+      this.props.selector,
+      this.props.focusedElementId,
+      {accuracy: this.props.accuracy},
     );
-
     const {elements, selectedElement} = value;
     this.elements = elements;
     this.nextFocusedElement = selectedElement || this.nextFocusedElement;
   }
 
-  _giveFocusTo(direction) {
-    const intermediate = this.nextFocusedElement;
-    if (!intermediate) {
-      this.hasMoved = false;
-      return null;
+  _flipflop(direction) {
+    let previousDirection = null;
+    switch (direction) {
+      case C_UP:
+        previousDirection = this.previousDirection === C_DOWN ? C_UP : null;
+        break;
+      case C_RIGHT:
+        previousDirection = this.previousDirection === C_LEFT ? C_RIGHT : null;
+        break;
+      case C_DOWN:
+        previousDirection = this.previousDirection === C_UP ? C_DOWN : null;
+        break;
+      case C_LEFT:
+        previousDirection = this.previousDirection === C_RIGHT ? C_LEFT : null;
+        break;
+      default:
     }
-    if (intermediate[direction]) {
-      this.nextFocusedElement =
-        this.elements.find(e => e.id === intermediate[direction]);
-    }
-    if (this.nextFocusedElement.id !== intermediate.id) {
+    if (previousDirection) {
+      const intermediate = this.prevFocusedElement;
+      this.prevFocusedElement = this.nextFocusedElement;
+      this.nextFocusedElement = intermediate;
+      this.previousDirection = previousDirection;
       this.hasMoved = true;
-      this.prevFocusedElement = intermediate;
-      this.previousDirection = direction;
-    } else {
-      this.hasMoved = false;
+    }
+    return !!previousDirection;
+  }
+
+  _giveFocusTo(direction) {
+    if (!this._flipflop(direction)) {
+      const intermediate = this.nextFocusedElement;
+      if (!intermediate) {
+        this.hasMoved = false;
+        return null;
+      }
+      if (intermediate[direction]) {
+        this.nextFocusedElement =
+          this.elements.find(e => e.id === intermediate[direction]);
+      }
+      if (this.nextFocusedElement.id !== intermediate.id) {
+        this.hasMoved = true;
+        this.prevFocusedElement = intermediate;
+        this.previousDirection = direction;
+      } else {
+        this.hasMoved = false;
+      }
     }
     return this.nextFocusedElement;
   }
@@ -182,7 +211,6 @@ class StrapeBinder extends Component {
     _addKeyBinderToStore({
       id: this.props.binderId,
       selectedId: this.nextFocusedElement.id,
-      marginLeft: this.nextFocusedElement.marginLeft,
     });
   }
 
@@ -200,4 +228,4 @@ class StrapeBinder extends Component {
 
 }
 
-export default StrapeBinder;
+export default MosaicBinder;

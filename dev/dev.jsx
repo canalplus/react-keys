@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import {connect, Provider} from 'react-redux';
-import {StrapeBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
+import {MosaicBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
 
 
 const logger = store => next => action => {
@@ -20,54 +20,41 @@ const store = createStore(combineReducers({
 
 keysInit({store: store});
 
-const PureStrape = ({binderId, activeBinder, selectedKeyId, marginLeft, onDownExit, onUpExit}) => {
-  const listStyle = {
-    marginLeft: binderId === activeBinder && marginLeft ? -marginLeft : 0,
-  };
+const PureMosaic = ({selectedKeyId}) => {
   return (
-    <StrapeBinder
-      binderId={binderId}
-      wrapper="#wrapper"
-      onDownExit={onDownExit}
-      strategy="progressive"
-      onUpExit={onUpExit}
-      gap={50}
-      onEnterKey={onEnterKey}>
-      <div id="wrapper">
-        <ul style={listStyle}>
-          <li id={binderId + '-1'} className={selectedKeyId === binderId + '-1' ? 'selected' : ''}>
-            #1
-          </li>
-          <li id={binderId + '-2'} className={selectedKeyId === binderId + '-2' ? 'selected' : ''}>
-            #2
-          </li>
-          <li id={binderId + '-3'} className={selectedKeyId === binderId + '-3' ? 'selected' : ''}>
-            #3
-          </li>
-          <li id={binderId + '-4'} className={selectedKeyId === binderId + '-4' ? 'selected' : ''}>
-            #4
-          </li>
-          <li id={binderId + '-5'} className={selectedKeyId === binderId + '-5' ? 'selected' : ''}>
-            #5
-          </li>
-        </ul>
-      </div>
-    </StrapeBinder>
+    <MosaicBinder
+      binderId="mosaic-1"
+      onEnter={onEnter}
+    >
+      <ul>
+        <li id="1" className={selectedKeyId === '1' ? 'selected' : ''}>#1</li>
+        <li id="2" className={selectedKeyId === '2' ? 'selected' : ''}>#2</li>
+        <li id="3" className={selectedKeyId === '3' ? 'selected' : ''}>#3</li>
+        <li id="4" className={selectedKeyId === '4' ? 'selected' : ''}>#4</li>
+        <li id="5" className={selectedKeyId === '5' ? 'selected' : ''}>#5</li>
+        <li id="6" className={selectedKeyId === '6' ? 'selected' : ''}>#6</li>
+        <li id="7" className={selectedKeyId === '7' ? 'selected' : ''}>#7</li>
+        <li id="8" className={selectedKeyId === '8' ? 'selected' : ''}>#8</li>
+        <li id="9" className={selectedKeyId === '9' ? 'selected' : ''}>#9</li>
+        <li id="10" className={selectedKeyId === '10' ? 'selected' : ''}>#10</li>
+        <li id="11" className={selectedKeyId === '11' ? 'selected' : ''}>#11</li>
+        <li id="12" className={selectedKeyId === '12' ? 'selected' : ''}>#12</li>
+      </ul>
+    </MosaicBinder>
   );
 };
 
-function onEnterKey(element) {
+function onEnter(element) {
   alert('ELEMENT #' + element.id);
 }
 
-const Strap = connect(state => state['@@keys'])(PureStrape);
+const Mosaic = connect(state => state['@@keys'])(PureMosaic);
 
 ReactDOM.render(<Provider store={store}>
   <div>
-    <Strap binderId="strape-1" onDownExit="strape-2"/>
-    <Strap binderId="strape-2" onUpExit="strape-1"/>
+    <Mosaic/>
   </div>
 </Provider>, document.getElementById('body'));
 
-activeKeyBinder('strape-1');
+activeKeyBinder('mosaic-1');
 
