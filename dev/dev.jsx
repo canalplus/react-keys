@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import {connect, Provider} from 'react-redux';
-import {KeyBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
+import {StrapeBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
 
 
 const logger = store => next => action => {
@@ -25,16 +25,13 @@ const PureStrape = ({binderId, activeBinder, selectedKeyId, marginLeft, onDownEx
     marginLeft: binderId === activeBinder && marginLeft ? -marginLeft : 0,
   };
   return (
-    <KeyBinder
+    <StrapeBinder
       binderId={binderId}
-      mode="strape"
+      wrapper="#wrapper"
       onDownExit={onDownExit}
+      strategy="progressive"
       onUpExit={onUpExit}
-      options={{
-        strategy: 'progressive',
-      }}
-      keys={{onEnterKey}}
-      wrapper="#wrapper">
+      onEnterKey={onEnterKey}>
       <div id="wrapper">
         <ul style={listStyle}>
           <li id={binderId + '-1'} className={selectedKeyId === binderId + '-1' ? 'selected' : ''}>
@@ -54,7 +51,7 @@ const PureStrape = ({binderId, activeBinder, selectedKeyId, marginLeft, onDownEx
           </li>
         </ul>
       </div>
-    </KeyBinder>
+    </StrapeBinder>
   );
 };
 

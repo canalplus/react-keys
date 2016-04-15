@@ -219,7 +219,6 @@ class KeyBinder extends Component {
   }
 
   componentDidUpdate() {
-    console.log('UPDATE');
     this.refreshState();
   }
 
