@@ -6,7 +6,7 @@ import {C_LEFT, C_RIGHT} from './constants';
 import {refresh} from './engines/strape';
 import {isBlocked, block} from './clock';
 import {addListener, removeListener, globalStore} from './listener';
-import {_addKeyBinderToStore, _updateSelectedId} from './redux/actions';
+import {_addKeyBinderToStore, _updateSelectedId, _activeKeyBinder} from './redux/actions';
 
 class StrapeBinder extends Component {
 
@@ -27,10 +27,22 @@ class StrapeBinder extends Component {
       context: PropTypes.object,
       onRight: PropTypes.func,
       onLeft: PropTypes.func,
-      onLeftExit: PropTypes.func,
-      onRightExit: PropTypes.func,
-      onUpExit: PropTypes.func,
-      onDownExit: PropTypes.func,
+      onLeftExit: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.func,
+      ]),
+      onRightExit: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.func,
+      ]),
+      onUpExit: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.func,
+      ]),
+      onDownExit: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.func,
+      ]),
       strategy: PropTypes.string,
       gap: PropTypes.number,
       lastGap: PropTypes.number,
@@ -66,25 +78,33 @@ class StrapeBinder extends Component {
       switch (keyCode) {
         case LEFT:
           this._giveFocusTo(C_LEFT);
-          _updateSelectedId(this.nextFocusedElement.id, this.nextFocusedElement.marginLeft);
           if (this.hasMoved) {
+            _updateSelectedId(this.nextFocusedElement.id, this.nextFocusedElement.marginLeft);
             if (this.props.onLeftKey) {
               this.executeFunctionAction(this.props.onLeftKey);
             }
           } else if (this.props.onLeftExit) {
-            this.props.onLeftExit();
+            if (typeof this.props.onLeftExit === 'string') {
+              _activeKeyBinder(this.props.onLeftExit);
+            } else {
+              this.props.onLeftExit();
+            }
           }
 
           break;
         case RIGHT:
           this._giveFocusTo(C_RIGHT);
-          _updateSelectedId(this.nextFocusedElement.id, this.nextFocusedElement.marginLeft);
           if (this.hasMoved) {
+            _updateSelectedId(this.nextFocusedElement.id, this.nextFocusedElement.marginLeft);
             if (this.props.onRightKey) {
               this.executeFunctionAction(this.props.onRightKey);
             }
           } else if (this.props.onRightExit) {
-            this.props.onRightExit();
+            if (typeof this.props.onRightExit === 'string') {
+              _activeKeyBinder(this.props.onRightExit);
+            } else {
+              this.props.onRightExit();
+            }
           }
           break;
         case ENTER:
@@ -94,12 +114,20 @@ class StrapeBinder extends Component {
           break;
         case UP:
           if (this.props.onUpExit) {
-            this.props.onUpExit();
+            if (typeof this.props.onUpExit === 'string') {
+              _activeKeyBinder(this.props.onUpExit);
+            } else {
+              this.props.onUpExit();
+            }
           }
           break;
         case DOWN:
           if (this.props.onDownExit) {
-            this.props.onDownExit();
+            if (typeof this.props.onDownExit === 'string') {
+              _activeKeyBinder(this.props.onDownExit);
+            } else {
+              this.props.onDownExit();
+            }
           }
           break;
         default:

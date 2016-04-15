@@ -59,20 +59,12 @@ function onEnterKey(element) {
   alert('ELEMENT #' + element.id);
 }
 
-function onDownStrap1Exit() {
-  activeKeyBinder('strape-2');
-}
-
-function onUpStrap2Exit() {
-  activeKeyBinder('strape-1');
-}
-
 const Strap = connect(state => state['@@keys'])(PureStrape);
 
 ReactDOM.render(<Provider store={store}>
   <div>
-    <Strap binderId="strape-1" onDownExit={onDownStrap1Exit}/>
-    <Strap binderId="strape-2" onUpExit={onUpStrap2Exit}/>
+    <Strap binderId="strape-1" onDownExit="strape-2"/>
+    <Strap binderId="strape-2" onUpExit="strape-1"/>
   </div>
 </Provider>, document.getElementById('body'));
 
