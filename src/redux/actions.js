@@ -20,7 +20,7 @@ export const _activeKeyBinder = binderId => {
 export const _addKeyBinderToStore = keyBinderState => {
   if (globalStore && globalStore.dispatch) {
     const keysState = globalStore.getState()[NAME].keysState;
-    if (!Object.keys(keysState).some(state => state.id === keyBinderState.id)) {
+    if (!keysState.some(state => state.id === keyBinderState.id)) {
       globalStore.dispatch({
         type: ADD_KEYBINDER_TO_STORE,
         state: keyBinderState,
