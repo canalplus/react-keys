@@ -1,5 +1,5 @@
-import _StrapeBinder from './StrapeBinder.jsx';
-import _MosaicBinder from './MosaicBinder.jsx';
+import _StrapeBinder from './StrapeBinder';
+import _MosaicBinder from './MosaicBinder';
 import {_register} from './events';
 import {_init} from './listener';
 import {UP, DOWN, LEFT, RIGHT, ENTER} from './keys';
