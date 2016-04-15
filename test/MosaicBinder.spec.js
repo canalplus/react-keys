@@ -1,20 +1,20 @@
 /* eslint no-unused-expressions:0 */
 /* eslint no-unused-vars:0 */
 import React from 'react';
-import KeyBinder from '../src/KeyBinder';
+import MosaicBinder from '../src/MosaicBinder.jsx';
 import {shallow} from 'enzyme';
 import * as constants from '../src/constants';
 
-describe('KeyBinder.jsx', () => {
+describe('MosaicBinder.jsx', () => {
   it('should wrap with tagName div', () => {
-    const keyBinder = shallow(<KeyBinder />);
+    const keyBinder = shallow(<MosaicBinder binderId="1"/>);
     keyBinder.should.have.tagName('div');
   });
 
   describe('_flipflop', () => {
     let keyBinder;
     beforeEach(() => {
-      keyBinder = new KeyBinder({});
+      keyBinder = new MosaicBinder({});
     });
     it('should flipflop from down to up', () => {
       keyBinder.previousDirection = constants.C_DOWN;
