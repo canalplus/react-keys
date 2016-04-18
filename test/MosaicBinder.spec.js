@@ -1,7 +1,7 @@
 /* eslint no-unused-expressions:0 */
 /* eslint no-unused-vars:0 */
 import React from 'react';
-import MosaicBinder from '../src/MosaicBinder.jsx';
+import MosaicBinder from '../src/MosaicBinder';
 import {shallow} from 'enzyme';
 import * as constants from '../src/constants';
 
