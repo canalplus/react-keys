@@ -62,6 +62,7 @@ class StrapeBinder extends Component {
       circular: false,
       wrapper: 'ul',
       wChildren: 'li',
+      context: {},
     };
   }
 
@@ -179,6 +180,9 @@ class StrapeBinder extends Component {
 
   componentDidMount() {
     this.refreshState();
+    if (!this.nextFocusedElement) {
+      return;
+    }
     _addKeyBinderToStore({
       id: this.props.binderId,
       selectedId: this.nextFocusedElement.id,
