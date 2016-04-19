@@ -8,7 +8,14 @@ const store = createStore(combineReducers({
 
 keysInit({store: store});
 
-const PureStrape = ({selectedKeyId, marginLeft}) => {
+const Card = ({id, active}) => {
+  const style = active ? 'selected' : '';
+  return (
+    <li id={id} className={style}>#{id}</li>
+  );
+};
+
+const PureStrape = ({selectedId, marginLeft, active}) => {
   const listStyle = {
     marginLeft: -marginLeft,
   };
@@ -22,25 +29,22 @@ const PureStrape = ({selectedKeyId, marginLeft}) => {
       circular={true}>
       <div id="wrapper">
         <ul style={listStyle}>
-          <li id="1" className={selectedKeyId === '1' ? 'selected' : ''}>#1</li>
-          <li id="2" className={selectedKeyId === '2' ? 'selected' : ''}>#2</li>
-          <li id="3" className={selectedKeyId === '3' ? 'selected' : ''}>#3</li>
-          <li id="4" className={selectedKeyId === '4' ? 'selected' : ''}>#4</li>
-          <li id="5" className={selectedKeyId === '5' ? 'selected' : ''}>#5</li>
-          <li id="6" className={selectedKeyId === '6' ? 'selected' : ''}>#6</li>
-          <li id="7" className={selectedKeyId === '7' ? 'selected' : ''}>#7</li>
-          <li id="8" className={selectedKeyId === '8' ? 'selected' : ''}>#8</li>
-          <li id="9" className={selectedKeyId === '9' ? 'selected' : ''}>#9</li>
-          <li id="10" className={selectedKeyId === '10' ? 'selected' : ''}>#10</li>
-          <li id="11" className={selectedKeyId === '11' ? 'selected' : ''}>#11</li>
-          <li id="12" className={selectedKeyId === '12' ? 'selected' : ''}>#12</li>
+          <Card id="1" active={active && selectedId === '1'}/>
+          <Card id="2" active={active && selectedId === '2'}/>
+          <Card id="3" active={active && selectedId === '3'}/>
+          <Card id="4" active={active && selectedId === '4'}/>
+          <Card id="5" active={active && selectedId === '5'}/>
+          <Card id="6" active={active && selectedId === '6'}/>
+          <Card id="7" active={active && selectedId === '7'}/>
+          <Card id="8" active={active && selectedId === '8'}/>
+          <Card id="9" active={active && selectedId === '9'}/>
         </ul>
       </div>
     </StrapeBinder>
   );
 };
 
-const Strape = connect(state => state['@@keys'])(PureStrape);
+const Strape = connect(state => state['@@keys'].getBinder('strape-1'))(PureStrape);
 
 function onEnterKey(element) {
   alert('ELEMENT #' + element.id);

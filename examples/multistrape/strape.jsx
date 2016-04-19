@@ -1,59 +1,66 @@
 const {StrapeBinder, keysInit, keysReducer, activeKeyBinder} = ReactKeys;
-const {createStore, combineReducers} = Redux;
+const {createStore, combineReducers, applyMiddleware} = Redux;
 const {connect, Provider} = ReactRedux;
+
+const logger = store => next => action => {
+  console.group(action.type);
+  console.info('dispatching', action);
+  const result = next(action);
+  console.info('next state', store.getState());
+  console.groupEnd(action.type);
+  return result;
+};
 
 const store = createStore(combineReducers({
   '@@keys': keysReducer,
-}));
+}), applyMiddleware(logger));
 
 keysInit({store: store});
 
-const PureStrape = ({binderId, activeBinder, selectedKeyId, marginLeft, onDownExit, onUpExit}) => {
+const Card = ({id, active}) => {
+  const style = active ? 'selected' : '';
+  return (
+    <li id={id} className={style}>#{id}</li>
+  );
+};
+
+const PureStrape = ({selectedId, marginLeft, binderId, active, onDownExit, onUpExit}) => {
   const listStyle = {
-    marginLeft: binderId === activeBinder && marginLeft ? -marginLeft : 0,
+    marginLeft: -marginLeft,
   };
   return (
     <StrapeBinder
       binderId={binderId}
       wrapper="#wrapper"
-      onDownExit={onDownExit}
       strategy="progressive"
-      onUpExit={onUpExit}
-      gap={50}
-      onEnterKey={onEnterKey}>
+      gap={13}
+      lastGap={13}
+      onDownExit={onDownExit}
+      onUpExit={onUpExit}>
       <div id="wrapper">
         <ul style={listStyle}>
-          <li id={binderId + '-1'} className={selectedKeyId === binderId + '-1' ? 'selected' : ''}>
-            #1
-          </li>
-          <li id={binderId + '-2'} className={selectedKeyId === binderId + '-2' ? 'selected' : ''}>
-            #2
-          </li>
-          <li id={binderId + '-3'} className={selectedKeyId === binderId + '-3' ? 'selected' : ''}>
-            #3
-          </li>
-          <li id={binderId + '-4'} className={selectedKeyId === binderId + '-4' ? 'selected' : ''}>
-            #4
-          </li>
-          <li id={binderId + '-5'} className={selectedKeyId === binderId + '-5' ? 'selected' : ''}>
-            #5
-          </li>
+          <Card id={binderId + '-1'} active={active && selectedId === binderId + '-1'}/>
+          <Card id={binderId + '-2'} active={active && selectedId === binderId + '-2'}/>
+          <Card id={binderId + '-3'} active={active && selectedId === binderId + '-3'}/>
+          <Card id={binderId + '-4'} active={active && selectedId === binderId + '-4'}/>
+          <Card id={binderId + '-5'} active={active && selectedId === binderId + '-5'}/>
+          <Card id={binderId + '-6'} active={active && selectedId === binderId + '-6'}/>
+          <Card id={binderId + '-7'} active={active && selectedId === binderId + '-7'}/>
+          <Card id={binderId + '-8'} active={active && selectedId === binderId + '-8'}/>
+          <Card id={binderId + '-9'} active={active && selectedId === binderId + '-9'}/>
         </ul>
       </div>
     </StrapeBinder>
   );
 };
 
-function onEnterKey(element) {
-  alert('ELEMENT #' + element.id);
-}
-
-const Strap = connect(state => state['@@keys'])(PureStrape);
+const Strape1 = connect(state => state['@@keys'].getBinder('strape-1'))(PureStrape);
+const Strape2 = connect(state => state['@@keys'].getBinder('strape-2'))(PureStrape);
 
 ReactDOM.render(<Provider store={store}>
   <div>
-    <Strap binderId="strape-1" onDownExit="strape-2"/>
-    <Strap binderId="strape-2" onUpExit="strape-1"/>
+    <Strape1 binderId="strape-1" onDownExit="strape-2"/>
+    <Strape2 binderId="strape-2" onUpExit="strape-1"/>
   </div>
 </Provider>, document.getElementById('body'));
 

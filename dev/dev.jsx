@@ -20,8 +20,11 @@ const store = createStore(combineReducers({
 
 keysInit({store: store});
 
-const buildClassName = (id, selectedId, active) => {
-  return id === selectedId && active ? 'selected' : '';
+const Card = ({id, active}) => {
+  const style = active ? 'selected' : '';
+  return (
+    <li id={id} className={style}>#{id}</li>
+  );
 };
 
 const PureStrape = ({selectedId, marginLeft, binderId, active, onDownExit, onUpExit}) => {
@@ -36,74 +39,31 @@ const PureStrape = ({selectedId, marginLeft, binderId, active, onDownExit, onUpE
       gap={13}
       lastGap={13}
       onDownExit={onDownExit}
-      onUpExit={onUpExit}
-      circular={true}>
+      onUpExit={onUpExit}>
       <div id="wrapper">
         <ul style={listStyle}>
-          <li id={binderId + '-1'}
-              className={buildClassName(selectedId, binderId + '-1', active)}>{binderId} #1
-          </li>
-          <li id={binderId + '-2'}
-              className={buildClassName(selectedId, binderId + '-2', active)}>{binderId} #2
-          </li>
-          <li id={binderId + '-3'}
-              className={buildClassName(selectedId, binderId + '-3', active)}>{binderId} #3
-          </li>
-          <li id={binderId + '-4'}
-              className={buildClassName(selectedId, binderId + '-4', active)}>{binderId} #4
-          </li>
-          <li id={binderId + '-5'}
-              className={buildClassName(selectedId, binderId + '-5', active)}>{binderId} #5
-          </li>
-          <li id={binderId + '-6'}
-              className={buildClassName(selectedId, binderId + '-6', active)}>{binderId} #6
-          </li>
-          <li id={binderId + '-7'}
-              className={buildClassName(selectedId, binderId + '-7', active)}>{binderId} #7
-          </li>
-          <li id={binderId + '-8'}
-              className={buildClassName(selectedId, binderId + '-8', active)}>{binderId} #8
-          </li>
-          <li id={binderId + '-9'}
-              className={buildClassName(selectedId, binderId + '-9', active)}>{binderId} #9
-          </li>
-          <li id={binderId + '-10'}
-              className={buildClassName(selectedId, binderId + '-10', active)}>
-            {binderId} #10
-          </li>
-          <li id={binderId + '-11'}
-              className={buildClassName(selectedId, binderId + '-11', active)}>
-            {binderId} #11
-          </li>
-          <li id={binderId + '-12'}
-              className={buildClassName(selectedId, binderId + '-12', active)}>
-            {binderId} #12
-          </li>
+          <Card id={binderId + '-1'} active={active && selectedId === binderId + '-1'}/>
+          <Card id={binderId + '-2'} active={active && selectedId === binderId + '-2'}/>
+          <Card id={binderId + '-3'} active={active && selectedId === binderId + '-3'}/>
+          <Card id={binderId + '-4'} active={active && selectedId === binderId + '-4'}/>
+          <Card id={binderId + '-5'} active={active && selectedId === binderId + '-5'}/>
+          <Card id={binderId + '-6'} active={active && selectedId === binderId + '-6'}/>
+          <Card id={binderId + '-7'} active={active && selectedId === binderId + '-7'}/>
+          <Card id={binderId + '-8'} active={active && selectedId === binderId + '-8'}/>
+          <Card id={binderId + '-9'} active={active && selectedId === binderId + '-9'}/>
         </ul>
       </div>
     </StrapeBinder>
   );
 };
 
-function onDownExit() {
-  activeKeyBinder('strape-2');
-}
-
-function onUpExit() {
-  activeKeyBinder('strape-1');
-}
-
-function onEnter(element) {
-  alert('ELEMENT #' + element.id);
-}
-
 const Strape1 = connect(state => state['@@keys'].getBinder('strape-1'))(PureStrape);
 const Strape2 = connect(state => state['@@keys'].getBinder('strape-2'))(PureStrape);
 
 ReactDOM.render(<Provider store={store}>
   <div>
-    <Strape1 binderId="strape-1" onDownExit={onDownExit}/>
-    <Strape2 binderId="strape-2" onUpExit={onUpExit}/>
+    <Strape1 binderId="strape-1" onDownExit="strape-2"/>
+    <Strape2 binderId="strape-2" onUpExit="strape-1"/>
   </div>
 </Provider>, document.getElementById('body'));
 

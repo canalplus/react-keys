@@ -6,7 +6,11 @@ import {C_LEFT, C_RIGHT} from './constants';
 import {refresh} from './engines/strape';
 import {isBlocked, block} from './clock';
 import {addListener, removeListener, globalStore} from './listener';
-import {_addKeyBinderToStore, _updateSelectedId, _activeKeyBinder} from './redux/actions';
+import {
+  _addKeyBinderToStore,
+  _updateSelectedId,
+  _activeKeyBinder,
+} from './redux/actions';
 
 class StrapeBinder extends Component {
 

@@ -1,61 +1,61 @@
-const {KeyBinder, keysInit} = ReactKeys;
-const {createStore} = Redux;
+const {MosaicBinder, keysInit, keysReducer, activeKeyBinder} = ReactKeys;
+const {createStore, combineReducers, applyMiddleware} = Redux;
+const {connect, Provider} = ReactRedux;
 
-keysInit();
-
-function selectedId(state = {selectedId: 1}, action) {
-  switch (action.type) {
-    case 'UPDATE_SELECT':
-      return {...state, ...{selectedId: action.selectedKeyId}};
-    default:
-      return state;
-  }
-}
-
-let store = createStore(selectedId);
-
-store.subscribe(() => {
-  ReactDOM.render(<Mosaic selectedId={store.getState().selectedKeyId}/>,
-    document.getElementById('body'));
-});
-
-const Mosaic = ({selectedId}) => {
-  return (
-    <KeyBinder
-      keys={{onRightKey, onLeftKey, onDownKey, onUpKey, onEnterKey}}>
-      <ul>
-        <li id="1" className={selectedId == 1 ? "selected" : ''}>#1</li>
-        <li id="2" className={selectedId == 2 ? "selected" : ''}>#2</li>
-        <li id="3" className={selectedId == 3 ? "selected" : ''}>#3</li>
-        <li id="4" className={selectedId == 4 ? "selected" : ''}>#4</li>
-        <li id="5" className={selectedId == 5 ? "selected" : ''}>#5</li>
-        <li id="6" className={selectedId == 6 ? "selected" : ''}>#6</li>
-        <li id="7" className={selectedId == 7 ? "selected" : ''}>#7</li>
-        <li id="8" className={selectedId == 8 ? "selected" : ''}>#8</li>
-        <li id="9" className={selectedId == 9 ? "selected" : ''}>#9</li>
-      </ul>
-    </KeyBinder>
-  );
+const logger = store => next => action => {
+  console.group(action.type);
+  console.info('dispatching', action);
+  const result = next(action);
+  console.info('next state', store.getState());
+  console.groupEnd(action.type);
+  return result;
 };
 
-function onRightKey(element) {
-  store.dispatch({type: 'UPDATE_SELECT', selectedId: element.id});
+const store = createStore(combineReducers({
+  '@@keys': keysReducer,
+}), applyMiddleware(logger))
+
+keysInit({store: store});
+
+const Card = ({id, active}) => {
+  const style = active ? 'selected' : '';
+  return (
+    <li id={id} className={style}>#{id}</li>
+  );
 }
 
-function onLeftKey(element) {
-  store.dispatch({type: 'UPDATE_SELECT', selectedId: element.id});
-}
-
-function onDownKey(element) {
-  store.dispatch({type: 'UPDATE_SELECT', selectedId: element.id});
-}
-
-function onUpKey(element) {
-  store.dispatch({type: 'UPDATE_SELECT', selectedId: element.id});
-}
+const PureMosaic = ({selectedId}) => {
+  return (
+    <MosaicBinder
+      binderId="mosaic-1"
+      onEnter={onEnterKey}>
+      <ul>
+        <Card id="1" active={selectedId === '1'}/>
+        <Card id="2" active={selectedId === '2'}/>
+        <Card id="3" active={selectedId === '3'}/>
+        <Card id="4" active={selectedId === '4'}/>
+        <Card id="5" active={selectedId === '5'}/>
+        <Card id="6" active={selectedId === '6'}/>
+        <Card id="7" active={selectedId === '7'}/>
+        <Card id="8" active={selectedId === '8'}/>
+        <Card id="9" active={selectedId === '9'}/>
+      </ul>
+    </MosaicBinder>
+  );
+};
 
 function onEnterKey(element) {
   alert('ELEMENT #' + element.id);
 }
 
-ReactDOM.render(<Mosaic selectedId="1"/>, document.getElementById('body'));
+const Mosaic = connect(state => state['@@keys'].getBinder('mosaic-1'))(PureMosaic);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <div>
+      <Mosaic />
+    </div>
+  </Provider>
+  , document.getElementById('body'));
+
+activeKeyBinder('mosaic-1');
