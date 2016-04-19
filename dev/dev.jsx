@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import {connect, Provider} from 'react-redux';
-import {MosaicBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
+import {StrapeBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
 
 
 const logger = store => next => action => {
@@ -20,41 +20,88 @@ const store = createStore(combineReducers({
 
 keysInit({store: store});
 
-const PureMosaic = ({selectedKeyId}) => {
+const buildClassName = (id, selectedId) => {
+  return id === selectedId ? 'selected' : '';
+};
+
+const PureStrape = ({selectedKeyId, marginLeft, binderId, activeBinder, onDownExit, onUpExit}) => {
+  const listStyle = {
+    marginLeft: activeBinder === binderId ? -marginLeft : 0,
+  };
   return (
-    <MosaicBinder
-      binderId="mosaic-1"
-      onEnter={onEnter}
-    >
-      <ul>
-        <li id="1" className={selectedKeyId === '1' ? 'selected' : ''}>#1</li>
-        <li id="2" className={selectedKeyId === '2' ? 'selected' : ''}>#2</li>
-        <li id="3" className={selectedKeyId === '3' ? 'selected' : ''}>#3</li>
-        <li id="4" className={selectedKeyId === '4' ? 'selected' : ''}>#4</li>
-        <li id="5" className={selectedKeyId === '5' ? 'selected' : ''}>#5</li>
-        <li id="6" className={selectedKeyId === '6' ? 'selected' : ''}>#6</li>
-        <li id="7" className={selectedKeyId === '7' ? 'selected' : ''}>#7</li>
-        <li id="8" className={selectedKeyId === '8' ? 'selected' : ''}>#8</li>
-        <li id="9" className={selectedKeyId === '9' ? 'selected' : ''}>#9</li>
-        <li id="10" className={selectedKeyId === '10' ? 'selected' : ''}>#10</li>
-        <li id="11" className={selectedKeyId === '11' ? 'selected' : ''}>#11</li>
-        <li id="12" className={selectedKeyId === '12' ? 'selected' : ''}>#12</li>
-      </ul>
-    </MosaicBinder>
+    <StrapeBinder
+      binderId={binderId}
+      wrapper="#wrapper"
+      strategy="progressive"
+      gap={13}
+      lastGap={13}
+      onDownExit={onDownExit}
+      onUpExit={onUpExit}
+      circular={true}>
+      <div id="wrapper">
+        <ul style={listStyle}>
+          <li id={binderId + '-1'}
+              className={buildClassName(selectedKeyId, binderId + '-1')}>{binderId} #1
+          </li>
+          <li id={binderId + '-2'}
+              className={buildClassName(selectedKeyId, binderId + '-2')}>{binderId} #2
+          </li>
+          <li id={binderId + '-3'}
+              className={buildClassName(selectedKeyId, binderId + '-3')}>{binderId} #3
+          </li>
+          <li id={binderId + '-4'}
+              className={buildClassName(selectedKeyId, binderId + '-4')}>{binderId} #4
+          </li>
+          <li id={binderId + '-5'}
+              className={buildClassName(selectedKeyId, binderId + '-5')}>{binderId} #5
+          </li>
+          <li id={binderId + '-6'}
+              className={buildClassName(selectedKeyId, binderId + '-6')}>{binderId} #6
+          </li>
+          <li id={binderId + '-7'}
+              className={buildClassName(selectedKeyId, binderId + '-7')}>{binderId} #7
+          </li>
+          <li id={binderId + '-8'}
+              className={buildClassName(selectedKeyId, binderId + '-8')}>{binderId} #8
+          </li>
+          <li id={binderId + '-9'}
+              className={buildClassName(selectedKeyId, binderId + '-9')}>{binderId} #9
+          </li>
+          <li id={binderId + '-10'} className={buildClassName(selectedKeyId, binderId + '-10')}>
+            {binderId} #10
+          </li>
+          <li id={binderId + '-11'} className={buildClassName(selectedKeyId, binderId + '-11')}>
+            {binderId} #11
+          </li>
+          <li id={binderId + '-12'} className={buildClassName(selectedKeyId, binderId + '-12')}>
+            {binderId} #12
+          </li>
+        </ul>
+      </div>
+    </StrapeBinder>
   );
 };
+
+function onDownExit() {
+  activeKeyBinder('strape-2');
+}
+
+function onUpExit() {
+  activeKeyBinder('strape-1');
+}
 
 function onEnter(element) {
   alert('ELEMENT #' + element.id);
 }
 
-const Mosaic = connect(state => state['@@keys'])(PureMosaic);
+const Strape = connect(state => state['@@keys'])(PureStrape);
 
 ReactDOM.render(<Provider store={store}>
   <div>
-    <Mosaic/>
+    <Strape binderId="strape-1" onDownExit={onDownExit}/>
+    <Strape binderId="strape-2" onUpExit={onUpExit}/>
   </div>
 </Provider>, document.getElementById('body'));
 
-activeKeyBinder('mosaic-1');
+activeKeyBinder('strape-1');
 
