@@ -5,39 +5,17 @@ import {
 } from './actions';
 
 const initialKeysSate = {
-  activeBinder: null,
-  selectedKeyId: null,
-  marginLeft: null,
-  keysState: [],
+  getBinder: function(binderId) {
+    return this[binderId] || {marginLeft: 0};
+  },
 };
-
-function updateKeysState(state, action) {
-  const binder = state.keysState.find(binderState => binderState.id === state.activeBinder);
-  binder.selectedId = action.selectedKeyId;
-  binder.marginLeft = action.marginLeft;
-  return state.keysState.slice(0);
-}
 
 export const _keyReducer = function(state = initialKeysSate, action) {
   switch (action.type) {
     case ACTIVE_KEYBINDER:
-      return {
-        ...state, ...{
-          activeBinder: action.binderId,
-          selectedKeyId: action.selectedKeyId,
-          marginLeft: action.marginLeft,
-        },
-      };
     case ADD_KEYBINDER_TO_STORE:
-      return {...state, ...{keysState: state.keysState.concat([action.state])}};
     case UPDATE_SELECTED_KEY:
-      return {
-        ...state, ...{
-          selectedKeyId: action.selectedKeyId,
-          marginLeft: action.marginLeft,
-          keysState: updateKeysState(state, action),
-        },
-      };
+      return {...state, ...action.state};
     default:
       return state;
   }

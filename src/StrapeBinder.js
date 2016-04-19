@@ -73,15 +73,22 @@ class StrapeBinder extends Component {
   }
 
   keysHandler(keyCode) {
-    const state = globalStore.getState()['@@keys'];
-    if (state.activeBinder === this.props.binderId && !isBlocked()) {
-      this.nextFocusedElement = this.elements.find(el => el.id === state.selectedKeyId);
+    const active = globalStore
+      && globalStore.getState()['@@keys']
+      && globalStore.getState()['@@keys'][this.props.binderId]
+      && globalStore.getState()['@@keys'][this.props.binderId].active;
+    if (active && !isBlocked()) {
+      const binderState = globalStore.getState()['@@keys'][this.props.binderId];
+      this.nextFocusedElement = this.elements.find(el => el.id === binderState.selectedId);
       block();
       switch (keyCode) {
         case LEFT:
           this._giveFocusTo(C_LEFT);
           if (this.hasMoved) {
-            _updateSelectedId(this.nextFocusedElement.id, this.nextFocusedElement.marginLeft);
+            _updateSelectedId(
+              this.nextFocusedElement.id,
+              this.nextFocusedElement.marginLeft,
+              this.props.binderId);
             if (this.props.onLeft) {
               this.executeFunctionAction(this.props.onLeft);
             }
@@ -97,7 +104,10 @@ class StrapeBinder extends Component {
         case RIGHT:
           this._giveFocusTo(C_RIGHT);
           if (this.hasMoved) {
-            _updateSelectedId(this.nextFocusedElement.id, this.nextFocusedElement.marginLeft);
+            _updateSelectedId(
+              this.nextFocusedElement.id,
+              this.nextFocusedElement.marginLeft,
+              this.props.binderId);
             if (this.props.onRight) {
               this.executeFunctionAction(this.props.onRight);
             }
@@ -185,6 +195,8 @@ class StrapeBinder extends Component {
     }
     _addKeyBinderToStore({
       id: this.props.binderId,
+      elements: this.elements,
+      visibleElements: this.elements.filter(element => element.marginLeft === 0).length,
       selectedId: this.nextFocusedElement.id,
       marginLeft: this.nextFocusedElement.marginLeft,
     });

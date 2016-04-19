@@ -20,13 +20,13 @@ const store = createStore(combineReducers({
 
 keysInit({store: store});
 
-const buildClassName = (id, selectedId) => {
-  return id === selectedId ? 'selected' : '';
+const buildClassName = (id, selectedId, active) => {
+  return id === selectedId && active ? 'selected' : '';
 };
 
-const PureStrape = ({selectedKeyId, marginLeft, binderId, activeBinder, onDownExit, onUpExit}) => {
+const PureStrape = ({selectedId, marginLeft, binderId, active, onDownExit, onUpExit}) => {
   const listStyle = {
-    marginLeft: activeBinder === binderId ? -marginLeft : 0,
+    marginLeft: -marginLeft,
   };
   return (
     <StrapeBinder
@@ -41,39 +41,42 @@ const PureStrape = ({selectedKeyId, marginLeft, binderId, activeBinder, onDownEx
       <div id="wrapper">
         <ul style={listStyle}>
           <li id={binderId + '-1'}
-              className={buildClassName(selectedKeyId, binderId + '-1')}>{binderId} #1
+              className={buildClassName(selectedId, binderId + '-1', active)}>{binderId} #1
           </li>
           <li id={binderId + '-2'}
-              className={buildClassName(selectedKeyId, binderId + '-2')}>{binderId} #2
+              className={buildClassName(selectedId, binderId + '-2', active)}>{binderId} #2
           </li>
           <li id={binderId + '-3'}
-              className={buildClassName(selectedKeyId, binderId + '-3')}>{binderId} #3
+              className={buildClassName(selectedId, binderId + '-3', active)}>{binderId} #3
           </li>
           <li id={binderId + '-4'}
-              className={buildClassName(selectedKeyId, binderId + '-4')}>{binderId} #4
+              className={buildClassName(selectedId, binderId + '-4', active)}>{binderId} #4
           </li>
           <li id={binderId + '-5'}
-              className={buildClassName(selectedKeyId, binderId + '-5')}>{binderId} #5
+              className={buildClassName(selectedId, binderId + '-5', active)}>{binderId} #5
           </li>
           <li id={binderId + '-6'}
-              className={buildClassName(selectedKeyId, binderId + '-6')}>{binderId} #6
+              className={buildClassName(selectedId, binderId + '-6', active)}>{binderId} #6
           </li>
           <li id={binderId + '-7'}
-              className={buildClassName(selectedKeyId, binderId + '-7')}>{binderId} #7
+              className={buildClassName(selectedId, binderId + '-7', active)}>{binderId} #7
           </li>
           <li id={binderId + '-8'}
-              className={buildClassName(selectedKeyId, binderId + '-8')}>{binderId} #8
+              className={buildClassName(selectedId, binderId + '-8', active)}>{binderId} #8
           </li>
           <li id={binderId + '-9'}
-              className={buildClassName(selectedKeyId, binderId + '-9')}>{binderId} #9
+              className={buildClassName(selectedId, binderId + '-9', active)}>{binderId} #9
           </li>
-          <li id={binderId + '-10'} className={buildClassName(selectedKeyId, binderId + '-10')}>
+          <li id={binderId + '-10'}
+              className={buildClassName(selectedId, binderId + '-10', active)}>
             {binderId} #10
           </li>
-          <li id={binderId + '-11'} className={buildClassName(selectedKeyId, binderId + '-11')}>
+          <li id={binderId + '-11'}
+              className={buildClassName(selectedId, binderId + '-11', active)}>
             {binderId} #11
           </li>
-          <li id={binderId + '-12'} className={buildClassName(selectedKeyId, binderId + '-12')}>
+          <li id={binderId + '-12'}
+              className={buildClassName(selectedId, binderId + '-12', active)}>
             {binderId} #12
           </li>
         </ul>
@@ -94,12 +97,13 @@ function onEnter(element) {
   alert('ELEMENT #' + element.id);
 }
 
-const Strape = connect(state => state['@@keys'])(PureStrape);
+const Strape1 = connect(state => state['@@keys'].getBinder('strape-1'))(PureStrape);
+const Strape2 = connect(state => state['@@keys'].getBinder('strape-2'))(PureStrape);
 
 ReactDOM.render(<Provider store={store}>
   <div>
-    <Strape binderId="strape-1" onDownExit={onDownExit}/>
-    <Strape binderId="strape-2" onUpExit={onUpExit}/>
+    <Strape1 binderId="strape-1" onDownExit={onDownExit}/>
+    <Strape2 binderId="strape-2" onUpExit={onUpExit}/>
   </div>
 </Provider>, document.getElementById('body'));
 

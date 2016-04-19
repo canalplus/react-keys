@@ -210,6 +210,7 @@ class MosaicBinder extends Component {
     this.refreshState();
     _addKeyBinderToStore({
       id: this.props.binderId,
+      elements: this.elements,
       selectedId: this.nextFocusedElement.id,
     });
   }
