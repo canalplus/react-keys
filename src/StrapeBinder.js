@@ -8,6 +8,7 @@ import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
 import {execCb} from './execCb';
 import {nextFocusedElement} from './nextFocusedElement';
+import {calculateNewState} from './calculateNewState';
 import {addListener, removeListener, globalStore} from './listener';
 import {
   _addKeyBinderToStore,
@@ -71,6 +72,7 @@ class StrapeBinder extends Component {
     this.listenerId = addListener(this.keysHandler, this);
     this.prevEl = null;
     this.nextEl = null;
+    this.prevDir = null;
     this.hasMoved = false;
   }
 
@@ -90,7 +92,7 @@ class StrapeBinder extends Component {
       block();
       switch (keyCode) {
         case LEFT:
-          this._giveFocusTo(C_LEFT);
+          this.calculateNewState(C_LEFT);
           if (this.hasMoved) {
             _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
             execCb(this.props.onLeft, this.nextEl, this, this.props);
@@ -104,7 +106,7 @@ class StrapeBinder extends Component {
 
           break;
         case RIGHT:
-          this._giveFocusTo(C_RIGHT);
+          this.calculateNewState(C_RIGHT);
           if (this.hasMoved) {
             _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
             execCb(this.props.onRight, this.nextEl, this, this.props);
@@ -163,23 +165,13 @@ class StrapeBinder extends Component {
     this.nextEl = selectedElement || this.nextEl;
   }
 
-  _giveFocusTo(direction) {
-    const intermediate = this.nextEl;
-    if (!intermediate) {
-      this.hasMoved = false;
-      return null;
-    }
-    if (intermediate[direction]) {
-      this.nextEl =
-        this.elements.find(e => e.id === intermediate[direction]);
-    }
-    if (this.nextEl.id !== intermediate.id) {
-      this.hasMoved = true;
-      this.prevEl = intermediate;
-    } else {
-      this.hasMoved = false;
-    }
-    return this.nextEl;
+  calculateNewState(direction) {
+    const response =
+      calculateNewState(direction, this.nextEl, this.prevEl, this.prevDir, this.elements);
+    this.nextEl = response.nextEl;
+    this.prevEl = response.prevEl;
+    this.prevDir = response.prevDir;
+    this.hasMoved = response.hasMoved;
   }
 
   componentDidMount() {

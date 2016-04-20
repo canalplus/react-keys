@@ -8,6 +8,7 @@ import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
 import {nextFocusedElement} from './nextFocusedElement';
 import {execCb} from './execCb';
+import {calculateNewState} from './calculateNewState';
 import {addListener, removeListener, globalStore} from './listener';
 import {_addKeyBinderToStore, _updateSelectedId, _activeKeyBinder} from './redux/actions';
 
@@ -73,7 +74,7 @@ class MosaicBinder extends Component {
       block();
       switch (keyCode) {
         case LEFT:
-          this._giveFocusTo(C_LEFT);
+          this.calculateNewState(C_LEFT);
           if (this.hasMoved) {
             _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
             execCb(this.props.onLeft, this.nextEl, this, this.props);
@@ -87,7 +88,7 @@ class MosaicBinder extends Component {
 
           break;
         case UP:
-          this._giveFocusTo(C_UP);
+          this.calculateNewState(C_UP);
           if (this.hasMoved) {
             _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
             execCb(this.props.onUp, this.nextEl, this, this.props);
@@ -100,7 +101,7 @@ class MosaicBinder extends Component {
           }
           break;
         case DOWN:
-          this._giveFocusTo(C_DOWN);
+          this.calculateNewState(C_DOWN);
           if (this.hasMoved) {
             _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
             execCb(this.props.onDown, this.nextEl, this, this.props);
@@ -113,7 +114,7 @@ class MosaicBinder extends Component {
           }
           break;
         case RIGHT:
-          this._giveFocusTo(C_RIGHT);
+          this.calculateNewState(C_RIGHT);
           if (this.hasMoved) {
             _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
             execCb(this.props.onRight, this.nextEl, this, this.props);
@@ -148,53 +149,13 @@ class MosaicBinder extends Component {
     this.nextEl = selectedElement || this.nextEl;
   }
 
-  _flipflop(direction) {
-    let previousDirection = null;
-    switch (direction) {
-      case C_UP:
-        previousDirection = this.prevDir === C_DOWN ? C_UP : null;
-        break;
-      case C_RIGHT:
-        previousDirection = this.prevDir === C_LEFT ? C_RIGHT : null;
-        break;
-      case C_DOWN:
-        previousDirection = this.prevDir === C_UP ? C_DOWN : null;
-        break;
-      case C_LEFT:
-        previousDirection = this.prevDir === C_RIGHT ? C_LEFT : null;
-        break;
-      default:
-    }
-    if (previousDirection) {
-      const intermediate = this.prevEl;
-      this.prevEl = this.nextEl;
-      this.nextEl = intermediate;
-      this.prevDir = previousDirection;
-      this.hasMoved = true;
-    }
-    return !!previousDirection;
-  }
-
-  _giveFocusTo(direction) {
-    if (!this._flipflop(direction)) {
-      const intermediate = this.nextEl;
-      if (!intermediate) {
-        this.hasMoved = false;
-        return null;
-      }
-      if (intermediate[direction]) {
-        this.nextEl =
-          this.elements.find(e => e.id === intermediate[direction]);
-      }
-      if (this.nextEl.id !== intermediate.id) {
-        this.hasMoved = true;
-        this.prevEl = intermediate;
-        this.prevDir = direction;
-      } else {
-        this.hasMoved = false;
-      }
-    }
-    return this.nextEl;
+  calculateNewState(direction) {
+    const response =
+      calculateNewState(direction, this.nextEl, this.prevEl, this.prevDir, this.elements);
+    this.nextEl = response.nextEl;
+    this.prevEl = response.prevEl;
+    this.prevDir = response.prevDir;
+    this.hasMoved = response.hasMoved;
   }
 
   componentDidMount() {
