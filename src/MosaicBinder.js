@@ -26,6 +26,7 @@ class MosaicBinder extends Component {
       selector: PropTypes.string,
       focusedElementId: PropTypes.string,
       context: PropTypes.object,
+      active: PropTypes.bool,
       accuracy: PropTypes.number,
       onRight: PropTypes.func,
       onLeft: PropTypes.func,
@@ -55,6 +56,7 @@ class MosaicBinder extends Component {
     return {
       selector: 'li',
       accuracy: 0,
+      active: true,
     };
   }
 
@@ -65,14 +67,24 @@ class MosaicBinder extends Component {
       this.props.context);
   }
 
+  isActiveBinder() {
+    let active = false;
+    if (globalStore) {
+      active = globalStore.getState()['@@keys']
+        && globalStore.getState()['@@keys'][this.props.binderId]
+        && globalStore.getState()['@@keys'][this.props.binderId].active;
+    } else {
+      active = this.props.active;
+    }
+    return active;
+  }
+
   keysHandler(keyCode) {
-    const active = globalStore
-      && globalStore.getState()['@@keys']
-      && globalStore.getState()['@@keys'][this.props.binderId]
-      && globalStore.getState()['@@keys'][this.props.binderId].active;
-    if (active && !isBlocked()) {
-      const binderState = globalStore.getState()['@@keys'][this.props.binderId];
-      this.nextFocusedElement = this.elements.find(el => el.id === binderState.selectedId);
+    if (this.isActiveBinder() && !isBlocked()) {
+      if (globalStore) {
+        const binderState = globalStore.getState()['@@keys'][this.props.binderId];
+        this.nextFocusedElement = this.elements.find(el => el.id === binderState.selectedId);
+      }
       block();
       switch (keyCode) {
         case LEFT:
