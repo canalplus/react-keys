@@ -74,41 +74,16 @@ class MosaicBinder extends Component {
       block();
       switch (keyCode) {
         case LEFT:
-          this.calculateNewState(C_LEFT);
-          if (this.hasMoved) {
-            _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
-            execCb(this.props.onLeft, this.nextEl, this, this.props);
-          } else {
-            exitTo(this.props.onLeftExit);
-          }
-
+          this.performAction(C_LEFT, this.props.onLeft, this.props.onLeftExit);
           break;
         case UP:
-          this.calculateNewState(C_UP);
-          if (this.hasMoved) {
-            _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
-            execCb(this.props.onUp, this.nextEl, this, this.props);
-          } else {
-            this.exitTo(this.props.onUpExit);
-          }
-          break;
-        case DOWN:
-          this.calculateNewState(C_DOWN);
-          if (this.hasMoved) {
-            _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
-            execCb(this.props.onDown, this.nextEl, this, this.props);
-          } else {
-            exitTo(this.props.onDownExit);
-          }
+          this.performAction(C_UP, this.props.onUp, this.props.onUpExit);
           break;
         case RIGHT:
-          this.calculateNewState(C_RIGHT);
-          if (this.hasMoved) {
-            _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
-            execCb(this.props.onRight, this.nextEl, this, this.props);
-          } else {
-            exitTo(this.props.onRightExit);
-          }
+          this.performAction(C_RIGHT, this.props.onRight, this.props.onRightExit);
+          break;
+        case DOWN:
+          this.performAction(C_DOWN, this.props.onDown, this.props.onDownExit);
           break;
         case ENTER:
           execCb(this.props.onEnter, this.nextEl, this, this.props);
@@ -116,6 +91,16 @@ class MosaicBinder extends Component {
         default:
           break;
       }
+    }
+  }
+
+  performAction(dir, cb, exitCb) {
+    this.calculateNewState(dir);
+    if (this.hasMoved) {
+      _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
+      execCb(cb, this.nextEl, this, this.props);
+    } else {
+      exitTo(exitCb);
     }
   }
 

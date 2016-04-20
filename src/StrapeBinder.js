@@ -82,22 +82,10 @@ class StrapeBinder extends Component {
       block();
       switch (keyCode) {
         case LEFT:
-          this.calculateNewState(C_LEFT);
-          if (this.hasMoved) {
-            _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
-            execCb(this.props.onLeft, this.nextEl, this, this.props);
-          } else {
-            exitTo(this.props.onLeftExit);
-          }
+          this.performAction(C_LEFT, this.props.onLeft, this.props.onLeftExit);
           break;
         case RIGHT:
-          this.calculateNewState(C_RIGHT);
-          if (this.hasMoved) {
-            _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
-            execCb(this.props.onRight, this.nextEl, this, this.props);
-          } else {
-            exitTo(this.props.onRightExit);
-          }
+          this.performAction(C_RIGHT, this.props.onRight, this.props.onRightExit);
           break;
         case ENTER:
           execCb(this.props.onEnter, this.nextEl, this, this.props);
@@ -111,6 +99,16 @@ class StrapeBinder extends Component {
         default:
           break;
       }
+    }
+  }
+
+  performAction(dir, cb, exitCb) {
+    this.calculateNewState(dir);
+    if (this.hasMoved) {
+      _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
+      execCb(cb, this.nextEl, this, this.props);
+    } else {
+      exitTo(exitCb);
     }
   }
 
