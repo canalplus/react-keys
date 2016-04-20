@@ -56,23 +56,23 @@ class MosaicBinder extends Component {
     super(props);
     this.elements = [];
     this.listenerId = addListener(this.keysHandler, this);
-    this.prevFocusedElement = null;
-    this.nextFocusedElement = null;
-    this.previousDirection = null;
+    this.prevEl = null;
+    this.nextEl = null;
+    this.prevDir = null;
     this.hasMoved = false;
   }
 
   executeFunctionAction(functionAction) {
     functionAction.call(this,
-      this.nextFocusedElement || {},
-      this.prevFocusedElement || {},
+      this.nextEl || {},
+      this.prevEl || {},
       this.props.context);
   }
 
   keysHandler(keyCode) {
     if (isActive(globalStore, this.props) && !isBlocked()) {
-      this.nextFocusedElement = nextFocusedElement(
-        this.nextFocusedElement,
+      this.nextEl = nextFocusedElement(
+        this.nextEl,
         globalStore,
         this.elements,
         this.props.binderId);
@@ -82,8 +82,8 @@ class MosaicBinder extends Component {
           this._giveFocusTo(C_LEFT);
           if (this.hasMoved) {
             _updateSelectedId(
-              this.nextFocusedElement.id,
-              this.nextFocusedElement.marginLeft,
+              this.nextEl.id,
+              this.nextEl.marginLeft,
               this.props.binderId);
             if (this.props.onLeft) {
               this.executeFunctionAction(this.props.onLeft);
@@ -101,8 +101,8 @@ class MosaicBinder extends Component {
           this._giveFocusTo(C_UP);
           if (this.hasMoved) {
             _updateSelectedId(
-              this.nextFocusedElement.id,
-              this.nextFocusedElement.marginLeft,
+              this.nextEl.id,
+              this.nextEl.marginLeft,
               this.props.binderId);
             if (this.props.onUp) {
               this.executeFunctionAction(this.props.onUp);
@@ -119,8 +119,8 @@ class MosaicBinder extends Component {
           this._giveFocusTo(C_DOWN);
           if (this.hasMoved) {
             _updateSelectedId(
-              this.nextFocusedElement.id,
-              this.nextFocusedElement.marginLeft,
+              this.nextEl.id,
+              this.nextEl.marginLeft,
               this.props.binderId);
             if (this.props.onDown) {
               this.executeFunctionAction(this.props.onDown);
@@ -137,8 +137,8 @@ class MosaicBinder extends Component {
           this._giveFocusTo(C_RIGHT);
           if (this.hasMoved) {
             _updateSelectedId(
-              this.nextFocusedElement.id,
-              this.nextFocusedElement.marginLeft,
+              this.nextEl.id,
+              this.nextEl.marginLeft,
               this.props.binderId);
             if (this.props.onRight) {
               this.executeFunctionAction(this.props.onRight);
@@ -173,31 +173,31 @@ class MosaicBinder extends Component {
     );
     const {elements, selectedElement} = value;
     this.elements = elements;
-    this.nextFocusedElement = selectedElement || this.nextFocusedElement;
+    this.nextEl = selectedElement || this.nextEl;
   }
 
   _flipflop(direction) {
     let previousDirection = null;
     switch (direction) {
       case C_UP:
-        previousDirection = this.previousDirection === C_DOWN ? C_UP : null;
+        previousDirection = this.prevDir === C_DOWN ? C_UP : null;
         break;
       case C_RIGHT:
-        previousDirection = this.previousDirection === C_LEFT ? C_RIGHT : null;
+        previousDirection = this.prevDir === C_LEFT ? C_RIGHT : null;
         break;
       case C_DOWN:
-        previousDirection = this.previousDirection === C_UP ? C_DOWN : null;
+        previousDirection = this.prevDir === C_UP ? C_DOWN : null;
         break;
       case C_LEFT:
-        previousDirection = this.previousDirection === C_RIGHT ? C_LEFT : null;
+        previousDirection = this.prevDir === C_RIGHT ? C_LEFT : null;
         break;
       default:
     }
     if (previousDirection) {
-      const intermediate = this.prevFocusedElement;
-      this.prevFocusedElement = this.nextFocusedElement;
-      this.nextFocusedElement = intermediate;
-      this.previousDirection = previousDirection;
+      const intermediate = this.prevEl;
+      this.prevEl = this.nextEl;
+      this.nextEl = intermediate;
+      this.prevDir = previousDirection;
       this.hasMoved = true;
     }
     return !!previousDirection;
@@ -205,24 +205,24 @@ class MosaicBinder extends Component {
 
   _giveFocusTo(direction) {
     if (!this._flipflop(direction)) {
-      const intermediate = this.nextFocusedElement;
+      const intermediate = this.nextEl;
       if (!intermediate) {
         this.hasMoved = false;
         return null;
       }
       if (intermediate[direction]) {
-        this.nextFocusedElement =
+        this.nextEl =
           this.elements.find(e => e.id === intermediate[direction]);
       }
-      if (this.nextFocusedElement.id !== intermediate.id) {
+      if (this.nextEl.id !== intermediate.id) {
         this.hasMoved = true;
-        this.prevFocusedElement = intermediate;
-        this.previousDirection = direction;
+        this.prevEl = intermediate;
+        this.prevDir = direction;
       } else {
         this.hasMoved = false;
       }
     }
-    return this.nextFocusedElement;
+    return this.nextEl;
   }
 
   componentDidMount() {
@@ -230,7 +230,7 @@ class MosaicBinder extends Component {
     _addKeyBinderToStore({
       id: this.props.binderId,
       elements: this.elements,
-      selectedId: this.nextFocusedElement.id,
+      selectedId: this.nextEl.id,
     });
   }
 

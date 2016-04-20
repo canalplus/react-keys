@@ -68,21 +68,21 @@ class StrapeBinder extends Component {
     super(props);
     this.elements = [];
     this.listenerId = addListener(this.keysHandler, this);
-    this.prevFocusedElement = null;
-    this.nextFocusedElement = null;
+    this.prevEl = null;
+    this.nextEl = null;
     this.hasMoved = false;
   }
 
   executeFunctionAction(functionAction) {
     functionAction.call(this,
-      this.nextFocusedElement || {},
+      this.nextEl || {},
       this.props.context);
   }
 
   keysHandler(keyCode) {
     if (isActive(globalStore, this.props) && !isBlocked()) {
-      this.nextFocusedElement = nextFocusedElement(
-        this.nextFocusedElement,
+      this.nextEl = nextFocusedElement(
+        this.nextEl,
         globalStore,
         this.elements,
         this.props.binderId);
@@ -92,8 +92,8 @@ class StrapeBinder extends Component {
           this._giveFocusTo(C_LEFT);
           if (this.hasMoved) {
             _updateSelectedId(
-              this.nextFocusedElement.id,
-              this.nextFocusedElement.marginLeft,
+              this.nextEl.id,
+              this.nextEl.marginLeft,
               this.props.binderId);
             if (this.props.onLeft) {
               this.executeFunctionAction(this.props.onLeft);
@@ -111,8 +111,8 @@ class StrapeBinder extends Component {
           this._giveFocusTo(C_RIGHT);
           if (this.hasMoved) {
             _updateSelectedId(
-              this.nextFocusedElement.id,
-              this.nextFocusedElement.marginLeft,
+              this.nextEl.id,
+              this.nextEl.marginLeft,
               this.props.binderId);
             if (this.props.onRight) {
               this.executeFunctionAction(this.props.onRight);
@@ -171,39 +171,39 @@ class StrapeBinder extends Component {
 
     const {elements, selectedElement} = value;
     this.elements = elements;
-    this.nextFocusedElement = selectedElement || this.nextFocusedElement;
+    this.nextEl = selectedElement || this.nextEl;
   }
 
   _giveFocusTo(direction) {
-    const intermediate = this.nextFocusedElement;
+    const intermediate = this.nextEl;
     if (!intermediate) {
       this.hasMoved = false;
       return null;
     }
     if (intermediate[direction]) {
-      this.nextFocusedElement =
+      this.nextEl =
         this.elements.find(e => e.id === intermediate[direction]);
     }
-    if (this.nextFocusedElement.id !== intermediate.id) {
+    if (this.nextEl.id !== intermediate.id) {
       this.hasMoved = true;
-      this.prevFocusedElement = intermediate;
+      this.prevEl = intermediate;
     } else {
       this.hasMoved = false;
     }
-    return this.nextFocusedElement;
+    return this.nextEl;
   }
 
   componentDidMount() {
     this.refreshState();
-    if (!this.nextFocusedElement) {
+    if (!this.nextEl) {
       return;
     }
     _addKeyBinderToStore({
       id: this.props.binderId,
       elements: this.elements,
       visibleElements: this.elements.filter(element => element.marginLeft === 0).length,
-      selectedId: this.nextFocusedElement.id,
-      marginLeft: this.nextFocusedElement.marginLeft,
+      selectedId: this.nextEl.id,
+      marginLeft: this.nextEl.marginLeft,
     });
   }
 
