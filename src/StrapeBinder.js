@@ -6,6 +6,7 @@ import {C_LEFT, C_RIGHT} from './constants';
 import {refresh} from './engines/strape';
 import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
+import {nextFocusedElement} from './nextFocusedElement';
 import {addListener, removeListener, globalStore} from './listener';
 import {
   _addKeyBinderToStore,
@@ -14,15 +15,6 @@ import {
 } from './redux/actions';
 
 class StrapeBinder extends Component {
-
-  constructor(props) {
-    super(props);
-    this.elements = [];
-    this.listenerId = addListener(this.keysHandler, this);
-    this.prevFocusedElement = null;
-    this.nextFocusedElement = null;
-    this.hasMoved = false;
-  }
 
   static get propTypes() {
     return {
@@ -72,6 +64,15 @@ class StrapeBinder extends Component {
     };
   }
 
+  constructor(props) {
+    super(props);
+    this.elements = [];
+    this.listenerId = addListener(this.keysHandler, this);
+    this.prevFocusedElement = null;
+    this.nextFocusedElement = null;
+    this.hasMoved = false;
+  }
+
   executeFunctionAction(functionAction) {
     functionAction.call(this,
       this.nextFocusedElement || {},
@@ -80,10 +81,11 @@ class StrapeBinder extends Component {
 
   keysHandler(keyCode) {
     if (isActive(globalStore, this.props) && !isBlocked()) {
-      if (globalStore) {
-        const binderState = globalStore.getState()['@@keys'][this.props.binderId];
-        this.nextFocusedElement = this.elements.find(el => el.id === binderState.selectedId);
-      }
+      this.nextFocusedElement = nextFocusedElement(
+        this.nextFocusedElement,
+        globalStore,
+        this.elements,
+        this.props.binderId);
       block();
       switch (keyCode) {
         case LEFT:
