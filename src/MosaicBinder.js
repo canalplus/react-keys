@@ -5,6 +5,7 @@ import {refresh} from './engines/mosaic';
 import {UP, DOWN, LEFT, RIGHT, ENTER} from './keys';
 import {C_UP, C_DOWN, C_LEFT, C_RIGHT} from './constants';
 import {isBlocked, block} from './clock';
+import {isActive} from './isActive';
 import {addListener, removeListener, globalStore} from './listener';
 import {_addKeyBinderToStore, _updateSelectedId, _activeKeyBinder} from './redux/actions';
 
@@ -67,20 +68,8 @@ class MosaicBinder extends Component {
       this.props.context);
   }
 
-  isActiveBinder() {
-    let active = false;
-    if (globalStore) {
-      active = globalStore.getState()['@@keys']
-        && globalStore.getState()['@@keys'][this.props.binderId]
-        && globalStore.getState()['@@keys'][this.props.binderId].active;
-    } else {
-      active = this.props.active;
-    }
-    return active;
-  }
-
   keysHandler(keyCode) {
-    if (this.isActiveBinder() && !isBlocked()) {
+    if (isActive(globalStore, this.props) && !isBlocked()) {
       if (globalStore) {
         const binderState = globalStore.getState()['@@keys'][this.props.binderId];
         this.nextFocusedElement = this.elements.find(el => el.id === binderState.selectedId);
