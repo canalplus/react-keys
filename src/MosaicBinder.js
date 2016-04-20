@@ -7,10 +7,10 @@ import {C_UP, C_DOWN, C_LEFT, C_RIGHT} from './constants';
 import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
 import {nextFocusedElement} from './nextFocusedElement';
-import {execCb} from './execCb';
+import {execCb, exitTo} from './funcHandler';
 import {calculateNewState} from './calculateNewState';
 import {addListener, removeListener, globalStore} from './listener';
-import {_addKeyBinderToStore, _updateSelectedId, _activeKeyBinder} from './redux/actions';
+import {_addKeyBinderToStore, _updateSelectedId} from './redux/actions';
 
 class MosaicBinder extends Component {
 
@@ -78,12 +78,8 @@ class MosaicBinder extends Component {
           if (this.hasMoved) {
             _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
             execCb(this.props.onLeft, this.nextEl, this, this.props);
-          } else if (this.props.onLeftExit) {
-            if (typeof this.props.onLeftExit === 'string') {
-              _activeKeyBinder(this.props.onLeftExit);
-            } else {
-              this.props.onLeftExit();
-            }
+          } else {
+            exitTo(this.props.onLeftExit);
           }
 
           break;
@@ -92,12 +88,8 @@ class MosaicBinder extends Component {
           if (this.hasMoved) {
             _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
             execCb(this.props.onUp, this.nextEl, this, this.props);
-          } else if (this.props.onUpExit) {
-            if (typeof this.props.onUpExit === 'string') {
-              _activeKeyBinder(this.props.onUpExit);
-            } else {
-              this.props.onUpExit();
-            }
+          } else {
+            this.exitTo(this.props.onUpExit);
           }
           break;
         case DOWN:
@@ -105,12 +97,8 @@ class MosaicBinder extends Component {
           if (this.hasMoved) {
             _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
             execCb(this.props.onDown, this.nextEl, this, this.props);
-          } else if (this.props.onDownExit) {
-            if (typeof this.props.onDownExit === 'string') {
-              _activeKeyBinder(this.props.onDownExit);
-            } else {
-              this.props.onDownExit();
-            }
+          } else {
+            exitTo(this.props.onDownExit);
           }
           break;
         case RIGHT:
@@ -118,12 +106,8 @@ class MosaicBinder extends Component {
           if (this.hasMoved) {
             _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
             execCb(this.props.onRight, this.nextEl, this, this.props);
-          } else if (this.props.onRightExit) {
-            if (typeof this.props.onRightExit === 'string') {
-              _activeKeyBinder(this.props.onRightExit);
-            } else {
-              this.props.onRightExit();
-            }
+          } else {
+            exitTo(this.props.onRightExit);
           }
           break;
         case ENTER:

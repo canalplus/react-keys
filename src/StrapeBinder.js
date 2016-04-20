@@ -6,15 +6,11 @@ import {C_LEFT, C_RIGHT} from './constants';
 import {refresh} from './engines/strape';
 import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
-import {execCb} from './execCb';
+import {execCb, exitTo} from './funcHandler';
 import {nextFocusedElement} from './nextFocusedElement';
 import {calculateNewState} from './calculateNewState';
 import {addListener, removeListener, globalStore} from './listener';
-import {
-  _addKeyBinderToStore,
-  _updateSelectedId,
-  _activeKeyBinder,
-} from './redux/actions';
+import {_addKeyBinderToStore, _updateSelectedId} from './redux/actions';
 
 class StrapeBinder extends Component {
 
@@ -76,12 +72,6 @@ class StrapeBinder extends Component {
     this.hasMoved = false;
   }
 
-  executeFunctionAction(functionAction) {
-    functionAction.call(this,
-      this.nextEl || {},
-      this.props.context);
-  }
-
   keysHandler(keyCode) {
     if (isActive(globalStore, this.props) && !isBlocked()) {
       this.nextEl = nextFocusedElement(
@@ -96,48 +86,27 @@ class StrapeBinder extends Component {
           if (this.hasMoved) {
             _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
             execCb(this.props.onLeft, this.nextEl, this, this.props);
-          } else if (this.props.onLeftExit) {
-            if (typeof this.props.onLeftExit === 'string') {
-              _activeKeyBinder(this.props.onLeftExit);
-            } else {
-              this.props.onLeftExit();
-            }
+          } else {
+            exitTo(this.props.onLeftExit);
           }
-
           break;
         case RIGHT:
           this.calculateNewState(C_RIGHT);
           if (this.hasMoved) {
             _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
             execCb(this.props.onRight, this.nextEl, this, this.props);
-          } else if (this.props.onRightExit) {
-            if (typeof this.props.onRightExit === 'string') {
-              _activeKeyBinder(this.props.onRightExit);
-            } else {
-              this.props.onRightExit();
-            }
+          } else {
+            exitTo(this.props.onRightExit);
           }
           break;
         case ENTER:
           execCb(this.props.onEnter, this.nextEl, this, this.props);
           break;
         case UP:
-          if (this.props.onUpExit) {
-            if (typeof this.props.onUpExit === 'string') {
-              _activeKeyBinder(this.props.onUpExit);
-            } else {
-              this.props.onUpExit();
-            }
-          }
+          exitTo(this.props.onUpExit);
           break;
         case DOWN:
-          if (this.props.onDownExit) {
-            if (typeof this.props.onDownExit === 'string') {
-              _activeKeyBinder(this.props.onDownExit);
-            } else {
-              this.props.onDownExit();
-            }
-          }
+          exitTo(this.props.onDownExit);
           break;
         default:
           break;

@@ -22,10 +22,4 @@ describe('StrapeBinder.jsx', () => {
     keyBinder.props().wChildren.should.equal('li');
     keyBinder.props().context.should.be.instanceOf(Object);
   });
-  it('executeFunctionAction should call function', sinon.test(function() {
-    const keyBinder = new StrapeBinder({context: 'context'});
-    const spy = this.spy();
-    keyBinder.executeFunctionAction(spy);
-    spy.should.have.been.calledOnce;
-  }));
 });
