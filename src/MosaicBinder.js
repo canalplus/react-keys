@@ -7,6 +7,7 @@ import {C_UP, C_DOWN, C_LEFT, C_RIGHT} from './constants';
 import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
 import {nextFocusedElement} from './nextFocusedElement';
+import {execCb} from './execCb';
 import {addListener, removeListener, globalStore} from './listener';
 import {_addKeyBinderToStore, _updateSelectedId, _activeKeyBinder} from './redux/actions';
 
@@ -62,13 +63,6 @@ class MosaicBinder extends Component {
     this.hasMoved = false;
   }
 
-  executeFunctionAction(functionAction) {
-    functionAction.call(this,
-      this.nextEl || {},
-      this.prevEl || {},
-      this.props.context);
-  }
-
   keysHandler(keyCode) {
     if (isActive(globalStore, this.props) && !isBlocked()) {
       this.nextEl = nextFocusedElement(
@@ -81,13 +75,8 @@ class MosaicBinder extends Component {
         case LEFT:
           this._giveFocusTo(C_LEFT);
           if (this.hasMoved) {
-            _updateSelectedId(
-              this.nextEl.id,
-              this.nextEl.marginLeft,
-              this.props.binderId);
-            if (this.props.onLeft) {
-              this.executeFunctionAction(this.props.onLeft);
-            }
+            _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
+            execCb(this.props.onLeft, this.nextEl, this, this.props);
           } else if (this.props.onLeftExit) {
             if (typeof this.props.onLeftExit === 'string') {
               _activeKeyBinder(this.props.onLeftExit);
@@ -100,13 +89,8 @@ class MosaicBinder extends Component {
         case UP:
           this._giveFocusTo(C_UP);
           if (this.hasMoved) {
-            _updateSelectedId(
-              this.nextEl.id,
-              this.nextEl.marginLeft,
-              this.props.binderId);
-            if (this.props.onUp) {
-              this.executeFunctionAction(this.props.onUp);
-            }
+            _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
+            execCb(this.props.onUp, this.nextEl, this, this.props);
           } else if (this.props.onUpExit) {
             if (typeof this.props.onUpExit === 'string') {
               _activeKeyBinder(this.props.onUpExit);
@@ -118,13 +102,8 @@ class MosaicBinder extends Component {
         case DOWN:
           this._giveFocusTo(C_DOWN);
           if (this.hasMoved) {
-            _updateSelectedId(
-              this.nextEl.id,
-              this.nextEl.marginLeft,
-              this.props.binderId);
-            if (this.props.onDown) {
-              this.executeFunctionAction(this.props.onDown);
-            }
+            _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
+            execCb(this.props.onDown, this.nextEl, this, this.props);
           } else if (this.props.onDownExit) {
             if (typeof this.props.onDownExit === 'string') {
               _activeKeyBinder(this.props.onDownExit);
@@ -136,13 +115,8 @@ class MosaicBinder extends Component {
         case RIGHT:
           this._giveFocusTo(C_RIGHT);
           if (this.hasMoved) {
-            _updateSelectedId(
-              this.nextEl.id,
-              this.nextEl.marginLeft,
-              this.props.binderId);
-            if (this.props.onRight) {
-              this.executeFunctionAction(this.props.onRight);
-            }
+            _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
+            execCb(this.props.onRight, this.nextEl, this, this.props);
           } else if (this.props.onRightExit) {
             if (typeof this.props.onRightExit === 'string') {
               _activeKeyBinder(this.props.onRightExit);
@@ -152,9 +126,7 @@ class MosaicBinder extends Component {
           }
           break;
         case ENTER:
-          if (this.props.onEnter) {
-            this.executeFunctionAction(this.props.onEnter);
-          }
+          execCb(this.props.onEnter, this.nextEl, this, this.props);
           break;
         default:
           break;

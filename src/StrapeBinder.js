@@ -6,6 +6,7 @@ import {C_LEFT, C_RIGHT} from './constants';
 import {refresh} from './engines/strape';
 import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
+import {execCb} from './execCb';
 import {nextFocusedElement} from './nextFocusedElement';
 import {addListener, removeListener, globalStore} from './listener';
 import {
@@ -91,13 +92,8 @@ class StrapeBinder extends Component {
         case LEFT:
           this._giveFocusTo(C_LEFT);
           if (this.hasMoved) {
-            _updateSelectedId(
-              this.nextEl.id,
-              this.nextEl.marginLeft,
-              this.props.binderId);
-            if (this.props.onLeft) {
-              this.executeFunctionAction(this.props.onLeft);
-            }
+            _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
+            execCb(this.props.onLeft, this.nextEl, this, this.props);
           } else if (this.props.onLeftExit) {
             if (typeof this.props.onLeftExit === 'string') {
               _activeKeyBinder(this.props.onLeftExit);
@@ -110,13 +106,8 @@ class StrapeBinder extends Component {
         case RIGHT:
           this._giveFocusTo(C_RIGHT);
           if (this.hasMoved) {
-            _updateSelectedId(
-              this.nextEl.id,
-              this.nextEl.marginLeft,
-              this.props.binderId);
-            if (this.props.onRight) {
-              this.executeFunctionAction(this.props.onRight);
-            }
+            _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
+            execCb(this.props.onRight, this.nextEl, this, this.props);
           } else if (this.props.onRightExit) {
             if (typeof this.props.onRightExit === 'string') {
               _activeKeyBinder(this.props.onRightExit);
@@ -126,9 +117,7 @@ class StrapeBinder extends Component {
           }
           break;
         case ENTER:
-          if (this.props.onEnter) {
-            this.executeFunctionAction(this.props.onEnter);
-          }
+          execCb(this.props.onEnter, this.nextEl, this, this.props);
           break;
         case UP:
           if (this.props.onUpExit) {
