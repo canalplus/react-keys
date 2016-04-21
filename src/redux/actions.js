@@ -4,7 +4,7 @@ export const ADD_KEYBINDER_TO_STORE = [NAME, '/ADD_KEYBINDER_TO_STORE'].join('')
 export const UPDATE_SELECTED_KEY = [NAME, '/UPDATE_SELECTED_KEY'].join('');
 import {globalStore} from '../listener';
 
-function clone(obj) {
+export const clone = obj => {
   const cloneObject = {};
   for (const property in obj) {
     if (typeof obj[property] === 'object') {
@@ -14,10 +14,10 @@ function clone(obj) {
     }
   }
   return cloneObject;
-}
+};
 
 export const _activeKeyBinder = binderId => {
-  if (globalStore && globalStore.dispatch) {
+  if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
     for (const key of Object.keys(newState)) {
       newState[key].active = false;
@@ -33,7 +33,7 @@ export const _activeKeyBinder = binderId => {
 };
 
 export const _addKeyBinderToStore = keyBinderState => {
-  if (globalStore && globalStore.dispatch) {
+  if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
     if (!Object.keys(newState).some(key => key === keyBinderState.id)) {
       newState[keyBinderState.id] = keyBinderState;
@@ -47,7 +47,7 @@ export const _addKeyBinderToStore = keyBinderState => {
 };
 
 export const _updateSelectedId = (selectedId, marginLeft, binderId) => {
-  if (globalStore && globalStore.dispatch) {
+  if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
     newState[binderId].selectedId = selectedId;
     newState[binderId].marginLeft = marginLeft;
