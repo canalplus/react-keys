@@ -1,4 +1,4 @@
-export const isActive = (state, {binderId, active}) => {
+export function isActive(state, {binderId, active}) {
   let response = false;
   if (state) {
     response = state.getState()['@@keys'] && state.getState()['@@keys'][binderId]
@@ -7,4 +7,4 @@ export const isActive = (state, {binderId, active}) => {
     response = active;
   }
   return !!response;
-};
+}

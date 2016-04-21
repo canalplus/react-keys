@@ -10,7 +10,7 @@ const initialKeysSate = {
   },
 };
 
-export const _keyReducer = function(state = initialKeysSate, action) {
+export function _keyReducer(state = initialKeysSate, action) {
   switch (action.type) {
     case ACTIVE_KEYBINDER:
     case ADD_KEYBINDER_TO_STORE:
@@ -19,4 +19,4 @@ export const _keyReducer = function(state = initialKeysSate, action) {
     default:
       return state;
   }
-};
+}

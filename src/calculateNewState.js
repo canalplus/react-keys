@@ -1,6 +1,6 @@
 import {C_UP, C_DOWN, C_LEFT, C_RIGHT} from './constants';
 
-export const flipflop = (direction, nextEl, prevEl, prevDir) => {
+export function flipflop(direction, nextEl, prevEl, prevDir) {
   let _hasMoved = false;
   let _prevEl = prevEl;
   let _nextEl = nextEl;
@@ -34,9 +34,9 @@ export const flipflop = (direction, nextEl, prevEl, prevDir) => {
     prevEl: _prevEl,
     prevDir: dir,
   };
-};
+}
 
-export const calculateNewState = (direction, nextEl, prevEl, prevDir, elements) => {
+export function calculateNewState(direction, nextEl, prevEl, prevDir, elements) {
   let _hasMoved = false;
   let _nextEl = nextEl;
   let _prevEl = prevEl;
@@ -60,4 +60,4 @@ export const calculateNewState = (direction, nextEl, prevEl, prevDir, elements) 
     };
   }
   return response;
-};
+}
