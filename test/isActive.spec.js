@@ -2,7 +2,7 @@
 import {isActive} from '../src/isActive';
 import {createStore} from 'redux';
 
-describe('isActive', () => {
+describe('isActive.js', () => {
   it('should return true when no state and props active = true', () => {
     const props = {binderId: '1', active: true};
     isActive(null, props).should.be.true;

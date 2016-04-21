@@ -11,7 +11,7 @@ import {
 import {expect} from 'chai';
 import jsdom from 'jsdom';
 
-describe('engine/strape', () => {
+describe('engine/strape.js', () => {
   it('build should return an array', () => {
     const dom = jsdom.jsdom('<div id="wrapper"><li id="1"></li><li id="2"></li></div>');
     const list = [];

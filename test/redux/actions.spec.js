@@ -12,7 +12,7 @@ import * as module from '../../src/listener';
 import {createStore} from 'redux';
 import sinon from 'sinon';
 
-describe('redux/actions', () => {
+describe('redux/actions.js', () => {
   describe('clone', () => {
     it('should clone an object', () => {
       const ob1 = {id: 1, context: {obladi: 'oblada'}};

@@ -8,6 +8,7 @@ import * as constants from '../src/constants';
 describe('MosaicBinder.jsx', () => {
   it('should wrap with tagName div', () => {
     const keyBinder = shallow(<MosaicBinder binderId="1"/>);
+    console.log(keyBinder);
     keyBinder.should.have.tagName('div');
   });
 });

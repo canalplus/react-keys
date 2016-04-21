@@ -3,7 +3,7 @@ import {execCb, exitTo} from '../src/funcHandler';
 import * as module from '../src/redux/actions';
 import sinon from 'sinon';
 
-describe('funcHandler', () => {
+describe('funcHandler.js', () => {
   describe('execCb', () => {
     it('should not throw error if function is null', () => {
       execCb(null);

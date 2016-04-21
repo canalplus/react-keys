@@ -2,7 +2,7 @@
 import {nextFocusedElement} from '../src/nextFocusedElement';
 import {createStore} from 'redux';
 
-describe('nextFocusedElement', () => {
+describe('nextFocusedElement.js', () => {
   it('should return current element when no store', () => {
     const el = {id: '2'};
     const elements = [{id: '1'}, {id: '2'}];

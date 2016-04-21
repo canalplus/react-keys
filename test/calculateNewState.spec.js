@@ -2,7 +2,7 @@
 import {flipflop, calculateNewState} from '../src/calculateNewState';
 import {C_UP, C_DOWN, C_LEFT, C_RIGHT} from '../src/constants';
 
-describe('calculateNewState', () => {
+describe('calculateNewState.js', () => {
   describe('flipflop', () => {
     it('should flipflop from down to up', () => {
       const nextEl = {id: 2};
