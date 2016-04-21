@@ -17,7 +17,9 @@ describe('listener.js', () => {
   it('_init should execute callback if one is passed', sinon.test(function() {
     this.mock(document).expects('addEventListener').never();
     const callback = sinon.spy();
-    _init(callback);
+    _init({
+      bindkeys: callback,
+    });
     callback.should.have.been.calledOnce;
     callback.should.have.been.calledWith(cb);
   }));

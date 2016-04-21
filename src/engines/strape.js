@@ -92,6 +92,12 @@ export function createList(dom, children) {
   return elements ? [].slice.call(elements) : [];
 }
 
+export function selectedElement(elements, focusedElementId) {
+  const focusedElement = focusedElementId
+    ? elements.find(e => e.id === focusedElementId) : null;
+  return focusedElement || elements[0];
+}
+
 export function refresh(dom, prevElements, wrapper, children, options) {
   const elements = createList(dom, children);
   if (!hasDiff(elements, prevElements)) {
@@ -104,7 +110,7 @@ export function refresh(dom, prevElements, wrapper, children, options) {
   trigger('strape:update', nextElements);
   return {
     elements: nextElements,
-    selectedElement: nextElements[0],
+    selectedElement: selectedElement(nextElements, options.focusedElementId),
   };
 }
 

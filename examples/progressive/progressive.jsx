@@ -1,77 +1,61 @@
-const {KeyBinder, keysInit} = ReactKeys;
-const {createStore} = Redux;
+const {StrapeBinder, keysInit, keysReducer, activeKeyBinder} = ReactKeys;
+const {createStore, combineReducers} = Redux;
+const {connect, Provider} = ReactRedux;
 
-keysInit();
+const store = createStore(combineReducers({
+  '@@keys': keysReducer,
+}));
 
-function selectedId(state = {selectedId: 1, marginLeft: 0}, action) {
-  switch (action.type) {
-    case 'UPDATE_SELECT':
-      return {...state, ...{selectedId: action.selectedId, marginLeft: action.marginLeft}};
-    default:
-      return state;
-  }
-}
+keysInit({store: store});
 
-const store = createStore(selectedId);
+const Card = ({id, active}) => {
+  const style = active ? 'selected' : '';
+  return (
+    <li id={id} className={style}>#{id}</li>
+  );
+};
 
-store.subscribe(() => {
-  ReactDOM.render(<Strape selectedId={store.getState().selectedId}
-                          marginLeft={store.getState().marginLeft}/>,
-    document.getElementById('body'));
-});
-
-const Strape = ({selectedId, marginLeft}) => {
+const PureStrape = ({selectedId, marginLeft, active}) => {
   const listStyle = {
     marginLeft: -marginLeft,
   };
   return (
-    <KeyBinder
-      mode="strape"
-      options={{
-        strategy: 'progressive',
-        gap: 30,
-        circular: true,
-      }}
+    <StrapeBinder
+      binderId="strape-1"
       wrapper="#wrapper"
-      keys={{onRightKey, onLeftKey, onDownKey, onUpKey, onEnterKey}}>
+      strategy="progressive"
+      gap={30}
+      onEnter={onEnterKey}
+      circular={true}>
       <div id="wrapper">
         <ul style={listStyle}>
-          <li id="1" className={selectedId === '1' ? 'selected' : ''}>#1</li>
-          <li id="2" className={selectedId === '2' ? 'selected' : ''}>#2</li>
-          <li id="3" className={selectedId === '3' ? 'selected' : ''}>#3</li>
-          <li id="4" className={selectedId === '4' ? 'selected' : ''}>#4</li>
-          <li id="5" className={selectedId === '5' ? 'selected' : ''}>#5</li>
-          <li id="6" className={selectedId === '6' ? 'selected' : ''}>#6</li>
-          <li id="7" className={selectedId === '7' ? 'selected' : ''}>#7</li>
-          <li id="8" className={selectedId === '8' ? 'selected' : ''}>#8</li>
-          <li id="9" className={selectedId === '9' ? 'selected' : ''}>#9</li>
-          <li id="10" className={selectedId === '10' ? 'selected' : ''}>#10</li>
-          <li id="11" className={selectedId === '11' ? 'selected' : ''}>#11</li>
-          <li id="12" className={selectedId === '12' ? 'selected' : ''}>#12</li>
+          <Card id="1" active={active && selectedId === '1'}/>
+          <Card id="2" active={active && selectedId === '2'}/>
+          <Card id="3" active={active && selectedId === '3'}/>
+          <Card id="4" active={active && selectedId === '4'}/>
+          <Card id="5" active={active && selectedId === '5'}/>
+          <Card id="6" active={active && selectedId === '6'}/>
+          <Card id="7" active={active && selectedId === '7'}/>
+          <Card id="8" active={active && selectedId === '8'}/>
+          <Card id="9" active={active && selectedId === '9'}/>
         </ul>
       </div>
-    </KeyBinder>
+    </StrapeBinder>
   );
 };
 
-function onRightKey(element) {
-  store.dispatch({type: 'UPDATE_SELECT', selectedId: element.id, marginLeft: element.marginLeft});
-}
-
-function onLeftKey(element) {
-  store.dispatch({type: 'UPDATE_SELECT', selectedId: element.id, marginLeft: element.marginLeft});
-}
-
-function onDownKey(element) {
-  store.dispatch({type: 'UPDATE_SELECT', selectedId: element.id, marginLeft: element.marginLeft});
-}
-
-function onUpKey(element) {
-  store.dispatch({type: 'UPDATE_SELECT', selectedId: element.id, marginLeft: element.marginLeft});
-}
+const Strape = connect(state => state['@@keys'].getBinder('strape-1'))(PureStrape);
 
 function onEnterKey(element) {
   alert('ELEMENT #' + element.id);
 }
 
-ReactDOM.render(<Strape selectedId="1" marginLeft="0"/>, document.getElementById('body'));
+ReactDOM.render(
+  <Provider store={store}>
+    <div>
+      <Strape />
+    </div>
+  </Provider>,
+  document.getElementById('body'));
+
+activeKeyBinder('strape-1');

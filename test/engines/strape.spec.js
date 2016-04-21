@@ -7,11 +7,12 @@ import {
   findRightElement,
   createList,
   build,
+  selectedElement,
 } from '../../src/engines/strape';
 import {expect} from 'chai';
 import jsdom from 'jsdom';
 
-describe('engine/strape', () => {
+describe('engine/strape.js', () => {
   it('build should return an array', () => {
     const dom = jsdom.jsdom('<div id="wrapper"><li id="1"></li><li id="2"></li></div>');
     const list = [];
@@ -215,5 +216,16 @@ describe('engine/strape', () => {
       {id: 2},
     ];
     findLeftElement(cards, 0, true).should.equal(2);
+  });
+  describe('selectedElement', () => {
+    it('should return element from id when it exists in array', () => {
+      const array = [{id: '1'}, {id: '2'}];
+      selectedElement(array, '2').id.should.equal('2');
+    });
+    it('should should return first element when id is not found', () => {
+      const array = [{id: '1'}, {id: '2'}];
+      selectedElement(array, '3').id.should.equal('1');
+      selectedElement(array, null).id.should.equal('1');
+    });
   });
 });

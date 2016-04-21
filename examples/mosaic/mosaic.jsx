@@ -1,64 +1,47 @@
-const {KeyBinder, keysInit} = ReactKeys;
-const {createStore} = Redux;
+const {MosaicBinder, keysInit, keysReducer, activeKeyBinder} = ReactKeys;
+const {createStore, combineReducers} = Redux;
+const {connect, Provider} = ReactRedux;
 
-keysInit();
+const store = createStore(combineReducers({
+  '@@keys': keysReducer,
+}));
 
-function selectedId(state = {selectedId: 1}, action) {
-  switch (action.type) {
-    case 'UPDATE_SELECT':
-      return {...state, ...{selectedId: action.selectedId}};
-    default:
-      return state;
-  }
-}
+keysInit({store: store});
 
-let store = createStore(selectedId);
-
-store.subscribe(() => {
-  ReactDOM.render(<Mosaic selectedId={store.getState().selectedId}/>,
-    document.getElementById('body'));
-});
-
-const Mosaic = ({selectedId}) => {
+const PureMosaic = ({selectedId}) => {
   return (
-    <KeyBinder
-      keys={{onRightKey, onLeftKey, onDownKey, onUpKey, onEnterKey}}>
+    <MosaicBinder
+      binderId="mosaic-1"
+      onEnter={onEnter}
+    >
       <ul>
-        <li id="1" className={selectedId == 1 ? "selected" : ''}>#1</li>
-        <li id="2" className={selectedId == 2 ? "selected" : ''}>#2</li>
-        <li id="3" className={selectedId == 3 ? "selected" : ''}>#3</li>
-        <li id="4" className={selectedId == 4 ? "selected" : ''}>#4</li>
-        <li id="5" className={selectedId == 5 ? "selected" : ''}>#5</li>
-        <li id="6" className={selectedId == 6 ? "selected" : ''}>#6</li>
-        <li id="7" className={selectedId == 7 ? "selected" : ''}>#7</li>
-        <li id="8" className={selectedId == 8 ? "selected" : ''}>#8</li>
-        <li id="9" className={selectedId == 9 ? "selected" : ''}>#9</li>
-        <li id="10" className={selectedId == 10 ? "selected" : ''}>#10</li>
-        <li id="11" className={selectedId == 11 ? "selected" : ''}>#11</li>
-        <li id="12" className={selectedId == 12 ? "selected" : ''}>#12</li>
+        <li id="1" className={selectedId === '1' ? 'selected' : ''}>#1</li>
+        <li id="2" className={selectedId === '2' ? 'selected' : ''}>#2</li>
+        <li id="3" className={selectedId === '3' ? 'selected' : ''}>#3</li>
+        <li id="4" className={selectedId === '4' ? 'selected' : ''}>#4</li>
+        <li id="5" className={selectedId === '5' ? 'selected' : ''}>#5</li>
+        <li id="6" className={selectedId === '6' ? 'selected' : ''}>#6</li>
+        <li id="7" className={selectedId === '7' ? 'selected' : ''}>#7</li>
+        <li id="8" className={selectedId === '8' ? 'selected' : ''}>#8</li>
+        <li id="9" className={selectedId === '9' ? 'selected' : ''}>#9</li>
+        <li id="10" className={selectedId === '10' ? 'selected' : ''}>#10</li>
+        <li id="11" className={selectedId === '11' ? 'selected' : ''}>#11</li>
+        <li id="12" className={selectedId === '12' ? 'selected' : ''}>#12</li>
       </ul>
-    </KeyBinder>
+    </MosaicBinder>
   );
 };
 
-function onRightKey(element) {
-  store.dispatch({type: 'UPDATE_SELECT', selectedId: element.id});
-}
-
-function onLeftKey(element) {
-  store.dispatch({type: 'UPDATE_SELECT', selectedId: element.id});
-}
-
-function onDownKey(element) {
-  store.dispatch({type: 'UPDATE_SELECT', selectedId: element.id});
-}
-
-function onUpKey(element) {
-  store.dispatch({type: 'UPDATE_SELECT', selectedId: element.id});
-}
-
-function onEnterKey(element) {
+function onEnter(element) {
   alert('ELEMENT #' + element.id);
 }
 
-ReactDOM.render(<Mosaic selectedId="1"/>, document.getElementById('body'));
+const Mosaic = connect(state => state['@@keys'].getBinder('mosaic-1'))(PureMosaic);
+
+ReactDOM.render(<Provider store={store}>
+  <div>
+    <Mosaic/>
+  </div>
+</Provider>, document.getElementById('body'));
+
+activeKeyBinder('mosaic-1');

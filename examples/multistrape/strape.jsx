@@ -1,9 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {createStore, applyMiddleware, combineReducers} from 'redux';
-import {connect, Provider} from 'react-redux';
-import {StrapeBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
-
+const {StrapeBinder, keysInit, keysReducer, activeKeyBinder} = ReactKeys;
+const {createStore, combineReducers, applyMiddleware} = Redux;
+const {connect, Provider} = ReactRedux;
 
 const logger = store => next => action => {
   console.group(action.type);
@@ -68,4 +65,3 @@ ReactDOM.render(<Provider store={store}>
 </Provider>, document.getElementById('body'));
 
 activeKeyBinder('strape-1');
-
