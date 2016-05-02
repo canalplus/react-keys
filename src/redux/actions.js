@@ -51,7 +51,7 @@ export function _addKeyBinderToStore(binderId) {
 export function _updateBinderState(binderId, binderState) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
-    newState[binderId] = {...newState[binderId], ...binderState}
+    newState[binderId] = {...newState[binderId], ...binderState};
     globalStore.dispatch({
       type: UPDATE_BINDER_STATE,
       state: newState,
