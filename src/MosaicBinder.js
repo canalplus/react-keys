@@ -115,7 +115,7 @@ class MosaicBinder extends Component {
     );
     const {elements, selectedElement} = value;
     this.elements = elements;
-    this.nextEl = selectedElement || this.nextEl;
+    this.nextEl = selectedElement || this.nextEl || {};
   }
 
   calculateNewState(direction) {
