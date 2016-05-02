@@ -92,6 +92,7 @@ class MosaicBinder extends Component {
           break;
         case BACK:
           execCb(this.props.onBack, this.nextEl, this, this.props);
+          break;
         default:
           break;
       }
