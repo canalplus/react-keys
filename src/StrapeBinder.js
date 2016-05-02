@@ -1,7 +1,7 @@
 /* eslint no-unused-vars:0 */
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
-import {UP, DOWN, LEFT, RIGHT, ENTER} from './keys';
+import {UP, DOWN, LEFT, RIGHT, ENTER, BACK} from './keys';
 import {C_LEFT, C_RIGHT} from './constants';
 import {refresh} from './engines/strape';
 import {isBlocked, block} from './clock';
@@ -23,6 +23,7 @@ class StrapeBinder extends Component {
       onRight: PropTypes.func,
       onLeft: PropTypes.func,
       onEnter: PropTypes.func,
+      onBack: PropTypes.func,
       onLeftExit: React.PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.func,
@@ -97,6 +98,8 @@ class StrapeBinder extends Component {
         case DOWN:
           exitTo(this.props.onDownExit);
           break;
+        case BACK:
+          execCb(this.props.onBack, this.nextEl, this, this.props);
         default:
           break;
       }

@@ -74,15 +74,13 @@ describe('MosaicBinder.jsx', () => {
     this.mock(actions).expects('_updateBinderState')
       .once()
       .withArgs('1', sinon.match.object);
-    const Component = React.createClass({
-      render: function() {
-        return (
-          <MosaicBinder binderId="1" active={true} focusedElementId="li2">
-            {this.props.elems.map(el => <li key={el.id} id={el.id}></li>)}
-          </MosaicBinder>
-        );
-      },
-    });
+    const Component = ({elems}) => {
+      return (
+        <MosaicBinder binderId="1" active={true} focusedElementId="li2">
+          {elems.map(el => <li key={el.id} id={el.id}></li>)}
+        </MosaicBinder>
+      );
+    };
     const elems = [];
     const mosaic = mount(<Component elems={elems}/>);
     mosaic.setProps({elems: [{id: 1}, {id: 2}]});
