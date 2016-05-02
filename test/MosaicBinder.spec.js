@@ -61,4 +61,30 @@ describe('MosaicBinder.jsx', () => {
     </MosaicBinder>);
     mosaic.node.nextEl.id.should.equal('li2');
   });
+
+  it('should set element selected', () => {
+    const mosaic = mount(<MosaicBinder binderId="1" active={true} focusedElementId="li2">
+      <li id="li1"></li>
+      <li id="li2"></li>
+    </MosaicBinder>);
+    mosaic.node.nextEl.id.should.equal('li2');
+  });
+
+  it('should send action updateBinderState when elements are updated', sinon.test(function() {
+    this.mock(actions).expects('_updateBinderState')
+      .once()
+      .withArgs('1', sinon.match.object);
+    const Component = React.createClass({
+      render: function() {
+        return (
+          <MosaicBinder binderId="1" active={true} focusedElementId="li2">
+            {this.props.elems.map(el => <li key={el.id} id={el.id}></li>)}
+          </MosaicBinder>
+        );
+      },
+    });
+    const elems = [];
+    const mosaic = mount(<Component elems={elems}/>);
+    mosaic.setProps({elems: [{id: 1}, {id: 2}]});
+  }));
 });

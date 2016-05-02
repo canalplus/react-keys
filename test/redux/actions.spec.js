@@ -4,9 +4,11 @@ import {
   _activeKeyBinder,
   _addKeyBinderToStore,
   _updateSelectedId,
+  _updateBinderState,
   ACTIVE_KEYBINDER,
   ADD_KEYBINDER_TO_STORE,
   UPDATE_SELECTED_KEY,
+  UPDATE_BINDER_STATE,
 } from '../../src/redux/actions';
 import * as module from '../../src/listener';
 import {createStore} from 'redux';
@@ -96,6 +98,23 @@ describe('redux/actions.js', () => {
         },
       });
       _updateSelectedId(2, 10, 'binderId');
+    }));
+  });
+
+  describe('_updateBinderState', () => {
+    it('should update state', sinon.test(function() {
+      const store = createStore((state = {
+        '@@keys': {
+          binderId: {active: false, selectedId: 1, marginLeft: 0},
+        },
+      }) => state);
+      module._init({store: store}); // init globalStore
+      this.mock(module.globalStore).expects('dispatch').once()
+        .withArgs({
+          type: UPDATE_BINDER_STATE,
+          state: sinon.match.object,
+        });
+      _updateBinderState('binderId', {});
     }));
   });
 });

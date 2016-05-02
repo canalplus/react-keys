@@ -10,7 +10,8 @@ import {execCb, exitTo} from './funcHandler';
 import {nextFocusedElement} from './nextFocusedElement';
 import {calculateNewState} from './calculateNewState';
 import {addListener, removeListener, globalStore} from './listener';
-import {_addKeyBinderToStore, _updateSelectedId} from './redux/actions';
+import {_addKeyBinderToStore, _updateSelectedId, _updateBinderState} from './redux/actions';
+import {hasDiff} from './hasDiff';
 
 class StrapeBinder extends Component {
 
@@ -129,8 +130,14 @@ class StrapeBinder extends Component {
     );
 
     const {elements, selectedElement} = value;
-    this.elements = elements;
-    this.nextEl = selectedElement || this.nextEl;
+    this.nextEl = selectedElement || this.nextEl || {};
+    if (hasDiff(elements, this.elements)) {
+      this.elements = elements;
+      _updateBinderState(this.props.binderId, {
+        elements: this.elements,
+        selectedId: this.nextEl.id,
+      });
+    }
   }
 
   calculateNewState(direction) {
