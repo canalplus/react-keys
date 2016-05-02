@@ -34,13 +34,7 @@ describe('StrapeBinder.jsx', () => {
     </StrapeBinder>);
     refreshStateSpy.should.have.been.calledOnce;
     addToStoreSpy.should.have.been.calledOnce;
-    addToStoreSpy.should.have.been.calledWith({
-      elements: [{id: 'li1', left: undefined, right: undefined, marginLeft: 0}],
-      id: '1',
-      marginLeft: 0,
-      selectedId: 'li1',
-      visibleElements: 1,
-    });
+    addToStoreSpy.should.have.been.calledWith('1');
   }));
 
   it('should call refreshState on update', sinon.test(function() {

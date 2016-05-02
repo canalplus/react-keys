@@ -139,7 +139,9 @@ class StrapeBinder extends Component {
       this.elements = elements;
       _updateBinderState(this.props.binderId, {
         elements: this.elements,
+        visibleElements: this.elements.filter(element => element.marginLeft === 0).length,
         selectedId: this.nextEl.id,
+        marginLeft: this.nextEl.marginLeft,
       });
     }
   }
@@ -154,17 +156,8 @@ class StrapeBinder extends Component {
   }
 
   componentDidMount() {
+    _addKeyBinderToStore(this.props.binderId);
     this.refreshState();
-    if (!this.nextEl) {
-      return;
-    }
-    _addKeyBinderToStore({
-      id: this.props.binderId,
-      elements: this.elements,
-      visibleElements: this.elements.filter(element => element.marginLeft === 0).length,
-      selectedId: this.nextEl.id,
-      marginLeft: this.nextEl.marginLeft,
-    });
   }
 
   componentDidUpdate() {

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import {connect, Provider} from 'react-redux';
-import {MosaicBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
+import {MosaicBinder, StrapeBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
 
 
 const logger = store => next => action => {
@@ -14,7 +14,7 @@ const logger = store => next => action => {
   return result;
 };
 
-function reducer(state = {list: []}, action) {
+function reducer(state = {list: [{id: 1}, {id: 2}]}, action) {
   switch (action.type) {
     case 'LOAD':
       return {...state, ...{list: action.list}};
@@ -41,13 +41,13 @@ const PureStrape = ({list, selectedId}) => {
   console.log(selectedId);
   return (
     <div>
-      <MosaicBinder binderId="mosaic">
+      <StrapeBinder binderId="mosaic">
         <ul>
           {list.map(el => {
             return <Card key={el.id} id={el.id} active={true}/>;
           })}
         </ul>
-      </MosaicBinder>
+      </StrapeBinder>
     </div>
   );
 };

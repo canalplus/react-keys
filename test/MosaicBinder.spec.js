@@ -21,11 +21,7 @@ describe('MosaicBinder.jsx', () => {
     </MosaicBinder>);
     refreshStateSpy.should.have.been.calledOnce;
     addToStoreSpy.should.have.been.calledOnce;
-    addToStoreSpy.should.have.been.calledWith({
-      elements: [{down: undefined, id: 'li1', left: undefined, right: undefined, up: undefined}],
-      id: '1',
-      selectedId: 'li1',
-    });
+    addToStoreSpy.should.have.been.calledWith('1');
   }));
 
   it('should call refreshState on update', sinon.test(function() {
