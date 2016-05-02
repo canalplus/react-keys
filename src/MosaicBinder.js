@@ -139,12 +139,8 @@ class MosaicBinder extends Component {
   }
 
   componentDidMount() {
+    _addKeyBinderToStore(this.props.binderId);
     this.refreshState();
-    _addKeyBinderToStore({
-      id: this.props.binderId,
-      elements: this.elements,
-      selectedId: this.nextEl.id,
-    });
   }
 
   componentDidUpdate() {

@@ -65,12 +65,9 @@ describe('redux/actions.js', () => {
       module._init({store: store}); // init globalStore
       this.mock(module.globalStore).expects('dispatch').once().withArgs({
         type: ADD_KEYBINDER_TO_STORE,
-        state: {
-          binderId: {active: false},
-          binderId2: {active: false, id: 'binderId2'},
-        },
+        state: sinon.match.object,
       });
-      _addKeyBinderToStore({id: 'binderId2'});
+      _addKeyBinderToStore('binderId2');
     }));
     it('should not dipatch if binderId already exists in state', sinon.test(function() {
       const store = createStore((state = {
@@ -80,7 +77,7 @@ describe('redux/actions.js', () => {
       }) => state);
       module._init({store: store}); // init globalStore
       this.mock(module.globalStore).expects('dispatch').never();
-      _addKeyBinderToStore({id: 'binderId'});
+      _addKeyBinderToStore('binderId');
     }));
   });
   describe('_updateSelectedId', () => {

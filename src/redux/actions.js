@@ -33,12 +33,13 @@ export function _activeKeyBinder(binderId) {
   }
 }
 
-export function _addKeyBinderToStore(keyBinderState) {
+export function _addKeyBinderToStore(binderId) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
-    if (!Object.keys(newState).some(key => key === keyBinderState.id)) {
-      newState[keyBinderState.id] = keyBinderState;
-      newState[keyBinderState.id].active = false;
+    if (!Object.keys(newState).some(key => key === binderId)) {
+      newState[binderId] = {};
+      newState[binderId].id = binderId;
+      newState[binderId].active = false;
       globalStore.dispatch({
         type: ADD_KEYBINDER_TO_STORE,
         state: newState,
@@ -47,12 +48,10 @@ export function _addKeyBinderToStore(keyBinderState) {
   }
 }
 
-export function _updateBinderState(binderId, keyBinderState) {
+export function _updateBinderState(binderId, binderState) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
-    newState[binderId].selectedId = keyBinderState.selectedId;
-    newState[binderId].elements = keyBinderState.elements;
-    newState[binderId].marginLeft = keyBinderState.marginLeft;
+    newState[binderId] = {...newState[binderId], ...binderState}
     globalStore.dispatch({
       type: UPDATE_BINDER_STATE,
       state: newState,
