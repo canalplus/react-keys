@@ -2,6 +2,7 @@ export const NAME = '@@keys';
 export const ACTIVE_KEYBINDER = [NAME, '/ACTIVE_KEYBINDER'].join('');
 export const ADD_KEYBINDER_TO_STORE = [NAME, '/ADD_KEYBINDER_TO_STORE'].join('');
 export const UPDATE_SELECTED_KEY = [NAME, '/UPDATE_SELECTED_KEY'].join('');
+export const UPDATE_BINDER_STATE = [NAME, '/UPDATE_BINDER_STATE'].join('');
 import {globalStore} from '../listener';
 
 export function clone(obj) {
@@ -43,6 +44,19 @@ export function _addKeyBinderToStore(keyBinderState) {
         state: newState,
       });
     }
+  }
+}
+
+export function _updateBinderState(binderId, keyBinderState) {
+  if (globalStore.dispatch) {
+    const newState = clone(globalStore.getState()[NAME]);
+    newState[binderId].selectedId = keyBinderState.selectedId;
+    newState[binderId].elements = keyBinderState.elements;
+    newState[binderId].marginLeft = keyBinderState.marginLeft;
+    globalStore.dispatch({
+      type: UPDATE_BINDER_STATE,
+      state: newState,
+    });
   }
 }
 

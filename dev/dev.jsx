@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import {connect, Provider} from 'react-redux';
-import {StrapeBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
+import {MosaicBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
 
 
 const logger = store => next => action => {
@@ -14,8 +14,18 @@ const logger = store => next => action => {
   return result;
 };
 
+function reducer(state = {list: []}, action) {
+  switch (action.type) {
+    case 'LOAD':
+      return {...state, ...{list: action.list}};
+    default:
+      return state;
+  }
+}
+
 const store = createStore(combineReducers({
   '@@keys': keysReducer,
+  main: reducer,
 }), applyMiddleware(logger));
 
 keysInit({store: store});
@@ -27,45 +37,42 @@ const Card = ({id, active}) => {
   );
 };
 
-const PureStrape = ({selectedId, marginLeft, binderId, active, onDownExit, onUpExit}) => {
-  const listStyle = {
-    marginLeft: -marginLeft,
-  };
+const PureStrape = ({list, selectedId}) => {
+  console.log(selectedId);
   return (
-    <StrapeBinder
-      binderId={binderId}
-      wrapper="#wrapper"
-      strategy="progressive"
-      gap={13}
-      lastGap={13}
-      onDownExit={onDownExit}
-      onUpExit={onUpExit}>
-      <div id="wrapper">
-        <ul style={listStyle}>
-          <Card id={binderId + '-1'} active={active && selectedId === binderId + '-1'}/>
-          <Card id={binderId + '-2'} active={active && selectedId === binderId + '-2'}/>
-          <Card id={binderId + '-3'} active={active && selectedId === binderId + '-3'}/>
-          <Card id={binderId + '-4'} active={active && selectedId === binderId + '-4'}/>
-          <Card id={binderId + '-5'} active={active && selectedId === binderId + '-5'}/>
-          <Card id={binderId + '-6'} active={active && selectedId === binderId + '-6'}/>
-          <Card id={binderId + '-7'} active={active && selectedId === binderId + '-7'}/>
-          <Card id={binderId + '-8'} active={active && selectedId === binderId + '-8'}/>
-          <Card id={binderId + '-9'} active={active && selectedId === binderId + '-9'}/>
+    <div>
+      <MosaicBinder binderId="mosaic">
+        <ul>
+          {list.map(el => {
+            return <Card key={el.id} id={el.id} active={true}/>;
+          })}
         </ul>
-      </div>
-    </StrapeBinder>
+      </MosaicBinder>
+    </div>
   );
 };
 
-const Strape1 = connect(state => state['@@keys'].getBinder('strape-1'))(PureStrape);
-const Strape2 = connect(state => state['@@keys'].getBinder('strape-2'))(PureStrape);
+setTimeout(() => {
+  store.dispatch({
+    type: 'LOAD',
+    list: [{id: 1}, {id: 2}, {id: 3}],
+  });
+}, 1000);
+
+const selector = state => {
+  return {
+    selectedId: state['@@keys'].getBinder('mosaic').selectedId,
+    list: state.main.list,
+  };
+};
+
+const ButtonEl = connect(selector)(PureStrape);
 
 ReactDOM.render(<Provider store={store}>
   <div>
-    <Strape1 binderId="strape-1" onDownExit="strape-2"/>
-    <Strape2 binderId="strape-2" onUpExit="strape-1"/>
+    <ButtonEl />
   </div>
 </Provider>, document.getElementById('body'));
 
-activeKeyBinder('strape-1');
+activeKeyBinder('mosaic');
 

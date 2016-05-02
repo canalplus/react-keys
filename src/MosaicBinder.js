@@ -10,7 +10,8 @@ import {nextFocusedElement} from './nextFocusedElement';
 import {execCb, exitTo} from './funcHandler';
 import {calculateNewState} from './calculateNewState';
 import {addListener, removeListener, globalStore} from './listener';
-import {_addKeyBinderToStore, _updateSelectedId} from './redux/actions';
+import {_addKeyBinderToStore, _updateSelectedId, _updateBinderState} from './redux/actions';
+import {hasDiff} from './hasDiff';
 
 class MosaicBinder extends Component {
 
@@ -114,8 +115,14 @@ class MosaicBinder extends Component {
       {accuracy: this.props.accuracy},
     );
     const {elements, selectedElement} = value;
-    this.elements = elements;
     this.nextEl = selectedElement || this.nextEl || {};
+    if (hasDiff(elements, this.elements)) {
+      this.elements = elements;
+      _updateBinderState(this.props.binderId, {
+        elements: this.elements,
+        selectedId: this.nextEl.id,
+      });
+    }
   }
 
   calculateNewState(direction) {
