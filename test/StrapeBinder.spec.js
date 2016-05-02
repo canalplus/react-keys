@@ -89,17 +89,15 @@ describe('StrapeBinder.jsx', () => {
     this.mock(actions).expects('_updateBinderState')
       .once()
       .withArgs('1', sinon.match.object);
-    const Component = React.createClass({
-      render: function() {
-        return (
-          <StrapeBinder binderId="1" active={true} focusedElementId="li2">
-            <ul>
-              {this.props.elems.map(el => <li key={el.id} id={el.id}></li>)}
-            </ul>
-          </StrapeBinder>
-        );
-      },
-    });
+    const Component = ({elems}) => {
+      return (
+        <StrapeBinder binderId="1" active={true} focusedElementId="li2">
+          <ul>
+            {elems.map(el => <li key={el.id} id={el.id}></li>)}
+          </ul>
+        </StrapeBinder>
+      );
+    };
     const elems = [];
     const mosaic = mount(<Component elems={elems}/>);
     mosaic.setProps({elems: [{id: 1}, {id: 2}]});

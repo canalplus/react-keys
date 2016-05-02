@@ -73,11 +73,12 @@ renderWithId('mosaic-1-1');
 * `context` (object / *optional*) context object passed within every callback
 * `active` (boolean / *optional*) determine if binder has to listen keys events (default `true`) **/!\ no need to use it with redux**
 * `accuracy` (number / *optional*) give tolerance for elements calculation, useful when your elements are not well aligned (default `O`)
-* `onRight` (function / *optional*) callback for right events `function(nextElement, prevElement, {context})`
-* `onLeft` (function / *optional*) callback for left events `function(nextElement, prevElement, {context})`
-* `onUp` (function / *optional*) callback for up events `function(nextElement, prevElement, {context})`
-* `onDown` (function / *optional*) callback for down events `function(nextElement, prevElement, {context})`
-* `onEnter` (function / *optional*) callback for enter events `function(nextElement, prevElement, {context})`
+* `onRight` (function / *optional*) callback for right events `function(nextElement, this, {context})`
+* `onLeft` (function / *optional*) callback for left events `function(nextElement, this, {context})`
+* `onUp` (function / *optional*) callback for up events `function(nextElement, this, {context})`
+* `onDown` (function / *optional*) callback for down events `function(nextElement, this, {context})`
+* `onEnter` (function / *optional*) callback for enter events `function(nextElement, this, {context})`
+* `onBack` (function / *optional*) callback for back events `function(nextElement, this, {context})`
 * `onRightExit` (function/string / *optional*) triggered when right event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onLeftExit` (function/string / *optional*) triggered when left event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onUpExit` (function/string / *optional*) triggered when up event would go outside the elements block, it can be a function or the binder id we want to reach
@@ -94,11 +95,11 @@ renderWithId('mosaic-1-1');
 * `focusedElementId` (string / *optional*) id to define the element focused (first element by default)
 * `context` (object / *optional*) context object passed within every callback
 * `active` (boolean / *optional*) determine if binder has to listen keys events (default `true`) **/!\ no need to use it with redux**
-* `onRight` (function / *optional*) callback for right events `function(nextElement, prevElement, {context})`
-* `onLeft` (function / *optional*) callback for left events `function(nextElement, prevElement, {context})`
-* `onUp` (function / *optional*) callback for up events `function(nextElement, prevElement, {context})`
-* `onDown` (function / *optional*) callback for down events `function(nextElement, prevElement, {context})`
-* `onEnter` (function / *optional*) callback for enter events `function(nextElement, prevElement, {context})`
+* `onRight` (function / *optional*) callback for right events `function(nextElement, this, {context})`
+* `onLeft` (function / *optional*) callback for left events `function(nextElement, this, {context})`
+* `onUp` (function / *optional*) callback for up events `function(nextElement, this, {context})`
+* `onDown` (function / *optional*) callback for down events `function(nextElement, this, {context})`
+* `onEnter` (function / *optional*) callback for enter events `function(nextElement, this, {context})`
 * `onRightExit` (function/string / *optional*) triggered when right event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onLeftExit` (function/string / *optional*) triggered when left event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onUpExit` (function/string / *optional*) triggered when up event would go outside the elements block, it can be a function or the binder id we want to reach

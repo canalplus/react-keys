@@ -2,7 +2,7 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import {refresh} from './engines/mosaic';
-import {UP, DOWN, LEFT, RIGHT, ENTER} from './keys';
+import {UP, DOWN, LEFT, RIGHT, ENTER, BACK} from './keys';
 import {C_UP, C_DOWN, C_LEFT, C_RIGHT} from './constants';
 import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
@@ -28,6 +28,7 @@ class MosaicBinder extends Component {
       onUp: PropTypes.func,
       onDown: PropTypes.func,
       onEnter: PropTypes.func,
+      onBack: PropTypes.func,
       onLeftExit: React.PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.func,
@@ -88,6 +89,9 @@ class MosaicBinder extends Component {
           break;
         case ENTER:
           execCb(this.props.onEnter, this.nextEl, this, this.props);
+          break;
+        case BACK:
+          execCb(this.props.onBack, this.nextEl, this, this.props);
           break;
         default:
           break;
