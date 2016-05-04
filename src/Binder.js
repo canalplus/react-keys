@@ -13,7 +13,7 @@ import {addListener, removeListener, globalStore} from './listener';
 import {_addKeyBinderToStore, _updateSelectedId, _updateBinderState} from './redux/actions';
 import {hasDiff} from './hasDiff';
 
-class MosaicBinder extends Component {
+class Binder extends Component {
 
   static get propTypes() {
     return {
@@ -157,4 +157,4 @@ class MosaicBinder extends Component {
 
 }
 
-export default MosaicBinder;
+export default Binder;

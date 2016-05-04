@@ -1,4 +1,4 @@
-const {MosaicBinder, keysInit, keysReducer, activeKeyBinder} = ReactKeys;
+const {Binder, keysInit, keysReducer, activeKeyBinder} = ReactKeys;
 const {createStore, combineReducers, applyMiddleware} = Redux;
 const {connect, Provider} = ReactRedux;
 
@@ -26,7 +26,7 @@ const Card = ({id, active}) => {
 
 const PureMosaic = ({selectedId}) => {
   return (
-    <MosaicBinder
+    <Binder
       binderId="mosaic-1"
       onEnter={onEnterKey}>
       <ul>
@@ -40,7 +40,7 @@ const PureMosaic = ({selectedId}) => {
         <Card id="8" active={selectedId === '8'}/>
         <Card id="9" active={selectedId === '9'}/>
       </ul>
-    </MosaicBinder>
+    </Binder>
   );
 };
 
