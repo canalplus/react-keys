@@ -11,7 +11,7 @@ keysInit({store: store});
 const PureMosaic = ({selectedId}) => {
   return (
     <Binder
-      binderId="mosaic-1"
+      id="mosaic-1"
       onEnter={onEnter}
     >
       <ul>

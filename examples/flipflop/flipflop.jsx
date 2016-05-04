@@ -22,12 +22,12 @@ const Card = ({id, active}) => {
   return (
     <li id={id} className={style}>#{id}</li>
   );
-}
+};
 
 const PureMosaic = ({selectedId}) => {
   return (
     <Binder
-      binderId="mosaic-1"
+      id="mosaic-1"
       onEnter={onEnterKey}>
       <ul>
         <Card id="1" active={selectedId === '1'}/>

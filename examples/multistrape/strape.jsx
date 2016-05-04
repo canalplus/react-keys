@@ -30,7 +30,7 @@ const PureStrape = ({selectedId, marginLeft, binderId, active, onDownExit, onUpE
   };
   return (
     <StrapeBinder
-      binderId={binderId}
+      id={binderId}
       wrapper="#wrapper"
       strategy="progressive"
       gap={13}

@@ -9,11 +9,11 @@ import sinon from 'sinon';
 
 describe('StrapeBinder.jsx', () => {
   it('should wrap with tagName div', () => {
-    const keyBinder = shallow(<StrapeBinder binderId="1"/>);
+    const keyBinder = shallow(<StrapeBinder id="1"/>);
     keyBinder.should.have.tagName('div');
   });
   it('should have right default props', () => {
-    const keyBinder = mount(<StrapeBinder binderId="1"/>);
+    const keyBinder = mount(<StrapeBinder id="1"/>);
     keyBinder.props().strategy.should.equal('progressive');
     keyBinder.props().gap.should.equal(0);
     keyBinder.props().lastGap.should.equal(0);
@@ -27,7 +27,7 @@ describe('StrapeBinder.jsx', () => {
   it('should call refreshState and _addKeyBinderToStore on mount', sinon.test(function() {
     const refreshStateSpy = this.spy(StrapeBinder.prototype, 'refreshState');
     const addToStoreSpy = this.spy(actions, '_addKeyBinderToStore');
-    mount(<StrapeBinder binderId="1">
+    mount(<StrapeBinder id="1">
       <ul>
         <li id="li1"></li>
       </ul>
@@ -38,7 +38,7 @@ describe('StrapeBinder.jsx', () => {
   }));
 
   it('should call refreshState on update', sinon.test(function() {
-    const strape = mount(<StrapeBinder binderId="1">
+    const strape = mount(<StrapeBinder id="1">
       <ul>
         <li id="li1"></li>
       </ul>
@@ -50,7 +50,7 @@ describe('StrapeBinder.jsx', () => {
 
   it('should call removeListener on unmout', sinon.test(function() {
     const spy = this.spy(listener, 'removeListener');
-    const strape = mount(<StrapeBinder binderId="1">
+    const strape = mount(<StrapeBinder id="1">
       <ul>
         <li id="li1"></li>
       </ul>
@@ -60,7 +60,7 @@ describe('StrapeBinder.jsx', () => {
   }));
 
   it('should set first element id', () => {
-    const strape = mount(<StrapeBinder binderId="1" active={true}>
+    const strape = mount(<StrapeBinder id="1" active={true}>
       <ul>
         <li id="li1"></li>
         <li id="li2"></li>
@@ -70,7 +70,7 @@ describe('StrapeBinder.jsx', () => {
   });
 
   it('should set element selected', () => {
-    const strape = mount(<StrapeBinder binderId="1" active={true} focusedElementId="li2">
+    const strape = mount(<StrapeBinder id="1" active={true} focusedElementId="li2">
       <ul>
         <li id="li1"></li>
         <li id="li2"></li>
@@ -85,7 +85,7 @@ describe('StrapeBinder.jsx', () => {
       .withArgs('1', sinon.match.object);
     const Component = ({elems}) => {
       return (
-        <StrapeBinder binderId="1" active={true} focusedElementId="li2">
+        <StrapeBinder id="1" active={true} focusedElementId="li2">
           <ul>
             {elems.map(el => <li key={el.id} id={el.id}></li>)}
           </ul>

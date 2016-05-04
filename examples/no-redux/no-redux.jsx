@@ -20,7 +20,7 @@ function onKey(element) {
 const Mosaic = ({binderId, selectedId}) => {
   return (
     <Binder
-      binderId={binderId}
+      id={binderId}
       onLeft={onKey}
       onUp={onKey}
       onDown={onKey}
