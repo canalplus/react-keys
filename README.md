@@ -46,8 +46,8 @@ const Card = ({id, active}) => {
 
 const Mosaic = ({binderId, selectedId}) => {
   return (
-    <MosaicBinder
-      binderId={binderId}
+    <Binder
+      id={binderId}
       onLeft={onKey}
       onUp={onKey}
       onDown={onKey}
@@ -57,7 +57,7 @@ const Mosaic = ({binderId, selectedId}) => {
         <Card id={binderId + '-2'} active={selectedId === binderId + '-2'}/>
         <Card id={binderId + '-3'} active={selectedId === binderId + '-3'}/>
       </ul>
-    </MosaicBinder>
+    </Binder>
   );
 };
 
@@ -66,26 +66,26 @@ renderWithId('mosaic-1-1');
 
 ## API
 
-### `<MosaicBinder ...options />`
-* `binderId` (string / **mandatory**) Define the block under the binder
+### `<Binder ...options />`
+* `id` (string / **mandatory**) Define the binder id
 * `selector` (string / *optional*) DOM selector which define each element (default `li`)
 * `focusedElementId` (string / *optional*) id to define the element focused (first element by default)
 * `context` (object / *optional*) context object passed within every callback
 * `active` (boolean / *optional*) determine if binder has to listen keys events (default `true`) **/!\ no need to use it with redux**
 * `accuracy` (number / *optional*) give tolerance for elements calculation, useful when your elements are not well aligned (default `O`)
-* `onRight` (function / *optional*) callback for right events `function(nextElement, this, {context})`
-* `onLeft` (function / *optional*) callback for left events `function(nextElement, this, {context})`
-* `onUp` (function / *optional*) callback for up events `function(nextElement, this, {context})`
-* `onDown` (function / *optional*) callback for down events `function(nextElement, this, {context})`
-* `onEnter` (function / *optional*) callback for enter events `function(nextElement, this, {context})`
-* `onBack` (function / *optional*) callback for back events `function(nextElement, this, {context})`
+* `onRight` (function / *optional*) callback for right events `function(nextElement, {context})`
+* `onLeft` (function / *optional*) callback for left events `function(nextElement, {context})`
+* `onUp` (function / *optional*) callback for up events `function(nextElement, {context})`
+* `onDown` (function / *optional*) callback for down events `function(nextElement, {context})`
+* `onEnter` (function / *optional*) callback for enter events `function(nextElement, {context})`
+* `onBack` (function / *optional*) callback for back events `function(nextElement, {context})`
 * `onRightExit` (function/string / *optional*) triggered when right event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onLeftExit` (function/string / *optional*) triggered when left event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onUpExit` (function/string / *optional*) triggered when up event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onDownExit` (function/string / *optional*) triggered when down event would go outside the elements block, it can be a function or the binder id we want to reach
 
 ### `<StrapeBinder ..options />`
-* `binderId` (string / **mandatory**) Define the block under the binder
+* `id` (string / **mandatory**) Define the binder id
 * `wrapper` (string / *optional*) DOM selector which define parent element (default `ul`)
 * `wChildren` (string / *optional*) DOM selector which define children elements (default `li`)
 * `strategy` (string / *optional*) define strape strategy : `progressive` or `cut` (default `progressive`)
@@ -95,11 +95,11 @@ renderWithId('mosaic-1-1');
 * `focusedElementId` (string / *optional*) id to define the element focused (first element by default)
 * `context` (object / *optional*) context object passed within every callback
 * `active` (boolean / *optional*) determine if binder has to listen keys events (default `true`) **/!\ no need to use it with redux**
-* `onRight` (function / *optional*) callback for right events `function(nextElement, this, {context})`
-* `onLeft` (function / *optional*) callback for left events `function(nextElement, this, {context})`
-* `onUp` (function / *optional*) callback for up events `function(nextElement, this, {context})`
-* `onDown` (function / *optional*) callback for down events `function(nextElement, this, {context})`
-* `onEnter` (function / *optional*) callback for enter events `function(nextElement, this, {context})`
+* `onRight` (function / *optional*) callback for right events `function(nextElement, {context})`
+* `onLeft` (function / *optional*) callback for left events `function(nextElement, {context})`
+* `onUp` (function / *optional*) callback for up events `function(nextElement, {context})`
+* `onDown` (function / *optional*) callback for down events `function(nextElement, {context})`
+* `onEnter` (function / *optional*) callback for enter events `function(nextElement, {context})`
 * `onRightExit` (function/string / *optional*) triggered when right event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onLeftExit` (function/string / *optional*) triggered when left event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onUpExit` (function/string / *optional*) triggered when up event would go outside the elements block, it can be a function or the binder id we want to reach
@@ -170,8 +170,8 @@ keysInit({store: store}); // add the store there
 
 const PureMosaic = ({selectedId}) => {
   return (
-    <MosaicBinder
-      binderId="mosaic-1"
+    <Binder
+      id="mosaic-1"
       onEnter={onEnter}
     >
       <ul>
@@ -182,7 +182,7 @@ const PureMosaic = ({selectedId}) => {
         <li id="5" className={selectedId === '5' ? 'selected' : ''}>#5</li>
         <li id="6" className={selectedId === '6' ? 'selected' : ''}>#6</li>
       </ul>
-    </MosaicBinder>
+    </Binder>
   );
 };
 
