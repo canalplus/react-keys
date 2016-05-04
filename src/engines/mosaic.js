@@ -13,8 +13,8 @@ export function isBetween(value, max, min) {
   return typeof value === 'number' && value <= max && value >= min;
 }
 
-export function findRightElement(elCoords, mosaicCoords, options) {
-  const rightElement = mosaicCoords
+export function findRightElement(elCoords, coords, options) {
+  const rightElement = coords
     .filter(el =>
     isBetween(el.top, elCoords.top + options.accuracy, elCoords.top - options.accuracy)
     && el.left > elCoords.left)
@@ -22,8 +22,8 @@ export function findRightElement(elCoords, mosaicCoords, options) {
   return rightElement[0] ? rightElement[0].id : undefined;
 }
 
-export function findLeftElement(elCoords, mosaicCoords, options) {
-  const leftElement = mosaicCoords
+export function findLeftElement(elCoords, coords, options) {
+  const leftElement = coords
     .filter(el =>
     isBetween(el.top, elCoords.top + options.accuracy, elCoords.top - options.accuracy)
     && el.left < elCoords.left)
@@ -31,15 +31,15 @@ export function findLeftElement(elCoords, mosaicCoords, options) {
   return leftElement[0] ? leftElement[0].id : undefined;
 }
 
-export function findDownElement(elCoords, mosaicCoords, options) {
-  const downElement = mosaicCoords
+export function findDownElement(elCoords, coords, options) {
+  const downElement = coords
     .filter(el => el.left <= elCoords.left + options.accuracy && el.top > elCoords.top)
     .sort((prev, next) => (prev.top - next.top) - (prev.left - next.left));
   return downElement[0] ? downElement[0].id : undefined;
 }
 
-export function findUpElement(elCoords, mosaicCoords, options) {
-  const upElement = mosaicCoords
+export function findUpElement(elCoords, coords, options) {
+  const upElement = coords
     .filter(el => el.left <= elCoords.left + options.accuracy && el.top < elCoords.top)
     .sort((prev, next) => (next.top + next.left) - (prev.top + prev.left));
   return upElement[0] ? upElement[0].id : undefined;
