@@ -1,8 +1,8 @@
-export function isActive(state, {binderId, active}) {
+export function isActive(state, {id, active}) {
   let response = false;
   if (state) {
-    response = state.getState()['@@keys'] && state.getState()['@@keys'][binderId]
-      && state.getState()['@@keys'][binderId].active;
+    response = state.getState()['@@keys'] && state.getState()['@@keys'][id]
+      && state.getState()['@@keys'][id].active;
   } else {
     response = active;
   }

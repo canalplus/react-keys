@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import {connect, Provider} from 'react-redux';
-import {MosaicBinder, StrapeBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
-
+import {Binder, StrapeBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
 
 const logger = store => next => action => {
   console.group(action.type);
@@ -14,65 +13,47 @@ const logger = store => next => action => {
   return result;
 };
 
-function reducer(state = {list: [{id: 1}, {id: 2}]}, action) {
-  switch (action.type) {
-    case 'LOAD':
-      return {...state, ...{list: action.list}};
-    default:
-      return state;
-  }
-}
-
 const store = createStore(combineReducers({
   '@@keys': keysReducer,
-  main: reducer,
-}), applyMiddleware(logger));
+}));
 
 keysInit({store: store});
 
-const Card = ({id, active}) => {
-  const style = active ? 'selected' : '';
+const PureMosaic = ({selectedId}) => {
   return (
-    <li id={id} className={style}>#{id}</li>
+    <Binder
+      id="mosaic-1"
+      onEnter={onEnter}
+    >
+      <ul>
+        <li id="1" className={selectedId === '1' ? 'selected' : ''}>#1</li>
+        <li id="2" className={selectedId === '2' ? 'selected' : ''}>#2</li>
+        <li id="3" className={selectedId === '3' ? 'selected' : ''}>#3</li>
+        <li id="4" className={selectedId === '4' ? 'selected' : ''}>#4</li>
+        <li id="5" className={selectedId === '5' ? 'selected' : ''}>#5</li>
+        <li id="6" className={selectedId === '6' ? 'selected' : ''}>#6</li>
+        <li id="7" className={selectedId === '7' ? 'selected' : ''}>#7</li>
+        <li id="8" className={selectedId === '8' ? 'selected' : ''}>#8</li>
+        <li id="9" className={selectedId === '9' ? 'selected' : ''}>#9</li>
+        <li id="10" className={selectedId === '10' ? 'selected' : ''}>#10</li>
+        <li id="11" className={selectedId === '11' ? 'selected' : ''}>#11</li>
+        <li id="12" className={selectedId === '12' ? 'selected' : ''}>#12</li>
+      </ul>
+    </Binder>
   );
 };
 
-const PureStrape = ({list, selectedId}) => {
-  console.log(selectedId);
-  return (
-    <div>
-      <StrapeBinder binderId="mosaic">
-        <ul>
-          {list.map(el => {
-            return <Card key={el.id} id={el.id} active={true}/>;
-          })}
-        </ul>
-      </StrapeBinder>
-    </div>
-  );
-};
+function onEnter(element) {
+  alert('ELEMENT #' + element.id);
+}
 
-setTimeout(() => {
-  store.dispatch({
-    type: 'LOAD',
-    list: [{id: 1}, {id: 2}, {id: 3}],
-  });
-}, 1000);
-
-const selector = state => {
-  return {
-    selectedId: state['@@keys'].getBinder('mosaic').selectedId,
-    list: state.main.list,
-  };
-};
-
-const ButtonEl = connect(selector)(PureStrape);
+const Mosaic = connect(state => state['@@keys'].getBinder('mosaic-1'))(PureMosaic);
 
 ReactDOM.render(<Provider store={store}>
   <div>
-    <ButtonEl />
+    <Mosaic/>
   </div>
 </Provider>, document.getElementById('body'));
 
-activeKeyBinder('mosaic');
+activeKeyBinder('mosaic-1');
 
