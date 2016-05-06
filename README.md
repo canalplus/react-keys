@@ -230,9 +230,11 @@ Here list of actions emitted by `react-router`
 * `ADD_KEYBINDER_TO_STORE` when a new binder is mount
 * `ACTIVE_KEYBINDER` when a new binder is activated
 * `UPDATE_SELECTED_KEY` when a new element is selected
+* `UPDATE_BINDER_STATE` when state is updated
 
 ### Action launchers
 * `activeKeyBinder([binderId])` activate a new binder by giving its id
+* `updateBinderState(binderId, binderState)` when you want to update the state manually
 
 # Tests
 
