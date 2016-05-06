@@ -1,10 +1,32 @@
 /* eslint no-unused-expressions:0 */
-import {_init, cb, addListener, removeListener, keysListeners} from '../src/listener';
+import {_init, cb, addListener, removeListener, globalStore, keysListeners} from '../src/listener';
 import sinon from 'sinon';
 
 describe('listener.js', () => {
   beforeEach(() => {
     keysListeners.length = 0;
+  });
+
+  afterEach(() => {
+    keysListeners.length = 0;
+  });
+
+  it('globalStore should be a function', () => {
+    globalStore.should.be.instanceOf(Function);
+  });
+
+  it('shoule cb call all listeners cb', () => {
+    const mySpy = sinon.spy();
+    const keyCode = 'keyCode';
+    const internCb = {
+      id: 0,
+      callback: mySpy,
+      context: {},
+    };
+    keysListeners.push(internCb);
+    cb(keyCode);
+    mySpy.should.have.been.calledOnce;
+    mySpy.should.have.been.calledWith(keyCode);
   });
 
   it('_init should listen on keydown event by default', sinon.test(function() {

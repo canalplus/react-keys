@@ -14,6 +14,8 @@ describe('clock.js', () => {
   });
 
   it('isBlock should return block state', () => {
+    block();
+    clock.tick(10);
     isBlocked().should.be.false;
   });
 
