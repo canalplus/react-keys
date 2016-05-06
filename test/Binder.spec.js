@@ -7,6 +7,9 @@ import * as actions from '../src/redux/actions';
 import * as listener from '../src/listener';
 import * as funcHandler from '../src/funcHandler';
 import * as calculation from '../src/calculateNewState';
+import * as next from '../src/nextFocusedElement';
+import * as clock from '../src/clock';
+import * as active from '../src/isActive';
 import sinon from 'sinon';
 import {expect} from 'chai';
 
@@ -159,4 +162,28 @@ describe('Binder.jsx', () => {
     mosaic.prevDir.should.equal('right');
     mosaic.hasMoved.should.be.true;
   }));
+
+  it('should looking for next focused element on keysHandler when it is active',
+    sinon.test(function() {
+      this.mock(next).expects('nextFocusedElement').once();
+      this.stub(active, 'isActive').returns(true);
+      this.stub(clock, 'isBlocked').returns(false);
+      const mosaic = new Binder();
+      mosaic.props = {
+        id: 1,
+      };
+      mosaic.keysHandler(30);
+    }));
+
+  it('should not looking for next focused element on keysHandler when it is inactive',
+    sinon.test(function() {
+      this.mock(next).expects('nextFocusedElement').never();
+      this.stub(active, 'isActive').returns(false);
+      this.stub(clock, 'isBlocked').returns(true);
+      const mosaic = new Binder();
+      mosaic.props = {
+        id: 1,
+      };
+      mosaic.keysHandler(30);
+    }));
 });
