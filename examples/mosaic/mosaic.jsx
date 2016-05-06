@@ -1,4 +1,4 @@
-const {MosaicBinder, keysInit, keysReducer, activeKeyBinder} = ReactKeys;
+const {Binder, keysInit, keysReducer, activeKeyBinder} = ReactKeys;
 const {createStore, combineReducers} = Redux;
 const {connect, Provider} = ReactRedux;
 
@@ -10,8 +10,8 @@ keysInit({store: store});
 
 const PureMosaic = ({selectedId}) => {
   return (
-    <MosaicBinder
-      binderId="mosaic-1"
+    <Binder
+      id="mosaic-1"
       onEnter={onEnter}
     >
       <ul>
@@ -28,7 +28,7 @@ const PureMosaic = ({selectedId}) => {
         <li id="11" className={selectedId === '11' ? 'selected' : ''}>#11</li>
         <li id="12" className={selectedId === '12' ? 'selected' : ''}>#12</li>
       </ul>
-    </MosaicBinder>
+    </Binder>
   );
 };
 

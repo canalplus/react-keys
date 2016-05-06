@@ -94,7 +94,7 @@ describe('redux/actions.js', () => {
           binderId: {active: false, selectedId: 2, marginLeft: 10},
         },
       });
-      _updateSelectedId(2, 10, 'binderId');
+      _updateSelectedId('binderId', 2, 10);
     }));
   });
 

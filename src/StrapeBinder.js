@@ -17,7 +17,7 @@ class StrapeBinder extends Component {
 
   static get propTypes() {
     return {
-      binderId: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
       focusedElementId: PropTypes.string,
       context: PropTypes.object,
       onRight: PropTypes.func,
@@ -80,7 +80,7 @@ class StrapeBinder extends Component {
         this.nextEl,
         globalStore,
         this.elements,
-        this.props.binderId);
+        this.props.id);
       block();
       switch (keyCode) {
         case LEFT:
@@ -110,7 +110,7 @@ class StrapeBinder extends Component {
   performAction(dir, cb, exitCb) {
     this.calculateNewState(dir);
     if (this.hasMoved) {
-      _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
+      _updateSelectedId(this.props.id, this.nextEl.id, this.nextEl.marginLeft);
       execCb(cb, this.nextEl, this, this.props);
     } else {
       exitTo(exitCb);
@@ -137,7 +137,7 @@ class StrapeBinder extends Component {
     this.nextEl = selectedElement || this.nextEl || {};
     if (hasDiff(elements, this.elements)) {
       this.elements = elements;
-      _updateBinderState(this.props.binderId, {
+      _updateBinderState(this.props.id, {
         elements: this.elements,
         visibleElements: this.elements.filter(element => element.marginLeft === 0).length,
         selectedId: this.nextEl.id,
@@ -156,7 +156,7 @@ class StrapeBinder extends Component {
   }
 
   componentDidMount() {
-    _addKeyBinderToStore(this.props.binderId);
+    _addKeyBinderToStore(this.props.id);
     this.refreshState();
   }
 

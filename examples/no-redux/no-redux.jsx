@@ -1,4 +1,4 @@
-const {MosaicBinder, keysInit} = ReactKeys;
+const {Binder, keysInit} = ReactKeys;
 
 keysInit();
 
@@ -19,8 +19,8 @@ function onKey(element) {
 
 const Mosaic = ({binderId, selectedId}) => {
   return (
-    <MosaicBinder
-      binderId={binderId}
+    <Binder
+      id={binderId}
       onLeft={onKey}
       onUp={onKey}
       onDown={onKey}
@@ -33,7 +33,7 @@ const Mosaic = ({binderId, selectedId}) => {
         <Card id={binderId + '-5'} active={selectedId === binderId + '-5'}/>
         <Card id={binderId + '-6'} active={selectedId === binderId + '-6'}/>
       </ul>
-    </MosaicBinder>
+    </Binder>
   );
 };
 

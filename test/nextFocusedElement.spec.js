@@ -6,7 +6,7 @@ describe('nextFocusedElement.js', () => {
   it('should return current element when no store', () => {
     const el = {id: '2'};
     const elements = [{id: '1'}, {id: '2'}];
-    nextFocusedElement(el, null, elements, '1').should.equal(el);
+    nextFocusedElement(el, () => null, elements, '1').should.equal(el);
   });
   it('should return new element from selectedId when having a store', () => {
     const el1 = {id: '1'};

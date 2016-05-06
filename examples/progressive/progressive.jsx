@@ -21,7 +21,7 @@ const PureStrape = ({selectedId, marginLeft, active}) => {
   };
   return (
     <StrapeBinder
-      binderId="strape-1"
+      id="strape-1"
       wrapper="#wrapper"
       strategy="progressive"
       gap={30}

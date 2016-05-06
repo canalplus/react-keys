@@ -59,7 +59,7 @@ export function _updateBinderState(binderId, binderState) {
   }
 }
 
-export function _updateSelectedId(selectedId, marginLeft, binderId) {
+export function _updateSelectedId(binderId, selectedId, marginLeft) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
     newState[binderId].selectedId = selectedId;

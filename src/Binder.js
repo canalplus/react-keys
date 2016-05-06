@@ -13,11 +13,11 @@ import {addListener, removeListener, globalStore} from './listener';
 import {_addKeyBinderToStore, _updateSelectedId, _updateBinderState} from './redux/actions';
 import {hasDiff} from './hasDiff';
 
-class MosaicBinder extends Component {
+class Binder extends Component {
 
   static get propTypes() {
     return {
-      binderId: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
       selector: PropTypes.string,
       focusedElementId: PropTypes.string,
       context: PropTypes.object,
@@ -72,7 +72,7 @@ class MosaicBinder extends Component {
         this.nextEl,
         globalStore,
         this.elements,
-        this.props.binderId);
+        this.props.id);
       block();
       switch (keyCode) {
         case LEFT:
@@ -102,7 +102,7 @@ class MosaicBinder extends Component {
   performAction(dir, cb, exitCb) {
     this.calculateNewState(dir);
     if (this.hasMoved) {
-      _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.binderId);
+      _updateSelectedId(this.props.id, this.nextEl.id, this.nextEl.marginLeft);
       execCb(cb, this.nextEl, this, this.props);
     } else {
       exitTo(exitCb);
@@ -122,7 +122,7 @@ class MosaicBinder extends Component {
     this.nextEl = selectedElement || this.nextEl || {};
     if (hasDiff(elements, this.elements)) {
       this.elements = elements;
-      _updateBinderState(this.props.binderId, {
+      _updateBinderState(this.props.id, {
         elements: this.elements,
         selectedId: this.nextEl.id,
       });
@@ -139,7 +139,7 @@ class MosaicBinder extends Component {
   }
 
   componentDidMount() {
-    _addKeyBinderToStore(this.props.binderId);
+    _addKeyBinderToStore(this.props.id);
     this.refreshState();
   }
 
@@ -157,4 +157,4 @@ class MosaicBinder extends Component {
 
 }
 
-export default MosaicBinder;
+export default Binder;
