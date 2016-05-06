@@ -27,7 +27,6 @@ describe('listener.js', () => {
     cb(keyCode);
     mySpy.should.have.been.calledOnce;
     mySpy.should.have.been.calledWith(keyCode);
-
   });
 
   it('_init should listen on keydown event by default', sinon.test(function() {

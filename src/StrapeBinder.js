@@ -110,7 +110,7 @@ class StrapeBinder extends Component {
   performAction(dir, cb, exitCb) {
     this.calculateNewState(dir);
     if (this.hasMoved) {
-      _updateSelectedId(this.nextEl.id, this.nextEl.marginLeft, this.props.id);
+      _updateSelectedId(this.props.id, this.nextEl.id, this.nextEl.marginLeft);
       execCb(cb, this.nextEl, this, this.props);
     } else {
       exitTo(exitCb);
