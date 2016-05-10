@@ -35,13 +35,16 @@ describe('redux/actions.js', () => {
           },
         }) => state);
         module._init({store: store}); // init globalStore
-        this.mock(module.globalStore).expects('dispatch').once().withArgs({
-          type: ACTIVE_KEYBINDER,
-          state: {
-            binderId: {active: true},
-            binderId2: {active: false},
-          },
-        });
+        this.mock(module.globalStore)
+          .expects('dispatch')
+          .once()
+          .withArgs({
+            type: ACTIVE_KEYBINDER,
+            state: {
+              binderId: {active: true},
+              binderId2: {active: false},
+            },
+          });
         _activeKeyBinder('binderId');
       }));
     it('should not dispatch anything if binderId not found in state', sinon.test(function() {
@@ -51,7 +54,9 @@ describe('redux/actions.js', () => {
         },
       }) => state);
       module._init({store: store}); // init globalStore
-      this.mock(module.globalStore).expects('dispatch').never();
+      this.mock(module.globalStore)
+        .expects('dispatch')
+        .never();
       _activeKeyBinder('binderId2');
     }));
   });
@@ -63,10 +68,13 @@ describe('redux/actions.js', () => {
         },
       }) => state);
       module._init({store: store}); // init globalStore
-      this.mock(module.globalStore).expects('dispatch').once().withArgs({
-        type: ADD_KEYBINDER_TO_STORE,
-        state: sinon.match.object,
-      });
+      this.mock(module.globalStore)
+        .expects('dispatch')
+        .once()
+        .withArgs({
+          type: ADD_KEYBINDER_TO_STORE,
+          state: sinon.match.object,
+        });
       _addKeyBinderToStore('binderId2');
     }));
     it('should not dipatch if binderId already exists in state', sinon.test(function() {
@@ -76,7 +84,9 @@ describe('redux/actions.js', () => {
         },
       }) => state);
       module._init({store: store}); // init globalStore
-      this.mock(module.globalStore).expects('dispatch').never();
+      this.mock(module.globalStore)
+        .expects('dispatch')
+        .never();
       _addKeyBinderToStore('binderId');
     }));
   });
@@ -88,12 +98,15 @@ describe('redux/actions.js', () => {
         },
       }) => state);
       module._init({store: store}); // init globalStore
-      this.mock(module.globalStore).expects('dispatch').once().withArgs({
-        type: UPDATE_SELECTED_KEY,
-        state: {
-          binderId: {active: false, selectedId: 2, marginLeft: 10},
-        },
-      });
+      this.mock(module.globalStore)
+        .expects('dispatch')
+        .once()
+        .withArgs({
+          type: UPDATE_SELECTED_KEY,
+          state: {
+            binderId: {active: false, selectedId: 2, marginLeft: 10},
+          },
+        });
       _updateSelectedId('binderId', 2, 10);
     }));
   });
@@ -106,7 +119,9 @@ describe('redux/actions.js', () => {
         },
       }) => state);
       module._init({store: store}); // init globalStore
-      this.mock(module.globalStore).expects('dispatch').once()
+      this.mock(module.globalStore)
+        .expects('dispatch')
+        .once()
         .withArgs({
           type: UPDATE_BINDER_STATE,
           state: sinon.match.object,

@@ -1,3 +1,4 @@
+/* eslint import/no-mutable-exports:0 */
 export let keysListeners = [];
 export let globalStore = function() {
 };

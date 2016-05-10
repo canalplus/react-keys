@@ -93,7 +93,10 @@ describe('Binder.jsx', () => {
     const dir = 'left';
     const cb = () => null;
     const exitCb = () => null;
-    this.mock(mosaic).expects('calculateNewState').once().withArgs(dir);
+    this.mock(mosaic)
+      .expects('calculateNewState')
+      .once()
+      .withArgs(dir);
     mosaic.performAction(dir, cb, exitCb);
   }));
 
@@ -111,7 +114,10 @@ describe('Binder.jsx', () => {
       const dir = 'left';
       const cb = () => null;
       const exitCb = () => null;
-      this.mock(mosaic).expects('calculateNewState').once().withArgs(dir);
+      this.mock(mosaic)
+        .expects('calculateNewState')
+        .once()
+        .withArgs(dir);
       const updateSelectedIdSpy = this.spy(actions, '_updateSelectedId');
       const execCbSpy = this.spy(funcHandler, 'execCb');
       const exitCbSpy = this.spy(funcHandler, 'exitTo');
@@ -134,7 +140,10 @@ describe('Binder.jsx', () => {
     const dir = 'left';
     const cb = () => null;
     const exitCb = () => null;
-    this.mock(mosaic).expects('calculateNewState').once().withArgs(dir);
+    this.mock(mosaic)
+      .expects('calculateNewState')
+      .once()
+      .withArgs(dir);
     const updateSelectedIdSpy = this.spy(actions, '_updateSelectedId');
     const execCbSpy = this.spy(funcHandler, 'execCb');
     const exitCbSpy = this.spy(funcHandler, 'exitTo');
@@ -165,7 +174,9 @@ describe('Binder.jsx', () => {
 
   it('should looking for next focused element on keysHandler when it is active',
     sinon.test(function() {
-      this.mock(next).expects('nextFocusedElement').once();
+      this.mock(next)
+        .expects('nextFocusedElement')
+        .once();
       this.stub(active, 'isActive').returns(true);
       this.stub(clock, 'isBlocked').returns(false);
       const mosaic = new Binder();
@@ -177,7 +188,9 @@ describe('Binder.jsx', () => {
 
   it('should not looking for next focused element on keysHandler when it is inactive',
     sinon.test(function() {
-      this.mock(next).expects('nextFocusedElement').never();
+      this.mock(next)
+        .expects('nextFocusedElement')
+        .never();
       this.stub(active, 'isActive').returns(false);
       this.stub(clock, 'isBlocked').returns(true);
       const mosaic = new Binder();

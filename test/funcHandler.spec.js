@@ -45,7 +45,10 @@ describe('funcHandler.js', () => {
     });
 
     it('should call _activateKeyBinder when callback is a string', sinon.test(function() {
-      this.mock(module).expects('_activeKeyBinder').once().withArgs('binder1');
+      this.mock(module)
+        .expects('_activeKeyBinder')
+        .once()
+        .withArgs('binder1');
       exitTo('binder1');
     }));
   });

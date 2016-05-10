@@ -86,7 +86,8 @@ describe('StrapeBinder.jsx', () => {
   });
 
   it('should send action updateBinderState when elements are updated', sinon.test(function() {
-    this.mock(actions).expects('_updateBinderState')
+    this.mock(actions)
+      .expects('_updateBinderState')
       .once()
       .withArgs('1', sinon.match.object);
     const Component = ({elems}) => {
@@ -108,7 +109,10 @@ describe('StrapeBinder.jsx', () => {
     const dir = 'left';
     const cb = () => null;
     const exitCb = () => null;
-    this.mock(mosaic).expects('calculateNewState').once().withArgs(dir);
+    this.mock(mosaic)
+      .expects('calculateNewState')
+      .once()
+      .withArgs(dir);
     mosaic.performAction(dir, cb, exitCb);
   }));
 
@@ -126,7 +130,10 @@ describe('StrapeBinder.jsx', () => {
       const dir = 'left';
       const cb = () => null;
       const exitCb = () => null;
-      this.mock(mosaic).expects('calculateNewState').once().withArgs(dir);
+      this.mock(mosaic)
+        .expects('calculateNewState')
+        .once()
+        .withArgs(dir);
       const updateSelectedIdSpy = this.spy(actions, '_updateSelectedId');
       const execCbSpy = this.spy(funcHandler, 'execCb');
       const exitCbSpy = this.spy(funcHandler, 'exitTo');
@@ -149,7 +156,10 @@ describe('StrapeBinder.jsx', () => {
     const dir = 'left';
     const cb = () => null;
     const exitCb = () => null;
-    this.mock(mosaic).expects('calculateNewState').once().withArgs(dir);
+    this.mock(mosaic)
+      .expects('calculateNewState')
+      .once()
+      .withArgs(dir);
     const updateSelectedIdSpy = this.spy(actions, '_updateSelectedId');
     const execCbSpy = this.spy(funcHandler, 'execCb');
     const exitCbSpy = this.spy(funcHandler, 'exitTo');
@@ -180,7 +190,9 @@ describe('StrapeBinder.jsx', () => {
 
   it('should looking for next focused element on keysHandler when it is active',
     sinon.test(function() {
-      this.mock(next).expects('nextFocusedElement').once();
+      this.mock(next)
+        .expects('nextFocusedElement')
+        .once();
       this.stub(active, 'isActive').returns(true);
       this.stub(clock, 'isBlocked').returns(false);
       const mosaic = new StrapeBinder();
@@ -192,7 +204,9 @@ describe('StrapeBinder.jsx', () => {
 
   it('should not looking for next focused element on keysHandler when it is inactive',
     sinon.test(function() {
-      this.mock(next).expects('nextFocusedElement').never();
+      this.mock(next)
+        .expects('nextFocusedElement')
+        .never();
       this.stub(active, 'isActive').returns(false);
       this.stub(clock, 'isBlocked').returns(true);
       const mosaic = new StrapeBinder();
