@@ -27,7 +27,7 @@ npm i react-dom -S
 ## Example
 
 ```javascript
-import {MosaicBinder, keysInit} from 'react-keys';
+import {Binder, keysInit} from 'react-keys';
 
 keysInit(); // must call it once at the app starting to enable the triggering
 
@@ -160,7 +160,7 @@ list of available keys triggered :
 ```javascript
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import {connect, Provider} from 'react-redux';
-import {MosaicBinder, keysInit, keysReducer, activeKeyBinder} from 'react-keys';
+import {Binder, keysInit, keysReducer, activeKeyBinder} from 'react-keys';
 
 const store = createStore(combineReducers({
   '@@keys': keysReducer, // you have to had the react-keys reducer with the @@keys id
