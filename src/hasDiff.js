@@ -3,9 +3,18 @@ export function hasDiff(nextEls, prevEls) {
     return false;
   }
 
-  if (prevEls.length === 0) {
+  if (prevEls.length === 0 || prevEls.length !== nextEls.length) {
     return true;
   }
 
-  return prevEls[0].id !== nextEls[0].id || prevEls.length !== nextEls.length;
+  let diff = false;
+  let index = 0;
+  while (index < nextEls.length && !diff) {
+    if (nextEls[index].id !== prevEls[index].id) {
+      diff = true;
+    }
+    index++;
+  }
+
+  return diff;
 }
