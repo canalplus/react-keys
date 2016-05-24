@@ -31,4 +31,10 @@ describe('hasDiff.js', () => {
     const prevEls = [{id: '2'}, {id: '4'}];
     hasDiff(nextEls, prevEls).should.be.false;
   });
+
+  it('should return false when ids are differents', () => {
+    const nextEls = [{id: '2'}, {id: '3'}, {id: '5'}];
+    const prevEls = [{id: '2'}, {id: '4'}, {id: '5'}];
+    hasDiff(nextEls, prevEls).should.be.true;
+  });
 });
