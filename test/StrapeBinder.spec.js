@@ -10,6 +10,7 @@ import * as calculation from '../src/calculateNewState';
 import * as next from '../src/nextFocusedElement';
 import * as clock from '../src/clock';
 import * as active from '../src/isActive';
+import * as engine from '../src/engines/strape';
 import {expect} from 'chai';
 import sinon from 'sinon';
 
@@ -115,6 +116,44 @@ describe('StrapeBinder.jsx', () => {
       .withArgs(dir);
     mosaic.performAction(dir, cb, exitCb);
   }));
+
+  it('should perform action call calculateBounds when stratey is bounds', sinon.test(function() {
+    const mosaic = new StrapeBinder();
+    const dir = 'left';
+    const cb = () => null;
+    const exitCb = () => null;
+    mosaic.hasMoved = true;
+    mosaic.nextEl = {};
+    mosaic.props = {
+      strategy: 'bounds',
+      id: '1',
+    };
+    this.stub(mosaic, 'calculateNewState').returns(null);
+    this.mock(engine)
+      .expects('calculateBounds')
+      .once()
+      .withArgs(dir, mosaic.nextEl, mosaic.wrapperPosition, mosaic.marginLeft, mosaic.props);
+    mosaic.performAction(dir, cb, exitCb);
+  }));
+
+  it('should perform action do not call calculateBounds when stratey is not bounds',
+    sinon.test(function() {
+      const mosaic = new StrapeBinder();
+      const dir = 'left';
+      const cb = () => null;
+      const exitCb = () => null;
+      mosaic.hasMoved = true;
+      mosaic.nextEl = {};
+      mosaic.props = {
+        strategy: 'cut',
+        id: '1',
+      };
+      this.stub(mosaic, 'calculateNewState').returns(null);
+      this.mock(engine)
+        .expects('calculateBounds')
+        .never();
+      mosaic.performAction(dir, cb, exitCb);
+    }));
 
   it('should update selected id et exec cb when it has moved on performAction',
     sinon.test(function() {
