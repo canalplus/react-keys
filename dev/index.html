@@ -5,16 +5,19 @@
     <title>flipflop example</title>
     <style>
         #wrapper {
+            display: block;
             width: 1315px;
-            height: 130px;
+            height: 160px;
             background-color: yellow;
             overflow: hidden;
         }
 
+        ul {
+            width: 4000px;
+        }
+
         li {
-            position: relative;
-            display: block;
-            float: left;
+            display: inline-block;
             width: 300px;
             height: 100px;
             background-color: #00A000;
@@ -29,6 +32,7 @@
 </head>
 <body>
 <div id="body"></div>
+<script src="http://localhost:35729/livereload.js"></script>
 <script type="text/javascript" src="bundle.js"></script> <!-- webpack bundle -->
 </body>
 </html>

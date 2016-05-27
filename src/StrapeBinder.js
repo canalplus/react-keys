@@ -3,7 +3,7 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import {UP, DOWN, LEFT, RIGHT, ENTER, BACK} from './keys';
 import {C_LEFT, C_RIGHT} from './constants';
-import {refresh} from './engines/strape';
+import {refresh, calculateBounds} from './engines/strape';
 import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
 import {execCb, exitTo} from './funcHandler';
@@ -67,11 +67,13 @@ class StrapeBinder extends Component {
   constructor(props) {
     super(props);
     this.elements = [];
+    this.wrapperPosition = {};
     this.listenerId = addListener(this.keysHandler, this);
     this.prevEl = null;
     this.nextEl = null;
     this.prevDir = null;
     this.hasMoved = false;
+    this.marginLeft = 0;
   }
 
   keysHandler(keyCode) {
@@ -110,7 +112,15 @@ class StrapeBinder extends Component {
   performAction(dir, cb, exitCb) {
     this.calculateNewState(dir);
     if (this.hasMoved) {
-      _updateSelectedId(this.props.id, this.nextEl.id, this.nextEl.marginLeft);
+      this.marginLeft = this.props.strategy === 'bounds'
+        ? calculateBounds(
+        dir,
+        this.nextEl,
+        this.wrapperPosition,
+        this.marginLeft,
+        this.props)
+        : this.nextEl.marginLeft;
+      _updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft);
       execCb(cb, this.nextEl, this, this.props);
     } else {
       exitTo(exitCb);
@@ -119,7 +129,7 @@ class StrapeBinder extends Component {
 
   refreshState() {
     const dom = ReactDOM.findDOMNode(this);
-    const value = refresh(
+    const response = refresh(
       dom,
       this.elements,
       this.props.wrapper,
@@ -133,9 +143,10 @@ class StrapeBinder extends Component {
       }
     );
 
-    const {elements, selectedElement} = value;
+    const {elements, selectedElement, wrapper} = response;
     this.nextEl = selectedElement || this.nextEl || {};
     if (hasDiff(elements, this.elements)) {
+      this.wrapperPosition = wrapper || this.wrapperPosition;
       this.elements = elements;
       _updateBinderState(this.props.id, {
         elements: this.elements,

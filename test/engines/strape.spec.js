@@ -1,4 +1,5 @@
 /* eslint no-unused-expressions:0 */
+/* eslint prefer-arrow-callback:0 */
 import {
   calculate,
   defineMarginLeft,
@@ -7,17 +8,21 @@ import {
   findRightElement,
   createList,
   build,
+  calculateBounds,
   selectedElement,
 } from '../../src/engines/strape';
+import {C_RIGHT, C_LEFT} from '../../src/constants';
 import {expect} from 'chai';
 import jsdom from 'jsdom';
+import sinon from 'sinon';
 
 describe('engine/strape.js', () => {
   it('build should return an array', () => {
     const dom = jsdom.jsdom('<div id="wrapper"><li id="1"></li><li id="2"></li></div>');
     const list = [];
     const options = {};
-    build(dom, '#wrapper', list, options).should.be.an.array;
+    const wrapperPosition = dom.querySelector('#wrapper').getBoundingClientRect();
+    build(wrapperPosition, list, options).should.be.an.array;
   });
 
   it('createList should return a list from dom', () => {
@@ -26,7 +31,94 @@ describe('engine/strape.js', () => {
     list.should.have.lengthOf(2);
     list[0].should.be.instanceOf(HTMLLIElement);
   });
-
+  describe('strategy : bounds', () => {
+    describe('calculateBounds', () => {
+      it('should return same marginLeft on right action when next card in inside bounds',
+        sinon.test(function() {
+          this.stub(document, 'getElementById').returns({
+            getBoundingClientRect: () => {
+              return {left: 100, right: 200};
+            },
+          });
+          const dir = C_RIGHT;
+          const el = {id: 10};
+          const wrapperPosition = {left: 0, right: 400};
+          const initialMarginLeft = 0;
+          const props = {gap: 0};
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props).should.equal(0);
+        }));
+      it('should calculate new marginLeft with new el is out of bounds on right',
+        sinon.test(function() {
+          this.stub(document, 'getElementById').returns({
+            getBoundingClientRect: () => {
+              return {left: 350, right: 450};
+            },
+          });
+          const dir = C_RIGHT;
+          const el = {id: 10};
+          const wrapperPosition = {left: 0, right: 400};
+          const initialMarginLeft = 0;
+          const props = {gap: 0};
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props).should.equal(50);
+        }));
+      it('should return same marginLeft on left action when next card in inside bounds',
+        sinon.test(function() {
+          this.stub(document, 'getElementById').returns({
+            getBoundingClientRect: () => {
+              return {left: 200, right: 300};
+            },
+          });
+          const dir = C_LEFT;
+          const el = {id: 10};
+          const wrapperPosition = {left: 0, right: 400};
+          const initialMarginLeft = 100;
+          const props = {gap: 0};
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props).should.equal(100);
+        }));
+      it('should calculate new marginLeft with new el is out of bounds on left',
+        sinon.test(function() {
+          this.stub(document, 'getElementById').returns({
+            getBoundingClientRect: () => {
+              return {left: 50, right: 150};
+            },
+          });
+          const dir = C_LEFT;
+          const el = {id: 10};
+          const wrapperPosition = {left: 100, right: 400};
+          const initialMarginLeft = 100;
+          const props = {gap: 0};
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props).should.equal(50);
+        }));
+      it('should add gap on right when out of bounds',
+        sinon.test(function() {
+          this.stub(document, 'getElementById').returns({
+            getBoundingClientRect: () => {
+              return {left: 450, right: 450};
+            },
+          });
+          const dir = C_RIGHT;
+          const el = {id: 10};
+          const wrapperPosition = {left: 100, right: 400};
+          const initialMarginLeft = 0;
+          const props = {gap: 10};
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props).should.equal(60);
+        }));
+      it('should sub gap on left when out of bounds',
+        sinon.test(function() {
+          this.stub(document, 'getElementById').returns({
+            getBoundingClientRect: () => {
+              return {left: 50, right: 150};
+            },
+          });
+          const dir = C_LEFT;
+          const el = {id: 10};
+          const wrapperPosition = {left: 100, right: 400};
+          const initialMarginLeft = 100;
+          const props = {gap: 10};
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props).should.equal(40);
+        }));
+    });
+  });
   describe('strategy : progressive', () => {
     it('should set margin when card is outside the wrapper', () => {
       const wrapper = {width: 200, left: 100};

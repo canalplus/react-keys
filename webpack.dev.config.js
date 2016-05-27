@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 module.exports = {
   entry: ['./dev/dev.jsx'],
@@ -19,6 +20,7 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
+    new LiveReloadPlugin(),
     new webpack.NoErrorsPlugin(),
   ],
 };
