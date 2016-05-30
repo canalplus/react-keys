@@ -17,11 +17,12 @@ export function clone(obj) {
   return cloneObject;
 }
 
-export function _activeKeyBinder(binderId) {
+export function _activeKeyBinder(binderId, id) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
     for (const key of Object.keys(newState)) {
       newState[key].active = false;
+      newState[key].selectedId = id || newState[key].selectedId;
     }
     if (Object.keys(newState).some(key => key === binderId)) {
       newState[binderId].active = true;
@@ -33,7 +34,7 @@ export function _activeKeyBinder(binderId) {
   }
 }
 
-export function _addKeyBinderToStore(binderId) {
+export function addKeyBinderToStore(binderId) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
     if (!Object.keys(newState).some(key => key === binderId)) {
@@ -59,7 +60,38 @@ export function _updateBinderState(binderId, binderState) {
   }
 }
 
-export function _updateSelectedId(binderId, selectedId, marginLeft) {
+export function exitBinder(strategy, callback, nextElId) {
+  if (callback) {
+    if (typeof callback === 'string') {
+      if (strategy === 'bounds') {
+        const dom = document.getElementById(callback);
+        if (dom) {
+          const leftElement = document.getElementById(nextElId);
+          const leftPx = leftElement ? leftElement.getBoundingClientRect().left : 0;
+          const exitBinderState = globalStore.getState()[NAME][callback];
+          const nextFocusedId = [].slice.call(dom.querySelectorAll(exitBinderState.wChildren))
+            .map(el => {
+              return {
+                id: el.id,
+                diff: el.getBoundingClientRect().left - leftPx,
+              };
+            })
+            .sort((a, b) => a.diff - b.diff)
+            .filter(a => a.diff >= 0);
+          _activeKeyBinder(callback, nextFocusedId[0] ? nextFocusedId[0].id : null);
+        } else {
+          _activeKeyBinder(callback);
+        }
+      } else {
+        _activeKeyBinder(callback);
+      }
+    } else {
+      callback();
+    }
+  }
+}
+
+export function updateSelectedId(binderId, selectedId, marginLeft) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
     newState[binderId].selectedId = selectedId;

@@ -10,7 +10,12 @@ import {execCb, exitTo} from './funcHandler';
 import {nextFocusedElement} from './nextFocusedElement';
 import {calculateNewState} from './calculateNewState';
 import {addListener, removeListener, globalStore} from './listener';
-import {_addKeyBinderToStore, _updateSelectedId, _updateBinderState} from './redux/actions';
+import {
+  addKeyBinderToStore,
+  updateSelectedId,
+  _updateBinderState,
+  exitBinder,
+} from './redux/actions';
 import {hasDiff} from './hasDiff';
 
 class StrapeBinder extends Component {
@@ -92,15 +97,19 @@ class StrapeBinder extends Component {
           this.performAction(C_RIGHT, this.props.onRight, this.props.onRightExit);
           break;
         case ENTER:
+          this.prevDir = null;
           execCb(this.props.onEnter, this.nextEl, this, this.props);
           break;
         case UP:
-          exitTo(this.props.onUpExit);
+          this.prevDir = null;
+          exitBinder(this.props.strategy, this.props.onUpExit, this.nextEl.id);
           break;
         case DOWN:
-          exitTo(this.props.onDownExit);
+          this.prevDir = null;
+          exitBinder(this.props.strategy, this.props.onDownExit, this.nextEl.id);
           break;
         case BACK:
+          this.prevDir = null;
           execCb(this.props.onBack, this.nextEl, this, this.props);
           break;
         default:
@@ -120,7 +129,7 @@ class StrapeBinder extends Component {
         this.marginLeft,
         this.props)
         : this.nextEl.marginLeft;
-      _updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft);
+      updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft);
       execCb(cb, this.nextEl, this, this.props);
     } else {
       exitTo(exitCb);
@@ -150,9 +159,9 @@ class StrapeBinder extends Component {
       this.elements = elements;
       _updateBinderState(this.props.id, {
         elements: this.elements,
-        visibleElements: this.elements.filter(element => element.marginLeft === 0).length,
         selectedId: this.nextEl.id,
         marginLeft: this.nextEl.marginLeft,
+        wChildren: this.props.wChildren,
       });
     }
   }
@@ -167,7 +176,7 @@ class StrapeBinder extends Component {
   }
 
   componentDidMount() {
-    _addKeyBinderToStore(this.props.id);
+    addKeyBinderToStore(this.props.id);
     this.refreshState();
   }
 
@@ -180,7 +189,7 @@ class StrapeBinder extends Component {
   }
 
   render() {
-    return <div>{this.props.children}</div>;
+    return <div id={this.props.id}>{this.props.children}</div>;
   }
 
 }
