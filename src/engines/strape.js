@@ -1,5 +1,29 @@
 import {trigger} from '../events';
 import {hasDiff} from '../hasDiff';
+import {C_LEFT, C_RIGHT} from '../constants';
+
+export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props) {
+  const element = document.getElementById(el.id).getBoundingClientRect();
+  let marginLeft = initialMarginLeft;
+  const {gap, lastGap} = props;
+  switch (dir) {
+    case C_RIGHT:
+      if (element.right > wrapperPosition.right) {
+        const bonus = el[C_RIGHT] ? gap : lastGap;
+        marginLeft = initialMarginLeft + element.right - wrapperPosition.right + bonus;
+      }
+      break;
+    case C_LEFT:
+      if (element.left < wrapperPosition.left) {
+        const bonus = el[C_LEFT] ? gap : lastGap;
+        marginLeft = initialMarginLeft + element.left - wrapperPosition.left - bonus;
+      }
+      break;
+    default:
+      break;
+  }
+  return marginLeft;
+}
 
 export function gapCorrection(card, wrapper, lastCard, options) {
   let gap = card.id === lastCard.id ? options.lastGap : options.gap;
@@ -81,8 +105,7 @@ function buildCardStructure(card) {
   };
 }
 
-export function build(dom, wrapper, list, options) {
-  const wrapperPosition = dom.querySelector(wrapper).getBoundingClientRect();
+export function build(wrapperPosition, list, options) {
   const cards = list.map(buildCardStructure);
   return calculate(wrapperPosition, cards, options);
 }
@@ -103,13 +126,16 @@ export function refresh(dom, prevElements, wrapper, children, options) {
   if (!hasDiff(elements, prevElements)) {
     return {
       elements: prevElements,
+      wrapper: null,
       selectedElement: null,
     };
   }
-  const nextElements = build(dom, wrapper, elements, options);
+  const wrapperPosition = dom.querySelector(wrapper).getBoundingClientRect();
+  const nextElements = build(wrapperPosition, elements, options);
   trigger('strape:update', nextElements);
   return {
     elements: nextElements,
+    wrapper: wrapperPosition,
     selectedElement: selectedElement(nextElements, options.focusedElementId),
   };
 }

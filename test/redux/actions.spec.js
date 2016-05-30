@@ -1,24 +1,15 @@
 /* eslint no-unused-expressions:0 */
-import {
-  clone,
-  _activeKeyBinder,
-  _addKeyBinderToStore,
-  _updateSelectedId,
-  _updateBinderState,
-  ACTIVE_KEYBINDER,
-  ADD_KEYBINDER_TO_STORE,
-  UPDATE_SELECTED_KEY,
-  UPDATE_BINDER_STATE,
-} from '../../src/redux/actions';
+import * as actions from '../../src/redux/actions';
 import * as module from '../../src/listener';
 import {createStore} from 'redux';
 import sinon from 'sinon';
+import jsdom from 'jsdom';
 
 describe('redux/actions.js', () => {
   describe('clone', () => {
     it('should clone an object', () => {
       const ob1 = {id: 1, context: {obladi: 'oblada'}};
-      const ob2 = clone(ob1);
+      const ob2 = actions.clone(ob1);
       ob1.should.not.equal(ob2);
       ob1.id.should.equal(ob2.id);
       ob1.context.should.not.equal(ob2.context);
@@ -39,13 +30,13 @@ describe('redux/actions.js', () => {
           .expects('dispatch')
           .once()
           .withArgs({
-            type: ACTIVE_KEYBINDER,
+            type: actions.ACTIVE_KEYBINDER,
             state: {
-              binderId: {active: true},
-              binderId2: {active: false},
+              binderId: {active: true, selectedId: undefined},
+              binderId2: {active: false, selectedId: undefined},
             },
           });
-        _activeKeyBinder('binderId');
+        actions._activeKeyBinder('binderId');
       }));
     it('should not dispatch anything if binderId not found in state', sinon.test(function() {
       const store = createStore((state = {
@@ -57,7 +48,7 @@ describe('redux/actions.js', () => {
       this.mock(module.globalStore)
         .expects('dispatch')
         .never();
-      _activeKeyBinder('binderId2');
+      actions._activeKeyBinder('binderId2');
     }));
   });
   describe('_addKeyBinderToStore', () => {
@@ -72,10 +63,10 @@ describe('redux/actions.js', () => {
         .expects('dispatch')
         .once()
         .withArgs({
-          type: ADD_KEYBINDER_TO_STORE,
+          type: actions.ADD_KEYBINDER_TO_STORE,
           state: sinon.match.object,
         });
-      _addKeyBinderToStore('binderId2');
+      actions.addKeyBinderToStore('binderId2');
     }));
     it('should not dipatch if binderId already exists in state', sinon.test(function() {
       const store = createStore((state = {
@@ -87,7 +78,7 @@ describe('redux/actions.js', () => {
       this.mock(module.globalStore)
         .expects('dispatch')
         .never();
-      _addKeyBinderToStore('binderId');
+      actions.addKeyBinderToStore('binderId');
     }));
   });
   describe('_updateSelectedId', () => {
@@ -102,12 +93,12 @@ describe('redux/actions.js', () => {
         .expects('dispatch')
         .once()
         .withArgs({
-          type: UPDATE_SELECTED_KEY,
+          type: actions.UPDATE_SELECTED_KEY,
           state: {
             binderId: {active: false, selectedId: 2, marginLeft: 10},
           },
         });
-      _updateSelectedId('binderId', 2, 10);
+      actions.updateSelectedId('binderId', 2, 10);
     }));
   });
 
@@ -123,10 +114,69 @@ describe('redux/actions.js', () => {
         .expects('dispatch')
         .once()
         .withArgs({
-          type: UPDATE_BINDER_STATE,
+          type: actions.UPDATE_BINDER_STATE,
           state: sinon.match.object,
         });
-      _updateBinderState('binderId', {});
+      actions._updateBinderState('binderId', {});
+    }));
+  });
+
+  describe('exitBinder', () => {
+    it('should not call activeKeyBinder when call is undefined', sinon.test(function() {
+      this.mock(actions)
+        .expects('_activeKeyBinder')
+        .never();
+      actions.exitBinder('bounds', null, '1');
+    }));
+
+    it('should call callback when callback is a function', sinon.test(function() {
+      const callback = this.spy();
+      actions.exitBinder('bounds', callback, '1');
+      callback.should.have.been.calledOnce;
+    }));
+
+    it('should call dispatcher when callback is a string and no strategy', sinon.test(function() {
+      const store = createStore((state = {
+        '@@keys': {
+          binderId: {active: false, selectedId: 1, marginLeft: 0},
+        },
+      }) => state);
+      module._init({store: store}); // init globalStore
+      this.mock(module.globalStore)
+        .expects('dispatch')
+        .once();
+      actions.exitBinder(null, 'binderId', 'nextEl1');
+    }));
+
+    it('should call dispatcher when callback is a string with mirror stategy',
+      sinon.test(function() {
+        const store = createStore((state = {
+          '@@keys': {
+            binderId: {active: false, selectedId: 1, marginLeft: 0},
+          },
+        }) => state);
+        module._init({store: store}); // init globalStore
+        this.mock(module.globalStore)
+          .expects('dispatch')
+          .once();
+        actions.exitBinder('mirror', 'binderId', 'nextEl1');
+      }));
+
+    /* eslint no-native-reassign: 0 */
+    it('should', sinon.test(function() {
+      document = jsdom.jsdom('<div id="wrapper"><ul><li id="1"></li></ul></div>' +
+        '<div id="binderId"><ul><li></li></ul></div>');
+      const store = createStore((state = {
+        '@@keys': {
+          binderId: {active: false, selectedId: 1, marginLeft: 0},
+        },
+      }) => state);
+      module._init({store: store}); // init globalStore
+      this.mock(module.globalStore)
+        .expects('dispatch')
+        .once();
+      actions.exitBinder('mirror', 'binderId', 'nextEl1');
+      document = null;
     }));
   });
 });

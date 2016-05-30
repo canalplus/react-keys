@@ -10,7 +10,7 @@ import {nextFocusedElement} from './nextFocusedElement';
 import {execCb, exitTo} from './funcHandler';
 import {calculateNewState} from './calculateNewState';
 import {addListener, removeListener, globalStore} from './listener';
-import {_addKeyBinderToStore, _updateSelectedId, _updateBinderState} from './redux/actions';
+import {addKeyBinderToStore, updateSelectedId, _updateBinderState} from './redux/actions';
 import {hasDiff} from './hasDiff';
 
 class Binder extends Component {
@@ -102,7 +102,7 @@ class Binder extends Component {
   performAction(dir, cb, exitCb) {
     this.calculateNewState(dir);
     if (this.hasMoved) {
-      _updateSelectedId(this.props.id, this.nextEl.id, this.nextEl.marginLeft);
+      updateSelectedId(this.props.id, this.nextEl.id, this.nextEl.marginLeft);
       execCb(cb, this.nextEl, this, this.props);
     } else {
       exitTo(exitCb);
@@ -139,7 +139,7 @@ class Binder extends Component {
   }
 
   componentDidMount() {
-    _addKeyBinderToStore(this.props.id);
+    addKeyBinderToStore(this.props.id);
     this.refreshState();
   }
 

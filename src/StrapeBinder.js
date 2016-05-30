@@ -3,14 +3,19 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import {UP, DOWN, LEFT, RIGHT, ENTER, BACK} from './keys';
 import {C_LEFT, C_RIGHT} from './constants';
-import {refresh} from './engines/strape';
+import {refresh, calculateBounds} from './engines/strape';
 import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
 import {execCb, exitTo} from './funcHandler';
 import {nextFocusedElement} from './nextFocusedElement';
 import {calculateNewState} from './calculateNewState';
 import {addListener, removeListener, globalStore} from './listener';
-import {_addKeyBinderToStore, _updateSelectedId, _updateBinderState} from './redux/actions';
+import {
+  addKeyBinderToStore,
+  updateSelectedId,
+  _updateBinderState,
+  exitBinder,
+} from './redux/actions';
 import {hasDiff} from './hasDiff';
 
 class StrapeBinder extends Component {
@@ -53,6 +58,7 @@ class StrapeBinder extends Component {
   static get defaultProps() {
     return {
       strategy: 'progressive',
+      exitStrategy: '',
       gap: 0,
       lastGap: 0,
       accuracy: 0,
@@ -67,11 +73,13 @@ class StrapeBinder extends Component {
   constructor(props) {
     super(props);
     this.elements = [];
+    this.wrapperPosition = {};
     this.listenerId = addListener(this.keysHandler, this);
     this.prevEl = null;
     this.nextEl = null;
     this.prevDir = null;
     this.hasMoved = false;
+    this.marginLeft = 0;
   }
 
   keysHandler(keyCode) {
@@ -90,15 +98,19 @@ class StrapeBinder extends Component {
           this.performAction(C_RIGHT, this.props.onRight, this.props.onRightExit);
           break;
         case ENTER:
+          this.prevDir = null;
           execCb(this.props.onEnter, this.nextEl, this, this.props);
           break;
         case UP:
-          exitTo(this.props.onUpExit);
+          this.prevDir = null;
+          exitBinder(this.props.exitStrategy, this.props.onUpExit, this.nextEl.id);
           break;
         case DOWN:
-          exitTo(this.props.onDownExit);
+          this.prevDir = null;
+          exitBinder(this.props.exitStrategy, this.props.onDownExit, this.nextEl.id);
           break;
         case BACK:
+          this.prevDir = null;
           execCb(this.props.onBack, this.nextEl, this, this.props);
           break;
         default:
@@ -110,7 +122,15 @@ class StrapeBinder extends Component {
   performAction(dir, cb, exitCb) {
     this.calculateNewState(dir);
     if (this.hasMoved) {
-      _updateSelectedId(this.props.id, this.nextEl.id, this.nextEl.marginLeft);
+      this.marginLeft = this.props.strategy === 'bounds'
+        ? calculateBounds(
+        dir,
+        this.nextEl,
+        this.wrapperPosition,
+        this.marginLeft,
+        this.props)
+        : this.nextEl.marginLeft;
+      updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft);
       execCb(cb, this.nextEl, this, this.props);
     } else {
       exitTo(exitCb);
@@ -119,7 +139,7 @@ class StrapeBinder extends Component {
 
   refreshState() {
     const dom = ReactDOM.findDOMNode(this);
-    const value = refresh(
+    const response = refresh(
       dom,
       this.elements,
       this.props.wrapper,
@@ -133,15 +153,16 @@ class StrapeBinder extends Component {
       }
     );
 
-    const {elements, selectedElement} = value;
+    const {elements, selectedElement, wrapper} = response;
     this.nextEl = selectedElement || this.nextEl || {};
     if (hasDiff(elements, this.elements)) {
+      this.wrapperPosition = wrapper || this.wrapperPosition;
       this.elements = elements;
       _updateBinderState(this.props.id, {
         elements: this.elements,
-        visibleElements: this.elements.filter(element => element.marginLeft === 0).length,
         selectedId: this.nextEl.id,
         marginLeft: this.nextEl.marginLeft,
+        wChildren: this.props.wChildren,
       });
     }
   }
@@ -156,7 +177,7 @@ class StrapeBinder extends Component {
   }
 
   componentDidMount() {
-    _addKeyBinderToStore(this.props.id);
+    addKeyBinderToStore(this.props.id);
     this.refreshState();
   }
 
@@ -169,7 +190,7 @@ class StrapeBinder extends Component {
   }
 
   render() {
-    return <div>{this.props.children}</div>;
+    return <div id={this.props.id}>{this.props.children}</div>;
   }
 
 }

@@ -21,7 +21,7 @@ describe('Binder.jsx', () => {
 
   it('should call refreshState and _addKeyBinderToStore on mount', sinon.test(function() {
     const refreshStateSpy = this.spy(Binder.prototype, 'refreshState');
-    const addToStoreSpy = this.spy(actions, '_addKeyBinderToStore');
+    const addToStoreSpy = this.spy(actions, 'addKeyBinderToStore');
     mount(<Binder id="1">
       <li id="li1"></li>
     </Binder>);
@@ -118,7 +118,7 @@ describe('Binder.jsx', () => {
         .expects('calculateNewState')
         .once()
         .withArgs(dir);
-      const updateSelectedIdSpy = this.spy(actions, '_updateSelectedId');
+      const updateSelectedIdSpy = this.spy(actions, 'updateSelectedId');
       const execCbSpy = this.spy(funcHandler, 'execCb');
       const exitCbSpy = this.spy(funcHandler, 'exitTo');
       mosaic.performAction(dir, cb, exitCb);
@@ -144,7 +144,7 @@ describe('Binder.jsx', () => {
       .expects('calculateNewState')
       .once()
       .withArgs(dir);
-    const updateSelectedIdSpy = this.spy(actions, '_updateSelectedId');
+    const updateSelectedIdSpy = this.spy(actions, 'updateSelectedId');
     const execCbSpy = this.spy(funcHandler, 'execCb');
     const exitCbSpy = this.spy(funcHandler, 'exitTo');
     mosaic.performAction(dir, cb, exitCb);
