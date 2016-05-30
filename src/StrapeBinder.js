@@ -159,6 +159,7 @@ class StrapeBinder extends Component {
       this.wrapperPosition = wrapper || this.wrapperPosition;
       this.elements = elements;
       _updateBinderState(this.props.id, {
+        id: this.props.id,
         elements: this.elements,
         selectedId: this.nextEl.id,
         marginLeft: this.nextEl.marginLeft,

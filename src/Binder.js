@@ -123,6 +123,7 @@ class Binder extends Component {
     if (hasDiff(elements, this.elements)) {
       this.elements = elements;
       _updateBinderState(this.props.id, {
+        id: this.props.id,
         elements: this.elements,
         selectedId: this.nextEl.id,
       });
@@ -152,7 +153,7 @@ class Binder extends Component {
   }
 
   render() {
-    return <div>{this.props.children}</div>;
+    return <div id={this.props.id}>{this.props.children}</div>;
   }
 
 }
