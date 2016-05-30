@@ -41,6 +41,7 @@ const PureMosaic = ({strape1, strape2}) => {
         exitStrategy="mirror"
         onDownExit="strape-2"
         gap={30}
+        lastGap={10}
         onEnter={onEnter}>
         <div id="wrapper">
           <ul style={ulStyle1}>

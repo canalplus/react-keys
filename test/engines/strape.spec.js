@@ -41,7 +41,7 @@ describe('engine/strape.js', () => {
             },
           });
           const dir = C_RIGHT;
-          const el = {id: 10};
+          const el = {id: 10, right: 'a3'};
           const wrapperPosition = {left: 0, right: 400};
           const initialMarginLeft = 0;
           const props = {gap: 0};
@@ -55,7 +55,7 @@ describe('engine/strape.js', () => {
             },
           });
           const dir = C_RIGHT;
-          const el = {id: 10};
+          const el = {id: 10, right: 'a3'};
           const wrapperPosition = {left: 0, right: 400};
           const initialMarginLeft = 0;
           const props = {gap: 0};
@@ -69,7 +69,7 @@ describe('engine/strape.js', () => {
             },
           });
           const dir = C_LEFT;
-          const el = {id: 10};
+          const el = {id: 10, left: 'a3'};
           const wrapperPosition = {left: 0, right: 400};
           const initialMarginLeft = 100;
           const props = {gap: 0};
@@ -83,7 +83,7 @@ describe('engine/strape.js', () => {
             },
           });
           const dir = C_LEFT;
-          const el = {id: 10};
+          const el = {id: 10, left: 'a3'};
           const wrapperPosition = {left: 100, right: 400};
           const initialMarginLeft = 100;
           const props = {gap: 0};
@@ -97,7 +97,7 @@ describe('engine/strape.js', () => {
             },
           });
           const dir = C_RIGHT;
-          const el = {id: 10};
+          const el = {id: 10, right: 'a3'};
           const wrapperPosition = {left: 100, right: 400};
           const initialMarginLeft = 0;
           const props = {gap: 10};
@@ -111,12 +111,38 @@ describe('engine/strape.js', () => {
             },
           });
           const dir = C_LEFT;
-          const el = {id: 10};
+          const el = {id: 10, left: 'a3'};
           const wrapperPosition = {left: 100, right: 400};
           const initialMarginLeft = 100;
           const props = {gap: 10};
           calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props).should.equal(40);
         }));
+      it('should add lastGap when lastElement on left', sinon.test(function() {
+        this.stub(document, 'getElementById').returns({
+          getBoundingClientRect: () => {
+            return {left: 50, right: 150};
+          },
+        });
+        const dir = C_LEFT;
+        const el = {id: 10, left: undefined};
+        const wrapperPosition = {left: 100, right: 400};
+        const initialMarginLeft = 100;
+        const props = {gap: 10, lastGap: 20};
+        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props).should.equal(30);
+      }));
+      it('should add lastGap when lastElement on right', sinon.test(function() {
+        this.stub(document, 'getElementById').returns({
+          getBoundingClientRect: () => {
+            return {left: 450, right: 450};
+          },
+        });
+        const dir = C_RIGHT;
+        const el = {id: 10, right: undefined};
+        const wrapperPosition = {left: 100, right: 400};
+        const initialMarginLeft = 0;
+        const props = {gap: 10, lastGap: 20};
+        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props).should.equal(70);
+      }));
     });
   });
   describe('strategy : progressive', () => {

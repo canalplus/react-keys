@@ -5,16 +5,18 @@ import {C_LEFT, C_RIGHT} from '../constants';
 export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props) {
   const element = document.getElementById(el.id).getBoundingClientRect();
   let marginLeft = initialMarginLeft;
-  const {gap} = props;
+  const {gap, lastGap} = props;
   switch (dir) {
     case C_RIGHT:
       if (element.right > wrapperPosition.right) {
-        marginLeft = initialMarginLeft + element.right - wrapperPosition.right + gap;
+        const bonus = el[C_RIGHT] ? gap : lastGap;
+        marginLeft = initialMarginLeft + element.right - wrapperPosition.right + bonus;
       }
       break;
     case C_LEFT:
       if (element.left < wrapperPosition.left) {
-        marginLeft = initialMarginLeft + element.left - wrapperPosition.left - gap;
+        const bonus = el[C_LEFT] ? gap : lastGap;
+        marginLeft = initialMarginLeft + element.left - wrapperPosition.left - bonus;
       }
       break;
     default:
