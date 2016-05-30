@@ -22,10 +22,10 @@ export function _activeKeyBinder(binderId, id) {
     const newState = clone(globalStore.getState()[NAME]);
     for (const key of Object.keys(newState)) {
       newState[key].active = false;
-      newState[key].selectedId = id || newState[key].selectedId;
     }
     if (Object.keys(newState).some(key => key === binderId)) {
       newState[binderId].active = true;
+      newState[binderId].selectedId = id || newState[binderId].selectedId;
       globalStore.dispatch({
         type: ACTIVE_KEYBINDER,
         state: newState,
@@ -73,11 +73,10 @@ export function exitBinder(strategy, callback, nextElId) {
             .map(el => {
               return {
                 id: el.id,
-                diff: el.getBoundingClientRect().left - leftPx,
+                diff: Math.abs(el.getBoundingClientRect().left - leftPx),
               };
             })
-            .sort((a, b) => a.diff - b.diff)
-            .filter(a => a.diff >= 0);
+            .sort((a, b) => a.diff - b.diff);
           _activeKeyBinder(callback, nextFocusedId[0] ? nextFocusedId[0].id : null);
         } else {
           _activeKeyBinder(callback);
