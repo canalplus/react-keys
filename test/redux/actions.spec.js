@@ -33,7 +33,7 @@ describe('redux/actions.js', () => {
             type: actions.ACTIVE_KEYBINDER,
             state: {
               binderId: {active: true, selectedId: undefined},
-              binderId2: {active: false, selectedId: undefined},
+              binderId2: {active: false},
             },
           });
         actions._activeKeyBinder('binderId');
