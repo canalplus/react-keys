@@ -148,7 +148,7 @@ describe('redux/actions.js', () => {
       actions.exitBinder(null, 'binderId', 'nextEl1');
     }));
 
-    it('should call dispatcher when callback is a string with bounds stategy',
+    it('should call dispatcher when callback is a string with mirror stategy',
       sinon.test(function() {
         const store = createStore((state = {
           '@@keys': {
@@ -159,7 +159,7 @@ describe('redux/actions.js', () => {
         this.mock(module.globalStore)
           .expects('dispatch')
           .once();
-        actions.exitBinder('bounds', 'binderId', 'nextEl1');
+        actions.exitBinder('mirror', 'binderId', 'nextEl1');
       }));
 
     /* eslint no-native-reassign: 0 */
@@ -175,7 +175,7 @@ describe('redux/actions.js', () => {
       this.mock(module.globalStore)
         .expects('dispatch')
         .once();
-      actions.exitBinder('bounds', 'binderId', 'nextEl1');
+      actions.exitBinder('mirror', 'binderId', 'nextEl1');
       document = null;
     }));
   });

@@ -58,6 +58,7 @@ class StrapeBinder extends Component {
   static get defaultProps() {
     return {
       strategy: 'progressive',
+      exitStrategy: '',
       gap: 0,
       lastGap: 0,
       accuracy: 0,
@@ -102,11 +103,11 @@ class StrapeBinder extends Component {
           break;
         case UP:
           this.prevDir = null;
-          exitBinder(this.props.strategy, this.props.onUpExit, this.nextEl.id);
+          exitBinder(this.props.exitStrategy, this.props.onUpExit, this.nextEl.id);
           break;
         case DOWN:
           this.prevDir = null;
-          exitBinder(this.props.strategy, this.props.onDownExit, this.nextEl.id);
+          exitBinder(this.props.exitStrategy, this.props.onDownExit, this.nextEl.id);
           break;
         case BACK:
           this.prevDir = null;

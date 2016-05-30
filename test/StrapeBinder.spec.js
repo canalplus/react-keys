@@ -266,7 +266,7 @@ describe('StrapeBinder.jsx', () => {
     const strape = new StrapeBinder();
     strape.props = {
       id: 1,
-      strategy: 'bounds',
+      exitStrategy: 'bounds',
       onUpExit: 'myup',
     };
     strape.nextEl = {id: 'nextEl2'};
@@ -285,7 +285,7 @@ describe('StrapeBinder.jsx', () => {
     const strape = new StrapeBinder();
     strape.props = {
       id: 1,
-      strategy: 'bounds',
+      exitStrategy: 'bounds',
       onDownExit: 'mydown',
     };
     strape.nextEl = {id: 'nextEl2'};

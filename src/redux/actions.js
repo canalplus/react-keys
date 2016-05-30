@@ -63,7 +63,7 @@ export function _updateBinderState(binderId, binderState) {
 export function exitBinder(strategy, callback, nextElId) {
   if (callback) {
     if (typeof callback === 'string') {
-      if (strategy === 'bounds') {
+      if (strategy === 'mirror') {
         const dom = document.getElementById(callback);
         if (dom) {
           const leftElement = document.getElementById(nextElId);

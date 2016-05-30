@@ -88,7 +88,8 @@ renderWithId('mosaic-1-1');
 * `id` (string / **mandatory**) Define the binder id
 * `wrapper` (string / *optional*) DOM selector which define parent element (default `ul`)
 * `wChildren` (string / *optional*) DOM selector which define children elements (default `li`)
-* `strategy` (string / *optional*) define strape strategy : `progressive` or `cut` (default `progressive`)
+* `strategy` (string / *optional*) define strape strategy : `progressive` / `cut` / `bounds` (default `progressive`)
+* `exitStrategy` (string / *optional*) define strape strategy : `none` / `mirror` (default `none`)
 * `circular` (boolean / *optional*) define if strape has no boundaries (default `false`)
 * `gap` (number / *optional*) reduce or increase elements margin (default `0`)
 * `lastGap` (number / *optional*) reduce or increase last element margin (default `0`)
