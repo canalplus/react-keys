@@ -1,8 +1,9 @@
 /* eslint no-unused-expressions:0 */
+import * as actions from '../../src/redux/actions';
 import * as module from '../../src/listener';
 import {createStore} from 'redux';
 import sinon from 'sinon';
-import * as actions from '../../src/redux/actions';
+import jsdom from 'jsdom';
 
 describe('redux/actions.js', () => {
   describe('clone', () => {
@@ -132,6 +133,50 @@ describe('redux/actions.js', () => {
       const callback = this.spy();
       actions.exitBinder('bounds', callback, '1');
       callback.should.have.been.calledOnce;
+    }));
+
+    it('should call dispatcher when callback is a string and no strategy', sinon.test(function() {
+      const store = createStore((state = {
+        '@@keys': {
+          binderId: {active: false, selectedId: 1, marginLeft: 0},
+        },
+      }) => state);
+      module._init({store: store}); // init globalStore
+      this.mock(module.globalStore)
+        .expects('dispatch')
+        .once();
+      actions.exitBinder(null, 'binderId', 'nextEl1');
+    }));
+
+    it('should call dispatcher when callback is a string with bounds stategy',
+      sinon.test(function() {
+        const store = createStore((state = {
+          '@@keys': {
+            binderId: {active: false, selectedId: 1, marginLeft: 0},
+          },
+        }) => state);
+        module._init({store: store}); // init globalStore
+        this.mock(module.globalStore)
+          .expects('dispatch')
+          .once();
+        actions.exitBinder('bounds', 'binderId', 'nextEl1');
+      }));
+
+    /* eslint no-native-reassign: 0 */
+    it('should', sinon.test(function() {
+      document = jsdom.jsdom('<div id="wrapper"><ul><li id="1"></li></ul></div>' +
+        '<div id="binderId"><ul><li></li></ul></div>');
+      const store = createStore((state = {
+        '@@keys': {
+          binderId: {active: false, selectedId: 1, marginLeft: 0},
+        },
+      }) => state);
+      module._init({store: store}); // init globalStore
+      this.mock(module.globalStore)
+        .expects('dispatch')
+        .once();
+      actions.exitBinder('bounds', 'binderId', 'nextEl1');
+      document = null;
     }));
   });
 });
