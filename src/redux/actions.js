@@ -69,19 +69,23 @@ export function exitBinder(strategy, callback, nextElId) {
       const dom = document.getElementById(callback) || document;
       const exitBinderState = globalStore.getState()[NAME][callback] || {};
       const children = [].slice.call(dom.querySelectorAll(exitBinderState.wChildren));
-      switch (strategy) {
-        case EXIT_STRATEGY_MIRROR:
-          const leftElement = document.getElementById(nextElId);
-          const mirrorId = findMirrorExitId(leftElement, children);
-          _activeKeyBinder(callback, mirrorId);
-          break;
-        case EXIT_STRATEGY_START:
-          const startId = findStartExitId(children);
-          _activeKeyBinder(callback, startId);
-          break;
-        default:
-          _activeKeyBinder(callback);
-          break;
+      if (children.length === 0) {
+        _activeKeyBinder(callback);
+      } else {
+        switch (strategy) {
+          case EXIT_STRATEGY_MIRROR:
+            const leftElement = document.getElementById(nextElId);
+            const mirrorId = findMirrorExitId(leftElement, children);
+            _activeKeyBinder(callback, mirrorId);
+            break;
+          case EXIT_STRATEGY_START:
+            const startId = findStartExitId(children);
+            _activeKeyBinder(callback, startId);
+            break;
+          default:
+            _activeKeyBinder(callback);
+            break;
+        }
       }
     } else {
       callback();

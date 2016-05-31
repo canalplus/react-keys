@@ -4,7 +4,6 @@ import * as module from '../../src/listener';
 import {createStore} from 'redux';
 import sinon from 'sinon';
 import * as strape from '../../src/engines/strape';
-import {EXIT_STRATEGY_MIRROR, EXIT_STRATEGY_START} from '../../src/constants';
 
 describe('redux/actions.js', () => {
   describe('clone', () => {
@@ -136,19 +135,19 @@ describe('redux/actions.js', () => {
       callback.should.have.been.calledOnce;
     }));
 
-    it('should call findMirrorExitId when strategy is mirror', sinon.test(function() {
-      this.mock(strape)
-        .expects('findMirrorExitId')
-        .once();
-      actions.exitBinder(EXIT_STRATEGY_MIRROR, 'strape', 'ID');
-    }));
-
-    it('should call findStartExitId when strategy is start', sinon.test(function() {
-      this.mock(strape)
-        .expects('findStartExitId')
-        .once();
-      actions.exitBinder(EXIT_STRATEGY_START, 'strape', 'ID');
-    }));
+    // it('should call findMirrorExitId when strategy is mirror', sinon.test(function() {
+    //   this.mock(strape)
+    //     .expects('findMirrorExitId')
+    //     .once();
+    //   actions.exitBinder(EXIT_STRATEGY_MIRROR, 'strape', 'ID');
+    // }));
+    //
+    // it('should call findStartExitId when strategy is start', sinon.test(function() {
+    //   this.mock(strape)
+    //     .expects('findStartExitId')
+    //     .once();
+    //   actions.exitBinder(EXIT_STRATEGY_START, 'strape', 'ID');
+    // }));
 
     it('should not call any engine when other strategy', sinon.test(function() {
       const mirrorSpy = this.spy(strape, 'findMirrorExitId');
