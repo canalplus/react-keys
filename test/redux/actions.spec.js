@@ -3,7 +3,8 @@ import * as actions from '../../src/redux/actions';
 import * as module from '../../src/listener';
 import {createStore} from 'redux';
 import sinon from 'sinon';
-import jsdom from 'jsdom';
+import * as strape from '../../src/engines/strape';
+import {EXIT_STRATEGY_MIRROR, EXIT_STRATEGY_START} from '../../src/constants';
 
 describe('redux/actions.js', () => {
   describe('clone', () => {
@@ -135,48 +136,26 @@ describe('redux/actions.js', () => {
       callback.should.have.been.calledOnce;
     }));
 
-    it('should call dispatcher when callback is a string and no strategy', sinon.test(function() {
-      const store = createStore((state = {
-        '@@keys': {
-          binderId: {active: false, selectedId: 1, marginLeft: 0},
-        },
-      }) => state);
-      module._init({store: store}); // init globalStore
-      this.mock(module.globalStore)
-        .expects('dispatch')
+    it('should call findMirrorExitId when strategy is mirror', sinon.test(function() {
+      this.mock(strape)
+        .expects('findMirrorExitId')
         .once();
-      actions.exitBinder(null, 'binderId', 'nextEl1');
+      actions.exitBinder(EXIT_STRATEGY_MIRROR, 'strape', 'ID');
     }));
 
-    it('should call dispatcher when callback is a string with mirror stategy',
-      sinon.test(function() {
-        const store = createStore((state = {
-          '@@keys': {
-            binderId: {active: false, selectedId: 1, marginLeft: 0},
-          },
-        }) => state);
-        module._init({store: store}); // init globalStore
-        this.mock(module.globalStore)
-          .expects('dispatch')
-          .once();
-        actions.exitBinder('mirror', 'binderId', 'nextEl1');
-      }));
-
-    /* eslint no-native-reassign: 0 */
-    it('should', sinon.test(function() {
-      document = jsdom.jsdom('<div id="wrapper"><ul><li id="1"></li></ul></div>' +
-        '<div id="binderId"><ul><li></li></ul></div>');
-      const store = createStore((state = {
-        '@@keys': {
-          binderId: {active: false, selectedId: 1, marginLeft: 0},
-        },
-      }) => state);
-      module._init({store: store}); // init globalStore
-      this.mock(module.globalStore)
-        .expects('dispatch')
+    it('should call findStartExitId when strategy is start', sinon.test(function() {
+      this.mock(strape)
+        .expects('findStartExitId')
         .once();
-      actions.exitBinder('mirror', 'binderId', 'nextEl1');
-      document = null;
+      actions.exitBinder(EXIT_STRATEGY_START, 'strape', 'ID');
+    }));
+
+    it('should not call any engine when other strategy', sinon.test(function() {
+      const mirrorSpy = this.spy(strape, 'findMirrorExitId');
+      const startSpy = this.spy(strape, 'findStartExitId');
+      actions.exitBinder('FUCKING_STRATEGY', 'strape', 'ID');
+      mirrorSpy.should.have.been.not.called;
+      startSpy.should.have.been.not.called;
     }));
   });
 });

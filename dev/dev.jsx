@@ -38,7 +38,7 @@ const PureMosaic = ({strape1, strape2}) => {
         id="strape-1"
         wrapper="#wrapper"
         strategy="bounds"
-        exitStrategy="mirror"
+        exitStrategy="start"
         onDownExit="strape-2"
         gap={30}
         lastGap={10}
@@ -64,8 +64,9 @@ const PureMosaic = ({strape1, strape2}) => {
         wrapper="#wrapper2"
         onUpExit="strape-1"
         strategy="bounds"
-        exitStrategy="mirror"
+        exitStrategy="start"
         gap={30}
+        lastGap={10}
         onEnter={onEnter}>
         <div id="wrapper2">
           <ul style={ulStyle2}>

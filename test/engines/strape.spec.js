@@ -10,6 +10,8 @@ import {
   build,
   calculateBounds,
   selectedElement,
+  findMirrorExitId,
+  findStartExitId,
 } from '../../src/engines/strape';
 import {C_RIGHT, C_LEFT} from '../../src/constants';
 import {expect} from 'chai';
@@ -30,6 +32,75 @@ describe('engine/strape.js', () => {
     const list = createList(dom, 'li');
     list.should.have.lengthOf(2);
     list[0].should.be.instanceOf(HTMLLIElement);
+  });
+
+  describe('exitStrategy', () => {
+    describe('findMirrorExitId', () => {
+      it('should return id of mirrored element', () => {
+        const leftElement = {
+          getBoundingClientRect: () => {
+            return {left: 10};
+          },
+        };
+        const children = [{
+          id: 1,
+          getBoundingClientRect: () => {
+            return {left: -10};
+          },
+        }, {
+          id: 2,
+          getBoundingClientRect: () => {
+            return {left: 0};
+          },
+        }, {
+          id: 3,
+          getBoundingClientRect: () => {
+            return {left: 10};
+          },
+        }];
+        findMirrorExitId(leftElement, children).should.equal(3);
+      });
+      it('should return id of mirrored element of 0 position when no leftElement', () => {
+        const children = [{
+          id: 1,
+          getBoundingClientRect: () => {
+            return {left: -10};
+          },
+        }, {
+          id: 2,
+          getBoundingClientRect: () => {
+            return {left: 0};
+          },
+        }, {
+          id: 3,
+          getBoundingClientRect: () => {
+            return {left: 10};
+          },
+        }];
+        findMirrorExitId(null, children).should.equal(2);
+      });
+    });
+    describe('findStartExitId', () => {
+      it('should return closed element to 0 left', () => {
+        const children = [{
+          id: 1,
+          getBoundingClientRect: () => {
+            return {left: -10};
+          },
+        }, {
+          id: 2,
+          getBoundingClientRect: () => {
+            return {left: 2};
+          },
+        }, {
+          id: 3,
+          getBoundingClientRect: () => {
+            return {left: 12};
+          },
+        }];
+        findStartExitId(children).should.equal(2);
+      });
+    });
   });
   describe('strategy : bounds', () => {
     describe('calculateBounds', () => {

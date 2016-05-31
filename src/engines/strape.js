@@ -2,6 +2,32 @@ import {trigger} from '../events';
 import {hasDiff} from '../hasDiff';
 import {C_LEFT, C_RIGHT} from '../constants';
 
+export function findMirrorExitId(leftElement, children) {
+  const leftPx = leftElement ? leftElement.getBoundingClientRect().left : 0;
+  const nextFocusedId = children
+    .map(el => {
+      return {
+        id: el.id,
+        diff: Math.abs(el.getBoundingClientRect().left - leftPx),
+      };
+    })
+    .sort((a, b) => a.diff - b.diff);
+  return nextFocusedId[0].id;
+}
+
+export function findStartExitId(children) {
+  const nextFocusedId = children
+    .map(el => {
+      return {
+        id: el.id,
+        left: el.getBoundingClientRect().left,
+      };
+    })
+    .filter(el => el.left > 0)
+    .sort((a, b) => a.left - b.left);
+  return nextFocusedId[0].id;
+}
+
 export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props) {
   const element = document.getElementById(el.id).getBoundingClientRect();
   let marginLeft = initialMarginLeft;
