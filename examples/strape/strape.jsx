@@ -25,6 +25,7 @@ const PureStrape = ({selectedId, marginLeft, active}) => {
       wrapper="#wrapper"
       strategy="cut"
       gap={30}
+      active={true}
       onEnter={onEnterKey}
       circular={true}>
       <div id="wrapper">
@@ -57,5 +58,3 @@ ReactDOM.render(
     </div>
   </Provider>,
   document.getElementById('body'));
-
-activeKeyBinder('strape-1');
