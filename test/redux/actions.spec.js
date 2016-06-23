@@ -3,6 +3,7 @@ import * as actions from '../../src/redux/actions';
 import * as module from '../../src/listener';
 import {createStore} from 'redux';
 import sinon from 'sinon';
+import {expect} from 'chai';
 import * as strape from '../../src/engines/strape';
 
 describe('redux/actions.js', () => {
@@ -14,6 +15,16 @@ describe('redux/actions.js', () => {
       ob1.id.should.equal(ob2.id);
       ob1.context.should.not.equal(ob2.context);
       ob1.context.obladi.should.equal(ob2.context.obladi);
+    });
+    it('should not clone if prop is a function', () => {
+      const ob1 = {
+        id: 1, context: {
+          obladi: () => {
+          },
+        },
+      };
+      const ob2 = actions.clone(ob1);
+      expect(ob2.context.obladi).to.be.undefined;
     });
   });
   describe('_activeKeyBinder', () => {
@@ -49,6 +60,26 @@ describe('redux/actions.js', () => {
         .expects('dispatch')
         .never();
       actions._activeKeyBinder('binderId2');
+    }));
+    it('should keep in memory the selected Id when memory is true', sinon.test(function() {
+      const store = createStore((state = {
+        '@@keys': {
+          binderId: {active: false},
+          binderId2: {active: true, selectedId: '3'},
+        },
+      }) => state);
+      module._init({store: store}); // init globalStore
+      this.mock(module.globalStore)
+        .expects('dispatch')
+        .once()
+        .withArgs({
+          type: actions.ACTIVE_KEYBINDER,
+          state: {
+            binderId: {active: true, selectedId: undefined},
+            binderId2: {active: false, selectedId: '3'},
+          },
+        });
+      actions._activeKeyBinder('binderId', null, true);
     }));
   });
   describe('_addKeyBinderToStore', () => {
@@ -150,20 +181,6 @@ describe('redux/actions.js', () => {
       actions.exitBinder('bounds', callback, '1');
       callback.should.have.been.calledOnce;
     }));
-
-    // it('should call findMirrorExitId when strategy is mirror', sinon.test(function() {
-    //   this.mock(strape)
-    //     .expects('findMirrorExitId')
-    //     .once();
-    //   actions.exitBinder(EXIT_STRATEGY_MIRROR, 'strape', 'ID');
-    // }));
-    //
-    // it('should call findStartExitId when strategy is start', sinon.test(function() {
-    //   this.mock(strape)
-    //     .expects('findStartExitId')
-    //     .once();
-    //   actions.exitBinder(EXIT_STRATEGY_START, 'strape', 'ID');
-    // }));
 
     it('should not call any engine when other strategy', sinon.test(function() {
       const mirrorSpy = this.spy(strape, 'findMirrorExitId');
