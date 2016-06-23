@@ -52,7 +52,7 @@ class Binder extends Component {
     return {
       selector: 'li',
       accuracy: 0,
-      active: true,
+      active: false,
     };
   }
 
@@ -140,7 +140,7 @@ class Binder extends Component {
   }
 
   componentDidMount() {
-    addKeyBinderToStore(this.props.id);
+    addKeyBinderToStore(this.props.id, this.props.active);
     this.refreshState();
   }
 

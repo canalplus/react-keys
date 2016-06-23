@@ -37,13 +37,13 @@ export function _activeKeyBinder(binderId, id) {
   }
 }
 
-export function addKeyBinderToStore(binderId) {
+export function addKeyBinderToStore(binderId, active) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
     if (!Object.keys(newState).some(key => key === binderId)) {
       newState[binderId] = {};
       newState[binderId].id = binderId;
-      newState[binderId].active = false;
+      newState[binderId].active = active;
       globalStore.dispatch({
         type: ADD_KEYBINDER_TO_STORE,
         state: newState,

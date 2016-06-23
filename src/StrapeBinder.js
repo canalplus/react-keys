@@ -65,7 +65,7 @@ class StrapeBinder extends Component {
       circular: false,
       wrapper: 'ul',
       wChildren: 'li',
-      active: true,
+      active: false,
       context: {},
     };
   }
@@ -178,7 +178,7 @@ class StrapeBinder extends Component {
   }
 
   componentDidMount() {
-    addKeyBinderToStore(this.props.id);
+    addKeyBinderToStore(this.props.id, this.props.active);
     this.refreshState();
   }
 
