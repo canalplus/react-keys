@@ -89,7 +89,7 @@ describe('Binder.jsx', () => {
   }));
 
   it('should perform action call calculateNewState with right dir', sinon.test(function() {
-    const mosaic = new Binder();
+    const mosaic = new Binder({props: {}});
     const dir = 'left';
     const cb = () => null;
     const exitCb = () => null;

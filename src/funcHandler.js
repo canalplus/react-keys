@@ -1,4 +1,4 @@
-import {_activeKeyBinder} from './redux/actions';
+import {exitBinder} from './redux/actions';
 
 export function execCb(func, nextEl, _this, props) {
   if (!func) return;
@@ -9,10 +9,10 @@ export function execCb(func, nextEl, _this, props) {
   }
 }
 
-export function exitTo(callback) {
+export function exitTo(strategy, callback, nextId) {
   if (callback) {
     if (typeof callback === 'string') {
-      _activeKeyBinder(callback);
+      exitBinder(strategy, callback, nextId);
     } else {
       callback();
     }

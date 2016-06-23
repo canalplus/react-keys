@@ -1,6 +1,6 @@
 /* eslint no-unused-expressions:0 */
 import {execCb, exitTo} from '../src/funcHandler';
-import * as module from '../src/redux/actions';
+import * as actions from '../src/redux/actions';
 import sinon from 'sinon';
 
 describe('funcHandler.js', () => {
@@ -40,16 +40,16 @@ describe('funcHandler.js', () => {
 
     it('should call function when callback is a func', () => {
       const spy = sinon.spy();
-      exitTo(spy);
+      exitTo('memory', spy);
       spy.should.have.been.calledOnce;
     });
 
-    it('should call _activateKeyBinder when callback is a string', sinon.test(function() {
-      this.mock(module)
-        .expects('_activeKeyBinder')
+    it('should call exitBinder when callback is a string', sinon.test(function() {
+      this.mock(actions)
+        .expects('exitBinder')
         .once()
-        .withArgs('binder1');
-      exitTo('binder1');
+        .withArgs('memory', 'binder1', '1');
+      exitTo('memory', 'binder1', '1');
     }));
   });
 });

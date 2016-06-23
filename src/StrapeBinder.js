@@ -133,7 +133,7 @@ class StrapeBinder extends Component {
       updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft);
       execCb(cb, this.nextEl, this, this.props);
     } else {
-      exitTo(exitCb);
+      exitTo(this.props.exitStrategy, exitCb);
     }
   }
 
