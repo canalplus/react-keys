@@ -34,6 +34,7 @@ const PureStrape = ({selectedId, marginLeft, binderId, active, onDownExit, onUpE
       active={active}
       wrapper="#wrapper"
       strategy="progressive"
+      exitStrategy="memory"
       gap={13}
       lastGap={13}
       onDownExit={onDownExit}

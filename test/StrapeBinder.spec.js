@@ -107,7 +107,7 @@ describe('StrapeBinder.jsx', () => {
   }));
 
   it('should perform action call calculateNewState with right dir', sinon.test(function() {
-    const strape = new StrapeBinder();
+    const strape = new StrapeBinder({props: {}});
     const dir = 'left';
     const cb = () => null;
     const exitCb = () => null;

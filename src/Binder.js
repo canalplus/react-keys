@@ -20,6 +20,7 @@ class Binder extends Component {
       id: PropTypes.string.isRequired,
       selector: PropTypes.string,
       focusedElementId: PropTypes.string,
+      exitStrategy: PropTypes.string,
       context: PropTypes.object,
       active: PropTypes.bool,
       accuracy: PropTypes.number,
@@ -105,7 +106,7 @@ class Binder extends Component {
       updateSelectedId(this.props.id, this.nextEl.id, this.nextEl.marginLeft);
       execCb(cb, this.nextEl, this, this.props);
     } else {
-      exitTo(exitCb);
+      exitTo(this.props.exitStrategy, exitCb);
     }
   }
 

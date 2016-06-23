@@ -1,6 +1,6 @@
 import {globalStore} from '../listener';
 import {findMirrorExitId, findStartExitId} from '../engines/strape';
-import {EXIT_STRATEGY_MIRROR, EXIT_STRATEGY_START} from '../constants';
+import {EXIT_STRATEGY_MIRROR, EXIT_STRATEGY_START, EXIT_STRATEGY_MEMORY} from '../constants';
 
 export const NAME = '@@keys';
 export const ACTIVE_KEYBINDER = [NAME, '/ACTIVE_KEYBINDER'].join('');
@@ -13,18 +13,23 @@ export function clone(obj) {
   for (const property in obj) {
     if (typeof obj[property] === 'object') {
       cloneObject[property] = clone(obj[property]);
-    } else {
+    } else if (typeof obj[property] !== 'function') {
       cloneObject[property] = obj[property];
     }
   }
   return cloneObject;
 }
 
-export function _activeKeyBinder(binderId, id) {
+export function _activeKeyBinder(binderId, id, memory = false) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
     for (const key of Object.keys(newState)) {
-      newState[key].active = false;
+      if (newState[key].active) {
+        newState[key].active = false;
+        if (!memory) {
+          newState[key].selectedId = newState[key].elements && newState[key].elements[0].id;
+        }
+      }
     }
     if (Object.keys(newState).some(key => key === binderId)) {
       newState[binderId].active = true;
@@ -69,23 +74,22 @@ export function exitBinder(strategy, callback, nextElId) {
       const dom = document.getElementById(callback) || document;
       const exitBinderState = globalStore.getState()[NAME][callback] || {};
       const children = [].slice.call(dom.querySelectorAll(exitBinderState.wChildren));
-      if (children.length === 0) {
-        _activeKeyBinder(callback);
-      } else {
-        switch (strategy) {
-          case EXIT_STRATEGY_MIRROR:
-            const leftElement = document.getElementById(nextElId);
-            const mirrorId = findMirrorExitId(leftElement, children);
-            _activeKeyBinder(callback, mirrorId);
-            break;
-          case EXIT_STRATEGY_START:
-            const startId = findStartExitId(children);
-            _activeKeyBinder(callback, startId);
-            break;
-          default:
-            _activeKeyBinder(callback);
-            break;
-        }
+      switch (strategy) {
+        case EXIT_STRATEGY_MIRROR:
+          const leftElement = document.getElementById(nextElId);
+          const mirrorId = findMirrorExitId(leftElement, children);
+          _activeKeyBinder(callback, mirrorId, true);
+          break;
+        case EXIT_STRATEGY_START:
+          const startId = findStartExitId(children);
+          _activeKeyBinder(callback, startId, true);
+          break;
+        case EXIT_STRATEGY_MEMORY:
+          _activeKeyBinder(callback, null, true);
+          break;
+        default:
+          _activeKeyBinder(callback);
+          break;
       }
     } else {
       callback();
