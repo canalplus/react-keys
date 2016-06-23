@@ -31,6 +31,7 @@ const PureStrape = ({selectedId, marginLeft, binderId, active, onDownExit, onUpE
   return (
     <StrapeBinder
       id={binderId}
+      active={active}
       wrapper="#wrapper"
       strategy="progressive"
       gap={13}
@@ -59,9 +60,7 @@ const Strape2 = connect(state => state['@@keys'].getBinder('strape-2'))(PureStra
 
 ReactDOM.render(<Provider store={store}>
   <div>
-    <Strape1 binderId="strape-1" onDownExit="strape-2"/>
-    <Strape2 binderId="strape-2" onUpExit="strape-1"/>
+    <Strape1 binderId="strape-1" onDownExit="strape-2" active={true}/>
+    <Strape2 binderId="strape-2" onUpExit="strape-1" active={false}/>
   </div>
 </Provider>, document.getElementById('body'));
-
-activeKeyBinder('strape-1');

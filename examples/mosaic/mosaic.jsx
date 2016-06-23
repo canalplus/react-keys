@@ -12,6 +12,7 @@ const PureMosaic = ({selectedId}) => {
   return (
     <Binder
       id="mosaic-1"
+      active={true}
       onEnter={onEnter}
     >
       <ul>
@@ -39,9 +40,5 @@ function onEnter(element) {
 const Mosaic = connect(state => state['@@keys'].getBinder('mosaic-1'))(PureMosaic);
 
 ReactDOM.render(<Provider store={store}>
-  <div>
-    <Mosaic/>
-  </div>
+  <Mosaic/>
 </Provider>, document.getElementById('body'));
-
-activeKeyBinder('mosaic-1');

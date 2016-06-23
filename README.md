@@ -48,6 +48,7 @@ const Mosaic = ({binderId, selectedId}) => {
   return (
     <Binder
       id={binderId}
+      active={true}
       onLeft={onKey}
       onUp={onKey}
       onDown={onKey}
@@ -68,10 +69,10 @@ renderWithId('mosaic-1-1');
 
 ### `<Binder ...options />`
 * `id` (string / **mandatory**) Define the binder id
+* `active` (boolean / *optional*) determine if binder is active (default `false`)
 * `selector` (string / *optional*) DOM selector which define each element (default `li`)
 * `focusedElementId` (string / *optional*) id to define the element focused (first element by default)
 * `context` (object / *optional*) context object passed within every callback
-* `active` (boolean / *optional*) determine if binder has to listen keys events (default `true`) **/!\ no need to use it with redux**
 * `accuracy` (number / *optional*) give tolerance for elements calculation, useful when your elements are not well aligned (default `O`)
 * `onRight` (function / *optional*) callback for right events `function(nextElement, {context})`
 * `onLeft` (function / *optional*) callback for left events `function(nextElement, {context})`
@@ -86,6 +87,7 @@ renderWithId('mosaic-1-1');
 
 ### `<StrapeBinder ..options />`
 * `id` (string / **mandatory**) Define the binder id
+* `active` (boolean / *optional*) determine if binder is active (default `false`)
 * `wrapper` (string / *optional*) DOM selector which define parent element (default `ul`)
 * `wChildren` (string / *optional*) DOM selector which define children elements (default `li`)
 * `strategy` (string / *optional*) define strape strategy : `progressive` / `cut` / `bounds` (default `progressive`)
@@ -95,7 +97,6 @@ renderWithId('mosaic-1-1');
 * `lastGap` (number / *optional*) reduce or increase last element margin (default `0`)
 * `focusedElementId` (string / *optional*) id to define the element focused (first element by default)
 * `context` (object / *optional*) context object passed within every callback
-* `active` (boolean / *optional*) determine if binder has to listen keys events (default `true`) **/!\ no need to use it with redux**
 * `onRight` (function / *optional*) callback for right events `function(nextElement, {context})`
 * `onLeft` (function / *optional*) callback for left events `function(nextElement, {context})`
 * `onUp` (function / *optional*) callback for up events `function(nextElement, {context})`
@@ -173,6 +174,7 @@ const PureMosaic = ({selectedId}) => {
   return (
     <Binder
       id="mosaic-1"
+      active={true} // activate your binder
       onEnter={onEnter}
     >
       <ul>
@@ -192,12 +194,8 @@ function onEnter(element) {alert('ELEMENT #' + element.id)}
 const Mosaic = connect(state => state['@@keys'].getBinder('mosaic-1'))(PureMosaic); // listen every changes of your mosaic like that
 
 ReactDOM.render(<Provider store={store}>
-  <div>
     <Mosaic/> // your mosaic
-  </div>
 </Provider>, document.getElementById('body'));
-
-activeKeyBinder('mosaic-1'); // active the binder you want to use
 ```
 
 three steps are needed to link `react-keys` to your redux store :-)

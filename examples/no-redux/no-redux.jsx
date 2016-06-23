@@ -21,6 +21,7 @@ const Mosaic = ({binderId, selectedId}) => {
   return (
     <Binder
       id={binderId}
+      active={true}
       onLeft={onKey}
       onUp={onKey}
       onDown={onKey}

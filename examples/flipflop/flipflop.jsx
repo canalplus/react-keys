@@ -28,6 +28,7 @@ const PureMosaic = ({selectedId}) => {
   return (
     <Binder
       id="mosaic-1"
+      active={true}
       onEnter={onEnterKey}>
       <ul>
         <Card id="1" active={selectedId === '1'}/>
@@ -57,5 +58,3 @@ ReactDOM.render(
     </div>
   </Provider>
   , document.getElementById('body'));
-
-activeKeyBinder('mosaic-1');

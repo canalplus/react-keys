@@ -26,6 +26,7 @@ const PureStrape = ({selectedId, marginLeft, active}) => {
       strategy="progressive"
       gap={30}
       onEnter={onEnterKey}
+      active={true}
       circular={true}>
       <div id="wrapper">
         <ul style={listStyle}>
@@ -57,5 +58,3 @@ ReactDOM.render(
     </div>
   </Provider>,
   document.getElementById('body'));
-
-activeKeyBinder('strape-1');
