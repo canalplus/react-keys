@@ -44,11 +44,10 @@ describe('funcHandler.js', () => {
       spy.should.have.been.calledOnce;
     });
 
-    it('should call exitBinder when callback is a string', sinon.test(function() {
+    it('should call exit when callback is a string', sinon.test(function() {
       this.mock(actions)
-        .expects('exitBinder')
-        .once()
-        .withArgs('memory', 'binder1', '1');
+        .expects('exit')
+        .once();
       exitTo('memory', 'binder1', '1');
     }));
   });

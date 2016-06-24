@@ -2,7 +2,7 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import {UP, DOWN, LEFT, RIGHT, ENTER, BACK} from './keys';
-import {C_LEFT, C_RIGHT} from './constants';
+import {C_LEFT, C_RIGHT, STRAPE_TYPE} from './constants';
 import {refresh, calculateBounds} from './engines/strape';
 import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
@@ -14,7 +14,7 @@ import {
   addKeyBinderToStore,
   updateSelectedId,
   _updateBinderState,
-  exitBinder,
+  exit,
 } from './redux/actions';
 import {hasDiff} from './hasDiff';
 
@@ -58,7 +58,7 @@ class StrapeBinder extends Component {
   static get defaultProps() {
     return {
       strategy: 'progressive',
-      exitStrategy: '',
+      exitStrategy: 'none',
       gap: 0,
       lastGap: 0,
       accuracy: 0,
@@ -103,11 +103,11 @@ class StrapeBinder extends Component {
           break;
         case UP:
           this.prevDir = null;
-          exitBinder(this.props.exitStrategy, this.props.onUpExit, this.nextEl.id);
+          exit(this.props.exitStrategy, this.props.onUpExit, this.nextEl.id);
           break;
         case DOWN:
           this.prevDir = null;
-          exitBinder(this.props.exitStrategy, this.props.onDownExit, this.nextEl.id);
+          exit(this.props.exitStrategy, this.props.onDownExit, this.nextEl.id);
           break;
         case BACK:
           this.prevDir = null;
@@ -161,6 +161,8 @@ class StrapeBinder extends Component {
       _updateBinderState(this.props.id, {
         id: this.props.id,
         elements: this.elements,
+        type: STRAPE_TYPE,
+        exitStrategy: this.props.exitStrategy,
         selectedId: this.nextEl.id,
         marginLeft: this.nextEl.marginLeft,
         wChildren: this.props.wChildren,

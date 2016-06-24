@@ -256,9 +256,9 @@ describe('StrapeBinder.jsx', () => {
       strape.keysHandler(30);
     }));
 
-  it('should call exitBinder and init prevDir on UP key', sinon.test(function() {
+  it('should call exit and init prevDir on UP key', sinon.test(function() {
     this.mock(actions)
-      .expects('exitBinder')
+      .expects('exit')
       .once()
       .withArgs('bounds', 'myup', 'nextEl2');
     this.stub(active, 'isActive').returns(true);
@@ -275,9 +275,9 @@ describe('StrapeBinder.jsx', () => {
     expect(strape.prevDir).to.be.null;
   }));
 
-  it('should call exitBinder and init prevDir on DOWN key', sinon.test(function() {
+  it('should call exit and init prevDir on DOWN key', sinon.test(function() {
     this.mock(actions)
-      .expects('exitBinder')
+      .expects('exit')
       .once()
       .withArgs('bounds', 'mydown', 'nextEl2');
     this.stub(active, 'isActive').returns(true);

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore, applyMiddleware, combineReducers} from 'redux';
 import {connect, Provider} from 'react-redux';
-import {Binder, keysInit, keysReducer, activeKeyBinder} from '../src';
+import {Binder, StrapeBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
 
 const logger = store => next => action => {
   console.group(action.type);
@@ -33,13 +33,13 @@ const PureMosaic = ({binder1, binder2}) => {
           <li id="b3" className={active1 && selectedId1 === 'b3' ? 'selected' : ''}>BOUTON 3</li>
         </ul>
       </Binder>
-      <Binder id="binder2" onUpExit="binder1">
+      <StrapeBinder id="binder2" onUpExit="binder1" exitStrategy="start">
         <ul>
           <li id="b4" className={active2 && selectedId2 === 'b4' ? 'selected' : ''}>BOUTON 4</li>
           <li id="b5" className={active2 && selectedId2 === 'b5' ? 'selected' : ''}>BOUTON 5</li>
           <li id="b6" className={active2 && selectedId2 === 'b6' ? 'selected' : ''}>BOUTON 6</li>
         </ul>
-      </Binder>
+      </StrapeBinder>
     </div>
   );
 };
@@ -56,9 +56,7 @@ const Mosaic = connect(state => {
 })(PureMosaic);
 
 ReactDOM.render(<Provider store={store}>
-  <div>
-    <Mosaic/>
-  </div>
+  <Mosaic/>
 </Provider>, document.getElementById('body'));
 
 activeKeyBinder('strape-1');
