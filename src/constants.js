@@ -6,3 +6,6 @@ export const C_RIGHT = 'right';
 export const EXIT_STRATEGY_MIRROR = 'mirror';
 export const EXIT_STRATEGY_START = 'start';
 export const EXIT_STRATEGY_MEMORY = 'memory';
+
+export const BINDER_TYPE = 'binder';
+export const STRAPE_TYPE = 'strape';

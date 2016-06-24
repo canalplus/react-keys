@@ -3,7 +3,7 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import {refresh} from './engines/mosaic';
 import {UP, DOWN, LEFT, RIGHT, ENTER, BACK} from './keys';
-import {C_UP, C_DOWN, C_LEFT, C_RIGHT} from './constants';
+import {C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE} from './constants';
 import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
 import {nextFocusedElement} from './nextFocusedElement';
@@ -54,6 +54,7 @@ class Binder extends Component {
       selector: 'li',
       accuracy: 0,
       active: false,
+      exitStrategy: 'none',
     };
   }
 
@@ -125,6 +126,8 @@ class Binder extends Component {
       this.elements = elements;
       _updateBinderState(this.props.id, {
         id: this.props.id,
+        type: BINDER_TYPE,
+        exitStrategy: this.props.exitStrategy,
         elements: this.elements,
         selectedId: this.nextEl.id,
       });

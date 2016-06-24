@@ -1,6 +1,6 @@
 /* eslint no-unused-expressions:0 */
 import * as actions from '../../src/redux/actions';
-import * as module from '../../src/listener';
+import * as listener from '../../src/listener';
 import {createStore} from 'redux';
 import sinon from 'sinon';
 import {expect} from 'chai';
@@ -36,8 +36,8 @@ describe('redux/actions.js', () => {
             binderId2: {active: true},
           },
         }) => state);
-        module._init({store: store}); // init globalStore
-        this.mock(module.globalStore)
+        listener._init({store: store}); // init globalStore
+        this.mock(listener.globalStore)
           .expects('dispatch')
           .once()
           .withArgs({
@@ -55,8 +55,8 @@ describe('redux/actions.js', () => {
           binderId: {active: false},
         },
       }) => state);
-      module._init({store: store}); // init globalStore
-      this.mock(module.globalStore)
+      listener._init({store: store}); // init globalStore
+      this.mock(listener.globalStore)
         .expects('dispatch')
         .never();
       actions._activeKeyBinder('binderId2');
@@ -68,8 +68,8 @@ describe('redux/actions.js', () => {
           binderId2: {active: true, selectedId: '3'},
         },
       }) => state);
-      module._init({store: store}); // init globalStore
-      this.mock(module.globalStore)
+      listener._init({store: store}); // init globalStore
+      this.mock(listener.globalStore)
         .expects('dispatch')
         .once()
         .withArgs({
@@ -89,8 +89,8 @@ describe('redux/actions.js', () => {
           binderId: {active: false},
         },
       }) => state);
-      module._init({store: store}); // init globalStore
-      this.mock(module.globalStore)
+      listener._init({store: store}); // init globalStore
+      this.mock(listener.globalStore)
         .expects('dispatch')
         .once()
         .withArgs({
@@ -105,8 +105,8 @@ describe('redux/actions.js', () => {
           binderId: {active: false},
         },
       }) => state);
-      module._init({store: store}); // init globalStore
-      this.mock(module.globalStore)
+      listener._init({store: store}); // init globalStore
+      this.mock(listener.globalStore)
         .expects('dispatch')
         .once()
         .withArgs({
@@ -121,8 +121,8 @@ describe('redux/actions.js', () => {
           binderId: {active: false},
         },
       }) => state);
-      module._init({store: store}); // init globalStore
-      this.mock(module.globalStore)
+      listener._init({store: store}); // init globalStore
+      this.mock(listener.globalStore)
         .expects('dispatch')
         .never();
       actions.addKeyBinderToStore('binderId', false);
@@ -135,8 +135,8 @@ describe('redux/actions.js', () => {
           binderId: {active: false, selectedId: 1, marginLeft: 0},
         },
       }) => state);
-      module._init({store: store}); // init globalStore
-      this.mock(module.globalStore)
+      listener._init({store: store}); // init globalStore
+      this.mock(listener.globalStore)
         .expects('dispatch')
         .once()
         .withArgs({
@@ -156,8 +156,8 @@ describe('redux/actions.js', () => {
           binderId: {active: false, selectedId: 1, marginLeft: 0},
         },
       }) => state);
-      module._init({store: store}); // init globalStore
-      this.mock(module.globalStore)
+      listener._init({store: store}); // init globalStore
+      this.mock(listener.globalStore)
         .expects('dispatch')
         .once()
         .withArgs({
@@ -167,25 +167,24 @@ describe('redux/actions.js', () => {
       actions._updateBinderState('binderId', {});
     }));
   });
-
-  describe('exitBinder', () => {
+  describe('exit', () => {
     it('should not call activeKeyBinder when call is undefined', sinon.test(function() {
       this.mock(actions)
         .expects('_activeKeyBinder')
         .never();
-      actions.exitBinder('bounds', null, '1');
+      actions.exit('bounds', null, '1');
     }));
 
     it('should call callback when callback is a function', sinon.test(function() {
       const callback = this.spy();
-      actions.exitBinder('bounds', callback, '1');
+      actions.exit('bounds', callback, '1');
       callback.should.have.been.calledOnce;
     }));
 
     it('should not call any engine when other strategy', sinon.test(function() {
       const mirrorSpy = this.spy(strape, 'findMirrorExitId');
       const startSpy = this.spy(strape, 'findStartExitId');
-      actions.exitBinder('FUCKING_STRATEGY', 'strape', 'ID');
+      actions.exit('FUCKING_STRATEGY', 'strape', 'ID');
       mirrorSpy.should.have.been.not.called;
       startSpy.should.have.been.not.called;
     }));

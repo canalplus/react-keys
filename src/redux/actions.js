@@ -1,6 +1,11 @@
 import {globalStore} from '../listener';
 import {findMirrorExitId, findStartExitId} from '../engines/strape';
-import {EXIT_STRATEGY_MIRROR, EXIT_STRATEGY_START, EXIT_STRATEGY_MEMORY} from '../constants';
+import {
+  EXIT_STRATEGY_MIRROR,
+  EXIT_STRATEGY_START,
+  EXIT_STRATEGY_MEMORY,
+  BINDER_TYPE,
+} from '../constants';
 
 export const NAME = '@@keys';
 export const ACTIVE_KEYBINDER = [NAME, '/ACTIVE_KEYBINDER'].join('');
@@ -68,28 +73,47 @@ export function _updateBinderState(binderId, binderState) {
   }
 }
 
-export function exitBinder(strategy, callback, nextElId) {
+export function exitStrape(strategy, callback, nextElId, children) {
+  switch (strategy) {
+    case EXIT_STRATEGY_MIRROR:
+      const leftElement = document.getElementById(nextElId);
+      const mirrorId = findMirrorExitId(leftElement, children);
+      _activeKeyBinder(callback, mirrorId, true);
+      break;
+    case EXIT_STRATEGY_START:
+      const startId = findStartExitId(children);
+      _activeKeyBinder(callback, startId, true);
+      break;
+    case EXIT_STRATEGY_MEMORY:
+      _activeKeyBinder(callback, null, true);
+      break;
+    default:
+      _activeKeyBinder(callback);
+      break;
+  }
+}
+
+export function exitBinder(strategy, callback) {
+  switch (strategy) {
+    case EXIT_STRATEGY_MEMORY:
+      _activeKeyBinder(callback, null, true);
+      break;
+    default:
+      _activeKeyBinder(callback);
+      break;
+  }
+}
+
+export function exit(strategy, callback, nextElId) {
   if (callback) {
     if (typeof callback === 'string') {
-      const dom = document.getElementById(callback) || document;
-      const exitBinderState = globalStore.getState()[NAME][callback] || {};
-      const children = [].slice.call(dom.querySelectorAll(exitBinderState.wChildren));
-      switch (strategy) {
-        case EXIT_STRATEGY_MIRROR:
-          const leftElement = document.getElementById(nextElId);
-          const mirrorId = findMirrorExitId(leftElement, children);
-          _activeKeyBinder(callback, mirrorId, true);
-          break;
-        case EXIT_STRATEGY_START:
-          const startId = findStartExitId(children);
-          _activeKeyBinder(callback, startId, true);
-          break;
-        case EXIT_STRATEGY_MEMORY:
-          _activeKeyBinder(callback, null, true);
-          break;
-        default:
-          _activeKeyBinder(callback);
-          break;
+      const nextBinderState = globalStore.getState()[NAME][callback] || {};
+      if (nextBinderState.type === BINDER_TYPE) {
+        exitBinder(strategy, callback);
+      } else {
+        const dom = document.getElementById(callback) || document;
+        const children = [].slice.call(dom.querySelectorAll(nextBinderState.wChildren));
+        exitStrape(strategy, callback, nextElId, children);
       }
     } else {
       callback();
