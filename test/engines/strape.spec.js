@@ -82,6 +82,11 @@ describe('engine/strape.js', () => {
     });
     describe('findStartExitId', () => {
       it('should return closed element to 0 left', () => {
+        const wrapper = {
+          getBoundingClientRect: () => {
+            return {left: 0};
+          },
+        };
         const children = [{
           id: 1,
           getBoundingClientRect: () => {
@@ -98,7 +103,31 @@ describe('engine/strape.js', () => {
             return {left: 12};
           },
         }];
-        findStartExitId(children).should.equal(2);
+        findStartExitId(children, wrapper).should.equal(2);
+      });
+      it('should wrapper left be counted', () => {
+        const wrapper = {
+          getBoundingClientRect: () => {
+            return {left: 10};
+          },
+        };
+        const children = [{
+          id: 1,
+          getBoundingClientRect: () => {
+            return {left: -10};
+          },
+        }, {
+          id: 2,
+          getBoundingClientRect: () => {
+            return {left: 2};
+          },
+        }, {
+          id: 3,
+          getBoundingClientRect: () => {
+            return {left: 12};
+          },
+        }];
+        findStartExitId(children, wrapper).should.equal(3);
       });
     });
   });

@@ -15,12 +15,13 @@ export function findMirrorExitId(leftElement, children) {
   return nextFocusedId[0].id;
 }
 
-export function findStartExitId(children) {
+export function findStartExitId(children, dom) {
+  const leftContainer = dom.getBoundingClientRect().left;
   const nextFocusedId = children
     .map(el => {
       return {
         id: el.id,
-        left: el.getBoundingClientRect().left,
+        left: el.getBoundingClientRect().left - leftContainer,
       };
     })
     .filter(el => el.left > 0)
