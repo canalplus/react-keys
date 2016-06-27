@@ -5,11 +5,11 @@ import {connect, Provider} from 'react-redux';
 import {Binder, StrapeBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
 
 const logger = store => next => action => {
-  console.group(action.type);
-  console.info('dispatching', action);
+  // console.group(action.type);
+  // console.info('dispatching', action);
   const result = next(action);
-  console.info('next state', store.getState());
-  console.groupEnd(action.type);
+  // console.info('next state', store.getState());
+  // console.groupEnd(action.type);
   return result;
 };
 
@@ -22,31 +22,47 @@ keysInit({store: store});
 const PureMosaic = ({binder1, binder2}) => {
   const selectedId1 = binder1.selectedId;
   const active1 = binder1.active;
+  const binder1Style = {
+    marginLeft: -binder1.marginLeft,
+  };
   const selectedId2 = binder2.selectedId;
   const active2 = binder2.active;
+  const binder2Style = {
+    marginLeft: -binder2.marginLeft,
+  };
   return (
-    <div>
-      <Binder id="binder1" active={true} onDownExit="binder2">
-        <ul>
-          <li id="b1" className={active1 && selectedId1 === 'b1' ? 'selected' : ''}>BOUTON 1</li>
-          <li id="b2" className={active1 && selectedId1 === 'b2' ? 'selected' : ''}>BOUTON 2</li>
-          <li id="b3" className={active1 && selectedId1 === 'b3' ? 'selected' : ''}>BOUTON 3</li>
-        </ul>
-      </Binder>
-      <StrapeBinder id="binder2" onUpExit="binder1" exitStrategy="start">
-        <ul>
-          <li id="b4" className={active2 && selectedId2 === 'b4' ? 'selected' : ''}>BOUTON 4</li>
-          <li id="b5" className={active2 && selectedId2 === 'b5' ? 'selected' : ''}>BOUTON 5</li>
-          <li id="b6" className={active2 && selectedId2 === 'b6' ? 'selected' : ''}>BOUTON 6</li>
-        </ul>
+    <div className="container">
+      <StrapeBinder id="binder1" onDownExit="binder2" exitStrategy="start" active={true}
+                    wrapper=".wrapper">
+        <div className="wrapper">
+          <ul style={binder1Style}>
+            <li id="b1" className={active1 && selectedId1 === 'b1' ? 'selected' : ''}>BOUTON 1</li>
+            <li id="b2" className={active1 && selectedId1 === 'b2' ? 'selected' : ''}>BOUTON 2</li>
+            <li id="b3" className={active1 && selectedId1 === 'b3' ? 'selected' : ''}>BOUTON 3</li>
+            <li id="b4" className={active1 && selectedId1 === 'b4' ? 'selected' : ''}>BOUTON 4</li>
+            <li id="b5" className={active1 && selectedId1 === 'b5' ? 'selected' : ''}>BOUTON 5</li>
+            <li id="b6" className={active1 && selectedId1 === 'b6' ? 'selected' : ''}>BOUTON 6</li>
+          </ul>
+        </div>
+      </StrapeBinder>
+      <StrapeBinder id="binder2" onUpExit="binder1" exitStrategy="start" wrapper=".wrapper">
+        <div className="wrapper">
+          <ul style={binder2Style}>
+            <li id="b7" className={active2 && selectedId2 === 'b7' ? 'selected' : ''}>BOUTON 7</li>
+            <li id="b8" className={active2 && selectedId2 === 'b8' ? 'selected' : ''}>BOUTON 8</li>
+            <li id="b9" className={active2 && selectedId2 === 'b9' ? 'selected' : ''}>BOUTON 9</li>
+            <li id="b10" className={active2 && selectedId2 === 'b10' ? 'selected' : ''}>BOUTON 10
+            </li>
+            <li id="b11" className={active2 && selectedId2 === 'b11' ? 'selected' : ''}>BOUTON 11
+            </li>
+            <li id="b12" className={active2 && selectedId2 === 'b12' ? 'selected' : ''}>BOUTON 12
+            </li>
+          </ul>
+        </div>
       </StrapeBinder>
     </div>
   );
 };
-
-function onEnter(element) {
-  alert('ELEMENT #' + element.id);
-}
 
 const Mosaic = connect(state => {
   return {

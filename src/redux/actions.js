@@ -73,7 +73,7 @@ export function _updateBinderState(binderId, binderState) {
   }
 }
 
-export function exitStrape(strategy, callback, nextElId, children) {
+export function exitStrape(strategy, callback, nextElId, children, dom) {
   switch (strategy) {
     case EXIT_STRATEGY_MIRROR:
       const leftElement = document.getElementById(nextElId);
@@ -81,7 +81,7 @@ export function exitStrape(strategy, callback, nextElId, children) {
       _activeKeyBinder(callback, mirrorId, true);
       break;
     case EXIT_STRATEGY_START:
-      const startId = findStartExitId(children);
+      const startId = findStartExitId(children, dom);
       _activeKeyBinder(callback, startId, true);
       break;
     case EXIT_STRATEGY_MEMORY:
@@ -113,7 +113,7 @@ export function exit(strategy, callback, nextElId) {
       } else {
         const dom = document.getElementById(callback) || document;
         const children = [].slice.call(dom.querySelectorAll(nextBinderState.wChildren));
-        exitStrape(strategy, callback, nextElId, children);
+        exitStrape(strategy, callback, nextElId, children, dom);
       }
     } else {
       callback();
