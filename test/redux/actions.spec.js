@@ -44,7 +44,7 @@ describe('redux/actions.js', () => {
             type: actions.ACTIVE_KEYBINDER,
             state: {
               binderId: {active: true, selectedId: undefined},
-              binderId2: {active: false, selectedId: undefined},
+              binderId2: {active: false},
             },
           });
         actions._activeKeyBinder('binderId');
@@ -172,19 +172,19 @@ describe('redux/actions.js', () => {
       this.mock(actions)
         .expects('_activeKeyBinder')
         .never();
-      actions.exit('bounds', null, '1');
+      actions.enter('bounds', null, '1');
     }));
 
     it('should call callback when callback is a function', sinon.test(function() {
       const callback = this.spy();
-      actions.exit('bounds', callback, '1');
+      actions.enter(callback, '1');
       callback.should.have.been.calledOnce;
     }));
 
     it('should not call any engine when other strategy', sinon.test(function() {
       const mirrorSpy = this.spy(strape, 'findMirrorExitId');
       const startSpy = this.spy(strape, 'findStartExitId');
-      actions.exit('FUCKING_STRATEGY', 'strape', 'ID');
+      actions.enter('FUCKING_STRATEGY', 'strape', 'ID');
       mirrorSpy.should.have.been.not.called;
       startSpy.should.have.been.not.called;
     }));

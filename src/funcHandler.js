@@ -1,4 +1,4 @@
-import {exit} from './redux/actions';
+import {enter} from './redux/actions';
 
 export function execCb(func, nextEl, _this, props) {
   if (!func) return;
@@ -9,10 +9,10 @@ export function execCb(func, nextEl, _this, props) {
   }
 }
 
-export function exitTo(strategy, callback, nextId) {
+export function enterTo(callback, nextId) {
   if (callback) {
     if (typeof callback === 'string') {
-      exit(strategy, callback, nextId);
+      enter(callback, nextId);
     } else {
       callback();
     }

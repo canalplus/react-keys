@@ -1,5 +1,5 @@
 /* eslint no-unused-expressions:0 */
-import {execCb, exitTo} from '../src/funcHandler';
+import {execCb, enterTo} from '../src/funcHandler';
 import * as actions from '../src/redux/actions';
 import sinon from 'sinon';
 
@@ -33,22 +33,22 @@ describe('funcHandler.js', () => {
       spy.should.have.been.calledWith(el, props.context);
     });
   });
-  describe('exitTo', () => {
+  describe('enterTo', () => {
     it('should not throw error if function is null', () => {
-      exitTo(null);
+      enterTo(null);
     });
 
     it('should call function when callback is a func', () => {
       const spy = sinon.spy();
-      exitTo('memory', spy);
+      enterTo(spy);
       spy.should.have.been.calledOnce;
     });
 
-    it('should call exit when callback is a string', sinon.test(function() {
+    it('should call enter when callback is a string', sinon.test(function() {
       this.mock(actions)
-        .expects('exit')
+        .expects('enter')
         .once();
-      exitTo('memory', 'binder1', '1');
+      enterTo('binder1', '1');
     }));
   });
 });

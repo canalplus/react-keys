@@ -169,21 +169,21 @@ describe('StrapeBinder.jsx', () => {
       };
       const dir = 'left';
       const cb = () => null;
-      const exitCb = () => null;
+      const enterCb = () => null;
       this.mock(strape)
         .expects('calculateNewState')
         .once()
         .withArgs(dir);
       const updateSelectedIdSpy = this.spy(actions, 'updateSelectedId');
       const execCbSpy = this.spy(funcHandler, 'execCb');
-      const exitCbSpy = this.spy(funcHandler, 'exitTo');
-      strape.performAction(dir, cb, exitCb);
+      const enterCbSpy = this.spy(funcHandler, 'enterTo');
+      strape.performAction(dir, cb, enterCb);
       updateSelectedIdSpy.should.have.been.calledOnce;
       execCbSpy.should.have.been.calledOnce;
-      exitCbSpy.should.have.been.callCount(0);
+      enterCbSpy.should.have.been.callCount(0);
     }));
 
-  it('should call exitCb when it has not moved on performAction', sinon.test(function() {
+  it('should call enterCb when it has not moved on performAction', sinon.test(function() {
     const strape = new StrapeBinder();
     strape.hasMoved = false;
     strape.nextEl = {
@@ -195,18 +195,18 @@ describe('StrapeBinder.jsx', () => {
     };
     const dir = 'left';
     const cb = () => null;
-    const exitCb = () => null;
+    const enterCb = () => null;
     this.mock(strape)
       .expects('calculateNewState')
       .once()
       .withArgs(dir);
     const updateSelectedIdSpy = this.spy(actions, 'updateSelectedId');
     const execCbSpy = this.spy(funcHandler, 'execCb');
-    const exitCbSpy = this.spy(funcHandler, 'exitTo');
-    strape.performAction(dir, cb, exitCb);
+    const enterCbSpy = this.spy(funcHandler, 'enterTo');
+    strape.performAction(dir, cb, enterCb);
     updateSelectedIdSpy.should.have.been.callCount(0);
     execCbSpy.should.have.been.callCount(0);
-    exitCbSpy.should.have.been.calledOnce;
+    enterCbSpy.should.have.been.calledOnce;
   }));
 
   it('should calculateNewState set new props to component', sinon.test(function() {
@@ -256,17 +256,17 @@ describe('StrapeBinder.jsx', () => {
       strape.keysHandler(30);
     }));
 
-  it('should call exit and init prevDir on UP key', sinon.test(function() {
+  it('should call enter and init prevDir on UP key', sinon.test(function() {
     this.mock(actions)
-      .expects('exit')
+      .expects('enter')
       .once()
-      .withArgs('bounds', 'myup', 'nextEl2');
+      .withArgs('myup', 'nextEl2');
     this.stub(active, 'isActive').returns(true);
     this.stub(clock, 'isBlocked').returns(false);
     const strape = new StrapeBinder();
     strape.props = {
       id: 1,
-      exitStrategy: 'bounds',
+      enterStrategy: 'bounds',
       onUpExit: 'myup',
     };
     strape.nextEl = {id: 'nextEl2'};
@@ -275,17 +275,17 @@ describe('StrapeBinder.jsx', () => {
     expect(strape.prevDir).to.be.null;
   }));
 
-  it('should call exit and init prevDir on DOWN key', sinon.test(function() {
+  it('should call enter and init prevDir on DOWN key', sinon.test(function() {
     this.mock(actions)
-      .expects('exit')
+      .expects('enter')
       .once()
-      .withArgs('bounds', 'mydown', 'nextEl2');
+      .withArgs('mydown', 'nextEl2');
     this.stub(active, 'isActive').returns(true);
     this.stub(clock, 'isBlocked').returns(false);
     const strape = new StrapeBinder();
     strape.props = {
       id: 1,
-      exitStrategy: 'bounds',
+      enterStrategy: 'bounds',
       onDownExit: 'mydown',
     };
     strape.nextEl = {id: 'nextEl2'};

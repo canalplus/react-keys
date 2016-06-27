@@ -29,16 +29,16 @@ export function _activeKeyBinder(binderId, id, memory = false) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
     for (const key of Object.keys(newState)) {
-      if (newState[key].active) {
-        newState[key].active = false;
-        if (!memory) {
-          newState[key].selectedId = newState[key].elements && newState[key].elements[0].id;
-        }
-      }
+      newState[key].active = false;
     }
     if (Object.keys(newState).some(key => key === binderId)) {
       newState[binderId].active = true;
-      newState[binderId].selectedId = id || newState[binderId].selectedId;
+      if (!memory) {
+        newState[binderId].selectedId =
+          newState[binderId].elements && newState[binderId].elements[0].id;
+      } else {
+        newState[binderId].selectedId = id || newState[binderId].selectedId;
+      }
       globalStore.dispatch({
         type: ACTIVE_KEYBINDER,
         state: newState,
@@ -73,7 +73,7 @@ export function _updateBinderState(binderId, binderState) {
   }
 }
 
-export function exitStrape(strategy, callback, nextElId, children, dom) {
+export function enterStrape(strategy, callback, nextElId, children, dom) {
   switch (strategy) {
     case EXIT_STRATEGY_MIRROR:
       const leftElement = document.getElementById(nextElId);
@@ -93,7 +93,7 @@ export function exitStrape(strategy, callback, nextElId, children, dom) {
   }
 }
 
-export function exitBinder(strategy, callback) {
+export function enterBinder(strategy, callback) {
   switch (strategy) {
     case EXIT_STRATEGY_MEMORY:
       _activeKeyBinder(callback, null, true);
@@ -104,16 +104,17 @@ export function exitBinder(strategy, callback) {
   }
 }
 
-export function exit(strategy, callback, nextElId) {
+export function enter(callback, nextElId) {
   if (callback) {
     if (typeof callback === 'string') {
       const nextBinderState = globalStore.getState()[NAME][callback] || {};
+      const strategy = nextBinderState.enterStrategy;
       if (nextBinderState.type === BINDER_TYPE) {
-        exitBinder(strategy, callback);
+        enterBinder(strategy, callback);
       } else {
         const dom = document.getElementById(callback) || document;
         const children = [].slice.call(dom.querySelectorAll(nextBinderState.wChildren));
-        exitStrape(strategy, callback, nextElId, children, dom);
+        enterStrape(strategy, callback, nextElId, children, dom);
       }
     } else {
       callback();

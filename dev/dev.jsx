@@ -22,9 +22,6 @@ keysInit({store: store});
 const PureMosaic = ({binder1, binder2}) => {
   const selectedId1 = binder1.selectedId;
   const active1 = binder1.active;
-  const binder1Style = {
-    marginLeft: -binder1.marginLeft,
-  };
   const selectedId2 = binder2.selectedId;
   const active2 = binder2.active;
   const binder2Style = {
@@ -32,20 +29,12 @@ const PureMosaic = ({binder1, binder2}) => {
   };
   return (
     <div className="container">
-      <StrapeBinder id="binder1" onDownExit="binder2" exitStrategy="start" active={true}
+      <Binder id="binder1" onDownExit="binder2" active={true}>
+        <li id="b1" className={active1 && selectedId1 === 'b1' ? 'selected' : ''}>BOUTON 1</li>
+        <li id="b2" className={active1 && selectedId1 === 'b2' ? 'selected' : ''}>BOUTON 2</li>
+      </Binder>
+      <StrapeBinder id="binder2" onUpExit="binder1" enterStrategy="start" strategy="bounds"
                     wrapper=".wrapper">
-        <div className="wrapper">
-          <ul style={binder1Style}>
-            <li id="b1" className={active1 && selectedId1 === 'b1' ? 'selected' : ''}>BOUTON 1</li>
-            <li id="b2" className={active1 && selectedId1 === 'b2' ? 'selected' : ''}>BOUTON 2</li>
-            <li id="b3" className={active1 && selectedId1 === 'b3' ? 'selected' : ''}>BOUTON 3</li>
-            <li id="b4" className={active1 && selectedId1 === 'b4' ? 'selected' : ''}>BOUTON 4</li>
-            <li id="b5" className={active1 && selectedId1 === 'b5' ? 'selected' : ''}>BOUTON 5</li>
-            <li id="b6" className={active1 && selectedId1 === 'b6' ? 'selected' : ''}>BOUTON 6</li>
-          </ul>
-        </div>
-      </StrapeBinder>
-      <StrapeBinder id="binder2" onUpExit="binder1" exitStrategy="start" wrapper=".wrapper">
         <div className="wrapper">
           <ul style={binder2Style}>
             <li id="b7" className={active2 && selectedId2 === 'b7' ? 'selected' : ''}>BOUTON 7</li>
