@@ -6,7 +6,7 @@ import {C_LEFT, C_RIGHT, STRAPE_TYPE} from './constants';
 import {refresh, calculateBounds} from './engines/strape';
 import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
-import {execCb, exitTo} from './funcHandler';
+import {execCb, enterTo} from './funcHandler';
 import {nextFocusedElement} from './nextFocusedElement';
 import {calculateNewState} from './calculateNewState';
 import {addListener, removeListener, globalStore} from './listener';
@@ -14,7 +14,7 @@ import {
   addKeyBinderToStore,
   updateSelectedId,
   _updateBinderState,
-  exit,
+  enter,
 } from './redux/actions';
 import {hasDiff} from './hasDiff';
 
@@ -58,7 +58,7 @@ class StrapeBinder extends Component {
   static get defaultProps() {
     return {
       strategy: 'progressive',
-      exitStrategy: 'none',
+      enterStrategy: 'none',
       gap: 0,
       lastGap: 0,
       accuracy: 0,
@@ -103,11 +103,11 @@ class StrapeBinder extends Component {
           break;
         case UP:
           this.prevDir = null;
-          exit(this.props.exitStrategy, this.props.onUpExit, this.nextEl.id);
+          enter(this.props.onUpExit, this.nextEl.id);
           break;
         case DOWN:
           this.prevDir = null;
-          exit(this.props.exitStrategy, this.props.onDownExit, this.nextEl.id);
+          enter(this.props.onDownExit, this.nextEl.id);
           break;
         case BACK:
           this.prevDir = null;
@@ -133,7 +133,7 @@ class StrapeBinder extends Component {
       updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft);
       execCb(cb, this.nextEl, this, this.props);
     } else {
-      exitTo(this.props.exitStrategy, exitCb);
+      enterTo(exitCb);
     }
   }
 
@@ -162,7 +162,7 @@ class StrapeBinder extends Component {
         id: this.props.id,
         elements: this.elements,
         type: STRAPE_TYPE,
-        exitStrategy: this.props.exitStrategy,
+        enterStrategy: this.props.enterStrategy,
         selectedId: this.nextEl.id,
         marginLeft: this.nextEl.marginLeft,
         wChildren: this.props.wChildren,

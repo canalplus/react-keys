@@ -73,7 +73,7 @@ renderWithId('mosaic-1-1');
 * `selector` (string / *optional*) DOM selector which define each element (default `li`)
 * `focusedElementId` (string / *optional*) id to define the element focused (first element by default)
 * `context` (object / *optional*) context object passed within every callback
-* `exitStrategy` (string / *optional*) define strape strategy : `memory` / `none` (default `none`)
+* `enterStrategy` (string / *optional*) define strape strategy on enter : `memory` / `none` (default `none`)
 * `accuracy` (number / *optional*) give tolerance for elements calculation, useful when your elements are not well aligned (default `O`)
 * `onRight` (function / *optional*) callback for right events `function(nextElement, {context})`
 * `onLeft` (function / *optional*) callback for left events `function(nextElement, {context})`
@@ -92,7 +92,7 @@ renderWithId('mosaic-1-1');
 * `wrapper` (string / *optional*) DOM selector which define parent element (default `ul`)
 * `wChildren` (string / *optional*) DOM selector which define children elements (default `li`)
 * `strategy` (string / *optional*) define strape strategy : `progressive` / `cut` / `bounds` (default `progressive`)
-* `exitStrategy` (string / *optional*) define strape strategy : `start` / `mirror` / `memory` / `none` (default `none`)
+* `enterStrategy` (string / *optional*) define strape strategy on enter: `start` / `mirror` / `memory` / `none` (default `none`)
 * `circular` (boolean / *optional*) define if strape has no boundaries (default `false`)
 * `gap` (number / *optional*) reduce or increase elements margin (default `0`)
 * `lastGap` (number / *optional*) reduce or increase last element margin (default `0`)

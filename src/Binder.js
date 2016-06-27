@@ -7,7 +7,7 @@ import {C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE} from './constants';
 import {isBlocked, block} from './clock';
 import {isActive} from './isActive';
 import {nextFocusedElement} from './nextFocusedElement';
-import {execCb, exitTo} from './funcHandler';
+import {execCb, enterTo} from './funcHandler';
 import {calculateNewState} from './calculateNewState';
 import {addListener, removeListener, globalStore} from './listener';
 import {addKeyBinderToStore, updateSelectedId, _updateBinderState} from './redux/actions';
@@ -20,7 +20,7 @@ class Binder extends Component {
       id: PropTypes.string.isRequired,
       selector: PropTypes.string,
       focusedElementId: PropTypes.string,
-      exitStrategy: PropTypes.string,
+      enterStrategy: PropTypes.string,
       context: PropTypes.object,
       active: PropTypes.bool,
       accuracy: PropTypes.number,
@@ -54,7 +54,7 @@ class Binder extends Component {
       selector: 'li',
       accuracy: 0,
       active: false,
-      exitStrategy: 'none',
+      enterStrategy: 'none',
     };
   }
 
@@ -107,7 +107,7 @@ class Binder extends Component {
       updateSelectedId(this.props.id, this.nextEl.id, this.nextEl.marginLeft);
       execCb(cb, this.nextEl, this, this.props);
     } else {
-      exitTo(this.props.exitStrategy, exitCb);
+      enterTo(exitCb);
     }
   }
 
@@ -127,7 +127,7 @@ class Binder extends Component {
       _updateBinderState(this.props.id, {
         id: this.props.id,
         type: BINDER_TYPE,
-        exitStrategy: this.props.exitStrategy,
+        enterStrategy: this.props.enterStrategy,
         elements: this.elements,
         selectedId: this.nextEl.id,
       });

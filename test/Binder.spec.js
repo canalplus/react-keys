@@ -113,18 +113,18 @@ describe('Binder.jsx', () => {
       };
       const dir = 'left';
       const cb = () => null;
-      const exitCb = () => null;
+      const enterCb = () => null;
       this.mock(mosaic)
         .expects('calculateNewState')
         .once()
         .withArgs(dir);
       const updateSelectedIdSpy = this.spy(actions, 'updateSelectedId');
       const execCbSpy = this.spy(funcHandler, 'execCb');
-      const exitCbSpy = this.spy(funcHandler, 'exitTo');
-      mosaic.performAction(dir, cb, exitCb);
+      const enterCbSpy = this.spy(funcHandler, 'enterTo');
+      mosaic.performAction(dir, cb, enterCb);
       updateSelectedIdSpy.should.have.been.calledOnce;
       execCbSpy.should.have.been.calledOnce;
-      exitCbSpy.should.have.been.callCount(0);
+      enterCbSpy.should.have.been.callCount(0);
     }));
 
   it('should call exitCb when it has not moved on performAction', sinon.test(function() {
@@ -139,18 +139,18 @@ describe('Binder.jsx', () => {
     };
     const dir = 'left';
     const cb = () => null;
-    const exitCb = () => null;
+    const enterCb = () => null;
     this.mock(mosaic)
       .expects('calculateNewState')
       .once()
       .withArgs(dir);
     const updateSelectedIdSpy = this.spy(actions, 'updateSelectedId');
     const execCbSpy = this.spy(funcHandler, 'execCb');
-    const exitCbSpy = this.spy(funcHandler, 'exitTo');
-    mosaic.performAction(dir, cb, exitCb);
+    const enterCbSpy = this.spy(funcHandler, 'enterTo');
+    mosaic.performAction(dir, cb, enterCb);
     updateSelectedIdSpy.should.have.been.callCount(0);
     execCbSpy.should.have.been.callCount(0);
-    exitCbSpy.should.have.been.calledOnce;
+    enterCbSpy.should.have.been.calledOnce;
   }));
 
   it('should calculateNewState set new props to component', sinon.test(function() {
