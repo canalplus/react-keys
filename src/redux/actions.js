@@ -39,6 +39,8 @@ export function _activeKeyBinder(binderId, id, memory = false) {
       } else {
         newState[binderId].selectedId = id || newState[binderId].selectedId;
       }
+      newState.selectedId = newState[binderId].selectedId;
+      newState.currentStrapeId = binderId;
       globalStore.dispatch({
         type: ACTIVE_KEYBINDER,
         state: newState,
@@ -127,6 +129,7 @@ export function updateSelectedId(binderId, selectedId, marginLeft) {
     const newState = clone(globalStore.getState()[NAME]);
     newState[binderId].selectedId = selectedId;
     newState[binderId].marginLeft = marginLeft;
+    newState.selectedId = selectedId;
     globalStore.dispatch({
       type: UPDATE_SELECTED_KEY,
       state: newState,
