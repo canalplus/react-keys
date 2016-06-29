@@ -32,8 +32,8 @@ describe('redux/actions.js', () => {
       sinon.test(function() {
         const store = createStore((state = {
           '@@keys': {
-            binderId: {active: false},
-            binderId2: {active: true},
+            binderId: {active: false, elements: [{id: '1'}]},
+            binderId2: {active: true, elements: [{id: '2'}]},
           },
         }) => state);
         listener._init({store: store}); // init globalStore
@@ -43,8 +43,10 @@ describe('redux/actions.js', () => {
           .withArgs({
             type: actions.ACTIVE_KEYBINDER,
             state: {
-              binderId: {active: true, selectedId: undefined},
-              binderId2: {active: false},
+              binderId: {active: true, elements: {0: {id: '1'}}, selectedId: '1'},
+              binderId2: {active: false, elements: {0: {id: '2'}}},
+              currentStrapeId: 'binderId',
+              selectedId: '1',
             },
           });
         actions._activeKeyBinder('binderId');
@@ -64,7 +66,7 @@ describe('redux/actions.js', () => {
     it('should keep in memory the selected Id when memory is true', sinon.test(function() {
       const store = createStore((state = {
         '@@keys': {
-          binderId: {active: false},
+          binderId: {active: false, selectedId: '2', elements: [{id: '1'}]},
           binderId2: {active: true, selectedId: '3'},
         },
       }) => state);
@@ -75,8 +77,10 @@ describe('redux/actions.js', () => {
         .withArgs({
           type: actions.ACTIVE_KEYBINDER,
           state: {
-            binderId: {active: true, selectedId: undefined},
+            binderId: {active: true, elements: {0: {id: '1'}}, selectedId: '2'},
             binderId2: {active: false, selectedId: '3'},
+            currentStrapeId: 'binderId',
+            selectedId: '2',
           },
         });
       actions._activeKeyBinder('binderId', null, true);
@@ -142,6 +146,7 @@ describe('redux/actions.js', () => {
         .withArgs({
           type: actions.UPDATE_SELECTED_KEY,
           state: {
+            selectedId: 2,
             binderId: {active: false, selectedId: 2, marginLeft: 10},
           },
         });
