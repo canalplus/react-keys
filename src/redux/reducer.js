@@ -6,8 +6,10 @@ import {
 } from './actions';
 
 const initialKeysSate = {
-  selectedId: null,
-  currentStrapeId: null,
+  current: {
+    selectedId: null,
+    binderId: null,
+  },
   getBinder: function(binderId) {
     return this[binderId] || {marginLeft: 0};
   },

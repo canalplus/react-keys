@@ -19,7 +19,7 @@ const store = createStore(combineReducers({
 
 keysInit({store: store});
 
-const PureMosaic = ({binder1, binder2}) => {
+const PureMosaic = ({binder1, binder2, selectedId}) => {
   const selectedId1 = binder1.selectedId;
   const active1 = binder1.active;
   const selectedId2 = binder2.selectedId;
@@ -55,6 +55,7 @@ const PureMosaic = ({binder1, binder2}) => {
 
 const Mosaic = connect(state => {
   return {
+    selectedId: state['@@keys'].current.selectedId,
     binder1: state['@@keys'].getBinder('binder1'),
     binder2: state['@@keys'].getBinder('binder2'),
   };
