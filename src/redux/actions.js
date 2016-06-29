@@ -25,13 +25,19 @@ export function clone(obj) {
   return cloneObject;
 }
 
+export function bindersKeys(newState) {
+  const keys = Object.keys(newState);
+  keys.splice(keys.indexOf('current'), 1);
+  return keys;
+}
+
 export function _activeKeyBinder(binderId, id, memory = false) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
-    for (const key of Object.keys(newState)) {
+    for (const key of bindersKeys(newState)) {
       newState[key].active = false;
     }
-    if (Object.keys(newState).some(key => key === binderId)) {
+    if (bindersKeys(newState).some(key => key === binderId)) {
       newState[binderId].active = true;
       if (!memory) {
         newState[binderId].selectedId =
@@ -39,8 +45,10 @@ export function _activeKeyBinder(binderId, id, memory = false) {
       } else {
         newState[binderId].selectedId = id || newState[binderId].selectedId;
       }
-      newState.selectedId = newState[binderId].selectedId;
-      newState.currentStrapeId = binderId;
+      newState.current = {
+        selectedId: newState[binderId].selectedId,
+        binderId: binderId,
+      };
       globalStore.dispatch({
         type: ACTIVE_KEYBINDER,
         state: newState,
@@ -52,10 +60,16 @@ export function _activeKeyBinder(binderId, id, memory = false) {
 export function addKeyBinderToStore(binderId, active) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
-    if (!Object.keys(newState).some(key => key === binderId)) {
+    if (!bindersKeys(newState).some(key => key === binderId)) {
       newState[binderId] = {};
       newState[binderId].id = binderId;
       newState[binderId].active = active;
+      if (active) {
+        newState.current = {
+          selectedId: newState[binderId].elements && newState[binderId].elements[0].id,
+          binderId: binderId,
+        };
+      }
       globalStore.dispatch({
         type: ADD_KEYBINDER_TO_STORE,
         state: newState,
@@ -67,6 +81,12 @@ export function addKeyBinderToStore(binderId, active) {
 export function _updateBinderState(binderId, binderState) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
+    if (newState[binderId].active) {
+      newState.current = {
+        selectedId: binderState.selectedId,
+        binderId: binderId,
+      };
+    }
     newState[binderId] = {...newState[binderId], ...binderState};
     globalStore.dispatch({
       type: UPDATE_BINDER_STATE,
@@ -129,7 +149,7 @@ export function updateSelectedId(binderId, selectedId, marginLeft) {
     const newState = clone(globalStore.getState()[NAME]);
     newState[binderId].selectedId = selectedId;
     newState[binderId].marginLeft = marginLeft;
-    newState.selectedId = selectedId;
+    newState.current.selectedId = selectedId;
     globalStore.dispatch({
       type: UPDATE_SELECTED_KEY,
       state: newState,

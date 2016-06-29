@@ -32,6 +32,7 @@ describe('redux/actions.js', () => {
       sinon.test(function() {
         const store = createStore((state = {
           '@@keys': {
+            current: {},
             binderId: {active: false, elements: [{id: '1'}]},
             binderId2: {active: true, elements: [{id: '2'}]},
           },
@@ -45,8 +46,7 @@ describe('redux/actions.js', () => {
             state: {
               binderId: {active: true, elements: {0: {id: '1'}}, selectedId: '1'},
               binderId2: {active: false, elements: {0: {id: '2'}}},
-              currentStrapeId: 'binderId',
-              selectedId: '1',
+              current: {binderId: 'binderId', selectedId: '1'},
             },
           });
         actions._activeKeyBinder('binderId');
@@ -66,6 +66,7 @@ describe('redux/actions.js', () => {
     it('should keep in memory the selected Id when memory is true', sinon.test(function() {
       const store = createStore((state = {
         '@@keys': {
+          current: {},
           binderId: {active: false, selectedId: '2', elements: [{id: '1'}]},
           binderId2: {active: true, selectedId: '3'},
         },
@@ -79,8 +80,7 @@ describe('redux/actions.js', () => {
           state: {
             binderId: {active: true, elements: {0: {id: '1'}}, selectedId: '2'},
             binderId2: {active: false, selectedId: '3'},
-            currentStrapeId: 'binderId',
-            selectedId: '2',
+            current: {selectedId: '2', binderId: 'binderId'},
           },
         });
       actions._activeKeyBinder('binderId', null, true);
@@ -90,6 +90,7 @@ describe('redux/actions.js', () => {
     it('should add new binder to store if not exists yet', sinon.test(function() {
       const store = createStore((state = {
         '@@keys': {
+          current: {},
           binderId: {active: false},
         },
       }) => state);
@@ -99,13 +100,18 @@ describe('redux/actions.js', () => {
         .once()
         .withArgs({
           type: actions.ADD_KEYBINDER_TO_STORE,
-          state: {binderId: {active: false}, binderId2: {active: false, id: 'binderId2'}},
+          state: {
+            binderId: {active: false},
+            binderId2: {active: false, id: 'binderId2'},
+            current: {},
+          },
         });
       actions.addKeyBinderToStore('binderId2', false);
     }));
     it('should activated binder when active is true', sinon.test(function() {
       const store = createStore((state = {
         '@@keys': {
+          current: {},
           binderId: {active: false},
         },
       }) => state);
@@ -115,13 +121,18 @@ describe('redux/actions.js', () => {
         .once()
         .withArgs({
           type: actions.ADD_KEYBINDER_TO_STORE,
-          state: {binderId: {active: false}, binderId2: {active: true, id: 'binderId2'}},
+          state: {
+            binderId: {active: false},
+            binderId2: {active: true, id: 'binderId2'},
+            current: {selectedId: undefined, binderId: 'binderId2'},
+          },
         });
       actions.addKeyBinderToStore('binderId2', true);
     }));
     it('should not dipatch if binderId already exists in state', sinon.test(function() {
       const store = createStore((state = {
         '@@keys': {
+          current: {},
           binderId: {active: false},
         },
       }) => state);
@@ -136,6 +147,7 @@ describe('redux/actions.js', () => {
     it('should update margin and selectedId to state', sinon.test(function() {
       const store = createStore((state = {
         '@@keys': {
+          current: {selectedId: null},
           binderId: {active: false, selectedId: 1, marginLeft: 0},
         },
       }) => state);
@@ -146,8 +158,8 @@ describe('redux/actions.js', () => {
         .withArgs({
           type: actions.UPDATE_SELECTED_KEY,
           state: {
-            selectedId: 2,
             binderId: {active: false, selectedId: 2, marginLeft: 10},
+            current: {selectedId: 2},
           },
         });
       actions.updateSelectedId('binderId', 2, 10);
@@ -193,5 +205,15 @@ describe('redux/actions.js', () => {
       mirrorSpy.should.have.been.not.called;
       startSpy.should.have.been.not.called;
     }));
+  });
+  describe('bindersKeys', () => {
+    it('should delete current keys and return list of objet keys', () => {
+      const object = {
+        current: {},
+        binder1: {},
+        binder2: {},
+      };
+      actions.bindersKeys(object).should.eql(['binder1', 'binder2']);
+    });
   });
 });
