@@ -81,13 +81,13 @@ export function addKeyBinderToStore(binderId, active) {
 export function _updateBinderState(binderId, binderState) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
+    newState[binderId] = {...newState[binderId], ...binderState};
     if (newState[binderId].active) {
       newState.current = {
         selectedId: binderState.selectedId,
         binderId: binderId,
       };
     }
-    newState[binderId] = {...newState[binderId], ...binderState};
     globalStore.dispatch({
       type: UPDATE_BINDER_STATE,
       state: newState,
