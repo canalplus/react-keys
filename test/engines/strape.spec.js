@@ -31,7 +31,7 @@ describe('engine/strape.js', () => {
     const dom = jsdom.jsdom('<div><li id="1"></li><li id="2"></li></div>');
     const list = createList(dom, 'li');
     list.should.have.lengthOf(2);
-    list[0].should.be.instanceOf(HTMLLIElement);
+    list[0].should.be.instanceOf(window.HTMLElement);
   });
 
   describe('exitStrategy', () => {
