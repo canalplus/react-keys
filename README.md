@@ -24,7 +24,34 @@ npm i react -S
 npm i react-dom -S
 ```
 
+# Keys
+
 ## Example
+```javascript
+import {Keys} from 'react-keys';
+
+function onBack(){
+  alert('alert bro');
+}
+
+const Component = () => {
+  return(
+    <Keys onBack={onBack}>
+      <h1>Check that out !</h1>
+    </Keys>
+  );
+}
+```
+
+### <Keys ..options/>
+* onBack (function / *optional*): handler for back (keyCode 27) keys event (keyCode 27)
+
+`react-keys` has some interesting features that allow you building advanced interfaces reacting with keys :
+
+## Binder
+
+![mosaic-gif](https://dl.dropboxusercontent.com/u/20177628/mosaic-screen.gif)
+
 
 ```javascript
 import {Binder, keysInit} from 'react-keys';
@@ -65,8 +92,6 @@ const Mosaic = ({binderId, selectedId}) => {
 renderWithId('mosaic-1-1');
 ```
 
-## API
-
 ### `<Binder ...options />`
 * `id` (string / **mandatory**) Define the binder id
 * `active` (boolean / *optional*) determine if binder is active (default `false`)
@@ -85,6 +110,10 @@ renderWithId('mosaic-1-1');
 * `onLeftExit` (function/string / *optional*) triggered when left event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onUpExit` (function/string / *optional*) triggered when up event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onDownExit` (function/string / *optional*) triggered when down event would go outside the elements block, it can be a function or the binder id we want to reach
+
+## Strape
+
+![mosaic-gif](https://dl.dropboxusercontent.com/u/20177628/strape-screen.gif)
 
 ### `<StrapeBinder ..options />`
 * `id` (string / **mandatory**) Define the binder id
