@@ -26,7 +26,6 @@ npm i react-dom -S
 
 # Keys
 
-## Example
 ```javascript
 import {Keys} from 'react-keys';
 
@@ -48,7 +47,7 @@ const Component = () => {
 
 `react-keys` has some interesting features that allow you building advanced interfaces reacting with keys :
 
-## Binder
+# Binder
 
 ![mosaic-gif](https://dl.dropboxusercontent.com/u/20177628/mosaic-screen.gif)
 
@@ -111,7 +110,7 @@ renderWithId('mosaic-1-1');
 * `onUpExit` (function/string / *optional*) triggered when up event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onDownExit` (function/string / *optional*) triggered when down event would go outside the elements block, it can be a function or the binder id we want to reach
 
-## Strape
+# Strape
 
 ![mosaic-gif](https://dl.dropboxusercontent.com/u/20177628/strape-screen.gif)
 
