@@ -17,6 +17,8 @@ class Carousel extends Component {
       speed: PropTypes.number,
       debounce: PropTypes.number,
       elWidth: PropTypes.number,
+      className: PropTypes.string,
+      childrenClassName: PropTypes.string,
       onDownExit: PropTypes.func,
       onUpExit: PropTypes.func,
       onEnter: PropTypes.func,
@@ -30,6 +32,8 @@ class Carousel extends Component {
       elWidth: 100,
       speed: 100,
       debounce: 82,
+      className: 'carousel',
+      childrenClassName: 'carousel-child',
       onDownExit: () => {
       },
       onUpExit: () => {
@@ -52,14 +56,14 @@ class Carousel extends Component {
   }
 
   buildWrapper() {
-    const { children, size, elWidth, speed } = this.props;
+    const { children, size, elWidth, speed, childrenClassName } = this.props;
     const indexs = build(this.ids, size + 4, this.getCursor());
     return children.map((el, index) => {
       if (indexs.indexOf(index) !== -1) {
         const x = (indexs.indexOf(index) - 2) * elWidth;
         return React.createElement('div', {
           key: index,
-          className: 'carousel-el',
+          className: childrenClassName,
           style: {
             transform: `translateX(${x}px)`,
             transition: `transform ${speed}ms`,
@@ -107,7 +111,7 @@ class Carousel extends Component {
   }
 
   render() {
-    return <div className="carousel">{this.state.elements}</div>;
+    return <div className={this.props.className}>{this.state.elements}</div>;
   }
 
 }
