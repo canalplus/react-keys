@@ -1,17 +1,17 @@
 /* eslint no-unused-vars:0 */
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import {refresh} from './engines/mosaic';
-import {UP, DOWN, LEFT, RIGHT, ENTER, BACK} from './keys';
-import {C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE} from './constants';
-import {isBlocked, block} from './clock';
-import {isActive} from './isActive';
-import {nextFocusedElement} from './nextFocusedElement';
-import {execCb, enterTo} from './funcHandler';
-import {calculateNewState} from './calculateNewState';
-import {addListener, removeListener, globalStore} from './listener';
-import {addKeyBinderToStore, updateSelectedId, _updateBinderState} from './redux/actions';
-import {hasDiff} from './hasDiff';
+import { refresh } from './engines/mosaic';
+import { UP, DOWN, LEFT, RIGHT, ENTER, BACK } from './keys';
+import { C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE } from './constants';
+import { isBlocked, block } from './clock';
+import { isActive } from './isActive';
+import { nextFocusedElement } from './nextFocusedElement';
+import { execCb, enterTo } from './funcHandler';
+import { calculateNewState } from './calculateNewState';
+import { addListener, removeListener, globalStore } from './listener';
+import { addKeyBinderToStore, updateSelectedId, _updateBinderState } from './redux/actions';
+import { hasDiff } from './hasDiff';
 
 class Binder extends Component {
 
@@ -30,21 +30,21 @@ class Binder extends Component {
       onDown: PropTypes.func,
       onEnter: PropTypes.func,
       onBack: PropTypes.func,
-      onLeftExit: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.func,
+      onLeftExit: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.func,
       ]),
-      onRightExit: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.func,
+      onRightExit: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.func,
       ]),
-      onUpExit: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.func,
+      onUpExit: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.func,
       ]),
-      onDownExit: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.func,
+      onDownExit: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.func,
       ]),
     };
   }
@@ -118,9 +118,9 @@ class Binder extends Component {
       this.elements,
       this.props.selector,
       this.props.focusedElementId,
-      {accuracy: this.props.accuracy},
+      { accuracy: this.props.accuracy },
     );
-    const {elements, selectedElement} = value;
+    const { elements, selectedElement } = value;
     this.nextEl = selectedElement || this.nextEl || {};
     if (hasDiff(elements, this.elements)) {
       this.elements = elements;

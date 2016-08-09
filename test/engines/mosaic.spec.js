@@ -9,7 +9,7 @@ import {
   selectedElement,
   build,
 } from '../../src/engines/mosaic';
-import {expect} from 'chai';
+import { expect } from 'chai';
 import jsdom from 'jsdom';
 
 describe('engine/mosaic.js', () => {
@@ -66,7 +66,7 @@ describe('engine/mosaic.js', () => {
       top: 0,
       left: 10,
     };
-    const options = {accuracy: 0};
+    const options = { accuracy: 0 };
     findRightElement(secondEl, mosaicCoords, options).should.equal(3);
   });
 
@@ -76,7 +76,7 @@ describe('engine/mosaic.js', () => {
       top: 0,
       left: 20,
     };
-    const options = {accuracy: 0};
+    const options = { accuracy: 0 };
     expect(findRightElement(thirdEl, mosaicCoords, options)).to.be.undefined;
   });
 
@@ -86,7 +86,7 @@ describe('engine/mosaic.js', () => {
       top: 0,
       left: 10,
     };
-    const options = {accuracy: 0};
+    const options = { accuracy: 0 };
     findLeftElement(secondEl, mosaicCoords, options).should.equal(1);
   });
 
@@ -96,7 +96,7 @@ describe('engine/mosaic.js', () => {
       top: 0,
       left: 0,
     };
-    const options = {accuracy: 0};
+    const options = { accuracy: 0 };
     expect(findLeftElement(firstEl, mosaicCoords, options)).to.be.undefined;
   });
 
@@ -106,7 +106,7 @@ describe('engine/mosaic.js', () => {
       top: 0,
       left: 10,
     };
-    const options = {accuracy: 0};
+    const options = { accuracy: 0 };
     findDownElement(secondEl, mosaicCoords, options).should.equal(5);
   });
 
@@ -116,7 +116,7 @@ describe('engine/mosaic.js', () => {
       top: 10,
       left: 10,
     };
-    const options = {accuracy: 0};
+    const options = { accuracy: 0 };
     expect(findDownElement(fifthEl, mosaicCoords, options)).to.be.undefined;
   });
 
@@ -126,7 +126,7 @@ describe('engine/mosaic.js', () => {
       top: 10,
       left: 10,
     };
-    const options = {accuracy: 0};
+    const options = { accuracy: 0 };
     findUpElement(fifthEl, mosaicCoords, options).should.equal(2);
   });
 
@@ -136,7 +136,7 @@ describe('engine/mosaic.js', () => {
       top: 0,
       left: 10,
     };
-    const options = {accuracy: 0};
+    const options = { accuracy: 0 };
     expect(findUpElement(secondEl, mosaicCoords, options)).to.be.undefined;
   });
 
@@ -156,11 +156,11 @@ describe('engine/mosaic.js', () => {
 
   describe('selectedElement', () => {
     it('should return element from id when it exists in array', () => {
-      const array = [{id: '1'}, {id: '2'}];
+      const array = [{ id: '1' }, { id: '2' }];
       selectedElement(array, '2').id.should.equal('2');
     });
     it('should should return first element when id is not found', () => {
-      const array = [{id: '1'}, {id: '2'}];
+      const array = [{ id: '1' }, { id: '2' }];
       selectedElement(array, '3').id.should.equal('1');
       selectedElement(array, null).id.should.equal('1');
     });

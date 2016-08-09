@@ -2,8 +2,8 @@
 /* eslint no-unused-vars:0 */
 import React from 'react';
 import StrapeBinder from '../src/StrapeBinder';
-import {shallow, mount} from 'enzyme';
-import {DOWN, UP, BACK} from '../src/keys';
+import { shallow, mount } from 'enzyme';
+import { DOWN, UP, BACK } from '../src/keys';
 import * as actions from '../src/redux/actions';
 import * as listener from '../src/listener';
 import * as funcHandler from '../src/funcHandler';
@@ -12,7 +12,7 @@ import * as next from '../src/nextFocusedElement';
 import * as clock from '../src/clock';
 import * as active from '../src/isActive';
 import * as engine from '../src/engines/strape';
-import {expect} from 'chai';
+import { expect } from 'chai';
 import sinon from 'sinon';
 
 describe('StrapeBinder.jsx', () => {
@@ -92,7 +92,7 @@ describe('StrapeBinder.jsx', () => {
       .expects('_updateBinderState')
       .once()
       .withArgs('1', sinon.match.object);
-    const Component = ({elems}) => {
+    const Component = ({ elems }) => {
       return (
         <StrapeBinder id="1" active={true} focusedElementId="li2">
           <ul>
@@ -103,11 +103,11 @@ describe('StrapeBinder.jsx', () => {
     };
     const elems = [];
     const mosaic = mount(<Component elems={elems}/>);
-    mosaic.setProps({elems: [{id: 1}, {id: 2}]});
+    mosaic.setProps({ elems: [{ id: 1 }, { id: 2 }] });
   }));
 
   it('should perform action call calculateNewState with right dir', sinon.test(function() {
-    const strape = new StrapeBinder({props: {}});
+    const strape = new StrapeBinder({ props: {} });
     const dir = 'left';
     const cb = () => null;
     const exitCb = () => null;
@@ -269,7 +269,7 @@ describe('StrapeBinder.jsx', () => {
       enterStrategy: 'bounds',
       onUpExit: 'myup',
     };
-    strape.nextEl = {id: 'nextEl2'};
+    strape.nextEl = { id: 'nextEl2' };
     strape.prevDir = 'right';
     strape.keysHandler(UP);
     expect(strape.prevDir).to.be.null;
@@ -288,7 +288,7 @@ describe('StrapeBinder.jsx', () => {
       enterStrategy: 'bounds',
       onDownExit: 'mydown',
     };
-    strape.nextEl = {id: 'nextEl2'};
+    strape.nextEl = { id: 'nextEl2' };
     strape.prevDir = 'right';
     strape.keysHandler(DOWN);
     expect(strape.prevDir).to.be.null;

@@ -11,7 +11,7 @@ const initialKeysSate = {
     binderId: null,
   },
   getBinder: function(binderId) {
-    return this[binderId] || {marginLeft: 0};
+    return this[binderId] || { marginLeft: 0 };
   },
 };
 
@@ -21,7 +21,7 @@ export function _keyReducer(state = initialKeysSate, action) {
     case ADD_KEYBINDER_TO_STORE:
     case UPDATE_BINDER_STATE:
     case UPDATE_SELECTED_KEY:
-      return {...state, ...action.state};
+      return { ...state, ...action.state };
     default:
       return state;
   }
