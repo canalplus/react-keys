@@ -19,6 +19,7 @@ class Carousel extends Component {
       elWidth: PropTypes.number,
       className: PropTypes.string,
       childrenClassName: PropTypes.string,
+      onChange: PropTypes.func,
       onDownExit: PropTypes.func,
       onUpExit: PropTypes.func,
       onEnter: PropTypes.func,
@@ -79,6 +80,7 @@ class Carousel extends Component {
     this.selectedId = this.props.children[cursor].props.id;
     _updateBinderState(this.props.id, { selectedId: this.selectedId, cursor: cursor });
     this.setState({ elements: this.buildWrapper() });
+    execCb(this.props.onChange, this.selectedId, this, this.props);
   }
 
   keysHandler(keyCode) {
