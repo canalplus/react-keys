@@ -14,6 +14,8 @@ class Carousel extends Component {
     return {
       index: PropTypes.number,
       size: PropTypes.number,
+      speed: PropTypes.number,
+      debounce: PropTypes.number,
       elWidth: PropTypes.number,
       onDownExit: PropTypes.func,
       onUpExit: PropTypes.func,
@@ -26,6 +28,8 @@ class Carousel extends Component {
       index: 0,
       size: 3,
       elWidth: 100,
+      speed: 100,
+      debounce: 82,
       onDownExit: () => {
       },
       onUpExit: () => {
@@ -36,16 +40,11 @@ class Carousel extends Component {
   constructor(props) {
     super(props);
     this.ids = this.props.children.map((el, index) => index);
-    this.cursor = props.index;
-    this.selectedId = props.children[this.cursor].props.id;
-    this.state = {
-      elements: this.buildWrapper(),
-    };
+    this.selectedId = props.children[props.index].props.id;
     this.listenerId = addListener(this.keysHandler, this);
-  }
-
-  componentDidMount() {
     addKeyBinderToStore(this.props.id, this.props.active);
+    _updateBinderState(this.props.id, { selectedId: this.selectedId, cursor: this.props.index });
+    this.state = { elements: this.buildWrapper() };
   }
 
   componentWillUnmount() {
@@ -53,8 +52,8 @@ class Carousel extends Component {
   }
 
   buildWrapper() {
-    const { children, size, elWidth } = this.props;
-    const indexs = build(this.ids, size + 4, this.cursor);
+    const { children, size, elWidth, speed } = this.props;
+    const indexs = build(this.ids, size + 4, this.getCursor());
     return children.map((el, index) => {
       if (indexs.indexOf(index) !== -1) {
         const x = (indexs.indexOf(index) - 2) * elWidth;
@@ -63,7 +62,8 @@ class Carousel extends Component {
           className: 'carousel-el',
           style: {
             transform: `translateX(${x}px)`,
-            opacity: (x === -200 || x === (size + 1) * elWidth) ? 0 : 1,
+            transition: `transform ${speed}ms`,
+            opacity: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 0 : 1,
           },
         }, el);
       }
@@ -72,22 +72,20 @@ class Carousel extends Component {
   }
 
   performAction(cursor) {
-    this.cursor = cursor;
-    const elements = this.buildWrapper();
-    this.selectedId = this.props.children[this.cursor].props.id;
-    _updateBinderState(this.props.id, { selectedId: this.selectedId });
-    this.setState({ elements: elements });
+    this.selectedId = this.props.children[cursor].props.id;
+    _updateBinderState(this.props.id, { selectedId: this.selectedId, cursor: cursor });
+    this.setState({ elements: this.buildWrapper() });
   }
 
   keysHandler(keyCode) {
     if (isActive(globalStore, this.props) && !isBlocked()) {
-      block(82);
+      block(this.props.debounce);
       switch (keyCode) {
         case LEFT:
-          this.performAction(getPrev(this.state.elements, this.cursor));
+          this.performAction(getPrev(this.state.elements, this.getCursor()));
           break;
         case RIGHT:
-          this.performAction(getNext(this.state.elements, this.cursor));
+          this.performAction(getNext(this.state.elements, this.getCursor()));
           break;
         case DOWN:
           this.props.onDownExit();
@@ -102,6 +100,10 @@ class Carousel extends Component {
           break;
       }
     }
+  }
+
+  getCursor() {
+    return globalStore.getState()['@@keys'].getBinder(this.props.id).cursor;
   }
 
   render() {
