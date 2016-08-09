@@ -5,7 +5,7 @@ import {
   addListener,
   removeListener,
   globalStore,
-  keysListeners
+  keysListeners,
 } from '../src/listener';
 import sinon from 'sinon';
 
