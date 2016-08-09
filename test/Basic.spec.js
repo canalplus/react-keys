@@ -2,9 +2,9 @@
 /* eslint no-unused-vars:0 */
 import React from 'react';
 import Basic from '../src/Basic';
-import {mount} from 'enzyme';
+import { mount } from 'enzyme';
 import sinon from 'sinon';
-import {BACK} from '../src/keys';
+import { BACK } from '../src/keys';
 
 function trigger(keyCode) {
   const evt = document.createEvent('HTMLEvents');

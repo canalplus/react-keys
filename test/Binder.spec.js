@@ -2,7 +2,7 @@
 /* eslint no-unused-vars:0 */
 import React from 'react';
 import Binder from '../src/Binder';
-import {shallow, mount} from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import * as actions from '../src/redux/actions';
 import * as listener from '../src/listener';
 import * as funcHandler from '../src/funcHandler';
@@ -11,7 +11,7 @@ import * as next from '../src/nextFocusedElement';
 import * as clock from '../src/clock';
 import * as active from '../src/isActive';
 import sinon from 'sinon';
-import {expect} from 'chai';
+import { expect } from 'chai';
 
 describe('Binder.jsx', () => {
   it('should wrap with tagName div', () => {
@@ -76,7 +76,7 @@ describe('Binder.jsx', () => {
     this.mock(actions).expects('_updateBinderState')
       .once()
       .withArgs('1', sinon.match.object);
-    const Component = ({elems}) => {
+    const Component = ({ elems }) => {
       return (
         <Binder id="1" active={true} focusedElementId="li2">
           {elems.map(el => <li key={el.id} id={el.id}></li>)}
@@ -85,11 +85,11 @@ describe('Binder.jsx', () => {
     };
     const elems = [];
     const mosaic = mount(<Component elems={elems}/>);
-    mosaic.setProps({elems: [{id: 1}, {id: 2}]});
+    mosaic.setProps({ elems: [{ id: 1 }, { id: 2 }] });
   }));
 
   it('should perform action call calculateNewState with right dir', sinon.test(function() {
-    const mosaic = new Binder({props: {}});
+    const mosaic = new Binder({ props: {} });
     const dir = 'left';
     const cb = () => null;
     const exitCb = () => null;

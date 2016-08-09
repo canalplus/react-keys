@@ -1,5 +1,5 @@
 /* eslint no-unused-expressions:0 */
-import {execCb, enterTo} from '../src/funcHandler';
+import { execCb, enterTo } from '../src/funcHandler';
 import * as actions from '../src/redux/actions';
 import sinon from 'sinon';
 
@@ -11,7 +11,7 @@ describe('funcHandler.js', () => {
 
     it('should call function this next element', () => {
       const spy = sinon.spy();
-      const el = {id: 1};
+      const el = { id: 1 };
       execCb(spy, el);
       spy.should.have.been.calledOnce;
       spy.should.have.been.calledWith(el);
@@ -26,8 +26,8 @@ describe('funcHandler.js', () => {
 
     it('should call with el and context if props.context', () => {
       const spy = sinon.spy();
-      const el = {id: 1};
-      const props = {context: {obladi: 'olbada'}};
+      const el = { id: 1 };
+      const props = { context: { obladi: 'olbada' } };
       execCb(spy, el, this, props);
       spy.should.have.been.calledOnce;
       spy.should.have.been.calledWith(el, props.context);

@@ -1,5 +1,12 @@
 /* eslint no-unused-expressions:0 */
-import {_init, cb, addListener, removeListener, globalStore, keysListeners} from '../src/listener';
+import {
+  _init,
+  cb,
+  addListener,
+  removeListener,
+  globalStore,
+  keysListeners
+} from '../src/listener';
 import sinon from 'sinon';
 
 describe('listener.js', () => {

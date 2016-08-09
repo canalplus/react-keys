@@ -1,15 +1,15 @@
 /* eslint no-unused-expressions:0 */
 import * as actions from '../../src/redux/actions';
 import * as listener from '../../src/listener';
-import {createStore} from 'redux';
+import { createStore } from 'redux';
 import sinon from 'sinon';
-import {expect} from 'chai';
+import { expect } from 'chai';
 import * as strape from '../../src/engines/strape';
 
 describe('redux/actions.js', () => {
   describe('clone', () => {
     it('should clone an object', () => {
-      const ob1 = {id: 1, context: {obladi: 'oblada'}};
+      const ob1 = { id: 1, context: { obladi: 'oblada' } };
       const ob2 = actions.clone(ob1);
       ob1.should.not.equal(ob2);
       ob1.id.should.equal(ob2.id);
@@ -33,20 +33,20 @@ describe('redux/actions.js', () => {
         const store = createStore((state = {
           '@@keys': {
             current: {},
-            binderId: {active: false, elements: [{id: '1'}]},
-            binderId2: {active: true, elements: [{id: '2'}]},
+            binderId: { active: false, elements: [{ id: '1' }] },
+            binderId2: { active: true, elements: [{ id: '2' }] },
           },
         }) => state);
-        listener._init({store: store}); // init globalStore
+        listener._init({ store: store }); // init globalStore
         this.mock(listener.globalStore)
           .expects('dispatch')
           .once()
           .withArgs({
             type: actions.ACTIVE_KEYBINDER,
             state: {
-              binderId: {active: true, elements: {0: {id: '1'}}, selectedId: '1'},
-              binderId2: {active: false, elements: {0: {id: '2'}}},
-              current: {binderId: 'binderId', selectedId: '1'},
+              binderId: { active: true, elements: { 0: { id: '1' } }, selectedId: '1' },
+              binderId2: { active: false, elements: { 0: { id: '2' } } },
+              current: { binderId: 'binderId', selectedId: '1' },
             },
           });
         actions._activeKeyBinder('binderId');
@@ -54,10 +54,10 @@ describe('redux/actions.js', () => {
     it('should not dispatch anything if binderId not found in state', sinon.test(function() {
       const store = createStore((state = {
         '@@keys': {
-          binderId: {active: false},
+          binderId: { active: false },
         },
       }) => state);
-      listener._init({store: store}); // init globalStore
+      listener._init({ store: store }); // init globalStore
       this.mock(listener.globalStore)
         .expects('dispatch')
         .never();
@@ -67,20 +67,20 @@ describe('redux/actions.js', () => {
       const store = createStore((state = {
         '@@keys': {
           current: {},
-          binderId: {active: false, selectedId: '2', elements: [{id: '1'}]},
-          binderId2: {active: true, selectedId: '3'},
+          binderId: { active: false, selectedId: '2', elements: [{ id: '1' }] },
+          binderId2: { active: true, selectedId: '3' },
         },
       }) => state);
-      listener._init({store: store}); // init globalStore
+      listener._init({ store: store }); // init globalStore
       this.mock(listener.globalStore)
         .expects('dispatch')
         .once()
         .withArgs({
           type: actions.ACTIVE_KEYBINDER,
           state: {
-            binderId: {active: true, elements: {0: {id: '1'}}, selectedId: '2'},
-            binderId2: {active: false, selectedId: '3'},
-            current: {selectedId: '2', binderId: 'binderId'},
+            binderId: { active: true, elements: { 0: { id: '1' } }, selectedId: '2' },
+            binderId2: { active: false, selectedId: '3' },
+            current: { selectedId: '2', binderId: 'binderId' },
           },
         });
       actions._activeKeyBinder('binderId', null, true);
@@ -91,18 +91,18 @@ describe('redux/actions.js', () => {
       const store = createStore((state = {
         '@@keys': {
           current: {},
-          binderId: {active: false},
+          binderId: { active: false },
         },
       }) => state);
-      listener._init({store: store}); // init globalStore
+      listener._init({ store: store }); // init globalStore
       this.mock(listener.globalStore)
         .expects('dispatch')
         .once()
         .withArgs({
           type: actions.ADD_KEYBINDER_TO_STORE,
           state: {
-            binderId: {active: false},
-            binderId2: {active: false, id: 'binderId2'},
+            binderId: { active: false },
+            binderId2: { active: false, id: 'binderId2' },
             current: {},
           },
         });
@@ -112,19 +112,19 @@ describe('redux/actions.js', () => {
       const store = createStore((state = {
         '@@keys': {
           current: {},
-          binderId: {active: false},
+          binderId: { active: false },
         },
       }) => state);
-      listener._init({store: store}); // init globalStore
+      listener._init({ store: store }); // init globalStore
       this.mock(listener.globalStore)
         .expects('dispatch')
         .once()
         .withArgs({
           type: actions.ADD_KEYBINDER_TO_STORE,
           state: {
-            binderId: {active: false},
-            binderId2: {active: true, id: 'binderId2'},
-            current: {selectedId: undefined, binderId: 'binderId2'},
+            binderId: { active: false },
+            binderId2: { active: true, id: 'binderId2' },
+            current: { selectedId: undefined, binderId: 'binderId2' },
           },
         });
       actions.addKeyBinderToStore('binderId2', true);
@@ -133,10 +133,10 @@ describe('redux/actions.js', () => {
       const store = createStore((state = {
         '@@keys': {
           current: {},
-          binderId: {active: false},
+          binderId: { active: false },
         },
       }) => state);
-      listener._init({store: store}); // init globalStore
+      listener._init({ store: store }); // init globalStore
       this.mock(listener.globalStore)
         .expects('dispatch')
         .never();
@@ -147,19 +147,19 @@ describe('redux/actions.js', () => {
     it('should update margin and selectedId to state', sinon.test(function() {
       const store = createStore((state = {
         '@@keys': {
-          current: {selectedId: null},
-          binderId: {active: false, selectedId: 1, marginLeft: 0},
+          current: { selectedId: null },
+          binderId: { active: false, selectedId: 1, marginLeft: 0 },
         },
       }) => state);
-      listener._init({store: store}); // init globalStore
+      listener._init({ store: store }); // init globalStore
       this.mock(listener.globalStore)
         .expects('dispatch')
         .once()
         .withArgs({
           type: actions.UPDATE_SELECTED_KEY,
           state: {
-            binderId: {active: false, selectedId: 2, marginLeft: 10},
-            current: {selectedId: 2},
+            binderId: { active: false, selectedId: 2, marginLeft: 10 },
+            current: { selectedId: 2 },
           },
         });
       actions.updateSelectedId('binderId', 2, 10);
@@ -170,10 +170,10 @@ describe('redux/actions.js', () => {
     it('should update state', sinon.test(function() {
       const store = createStore((state = {
         '@@keys': {
-          binderId: {active: false, selectedId: 1, marginLeft: 0},
+          binderId: { active: false, selectedId: 1, marginLeft: 0 },
         },
       }) => state);
-      listener._init({store: store}); // init globalStore
+      listener._init({ store: store }); // init globalStore
       this.mock(listener.globalStore)
         .expects('dispatch')
         .once()
