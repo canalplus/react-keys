@@ -1,4 +1,4 @@
-import {C_UP, C_DOWN, C_LEFT, C_RIGHT} from './constants';
+import { C_UP, C_DOWN, C_LEFT, C_RIGHT } from './constants';
 
 export function flipflop(direction, nextEl, prevEl, prevDir) {
   let _hasMoved = false;

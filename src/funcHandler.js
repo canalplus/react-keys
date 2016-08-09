@@ -1,4 +1,4 @@
-import {enter} from './redux/actions';
+import { enter } from './redux/actions';
 
 export function execCb(func, nextEl, _this, props) {
   if (!func) return;

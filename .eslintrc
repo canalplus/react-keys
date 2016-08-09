@@ -12,10 +12,6 @@
     "func-names": 0,
     "space-before-function-paren": 0,
     "new-cap": 0,
-    "object-curly-spacing": [
-      2,
-      "never"
-    ],
     "no-underscore-dangle": 0,
     "no-restricted-syntax": 0,
     "arrow-body-style": 0,

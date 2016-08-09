@@ -1,8 +1,8 @@
 let keysLock = false;
 
-export function block() {
+export function block(timeout = 10) {
   keysLock = true;
-  setTimeout(() => (keysLock = false), 10);
+  setTimeout(() => (keysLock = false), timeout);
 }
 
 export function isBlocked() {

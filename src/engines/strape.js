@@ -1,6 +1,6 @@
-import {trigger} from '../events';
-import {hasDiff} from '../hasDiff';
-import {C_LEFT, C_RIGHT} from '../constants';
+import { trigger } from '../events';
+import { hasDiff } from '../hasDiff';
+import { C_LEFT, C_RIGHT } from '../constants';
 
 export function findMirrorExitId(leftElement, children) {
   const leftPx = leftElement ? leftElement.getBoundingClientRect().left : 0;
@@ -32,7 +32,7 @@ export function findStartExitId(children, dom) {
 export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props) {
   const element = document.getElementById(el.id).getBoundingClientRect();
   let marginLeft = initialMarginLeft;
-  const {gap, lastGap} = props;
+  const { gap, lastGap } = props;
   switch (dir) {
     case C_RIGHT:
       if (element.right > wrapperPosition.right) {

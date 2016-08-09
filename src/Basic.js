@@ -1,5 +1,5 @@
-import React, {PropTypes} from 'react';
-import {BACK} from './keys';
+import React, { PropTypes } from 'react';
+import { BACK } from './keys';
 
 const Keys = React.createClass({
 
@@ -8,7 +8,7 @@ const Keys = React.createClass({
   },
 
   componentDidMount() {
-    this.callback = ({keyCode}) => {
+    this.callback = ({ keyCode }) => {
       switch (keyCode) {
         case BACK:
           this.props.onBack();

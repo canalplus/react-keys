@@ -1,4 +1,4 @@
-import {hasDiff} from '../hasDiff';
+import { hasDiff } from '../hasDiff';
 
 function createCoordsObject(el) {
   const bounds = el.getBoundingClientRect();

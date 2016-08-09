@@ -1,5 +1,5 @@
-import {globalStore} from '../listener';
-import {findMirrorExitId, findStartExitId} from '../engines/strape';
+import { globalStore } from '../listener';
+import { findMirrorExitId, findStartExitId } from '../engines/strape';
 import {
   EXIT_STRATEGY_MIRROR,
   EXIT_STRATEGY_START,
@@ -81,7 +81,7 @@ export function addKeyBinderToStore(binderId, active) {
 export function _updateBinderState(binderId, binderState) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
-    newState[binderId] = {...newState[binderId], ...binderState};
+    newState[binderId] = { ...newState[binderId], ...binderState };
     if (newState[binderId].active) {
       newState.current = {
         selectedId: binderState.selectedId,
