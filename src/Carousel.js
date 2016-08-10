@@ -49,9 +49,17 @@ class Carousel extends Component {
     this.ids = this.props.children.map((el, index) => index);
     this.selectedId = props.children[props.index].props.id;
     this.listenerId = addListener(this.keysHandler, this);
-    addKeyBinderToStore(this.props.id, this.props.active);
-    _updateBinderState(this.props.id, { selectedId: this.selectedId, cursor: this.props.index });
+    addKeyBinderToStore(props.id, props.active);
+    _updateBinderState(props.id, {
+      selectedId: this.selectedId,
+      cursor: props.index,
+      moving: false,
+    });
     this.state = { elements: this.buildWrapper() };
+    this.timeout = null;
+    this.movingCountDown = () => {
+      this.timeout = setTimeout(() => _updateBinderState(props.id, { moving: false }), props.speed);
+    }
   }
 
   componentWillUnmount() {
@@ -79,9 +87,15 @@ class Carousel extends Component {
   }
 
   performAction(cursor) {
+    clearTimeout(this.timeout);
     this.selectedId = this.props.children[cursor].props.id;
-    _updateBinderState(this.props.id, { selectedId: this.selectedId, cursor: cursor });
+    _updateBinderState(this.props.id, {
+      selectedId: this.selectedId,
+      cursor: cursor,
+      moving: true,
+    });
     this.setState({ elements: this.buildWrapper() });
+    this.movingCountDown();
     execCb(this.props.onChange, this.selectedId, this, this.props);
   }
 
