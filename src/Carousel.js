@@ -59,7 +59,7 @@ class Carousel extends Component {
     this.timeout = null;
     this.movingCountDown = () => {
       this.timeout = setTimeout(() => _updateBinderState(props.id, { moving: false }), props.speed);
-    }
+    };
   }
 
   componentWillUnmount() {
