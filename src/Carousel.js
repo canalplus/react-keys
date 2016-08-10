@@ -17,6 +17,7 @@ class Carousel extends Component {
       speed: PropTypes.number,
       debounce: PropTypes.number,
       elWidth: PropTypes.number,
+      circular: PropTypes.bool,
       className: PropTypes.string,
       childrenClassName: PropTypes.string,
       onChange: PropTypes.func,
@@ -31,6 +32,7 @@ class Carousel extends Component {
       index: 0,
       size: 3,
       elWidth: 100,
+      circular: true,
       speed: 100,
       debounce: 82,
       className: 'carousel',
@@ -57,8 +59,8 @@ class Carousel extends Component {
   }
 
   buildWrapper() {
-    const { children, size, elWidth, speed, childrenClassName } = this.props;
-    const indexs = build(this.ids, size + 4, this.getCursor());
+    const { children, size, elWidth, speed, childrenClassName, circular } = this.props;
+    const indexs = build(this.ids, size + 4, this.getCursor(), circular);
     return children.map((el, index) => {
       if (indexs.indexOf(index) !== -1) {
         const x = (indexs.indexOf(index) - 2) * elWidth;
@@ -86,12 +88,15 @@ class Carousel extends Component {
   keysHandler(keyCode) {
     if (isActive(globalStore, this.props) && !isBlocked()) {
       block(this.props.debounce);
+      const cursor = this.getCursor();
       switch (keyCode) {
         case LEFT:
-          this.performAction(getPrev(this.state.elements, this.getCursor()));
+          if (!this.props.circular && cursor === 0) return;
+          this.performAction(getPrev(this.state.elements, cursor));
           break;
         case RIGHT:
-          this.performAction(getNext(this.state.elements, this.getCursor()));
+          if (!this.props.circular && cursor === this.props.children.length - 1) return;
+          this.performAction(getNext(this.state.elements, cursor));
           break;
         case DOWN:
           execCb(this.props.onDownExit, this.selectedId, this, this.props);
