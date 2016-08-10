@@ -94,10 +94,10 @@ class Carousel extends Component {
           this.performAction(getNext(this.state.elements, this.getCursor()));
           break;
         case DOWN:
-          this.props.onDownExit();
+          execCb(this.props.onDownExit, this.selectedId, this, this.props);
           break;
         case UP:
-          this.props.onUpExit();
+          execCb(this.props.onUpExit, this.selectedId, this, this.props);
           break;
         case ENTER:
           execCb(this.props.onEnter, this.selectedId, this, this.props);
