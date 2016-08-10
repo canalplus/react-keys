@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { BACK, DOWN, UP } from './keys';
+import { execCb } from './funcHandler';
 
 const Keys = React.createClass({
 
@@ -13,13 +14,13 @@ const Keys = React.createClass({
     this.callback = ({ keyCode }) => {
       switch (keyCode) {
         case BACK:
-          this.props.onBack();
+          execCb(this.props.onBack, null, this, this.props);
           break;
         case UP:
-          this.props.onUp();
+          execCb(this.props.onUp, null, this, this.props);
           break;
         case DOWN:
-          this.props.onDown();
+          execCb(this.props.onDown, null, this, this.props);
           break;
         default:
       }
