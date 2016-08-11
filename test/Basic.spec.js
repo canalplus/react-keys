@@ -4,7 +4,7 @@ import React from 'react';
 import Basic from '../src/Basic';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
-import { BACK } from '../src/keys';
+import { BACK, NUM0 } from '../src/keys';
 
 function trigger(keyCode) {
   const evt = document.createEvent('HTMLEvents');
@@ -31,5 +31,12 @@ describe('Basic', () => {
     wrapper.unmount();
     trigger(BACK);
     onBackKey.should.have.not.been.called;
+  });
+  it('should bind digit event', () => {
+    const onDigit = sinon.spy();
+    const wrapper = mount(<Basic onDigit={onDigit}></Basic>);
+    trigger(NUM0);
+    onDigit.should.have.been.calledOnce;
+    wrapper.unmount();
   });
 });

@@ -1,5 +1,19 @@
 import React, { PropTypes } from 'react';
-import { BACK, DOWN, UP } from './keys';
+import {
+  BACK,
+  DOWN,
+  UP,
+  NUM0,
+  NUM1,
+  NUM2,
+  NUM3,
+  NUM4,
+  NUM5,
+  NUM6,
+  NUM7,
+  NUM8,
+  NUM9,
+ } from './keys';
 import { execCb } from './funcHandler';
 
 const Keys = React.createClass({
@@ -8,6 +22,7 @@ const Keys = React.createClass({
     onBack: PropTypes.func,
     onDown: PropTypes.func,
     onUp: PropTypes.func,
+    onDigit: PropTypes.func,
   },
 
   componentDidMount() {
@@ -21,6 +36,18 @@ const Keys = React.createClass({
           break;
         case DOWN:
           execCb(this.props.onDown, null, this, this.props);
+          break;
+        case NUM0:
+        case NUM1:
+        case NUM2:
+        case NUM3:
+        case NUM4:
+        case NUM5:
+        case NUM6:
+        case NUM7:
+        case NUM8:
+        case NUM9:
+          execCb(this.props.onDigit, keyCode, this, this.props);
           break;
         default:
       }
