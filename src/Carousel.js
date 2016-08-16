@@ -58,16 +58,16 @@ class Carousel extends Component {
   componentWillMount() {
     const { id, active, index } = this.props;
     addKeyBinderToStore(id, active);
-    this.buildState(index);
+    this.buildState(index, false);
   }
 
-  buildState(index) {
+  buildState(index, moving) {
     const { id, children } = this.props;
     this.selectedId = children[index].props.id;
     _updateBinderState(id, {
       selectedId: this.selectedId,
       cursor: index,
-      moving: false,
+      moving: moving,
     });
     this.setState({ elements: this.buildWrapper() });
   }
@@ -98,7 +98,7 @@ class Carousel extends Component {
 
   performAction(cursor) {
     clearTimeout(this.timeout);
-    this.buildState(cursor);
+    this.buildState(cursor, true);
     this.movingCountDown();
     execCb(this.props.onChange, this.selectedId, this, this.props);
   }
