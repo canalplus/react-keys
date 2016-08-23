@@ -64,16 +64,14 @@ export function addKeyBinderToStore(binderId, active) {
       newState[binderId] = {};
       newState[binderId].id = binderId;
       newState[binderId].active = active;
-      if (active) {
-        newState.current = {
-          selectedId: newState[binderId].elements && newState[binderId].elements[0].id,
-          binderId: binderId,
-        };
-      }
       globalStore.dispatch({
         type: ADD_KEYBINDER_TO_STORE,
         state: newState,
       });
+    }
+    if (active) {
+      _activeKeyBinder(binderId,
+        newState[binderId].elements && newState[binderId].elements[0].id);
     }
   }
 }

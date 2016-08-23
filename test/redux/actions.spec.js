@@ -124,7 +124,7 @@ describe('redux/actions.js', () => {
           state: {
             binderId: { active: false },
             binderId2: { active: true, id: 'binderId2' },
-            current: { selectedId: undefined, binderId: 'binderId2' },
+            current: {},
           },
         });
       actions.addKeyBinderToStore('binderId2', true);
