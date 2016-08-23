@@ -3,6 +3,7 @@ import {
   BACK,
   DOWN,
   UP,
+  MENU,
   NUM0,
   NUM1,
   NUM2,
@@ -23,6 +24,7 @@ const Keys = React.createClass({
     onDown: PropTypes.func,
     onUp: PropTypes.func,
     onDigit: PropTypes.func,
+    onMenu: PropTypes.func,
   },
 
   componentDidMount() {
@@ -36,6 +38,9 @@ const Keys = React.createClass({
           break;
         case DOWN:
           execCb(this.props.onDown, null, this, this.props);
+          break;
+        case MENU:
+          execCb(this.props.onMenu, null, this, this.props);
           break;
         case NUM0:
         case NUM1:
