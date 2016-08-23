@@ -46,9 +46,7 @@ class Carousel extends Component {
 
   constructor(props) {
     super(props);
-    this.ids = this.props.children.map((el, index) => index);
     this.listenerId = addListener(this.keysHandler, this);
-    this.state = { elements: [] };
     this.timeout = null;
     this.movingCountDown = () => {
       this.timeout = setTimeout(() => _updateBinderState(props.id, { moving: false }), props.speed);
@@ -56,49 +54,49 @@ class Carousel extends Component {
   }
 
   componentWillMount() {
-    const { id, active, index } = this.props;
+    const { id, active, children } = this.props;
     addKeyBinderToStore(id, active);
-    this.buildState(index, false);
+    if (children.length !== 0) {
+      this.initializeCarousel(children);
+    }
   }
 
-  buildState(index, moving) {
-    const { id, children } = this.props;
+  componentWillUpdate(nextProps) {
+    const { children } = nextProps;
+    if (this.props.children.length === 0 && children.length !== 0) {
+      this.initializeCarousel(children);
+    }
+  }
+
+  initializeCarousel(children) {
+    const { id, index, size, circular } = this.props;
+    const indexs = build(children.map((el, i) => i), size + 4, this.getCursor(), circular);
     this.selectedId = children[index].props.id;
+    this.sketch = children.map((el, i) => {
+      if (indexs.indexOf(i) !== -1) {
+        return '';
+      }
+      return null;
+    });
     _updateBinderState(id, {
       selectedId: this.selectedId,
       cursor: index,
-      moving: moving,
+      moving: false,
     });
-    this.setState({ elements: this.buildWrapper() });
   }
 
   componentWillUnmount() {
     removeListener(this.listenerId);
   }
 
-  buildWrapper() {
-    const { children, size, elWidth, speed, childrenClassName, circular } = this.props;
-    const indexs = build(this.ids, size + 4, this.getCursor(), circular);
-    return children.map((el, index) => {
-      if (indexs.indexOf(index) !== -1) {
-        const x = (indexs.indexOf(index) - 2) * elWidth;
-        return React.createElement('div', {
-          key: index,
-          className: childrenClassName,
-          style: {
-            transform: `translateX(${x}px)`,
-            transition: `transform ${speed}ms`,
-            opacity: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 0 : 1,
-          },
-        }, el);
-      }
-      return null;
-    });
-  }
-
   performAction(cursor) {
     clearTimeout(this.timeout);
-    this.buildState(cursor, true);
+    this.selectedId = this.props.children[cursor].props.id;
+    _updateBinderState(this.props.id, {
+      selectedId: this.selectedId,
+      cursor: cursor,
+      moving: true,
+    });
     this.movingCountDown();
     execCb(this.props.onChange, this.selectedId, this, this.props);
   }
@@ -110,11 +108,11 @@ class Carousel extends Component {
       switch (keyCode) {
         case LEFT:
           if (!this.props.circular && cursor === 0) return;
-          this.performAction(getPrev(this.state.elements, cursor));
+          this.performAction(getPrev(this.sketch, cursor));
           break;
         case RIGHT:
           if (!this.props.circular && cursor === this.props.children.length - 1) return;
-          this.performAction(getNext(this.state.elements, cursor));
+          this.performAction(getNext(this.sketch, cursor));
           break;
         case DOWN:
           execCb(this.props.onDownExit, this.selectedId, this, this.props);
@@ -136,7 +134,22 @@ class Carousel extends Component {
   }
 
   render() {
-    return <div className={this.props.className}>{this.state.elements}</div>;
+    const { size, elWidth, speed, childrenClassName, circular, children, className } = this.props;
+    const ids = children.map((el, index) => index);
+    const indexs = build(ids, size + 4, this.getCursor(), circular);
+    return <div className={className}>
+      {children.map((el, index) => {
+        if (indexs.indexOf(index) !== -1) {
+          const x = (indexs.indexOf(index) - 2) * elWidth;
+          return <div key={index} className={childrenClassName} style={{
+            transform: `translateX(${x}px)`,
+            transition: `transform ${speed}ms`,
+            opacity: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 0 : 1,
+          }}>{el}</div>;
+        }
+        return null;
+      })}
+    </div>;
   }
 
 }
