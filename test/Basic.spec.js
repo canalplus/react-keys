@@ -20,28 +20,28 @@ describe('Basic', () => {
   });
   it('should bind back event', () => {
     const onBackKey = sinon.spy();
-    const wrapper = mount(<Basic onBack={onBackKey}></Basic>);
+    const wrapper = mount(<Basic onBack={onBackKey} active={true}></Basic>);
     trigger(BACK);
     onBackKey.should.have.been.calledOnce;
     wrapper.unmount();
   });
   it('should stop listening event on unmount', () => {
     const onBackKey = sinon.spy();
-    const wrapper = mount(<Basic onBack={onBackKey}></Basic>);
+    const wrapper = mount(<Basic onBack={onBackKey} active={true}></Basic>);
     wrapper.unmount();
     trigger(BACK);
     onBackKey.should.have.not.been.called;
   });
   it('should bind digit event', () => {
     const onDigit = sinon.spy();
-    const wrapper = mount(<Basic onDigit={onDigit}></Basic>);
+    const wrapper = mount(<Basic onDigit={onDigit} active={true}></Basic>);
     trigger(NUM0);
     onDigit.should.have.been.calledOnce;
     wrapper.unmount();
   });
   it('should bind menu event', () => {
     const onMenu = sinon.spy();
-    const wrapper = mount(<Basic onMenu={onMenu}></Basic>);
+    const wrapper = mount(<Basic onMenu={onMenu} active={true}></Basic>);
     trigger(MENU);
     onMenu.should.have.been.calledOnce;
     wrapper.unmount();
