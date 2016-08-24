@@ -4,7 +4,7 @@ import React from 'react';
 import Basic from '../src/Basic';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
-import { BACK, NUM0, MENU } from '../src/keys';
+import { BACK, NUM0, MENU, NEXTPROG, PREVPROG } from '../src/keys';
 
 function trigger(keyCode) {
   const evt = document.createEvent('HTMLEvents');
@@ -44,6 +44,20 @@ describe('Basic', () => {
     const wrapper = mount(<Basic onMenu={onMenu} active={true}></Basic>);
     trigger(MENU);
     onMenu.should.have.been.calledOnce;
+    wrapper.unmount();
+  });
+  it('should bind nextprog event', () => {
+    const onNextProg = sinon.spy();
+    const wrapper = mount(<Basic onNextProg={onNextProg} active={true}></Basic>);
+    trigger(NEXTPROG);
+    onNextProg.should.have.been.calledOnce;
+    wrapper.unmount();
+  });
+  it('should bind prevprog event', () => {
+    const onPrevProg = sinon.spy();
+    const wrapper = mount(<Basic onPrevProg={onPrevProg} active={true}></Basic>);
+    trigger(PREVPROG);
+    onPrevProg.should.have.been.calledOnce;
     wrapper.unmount();
   });
 });

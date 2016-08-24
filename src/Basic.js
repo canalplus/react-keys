@@ -4,6 +4,8 @@ import {
   DOWN,
   UP,
   MENU,
+  NEXTPROG,
+  PREVPROG,
   NUM0,
   NUM1,
   NUM2,
@@ -25,6 +27,8 @@ const Keys = React.createClass({
     onUp: PropTypes.func,
     onDigit: PropTypes.func,
     onMenu: PropTypes.func,
+    onNextProg: PropTypes.func,
+    onPrevProg: PropTypes.func,
     active: PropTypes.bool,
   },
 
@@ -47,6 +51,12 @@ const Keys = React.createClass({
             break;
           case MENU:
             execCb(this.props.onMenu, null, this, this.props);
+            break;
+          case NEXTPROG:
+            execCb(this.props.onNextProg, null, this, this.props);
+            break;
+          case PREVPROG:
+            execCb(this.props.onPrevProg, null, this, this.props);
             break;
           case NUM0:
           case NUM1:
