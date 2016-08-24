@@ -25,36 +25,43 @@ const Keys = React.createClass({
     onUp: PropTypes.func,
     onDigit: PropTypes.func,
     onMenu: PropTypes.func,
+    active: PropTypes.bool,
+  },
+
+  defaultProps: {
+    active: true,
   },
 
   componentDidMount() {
     this.callback = ({ keyCode }) => {
-      switch (keyCode) {
-        case BACK:
-          execCb(this.props.onBack, null, this, this.props);
-          break;
-        case UP:
-          execCb(this.props.onUp, null, this, this.props);
-          break;
-        case DOWN:
-          execCb(this.props.onDown, null, this, this.props);
-          break;
-        case MENU:
-          execCb(this.props.onMenu, null, this, this.props);
-          break;
-        case NUM0:
-        case NUM1:
-        case NUM2:
-        case NUM3:
-        case NUM4:
-        case NUM5:
-        case NUM6:
-        case NUM7:
-        case NUM8:
-        case NUM9:
-          execCb(this.props.onDigit, keyCode, this, this.props);
-          break;
-        default:
+      if (this.props.active) {
+        switch (keyCode) {
+          case BACK:
+            execCb(this.props.onBack, null, this, this.props);
+            break;
+          case UP:
+            execCb(this.props.onUp, null, this, this.props);
+            break;
+          case DOWN:
+            execCb(this.props.onDown, null, this, this.props);
+            break;
+          case MENU:
+            execCb(this.props.onMenu, null, this, this.props);
+            break;
+          case NUM0:
+          case NUM1:
+          case NUM2:
+          case NUM3:
+          case NUM4:
+          case NUM5:
+          case NUM6:
+          case NUM7:
+          case NUM8:
+          case NUM9:
+            execCb(this.props.onDigit, keyCode, this, this.props);
+            break;
+          default:
+        }
       }
     };
     window.document.addEventListener('keydown', this.callback);
