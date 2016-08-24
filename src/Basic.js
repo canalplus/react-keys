@@ -32,8 +32,10 @@ const Keys = React.createClass({
     active: PropTypes.bool,
   },
 
-  defaultProps: {
-    active: true,
+  getDefaultProps() {
+    return {
+      active: true,
+    };
   },
 
   componentDidMount() {
