@@ -89,29 +89,42 @@ class StrapeBinder extends Component {
         globalStore,
         this.elements,
         this.props.id);
-      block();
       switch (keyCode) {
         case LEFT:
+          block();
           this.performAction(C_LEFT, this.props.onLeft, this.props.onLeftExit);
           break;
         case RIGHT:
+          block();
           this.performAction(C_RIGHT, this.props.onRight, this.props.onRightExit);
           break;
         case ENTER:
-          this.prevDir = null;
-          execCb(this.props.onEnter, this.nextEl, this, this.props);
+          if (this.props.onEnter) {
+            block();
+            this.prevDir = null;
+            execCb(this.props.onEnter, this.nextEl, this, this.props);
+          }
           break;
         case UP:
-          this.prevDir = null;
-          enter(this.props.onUpExit, this.nextEl.id);
+          if (this.props.onUpExit) {
+            block();
+            this.prevDir = null;
+            enter(this.props.onUpExit, this.nextEl.id);
+          }
           break;
         case DOWN:
-          this.prevDir = null;
-          enter(this.props.onDownExit, this.nextEl.id);
+          if (this.props.onDownExit) {
+            block();
+            this.prevDir = null;
+            enter(this.props.onDownExit, this.nextEl.id);
+          }
           break;
         case BACK:
-          this.prevDir = null;
-          execCb(this.props.onBack, this.nextEl, this, this.props);
+          if (this.props.onBack) {
+            block();
+            this.prevDir = null;
+            execCb(this.props.onBack, this.nextEl, this, this.props);
+          }
           break;
         default:
           break;

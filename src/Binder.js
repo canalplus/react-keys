@@ -75,25 +75,34 @@ class Binder extends Component {
         globalStore,
         this.elements,
         this.props.id);
-      block();
       switch (keyCode) {
         case LEFT:
+          block();
           this.performAction(C_LEFT, this.props.onLeft, this.props.onLeftExit);
           break;
         case UP:
+          block();
           this.performAction(C_UP, this.props.onUp, this.props.onUpExit);
           break;
         case RIGHT:
+          block();
           this.performAction(C_RIGHT, this.props.onRight, this.props.onRightExit);
           break;
         case DOWN:
+          block();
           this.performAction(C_DOWN, this.props.onDown, this.props.onDownExit);
           break;
         case ENTER:
-          execCb(this.props.onEnter, this.nextEl, this, this.props);
+          if (this.props.onEnter) {
+            block();
+            execCb(this.props.onEnter, this.nextEl, this, this.props);
+          }
           break;
         case BACK:
-          execCb(this.props.onBack, this.nextEl, this, this.props);
+          if (this.props.onBack) {
+            block();
+            execCb(this.props.onBack, this.nextEl, this, this.props);
+          }
           break;
         default:
           break;

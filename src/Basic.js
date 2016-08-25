@@ -1,4 +1,6 @@
 import React, { PropTypes } from 'react';
+import { isBlocked, block } from './clock';
+
 import {
   BACK,
   DOWN,
@@ -40,25 +42,43 @@ const Keys = React.createClass({
 
   componentDidMount() {
     this.callback = ({ keyCode }) => {
-      if (this.props.active) {
+      if (this.props.active && !isBlocked()) {
         switch (keyCode) {
           case BACK:
-            execCb(this.props.onBack, null, this, this.props);
+            if (this.props.onBack) {
+              block();
+              execCb(this.props.onBack, null, this, this.props);
+            }
             break;
           case UP:
-            execCb(this.props.onUp, null, this, this.props);
+            if (this.props.onUp) {
+              block();
+              execCb(this.props.onUp, null, this, this.props);
+            }
             break;
           case DOWN:
-            execCb(this.props.onDown, null, this, this.props);
+            if (this.props.onDown) {
+              block();
+              execCb(this.props.onDown, null, this, this.props);
+            }
             break;
           case MENU:
-            execCb(this.props.onMenu, null, this, this.props);
+            if (this.props.onMenu) {
+              block();
+              execCb(this.props.onMenu, null, this, this.props);
+            }
             break;
           case NEXTPROG:
-            execCb(this.props.onNextProg, null, this, this.props);
+            if (this.props.onNextProg) {
+              block();
+              execCb(this.props.onNextProg, null, this, this.props);
+            }
             break;
           case PREVPROG:
-            execCb(this.props.onPrevProg, null, this, this.props);
+            if (this.props.onPrevProg) {
+              block();
+              execCb(this.props.onPrevProg, null, this, this.props);
+            }
             break;
           case NUM0:
           case NUM1:
@@ -70,7 +90,10 @@ const Keys = React.createClass({
           case NUM7:
           case NUM8:
           case NUM9:
-            execCb(this.props.onDigit, keyCode, this, this.props);
+            if (this.props.onDigit) {
+              block();
+              execCb(this.props.onDigit, keyCode, this, this.props);
+            }
             break;
           default:
         }

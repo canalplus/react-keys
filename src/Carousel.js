@@ -37,10 +37,6 @@ class Carousel extends Component {
       debounce: 82,
       className: 'carousel',
       childrenClassName: 'carousel-child',
-      onDownExit: () => {
-      },
-      onUpExit: () => {
-      },
     };
   }
 
@@ -103,25 +99,35 @@ class Carousel extends Component {
 
   keysHandler(keyCode) {
     if (isActive(globalStore, this.props) && !isBlocked()) {
-      block(this.props.debounce);
       const cursor = this.getCursor();
       switch (keyCode) {
         case LEFT:
           if (!this.props.circular && cursor === 0) return;
+          block(this.props.debounce);
           this.performAction(getPrev(this.sketch, cursor));
           break;
         case RIGHT:
           if (!this.props.circular && cursor === this.props.children.length - 1) return;
+          block(this.props.debounce);
           this.performAction(getNext(this.sketch, cursor));
           break;
         case DOWN:
-          execCb(this.props.onDownExit, this.selectedId, this, this.props);
+          if (this.props.onDownExit) {
+            block();
+            execCb(this.props.onDownExit, this.selectedId, this, this.props);
+          }
           break;
         case UP:
-          execCb(this.props.onUpExit, this.selectedId, this, this.props);
+          if (this.props.onUpExit) {
+            block();
+            execCb(this.props.onUpExit, this.selectedId, this, this.props);
+          }
           break;
         case ENTER:
-          execCb(this.props.onEnter, this.selectedId, this, this.props);
+          if (this.props.onEnter) {
+            block();
+            execCb(this.props.onEnter, this.selectedId, this, this.props);
+          }
           break;
         default:
           break;
