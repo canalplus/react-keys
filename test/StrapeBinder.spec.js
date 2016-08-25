@@ -303,6 +303,8 @@ describe('StrapeBinder.jsx', () => {
     const strape = new StrapeBinder();
     strape.props = {
       id: 1,
+      onBack: function() {
+      },
     };
     strape.prevDir = 'right';
     strape.keysHandler(BACK);

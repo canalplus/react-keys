@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { isBlocked, block } from './clock';
-
+import { addListener, removeListener } from './listener';
 import {
   BACK,
   DOWN,
@@ -18,7 +18,7 @@ import {
   NUM7,
   NUM8,
   NUM9,
- } from './keys';
+} from './keys';
 import { execCb } from './funcHandler';
 
 const Keys = React.createClass({
@@ -41,69 +41,56 @@ const Keys = React.createClass({
   },
 
   componentDidMount() {
-    this.callback = ({ keyCode }) => {
-      if (this.props.active && !isBlocked()) {
-        switch (keyCode) {
-          case BACK:
-            if (this.props.onBack) {
-              block();
-              execCb(this.props.onBack, null, this, this.props);
-            }
-            break;
-          case UP:
-            if (this.props.onUp) {
-              block();
-              execCb(this.props.onUp, null, this, this.props);
-            }
-            break;
-          case DOWN:
-            if (this.props.onDown) {
-              block();
-              execCb(this.props.onDown, null, this, this.props);
-            }
-            break;
-          case MENU:
-            if (this.props.onMenu) {
-              block();
-              execCb(this.props.onMenu, null, this, this.props);
-            }
-            break;
-          case NEXTPROG:
-            if (this.props.onNextProg) {
-              block();
-              execCb(this.props.onNextProg, null, this, this.props);
-            }
-            break;
-          case PREVPROG:
-            if (this.props.onPrevProg) {
-              block();
-              execCb(this.props.onPrevProg, null, this, this.props);
-            }
-            break;
-          case NUM0:
-          case NUM1:
-          case NUM2:
-          case NUM3:
-          case NUM4:
-          case NUM5:
-          case NUM6:
-          case NUM7:
-          case NUM8:
-          case NUM9:
-            if (this.props.onDigit) {
-              block();
-              execCb(this.props.onDigit, keyCode, this, this.props);
-            }
-            break;
-          default:
-        }
-      }
-    };
-    window.document.addEventListener('keydown', this.callback);
+    this.listenerId = addListener(this.keysHandler, this);
   },
 
   componentWillUnmount() {
-    window.document.removeEventListener('keydown', this.callback);
+    removeListener(this.listenerId);
+  },
+
+  keysHandler(keyCode) {
+    if (this.props.active && !isBlocked()) {
+      switch (keyCode) {
+        case BACK:
+          this.performAction(this.props.onBack);
+          break;
+        case UP:
+          this.performAction(this.props.onUp);
+          break;
+        case DOWN:
+          this.performAction(this.props.onDown);
+          break;
+        case MENU:
+          this.performAction(this.props.onMenu);
+          break;
+        case NEXTPROG:
+          this.performAction(this.props.onNextProg);
+          break;
+        case PREVPROG:
+          this.performAction(this.props.onPrevProg);
+          break;
+        case NUM0:
+        case NUM1:
+        case NUM2:
+        case NUM3:
+        case NUM4:
+        case NUM5:
+        case NUM6:
+        case NUM7:
+        case NUM8:
+        case NUM9:
+          this.performAction(this.props.onDigit, keyCode);
+          break;
+        default:
+      }
+    }
+  },
+
+  performAction(callback, keyCode) {
+    if (callback) {
+      block();
+      execCb(callback, keyCode, this, this.props);
+    }
   },
 
   render() {

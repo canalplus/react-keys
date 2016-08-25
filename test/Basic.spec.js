@@ -6,14 +6,25 @@ import { mount } from 'enzyme';
 import sinon from 'sinon';
 import { BACK, NUM0, MENU, NEXTPROG, PREVPROG } from '../src/keys';
 
-function trigger(keyCode) {
-  const evt = document.createEvent('HTMLEvents');
-  evt.initEvent('keydown', false, false);
-  evt.keyCode = keyCode;
-  document.dispatchEvent(evt);
-}
-
 describe('Basic', () => {
+  let clock;
+
+  before(() => {
+    clock = sinon.useFakeTimers();
+  });
+
+  after(() => {
+    clock.restore();
+  });
+
+  function trigger(keyCode) {
+    clock.tick(10);
+    const evt = document.createEvent('HTMLEvents');
+    evt.initEvent('keydown', false, false);
+    evt.keyCode = keyCode;
+    document.dispatchEvent(evt);
+  }
+
   it('should wrap with div hoc-keys id', () => {
     const wrapper = mount(<Basic></Basic>);
     wrapper.find('#hoc-keys').should.have.length(1);

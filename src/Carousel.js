@@ -86,6 +86,7 @@ class Carousel extends Component {
   }
 
   performAction(cursor) {
+    block(this.props.debounce);
     clearTimeout(this.timeout);
     this.selectedId = this.props.children[cursor].props.id;
     _updateBinderState(this.props.id, {
@@ -103,35 +104,31 @@ class Carousel extends Component {
       switch (keyCode) {
         case LEFT:
           if (!this.props.circular && cursor === 0) return;
-          block(this.props.debounce);
           this.performAction(getPrev(this.sketch, cursor));
           break;
         case RIGHT:
           if (!this.props.circular && cursor === this.props.children.length - 1) return;
-          block(this.props.debounce);
           this.performAction(getNext(this.sketch, cursor));
           break;
         case DOWN:
-          if (this.props.onDownExit) {
-            block();
-            execCb(this.props.onDownExit, this.selectedId, this, this.props);
-          }
+          this.performCallback(this.props.onDownExit);
           break;
         case UP:
-          if (this.props.onUpExit) {
-            block();
-            execCb(this.props.onUpExit, this.selectedId, this, this.props);
-          }
+          this.performCallback(this.props.onUpExit);
           break;
         case ENTER:
-          if (this.props.onEnter) {
-            block();
-            execCb(this.props.onEnter, this.selectedId, this, this.props);
-          }
+          this.performCallback(this.props.onEnter);
           break;
         default:
           break;
       }
+    }
+  }
+
+  performCallback(callback) {
+    if (callback) {
+      block();
+      execCb(callback, this.selectedId, this, this.props);
     }
   }
 

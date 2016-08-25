@@ -77,19 +77,15 @@ class Binder extends Component {
         this.props.id);
       switch (keyCode) {
         case LEFT:
-          block();
           this.performAction(C_LEFT, this.props.onLeft, this.props.onLeftExit);
           break;
         case UP:
-          block();
           this.performAction(C_UP, this.props.onUp, this.props.onUpExit);
           break;
         case RIGHT:
-          block();
           this.performAction(C_RIGHT, this.props.onRight, this.props.onRightExit);
           break;
         case DOWN:
-          block();
           this.performAction(C_DOWN, this.props.onDown, this.props.onDownExit);
           break;
         case ENTER:
@@ -111,6 +107,7 @@ class Binder extends Component {
   }
 
   performAction(dir, cb, exitCb) {
+    block();
     this.calculateNewState(dir);
     if (this.hasMoved) {
       updateSelectedId(this.props.id, this.nextEl.id, this.nextEl.marginLeft);

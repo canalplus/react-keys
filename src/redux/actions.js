@@ -125,20 +125,18 @@ export function enterBinder(strategy, callback) {
 }
 
 export function enter(callback, nextElId) {
-  if (callback) {
-    if (typeof callback === 'string') {
-      const nextBinderState = globalStore.getState()[NAME][callback] || {};
-      const strategy = nextBinderState.enterStrategy;
-      if (nextBinderState.type === BINDER_TYPE) {
-        enterBinder(strategy, callback);
-      } else {
-        const dom = document.getElementById(callback) || document;
-        const children = [].slice.call(dom.querySelectorAll(nextBinderState.wChildren));
-        enterStrape(strategy, callback, nextElId, children, dom);
-      }
+  if (typeof callback === 'string') {
+    const nextBinderState = globalStore.getState()[NAME][callback] || {};
+    const strategy = nextBinderState.enterStrategy;
+    if (nextBinderState.type === BINDER_TYPE) {
+      enterBinder(strategy, callback);
     } else {
-      callback();
+      const dom = document.getElementById(callback) || document;
+      const children = [].slice.call(dom.querySelectorAll(nextBinderState.wChildren));
+      enterStrape(strategy, callback, nextElId, children, dom);
     }
+  } else {
+    callback();
   }
 }
 

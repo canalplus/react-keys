@@ -21,7 +21,7 @@ export function _init(ops) {
 }
 
 export function addListener(callback, context) {
-  const id = Math.random().toString(36).substring(2, 5);
+  const id = Math.random().toString(36).substring(2, 10);
   keysListeners.push({
     id: id,
     callback: callback,

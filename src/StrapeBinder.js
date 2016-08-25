@@ -91,40 +91,22 @@ class StrapeBinder extends Component {
         this.props.id);
       switch (keyCode) {
         case LEFT:
-          block();
           this.performAction(C_LEFT, this.props.onLeft, this.props.onLeftExit);
           break;
         case RIGHT:
-          block();
           this.performAction(C_RIGHT, this.props.onRight, this.props.onRightExit);
           break;
         case ENTER:
-          if (this.props.onEnter) {
-            block();
-            this.prevDir = null;
-            execCb(this.props.onEnter, this.nextEl, this, this.props);
-          }
+          this.performCallback(this.props.onEnter);
           break;
         case UP:
-          if (this.props.onUpExit) {
-            block();
-            this.prevDir = null;
-            enter(this.props.onUpExit, this.nextEl.id);
-          }
+          this.performEnter(this.props.onUpExit);
           break;
         case DOWN:
-          if (this.props.onDownExit) {
-            block();
-            this.prevDir = null;
-            enter(this.props.onDownExit, this.nextEl.id);
-          }
+          this.performEnter(this.props.onDownExit);
           break;
         case BACK:
-          if (this.props.onBack) {
-            block();
-            this.prevDir = null;
-            execCb(this.props.onBack, this.nextEl, this, this.props);
-          }
+          this.performCallback(this.props.onBack);
           break;
         default:
           break;
@@ -132,7 +114,24 @@ class StrapeBinder extends Component {
     }
   }
 
+  performCallback(callback) {
+    if (callback) {
+      block();
+      this.prevDir = null;
+      execCb(callback, this.nextEl, this, this.props);
+    }
+  }
+
+  performEnter(callback) {
+    if (callback) {
+      block();
+      this.prevDir = null;
+      enter(callback, this.nextEl.id);
+    }
+  }
+
   performAction(dir, cb, exitCb) {
+    block();
     this.calculateNewState(dir);
     if (this.hasMoved) {
       this.marginLeft = this.props.strategy === 'bounds'
