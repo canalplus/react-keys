@@ -12,6 +12,12 @@ class Carousel extends Component {
 
   static get propTypes() {
     return {
+      children: React.PropTypes.oneOfType([
+        React.PropTypes.object,
+        React.PropTypes.array,
+      ]),
+      id: PropTypes.string.isRequired,
+      active: PropTypes.bool,
       index: PropTypes.number,
       size: PropTypes.number,
       speed: PropTypes.number,
@@ -33,6 +39,7 @@ class Carousel extends Component {
       size: 3,
       elWidth: 100,
       circular: true,
+      active: true,
       speed: 100,
       debounce: 82,
       className: 'carousel',

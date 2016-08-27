@@ -24,6 +24,10 @@ import { execCb } from './funcHandler';
 const Keys = React.createClass({
 
   propTypes: {
+    children: React.PropTypes.oneOfType([
+      React.PropTypes.object,
+      React.PropTypes.array,
+    ]),
     onBack: PropTypes.func,
     onDown: PropTypes.func,
     onUp: PropTypes.func,

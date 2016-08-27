@@ -1,4 +1,3 @@
-/* eslint no-unused-expressions:0 */
 import { execCb, enterTo } from '../src/funcHandler';
 import * as actions from '../src/redux/actions';
 import sinon from 'sinon';

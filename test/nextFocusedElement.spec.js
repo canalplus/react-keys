@@ -1,4 +1,3 @@
-/* eslint no-unused-expressions:0 */
 import { nextFocusedElement } from '../src/nextFocusedElement';
 import { createStore } from 'redux';
 

@@ -17,6 +17,10 @@ class Binder extends Component {
 
   static get propTypes() {
     return {
+      children: React.PropTypes.oneOfType([
+        React.PropTypes.object,
+        React.PropTypes.array,
+      ]),
       id: PropTypes.string.isRequired,
       selector: PropTypes.string,
       focusedElementId: PropTypes.string,

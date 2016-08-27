@@ -1,5 +1,3 @@
-/* eslint no-unused-expressions:0 */
-/* eslint no-unused-vars:0 */
 import React from 'react';
 import Basic from '../src/Basic';
 import { mount } from 'enzyme';

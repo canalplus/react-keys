@@ -96,13 +96,11 @@ export function _updateBinderState(binderId, binderState) {
 export function enterStrape(strategy, callback, nextElId, children, dom) {
   switch (strategy) {
     case EXIT_STRATEGY_MIRROR:
-      const leftElement = document.getElementById(nextElId);
-      const mirrorId = findMirrorExitId(leftElement, children);
-      _activeKeyBinder(callback, mirrorId, true);
+      _activeKeyBinder(callback,
+        findMirrorExitId(document.getElementById(nextElId), children), true);
       break;
     case EXIT_STRATEGY_START:
-      const startId = findStartExitId(children, dom);
-      _activeKeyBinder(callback, startId, true);
+      _activeKeyBinder(callback, findStartExitId(children, dom), true);
       break;
     case EXIT_STRATEGY_MEMORY:
       _activeKeyBinder(callback, null, true);

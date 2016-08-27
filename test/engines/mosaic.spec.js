@@ -1,4 +1,3 @@
-/* eslint no-unused-expressions:0 */
 import {
   findRightElement,
   findLeftElement,

@@ -1,4 +1,3 @@
-/* eslint no-unused-expressions:0 */
 import { flipflop, calculateNewState } from '../src/calculateNewState';
 import { C_UP, C_DOWN, C_LEFT, C_RIGHT } from '../src/constants';
 

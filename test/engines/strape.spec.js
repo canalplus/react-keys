@@ -1,5 +1,3 @@
-/* eslint no-unused-expressions:0 */
-/* eslint prefer-arrow-callback:0 */
 import {
   calculate,
   defineMarginLeft,

@@ -22,6 +22,10 @@ class StrapeBinder extends Component {
 
   static get propTypes() {
     return {
+      children: React.PropTypes.oneOfType([
+        React.PropTypes.object,
+        React.PropTypes.array,
+      ]),
       id: PropTypes.string.isRequired,
       focusedElementId: PropTypes.string,
       context: PropTypes.object,
@@ -46,6 +50,7 @@ class StrapeBinder extends Component {
         React.PropTypes.func,
       ]),
       strategy: PropTypes.string,
+      enterStrategy: PropTypes.string,
       gap: PropTypes.number,
       lastGap: PropTypes.number,
       circular: PropTypes.bool,

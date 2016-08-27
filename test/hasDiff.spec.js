@@ -1,4 +1,3 @@
-/* eslint no-unused-expressions:0 */
 import { hasDiff } from '../src/hasDiff';
 
 describe('hasDiff.js', () => {

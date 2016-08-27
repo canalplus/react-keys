@@ -1,4 +1,3 @@
-/* eslint no-unused-expressions:0 */
 import { keysActions, _register, trigger } from '../src/events';
 import sinon from 'sinon';
 

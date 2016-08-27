@@ -1,4 +1,3 @@
-/* eslint no-unused-expressions:0 */
 import * as actions from '../../src/redux/actions';
 import * as listener from '../../src/listener';
 import { createStore } from 'redux';

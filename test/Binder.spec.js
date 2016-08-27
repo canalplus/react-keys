@@ -1,5 +1,4 @@
-/* eslint no-unused-expressions:0 */
-/* eslint no-unused-vars:0 */
+/* eslint react/prop-types:0 */
 import React from 'react';
 import Binder from '../src/Binder';
 import { shallow, mount } from 'enzyme';

@@ -1,4 +1,3 @@
-/* eslint no-unused-expressions:0 */
 import { isActive } from '../src/isActive';
 import { createStore } from 'redux';
 
