@@ -51,9 +51,11 @@ class Carousel extends Component {
     super(props);
     this.listenerId = addListener(this.keysHandler, this);
     this.timeout = null;
+    this.sketch = [];
     this.movingCountDown = () => {
       this.timeout = setTimeout(() => _updateBinderState(props.id, { moving: false }), props.speed);
     };
+    this.state = { cursor: props.index };
   }
 
   componentWillMount() {
@@ -72,15 +74,9 @@ class Carousel extends Component {
   }
 
   initializeCarousel(children) {
-    const { id, index, size, circular } = this.props;
-    const indexs = build(children.map((el, i) => i), size + 4, this.getCursor(), circular);
+    const { id, index } = this.props;
     this.selectedId = children[index].props.id;
-    this.sketch = children.map((el, i) => {
-      if (indexs.indexOf(i) !== -1) {
-        return '';
-      }
-      return null;
-    });
+    this.sketch = children.map(() => '');
     _updateBinderState(id, {
       selectedId: this.selectedId,
       cursor: index,
@@ -101,13 +97,14 @@ class Carousel extends Component {
       cursor: cursor,
       moving: true,
     });
+    this.setState({ cursor: cursor });
     this.movingCountDown();
     execCb(this.props.onChange, this.selectedId, this, this.props);
   }
 
   keysHandler(keyCode) {
     if (isActive(globalStore, this.props) && !isBlocked()) {
-      const cursor = this.getCursor();
+      const { cursor } = this.state;
       switch (keyCode) {
         case LEFT:
           if (!this.props.circular && cursor === 0) return;
@@ -139,14 +136,11 @@ class Carousel extends Component {
     }
   }
 
-  getCursor() {
-    return globalStore.getState()['@@keys'].getBinder(this.props.id).cursor;
-  }
-
   render() {
     const { size, elWidth, speed, childrenClassName, circular, children, className } = this.props;
+    const { cursor } = this.state;
     const ids = children.map((el, index) => index);
-    const indexs = build(ids, size + 4, this.getCursor(), circular);
+    const indexs = build(ids, size + 4, cursor, circular);
     return <div className={className}>
       {children.map((el, index) => {
         if (indexs.indexOf(index) !== -1) {
