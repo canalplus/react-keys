@@ -2,7 +2,7 @@
 import React from 'react';
 import StrapeBinder from '../src/StrapeBinder';
 import { shallow, mount } from 'enzyme';
-import { DOWN, UP, BACK } from '../src/keys';
+import { DOWN, UP, BACK, LEFT, RIGHT } from '../src/keys';
 import * as actions from '../src/redux/actions';
 import * as listener from '../src/listener';
 import * as funcHandler from '../src/funcHandler';
@@ -22,6 +22,7 @@ describe('StrapeBinder.jsx', () => {
   it('should have right default props', () => {
     const keyBinder = mount(<StrapeBinder id="1"/>);
     keyBinder.props().strategy.should.equal('progressive');
+    keyBinder.props().position.should.equal(false);
     keyBinder.props().gap.should.equal(0);
     keyBinder.props().lastGap.should.equal(0);
     keyBinder.props().accuracy.should.equal(0);
@@ -132,7 +133,7 @@ describe('StrapeBinder.jsx', () => {
     this.mock(engine)
       .expects('calculateBounds')
       .once()
-      .withArgs(dir, strape.nextEl, strape.wrapperPosition, strape.marginLeft, strape.props);
+      .withArgs(dir, strape.nextEl, strape.wrapperPosition, strape.marginLeft, strape.marginTop, strape.props);
     strape.performAction(dir, cb, exitCb);
   }));
 
@@ -162,6 +163,7 @@ describe('StrapeBinder.jsx', () => {
       strape.nextEl = {
         id: 1,
         marginLeft: 0,
+        marginTop: 0
       };
       strape.props = {
         id: 1,
@@ -188,6 +190,7 @@ describe('StrapeBinder.jsx', () => {
     strape.nextEl = {
       id: 1,
       marginLeft: 0,
+      marginTop: 0
     };
     strape.props = {
       id: 1,
@@ -224,6 +227,25 @@ describe('StrapeBinder.jsx', () => {
     strape.nextEl.should.equal('1');
     strape.prevEl.should.equal('2');
     strape.prevDir.should.equal('right');
+    strape.hasMoved.should.be.true;
+  }));
+
+  it('should calculateNewState set new props to component with down', sinon.test(function() {
+    this.stub(calculation, 'calculateNewState').returns({
+      nextEl: '1',
+      prevEl: '2',
+      prevDir: 'down',
+      hasMoved: true,
+    });
+    const strape = new StrapeBinder();
+    expect(strape.nextEl).to.be.null;
+    expect(strape.prevEl).to.be.null;
+    expect(strape.prevDir).to.be.null;
+    strape.hasMoved.should.be.false;
+    strape.calculateNewState('up');
+    strape.nextEl.should.equal('1');
+    strape.prevEl.should.equal('2');
+    strape.prevDir.should.equal('down');
     strape.hasMoved.should.be.true;
   }));
 
@@ -273,6 +295,47 @@ describe('StrapeBinder.jsx', () => {
     strape.keysHandler(UP);
     expect(strape.prevDir).to.be.null;
   }));
+
+  it('should call enter and init prevDir on LEFT key with position true', sinon.test(function() {
+    this.mock(actions)
+        .expects('enter')
+        .once()
+        .withArgs('myLeft', 'nextEl2');
+    this.stub(active, 'isActive').returns(true);
+    this.stub(clock, 'isBlocked').returns(false);
+    const strape = new StrapeBinder();
+    strape.props = {
+      id: 1,
+      enterStrategy: 'bounds',
+      position:true,
+      onLeftExit: 'myLeft'
+    };
+    strape.nextEl = { id: 'nextEl2' };
+    strape.prevDir = 'down';
+    strape.keysHandler(LEFT);
+    expect(strape.prevDir).to.be.null;
+  }));
+
+  it('should call enter and init prevDir on RIGHT key with position true', sinon.test(function() {
+    this.mock(actions)
+        .expects('enter')
+        .once()
+        .withArgs('myRight', 'nextEl2');
+    this.stub(active, 'isActive').returns(true);
+    this.stub(clock, 'isBlocked').returns(false);
+    const strape = new StrapeBinder();
+    strape.props = {
+      id: 1,
+      enterStrategy: 'bounds',
+      position:true,
+      onRightExit: 'myRight'
+    };
+    strape.nextEl = { id: 'nextEl2' };
+    strape.prevDir = 'down';
+    strape.keysHandler(RIGHT);
+    expect(strape.prevDir).to.be.null;
+  }));
+
 
   it('should call enter and init prevDir on DOWN key', sinon.test(function() {
     this.mock(actions)
