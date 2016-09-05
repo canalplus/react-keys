@@ -1,37 +1,38 @@
 import { trigger } from '../events';
 import { hasDiff } from '../hasDiff';
-import { C_LEFT, C_RIGHT } from '../constants';
+import { C_LEFT, C_RIGHT, C_UP, C_DOWN } from '../constants';
 
-export function findMirrorExitId(leftElement, children) {
-  const leftPx = leftElement ? leftElement.getBoundingClientRect().left : 0;
+export function findMirrorExitId(leftElement, children, moved) {
+  const leftPx = leftElement ? leftElement.getBoundingClientRect()[moved] : 0;
   const nextFocusedId = children
     .map(el => {
       return {
         id: el.id,
-        diff: Math.abs(el.getBoundingClientRect().left - leftPx),
+        diff: Math.abs(el.getBoundingClientRect()[moved] - leftPx),
       };
     })
     .sort((a, b) => a.diff - b.diff);
   return nextFocusedId[0].id;
 }
 
-export function findStartExitId(children, dom) {
-  const leftContainer = dom.getBoundingClientRect().left;
+export function findStartExitId(children, dom, moved) {
+  const leftContainer = dom.getBoundingClientRect()[moved];
   const nextFocusedId = children
-    .map(el => {
-      return {
-        id: el.id,
-        left: el.getBoundingClientRect().left - leftContainer,
-      };
-    })
-    .filter(el => el.left > 0)
-    .sort((a, b) => a.left - b.left);
+      .map(el => {
+        return {
+          id: el.id,
+          [moved]: el.getBoundingClientRect()[moved] - leftContainer,
+        };
+      })
+      .filter(el => el[moved] > 0)
+      .sort((a, b) => a[moved] - b[moved]);
   return nextFocusedId[0].id;
 }
 
-export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, props) {
+export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props) {
   const element = document.getElementById(el.id).getBoundingClientRect();
   let marginLeft = initialMarginLeft;
+  let marginTop = initialMarginTop;
   const { gap, lastGap } = props;
   switch (dir) {
     case C_RIGHT:
@@ -46,36 +47,48 @@ export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, pro
         marginLeft = initialMarginLeft + element.left - wrapperPosition.left - bonus;
       }
       break;
+    case C_DOWN:
+      if (element.bottom > wrapperPosition.bottom) {
+        const bonus = el[C_DOWN] ? gap : lastGap;
+        marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + bonus;
+      }
+      break;
+    case C_UP:
+      if (element.top < wrapperPosition.top) {
+        const bonus = el[C_UP] ? gap : lastGap;
+        marginTop = initialMarginTop + element.top - wrapperPosition.top - bonus;
+      }
+      break;
     default:
       break;
   }
-  return marginLeft;
+  return props.position ? marginTop : marginLeft;
 }
 
-export function gapCorrection(card, wrapper, lastCard, options) {
+export function gapCorrection(card, wrapper, lastCard, options, moved, size) {
   let gap = card.id === lastCard.id ? options.lastGap : options.gap;
-  const maxSize = lastCard.left + lastCard.width;
-  if (card.width + card.left + gap > maxSize) {
-    const lastMarginLeft = lastCard.left + lastCard.width + options.lastGap
-      - (wrapper.width + wrapper.left);
-    const currentMarginLeft = card.left + card.width - (wrapper.width + wrapper.left);
+  const maxSize = lastCard[moved] + lastCard[size];
+  if (card[size] + card[moved] + gap > maxSize) {
+    const lastMarginLeft = lastCard[moved] + lastCard[size] + options.lastGap
+      - (wrapper[size] + wrapper[moved]);
+    const currentMarginLeft = card[moved] + card[size] - (wrapper[size] + wrapper[moved]);
     gap = lastMarginLeft - currentMarginLeft;
   }
   return gap;
 }
 
-export function defineMarginLeft(card, wrapper, marginLeft, lastCard, options) {
-  let margin = marginLeft;
-  const gap = gapCorrection(card, wrapper, lastCard, options);
-  if (card.width + card.left - wrapper.left >
-    wrapper.width + marginLeft - gap) {
+export function defineMargin(card, wrapper, marge, lastCard, options, moved, size) {
+  let margin = marge;
+  const gap = gapCorrection(card, wrapper, lastCard, options, moved, size);
+  if (card[size] + card[moved] - wrapper[moved] >
+    wrapper[size] + margin - gap) {
     switch (options.strategy) {
       case 'cut':
-        margin = card.left - wrapper.left + gap;
+        margin = card[moved] - wrapper[moved] + gap;
         break;
       case 'progressive':
       default:
-        margin = card.left + card.width - (wrapper.width + wrapper.left) + gap;
+        margin = card[moved] + card[size] - (wrapper[size] + wrapper[moved]) + gap;
     }
   }
   return margin;
@@ -106,16 +119,37 @@ export function findLeftElement(cards, index, circular) {
 }
 
 export function calculate(wrapper, cards, options) {
+  const moved = 'left';
+  const size = 'width';
   const builtList = [];
   let marginLeft = 0;
   const lastCard = cards[cards.length - 1];
   cards.forEach((card, index) => {
-    marginLeft = defineMarginLeft(card, wrapper, marginLeft, lastCard, options);
+    marginLeft = defineMargin(card, wrapper, marginLeft, lastCard, options, moved, size);
     const coords = {
       id: card.id,
       marginLeft: marginLeft,
       right: findRightElement(cards, index, options.circular),
       left: findLeftElement(cards, index, options.circular),
+    };
+    builtList.push(coords);
+  });
+  return builtList;
+}
+
+export function calculateVertical(wrapper, cards, options) {
+  const moved = 'top';
+  const size = 'height';
+  const builtList = [];
+  let marginTop = 0;
+  const lastCard = cards[cards.length - 1];
+  cards.forEach((card, index) => {
+    marginTop = defineMargin(card, wrapper, marginTop, lastCard, options, moved, size);
+    const coords = {
+      id: card.id,
+      marginTop: marginTop,
+      down: findRightElement(cards, index, options.circular),
+      up: findLeftElement(cards, index, options.circular),
     };
     builtList.push(coords);
   });
@@ -132,9 +166,20 @@ function buildCardStructure(card) {
   };
 }
 
+function buildCardVerticalStructure(card) {
+  const position = card.getBoundingClientRect();
+  return {
+    id: card.id,
+    bottom: position.bottom,
+    top: position.top,
+    height: position.height,
+  };
+}
+
 export function build(wrapperPosition, list, options) {
-  const cards = list.map(buildCardStructure);
-  return calculate(wrapperPosition, cards, options);
+  let cards;
+  options.position ? cards = list.map(buildCardVerticalStructure) : cards = list.map(buildCardStructure);
+  return options.position ? calculateVertical(wrapperPosition, cards, options) : calculate(wrapperPosition, cards, options);
 }
 
 export function createList(dom, children) {

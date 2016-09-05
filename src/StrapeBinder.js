@@ -1,8 +1,7 @@
-/* eslint no-unused-vars:0 */
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { UP, DOWN, LEFT, RIGHT, ENTER, BACK } from './keys';
-import { C_LEFT, C_RIGHT, STRAPE_TYPE } from './constants';
+import { C_LEFT, C_RIGHT, C_UP, C_DOWN, STRAPE_TYPE } from './constants';
 import { refresh, calculateBounds } from './engines/strape';
 import { isBlocked, block } from './clock';
 import { isActive } from './isActive';
@@ -31,6 +30,8 @@ class StrapeBinder extends Component {
       context: PropTypes.object,
       onRight: PropTypes.func,
       onLeft: PropTypes.func,
+      onUp: PropTypes.func,
+      onDown: PropTypes.func,
       onEnter: PropTypes.func,
       onBack: PropTypes.func,
       onLeftExit: React.PropTypes.oneOfType([
@@ -57,6 +58,7 @@ class StrapeBinder extends Component {
       wrapper: PropTypes.string,
       wChildren: PropTypes.string,
       active: PropTypes.bool,
+      position: PropTypes.bool
     };
   }
 
@@ -64,6 +66,7 @@ class StrapeBinder extends Component {
     return {
       strategy: 'progressive',
       enterStrategy: 'none',
+      position: false,
       gap: 0,
       lastGap: 0,
       accuracy: 0,
@@ -85,6 +88,7 @@ class StrapeBinder extends Component {
     this.prevDir = null;
     this.hasMoved = false;
     this.marginLeft = 0;
+    this.marginTop = 0;
   }
 
   keysHandler(keyCode) {
@@ -96,19 +100,19 @@ class StrapeBinder extends Component {
         this.props.id);
       switch (keyCode) {
         case LEFT:
-          this.performAction(C_LEFT, this.props.onLeft, this.props.onLeftExit);
+          this.props.position ? this.performEnter(this.props.onLeftExit) : this.performAction(C_LEFT, this.props.onLeft, this.props.onLeftExit);
           break;
         case RIGHT:
-          this.performAction(C_RIGHT, this.props.onRight, this.props.onRightExit);
+          this.props.position ? this.performEnter(this.props.onRightExit) : this.performAction(C_RIGHT, this.props.onRight, this.props.onRightExit);
           break;
         case ENTER:
           this.performCallback(this.props.onEnter);
           break;
         case UP:
-          this.performEnter(this.props.onUpExit);
+          this.props.position ? this.performAction(C_UP, this.props.onUp, this.props.onUpExit) : this.performEnter(this.props.onUpExit) ;
           break;
         case DOWN:
-          this.performEnter(this.props.onDownExit);
+          this.props.position ? this.performAction(C_DOWN, this.props.onDown, this.props.onDownExit) : this.performEnter(this.props.onDownExit);
           break;
         case BACK:
           this.performCallback(this.props.onBack);
@@ -139,16 +143,31 @@ class StrapeBinder extends Component {
     block();
     this.calculateNewState(dir);
     if (this.hasMoved) {
-      this.marginLeft = this.props.strategy === 'bounds'
-        ? calculateBounds(
-        dir,
-        this.nextEl,
-        this.wrapperPosition,
-        this.marginLeft,
-        this.props)
-        : this.nextEl.marginLeft;
-      updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft);
-      execCb(cb, this.nextEl, this, this.props);
+      if (this.props.position) {
+        this.marginTop = this.props.strategy === 'bounds'
+              ? calculateBounds(
+              dir,
+              this.nextEl,
+              this.wrapperPosition,
+              this.marginLeft,
+              this.marginTop,
+              this.props)
+              : this.nextEl.marginTop;
+            updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft, this.marginTop);
+            execCb(cb, this.nextEl, this, this.props);
+      } else {
+        this.marginLeft = this.props.strategy === 'bounds'
+              ? calculateBounds(
+              dir,
+              this.nextEl,
+              this.wrapperPosition,
+              this.marginLeft,
+              this.marginTop,
+              this.props)
+              : this.nextEl.marginLeft;
+            updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft, this.marginTop);
+            execCb(cb, this.nextEl, this, this.props);
+      }
     } else {
       enterTo(exitCb);
     }
@@ -167,6 +186,7 @@ class StrapeBinder extends Component {
         strategy: this.props.strategy,
         cicrular: this.props.circular,
         focusedElementId: this.props.focusedElementId,
+        position: this.props.position
       }
     );
 
@@ -182,7 +202,9 @@ class StrapeBinder extends Component {
         enterStrategy: this.props.enterStrategy,
         selectedId: this.nextEl.id,
         marginLeft: this.nextEl.marginLeft,
+        marginTop: this.nextEl.marginTop,
         wChildren: this.props.wChildren,
+        position: this.props.position
       });
     }
   }

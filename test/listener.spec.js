@@ -1,19 +1,27 @@
 import {
+  keysListeners,
+  fired,
   _init,
   cb,
+  cbRelease,
   addListener,
   removeListener,
   globalStore,
-  keysListeners,
 } from '../src/listener';
+import * as actions from '../src/redux/actions';
+
 import sinon from 'sinon';
 
 describe('listener.js', () => {
-  beforeEach(() => {
+  let clock;
+
+  beforeEach(function() {
+    clock = sinon.useFakeTimers();
     keysListeners.length = 0;
   });
 
-  afterEach(() => {
+  afterEach(function() {
+    clock.restore();
     keysListeners.length = 0;
   });
 
@@ -21,24 +29,56 @@ describe('listener.js', () => {
     globalStore.should.be.instanceOf(Function);
   });
 
-  it('shoule cb call all listeners cb', () => {
+  it('should cbRelease call all listeners cb', () => {
     const mySpy = sinon.spy();
     const keyCode = 'keyCode';
     const internCb = {
       id: 0,
       callback: mySpy,
-      context: {},
+      context: {props: { id:'1' } },
+    };
+    keysListeners.push(internCb);
+    cbRelease(keyCode);
+    fired.should.equal(false);
+  });
+
+  it('should cb call all listeners cb', sinon.test(function() {
+    const mySpy = this.spy();
+    const updateBinderStateSpy = this.spy(actions, '_updateBinderState');
+    const keyCode = 'keyCode';
+    const internCb = {
+      id: 0,
+      callback: mySpy,
+      context: {props: { id:'1' } },
     };
     keysListeners.push(internCb);
     cb(keyCode);
+    this.clock.tick(1000);
+    fired.should.equal(true);
     mySpy.should.have.been.calledOnce;
     mySpy.should.have.been.calledWith(keyCode);
-  });
+    updateBinderStateSpy.should.have.been.calledOnce;
+    updateBinderStateSpy.should.have.been.calledWith('1');
+  }));
+
+  it('should cb and cbRelease call all listeners cb', sinon.test(function() {
+    const mySpy = this.spy();
+    const keyCode = 'keyCode';
+    const internCb = {
+      id: 0,
+      callback: mySpy,
+      context: {props: { id:'1' } },
+    };
+    keysListeners.push(internCb);
+    cb(keyCode);
+    cbRelease(keyCode);
+    this.clock.tick(1000);
+    fired.should.equal(false);
+  }));
 
   it('_init should listen on keydown event by default', sinon.test(function() {
     this.mock(document).expects('addEventListener')
-      .once()
-      .withArgs('keydown', cb);
+      .twice()
     _init();
   }));
 

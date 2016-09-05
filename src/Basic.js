@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { isBlocked, block } from './clock';
 import { addListener, removeListener } from './listener';
+import { addKeyBinderToStore, updateSelectedId, _updateBinderState } from './redux/actions';
 import {
   BACK,
   DOWN,
@@ -21,36 +22,36 @@ import {
 } from './keys';
 import { execCb } from './funcHandler';
 
-const Keys = React.createClass({
+class Keys extends Component {
 
-  propTypes: {
-    children: React.PropTypes.oneOfType([
-      React.PropTypes.object,
-      React.PropTypes.array,
-    ]),
-    onBack: PropTypes.func,
-    onDown: PropTypes.func,
-    onUp: PropTypes.func,
-    onDigit: PropTypes.func,
-    onMenu: PropTypes.func,
-    onNextProg: PropTypes.func,
-    onPrevProg: PropTypes.func,
-    active: PropTypes.bool,
-  },
+  static get propTypes() {
+    return {
+      children: React.PropTypes.oneOfType([
+        React.PropTypes.object,
+        React.PropTypes.array,
+      ]),
+      id: PropTypes.string.isRequired,
+      onBack: PropTypes.func,
+      onDown: PropTypes.func,
+      onUp: PropTypes.func,
+      onDigit: PropTypes.func,
+      onMenu: PropTypes.func,
+      onNextProg: PropTypes.func,
+      onPrevProg: PropTypes.func,
+      active: PropTypes.bool,
+    }
+  }
 
-  getDefaultProps() {
+  static get defaultProps() {
     return {
       active: true,
-    };
-  },
+    }
+  }
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
     this.listenerId = addListener(this.keysHandler, this);
-  },
-
-  componentWillUnmount() {
-    removeListener(this.listenerId);
-  },
+  }
 
   keysHandler(keyCode) {
     if (this.props.active && !isBlocked()) {
@@ -88,19 +89,29 @@ const Keys = React.createClass({
         default:
       }
     }
-  },
+  }
 
   performAction(callback, keyCode) {
     if (callback) {
       block();
       execCb(callback, keyCode, this, this.props);
     }
-  },
+  }
+
+  componentDidMount() {
+    addKeyBinderToStore(this.props.id, this.props.active);
+		_updateBinderState(this.props.id, {
+			press: false
+  });
+  }
+
+	componentWillUnmount() {
+		removeListener(this.listenerId);
+	}
 
   render() {
     return <div id="hoc-keys">{this.props.children}</div>;
-  },
-
-});
+  }
+}
 
 export default Keys;
