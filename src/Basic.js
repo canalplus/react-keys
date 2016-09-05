@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { isBlocked, block } from './clock';
 import { addListener, removeListener } from './listener';
-import { addKeyBinderToStore, updateSelectedId, _updateBinderState } from './redux/actions';
+import { addKeyBinderToStore, _updateBinderState } from './redux/actions';
 import {
   BACK,
   DOWN,
