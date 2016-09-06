@@ -11,7 +11,7 @@ const initialKeysSate = {
     binderId: null,
   },
   getBinder: function(binderId) {
-    return this[binderId] || { marginLeft: 0 };
+    return this[binderId] || { marginLeft: 0, marginTop: 0 };
   },
 };
 

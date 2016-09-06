@@ -147,7 +147,7 @@ describe('redux/actions.js', () => {
       const store = createStore((state = {
         '@@keys': {
           current: { selectedId: null },
-          binderId: { active: false, selectedId: 1, marginLeft: 0 },
+          binderId: { active: false, selectedId: 1, marginLeft: 0, marginTop: 0 },
         },
       }) => state);
       listener._init({ store: store }); // init globalStore
@@ -157,11 +157,11 @@ describe('redux/actions.js', () => {
         .withArgs({
           type: actions.UPDATE_SELECTED_KEY,
           state: {
-            binderId: { active: false, selectedId: 2, marginLeft: 10 },
+            binderId: { active: false, selectedId: 2, marginLeft: 10, marginTop: 0 },
             current: { selectedId: 2 },
           },
         });
-      actions.updateSelectedId('binderId', 2, 10);
+      actions.updateSelectedId('binderId', 2, 10, 0);
     }));
   });
 
