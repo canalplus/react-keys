@@ -109,7 +109,7 @@ class StrapeBinder extends Component {
           this.performCallback(this.props.onEnter);
           break;
         case UP:
-          this.props.position ? this.performAction(C_UP, this.props.onUp, this.props.onUpExit) : this.performEnter(this.props.onUpExit) ;
+          this.props.position ? this.performAction(C_UP, this.props.onUp, this.props.onUpExit) : this.performEnter(this.props.onUpExit);
           break;
         case DOWN:
           this.props.position ? this.performAction(C_DOWN, this.props.onDown, this.props.onDownExit) : this.performEnter(this.props.onDownExit);
@@ -144,33 +144,27 @@ class StrapeBinder extends Component {
     this.calculateNewState(dir);
     if (this.hasMoved) {
       if (this.props.position) {
-        this.marginTop = this.props.strategy === 'bounds'
-              ? calculateBounds(
-              dir,
-              this.nextEl,
-              this.wrapperPosition,
-              this.marginLeft,
-              this.marginTop,
-              this.props)
-              : this.nextEl.marginTop;
-            updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft, this.marginTop);
-            execCb(cb, this.nextEl, this, this.props);
+        this.marginTop = this.calculateMargin(dir, this.nextEl.marginTop);
       } else {
-        this.marginLeft = this.props.strategy === 'bounds'
-              ? calculateBounds(
-              dir,
-              this.nextEl,
-              this.wrapperPosition,
-              this.marginLeft,
-              this.marginTop,
-              this.props)
-              : this.nextEl.marginLeft;
-            updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft, this.marginTop);
-            execCb(cb, this.nextEl, this, this.props);
+        this.marginLeft = this.calculateMargin(dir, this.nextEl.marginLeft);
       }
+      updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft, this.marginTop);
+      execCb(cb, this.nextEl, this, this.props);
     } else {
       enterTo(exitCb);
     }
+  }
+
+  calculateMargin(dir, margin) {
+    return this.props.strategy === 'bounds'
+      ? calculateBounds(
+      dir,
+      this.nextEl,
+      this.wrapperPosition,
+      this.marginLeft,
+      this.marginTop,
+      this.props)
+      : margin;
   }
 
   refreshState() {
