@@ -3,6 +3,7 @@ import React from 'react';
 import StrapeBinder from '../src/StrapeBinder';
 import { shallow, mount } from 'enzyme';
 import { DOWN, UP, BACK, LEFT, RIGHT } from '../src/keys';
+import { HORIZONTAL, VERTICAL } from '../src/constants';
 import * as actions from '../src/redux/actions';
 import * as listener from '../src/listener';
 import * as funcHandler from '../src/funcHandler';
@@ -22,7 +23,7 @@ describe('StrapeBinder.jsx', () => {
   it('should have right default props', () => {
     const keyBinder = mount(<StrapeBinder id="1"/>);
     keyBinder.props().strategy.should.equal('progressive');
-    keyBinder.props().position.should.equal(false);
+    keyBinder.props().position.should.equal(HORIZONTAL);
     keyBinder.props().gap.should.equal(0);
     keyBinder.props().lastGap.should.equal(0);
     keyBinder.props().accuracy.should.equal(0);
@@ -307,7 +308,7 @@ describe('StrapeBinder.jsx', () => {
     strape.props = {
       id: 1,
       enterStrategy: 'bounds',
-      position:true,
+      position: VERTICAL,
       onLeftExit: 'myLeft'
     };
     strape.nextEl = { id: 'nextEl2' };
@@ -327,7 +328,7 @@ describe('StrapeBinder.jsx', () => {
     strape.props = {
       id: 1,
       enterStrategy: 'bounds',
-      position:true,
+      position: VERTICAL,
       onRightExit: 'myRight'
     };
     strape.nextEl = { id: 'nextEl2' };

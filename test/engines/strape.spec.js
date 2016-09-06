@@ -12,7 +12,7 @@ import {
   findMirrorExitId,
   findStartExitId,
 } from '../../src/engines/strape';
-import { C_RIGHT, C_LEFT, C_DOWN, C_UP } from '../../src/constants';
+import { C_RIGHT, C_LEFT, C_DOWN, C_UP, VERTICAL } from '../../src/constants';
 import { expect } from 'chai';
 import jsdom from 'jsdom';
 import sinon from 'sinon';
@@ -247,7 +247,7 @@ describe('engine/strape.js', () => {
             const wrapperPosition = {top: 0, bottom: 400};
             const initialMarginLeft = 0;
             const initialMarginTop = 0;
-            const props = {gap: 0, position: true };
+            const props = { gap: 0, position: VERTICAL };
             calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(50);
           }));
       it('should return same marginLeft on left action when next card in inside bounds',
@@ -277,7 +277,7 @@ describe('engine/strape.js', () => {
             const wrapperPosition = { top: 0, bottom: 400 };
             const initialMarginLeft = 0;
             const initialMarginTop = 100;
-            const props = { gap: 0, position: true };
+            const props = { gap: 0, position: VERTICAL };
             calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(100);
           }));
       it('should calculate new marginLeft with new el is out of bounds on left',
@@ -307,7 +307,7 @@ describe('engine/strape.js', () => {
             const wrapperPosition = { top: 100, bottom: 400 };
             const initialMarginLeft = 0;
             const initialMarginTop = 100;
-            const props = { gap: 0, position: true };
+            const props = { gap: 0, position: VERTICAL };
             calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(50);
           }));
       it('should add gap on right when out of bounds',
@@ -337,7 +337,7 @@ describe('engine/strape.js', () => {
             const wrapperPosition = { top: 100, bottom: 400 };
             const initialMarginLeft = 0;
             const initialMarginTop = 0;
-            const props = { gap: 10, position: true };
+            const props = { gap: 10, position: VERTICAL };
             calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(60);
           }));
       it('should sub gap on left when out of bounds',
@@ -367,7 +367,7 @@ describe('engine/strape.js', () => {
             const wrapperPosition = { top: 100, bottom: 400 };
             const initialMarginLeft = 0;
             const initialMarginTop = 100;
-            const props = { gap: 10, position: true };
+            const props = { gap: 10, position: VERTICAL };
             calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(40);
           }));
       it('should add lastGap when lastElement on left', sinon.test(function() {
@@ -395,7 +395,7 @@ describe('engine/strape.js', () => {
         const wrapperPosition = { top: 100, bottom: 400 };
         const initialMarginLeft = 0;
         const initialMarginTop = 100;
-        const props = { gap: 10, lastGap: 20, position: true };
+        const props = { gap: 10, lastGap: 20, position: VERTICAL };
         calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(30);
       }));
       it('should add lastGap when lastElement on right', sinon.test(function() {
@@ -423,7 +423,7 @@ describe('engine/strape.js', () => {
         const wrapperPosition = { top: 100, bottom: 400 };
         const initialMarginLeft = 0;
         const initialMarginTop = 0;
-        const props = { gap: 10, lastGap: 20, position: true };
+        const props = { gap: 10, lastGap: 20, position: VERTICAL };
         calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(70);
       }));
     });

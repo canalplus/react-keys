@@ -37,16 +37,16 @@ const PureStrape = ({selectedId, marginTop, binderId, active, onRightExit, onLef
     return (
         <div style={{ display: 'inline-block', marginRight: '10px'}}>
             <StrapeBinder
-                id={binderId}
-                active={active}
-                enterStrategy="start"
-                strategy="bounds"
-                wrapper="#wrapper"
-                position={true}
-                gap={10}
-                lastGap={10}
-                onLeftExit={onLeftExit}
-                onRightExit={onRightExit}>
+              id={binderId}
+              active={active}
+              enterStrategy="start"
+              strategy="bounds"
+              wrapper="#wrapper"
+              position='vertical'
+              gap={10}
+              lastGap={10}
+              onLeftExit={onLeftExit}
+              onRightExit={onRightExit}>
                 <div id="wrapper">
                     <ul style={listStyle}>
                         <Card id={binderId + '-1'} active={active && selectedId === binderId + '-1'}/>

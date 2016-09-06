@@ -1,6 +1,6 @@
 import { trigger } from '../events';
 import { hasDiff } from '../hasDiff';
-import { C_LEFT, C_RIGHT, C_UP, C_DOWN } from '../constants';
+import { C_LEFT, C_RIGHT, C_UP, C_DOWN, VERTICAL } from '../constants';
 
 export function findMirrorExitId(leftElement, children, moved) {
   const leftPx = leftElement ? leftElement.getBoundingClientRect()[moved] : 0;
@@ -30,6 +30,7 @@ export function findStartExitId(children, dom, moved) {
 }
 
 export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props) {
+  const isVertical = props.position === VERTICAL;
   const element = document.getElementById(el.id).getBoundingClientRect();
   let marginLeft = initialMarginLeft;
   let marginTop = initialMarginTop;
@@ -62,7 +63,7 @@ export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, ini
     default:
       break;
   }
-  return props.position ? marginTop : marginLeft;
+  return isVertical ? marginTop : marginLeft;
 }
 
 export function gapCorrection(card, wrapper, lastCard, options, moved, size) {
@@ -177,9 +178,9 @@ function buildCardVerticalStructure(card) {
 }
 
 export function build(wrapperPosition, list, options) {
-  let cards;
-  options.position ? cards = list.map(buildCardVerticalStructure) : cards = list.map(buildCardStructure);
-  return options.position ? calculateVertical(wrapperPosition, cards, options) : calculate(wrapperPosition, cards, options);
+  const isVertical = options.position === VERTICAL;
+  const cards = isVertical ? list.map(buildCardVerticalStructure) : list.map(buildCardStructure);
+  return isVertical ? calculateVertical(wrapperPosition, cards, options) : calculate(wrapperPosition, cards, options);
 }
 
 export function createList(dom, children) {

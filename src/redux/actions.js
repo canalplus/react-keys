@@ -5,6 +5,7 @@ import {
   EXIT_STRATEGY_START,
   EXIT_STRATEGY_MEMORY,
   BINDER_TYPE,
+  VERTICAL,
 } from '../constants';
 
 export const NAME = '@@keys';
@@ -94,8 +95,8 @@ export function _updateBinderState(binderId, binderState) {
 }
 
 export function enterStrape(position, strategy, callback, nextElId, children, dom) {
-  let moved;
-  position ? moved ='top' : moved = 'left';
+  const isVertical = position === VERTICAL;
+  const moved = isVertical ? 'top' : 'left';
   switch (strategy) {
     case EXIT_STRATEGY_MIRROR:
       _activeKeyBinder(callback,
