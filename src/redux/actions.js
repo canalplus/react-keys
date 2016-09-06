@@ -5,6 +5,7 @@ import {
   EXIT_STRATEGY_START,
   EXIT_STRATEGY_MEMORY,
   BINDER_TYPE,
+  VERTICAL,
 } from '../constants';
 
 export const NAME = '@@keys';
@@ -93,14 +94,16 @@ export function _updateBinderState(binderId, binderState) {
   }
 }
 
-export function enterStrape(strategy, callback, nextElId, children, dom) {
+export function enterStrape(position, strategy, callback, nextElId, children, dom) {
+  const isVertical = position === VERTICAL;
+  const moved = isVertical ? 'top' : 'left';
   switch (strategy) {
     case EXIT_STRATEGY_MIRROR:
       _activeKeyBinder(callback,
-        findMirrorExitId(document.getElementById(nextElId), children), true);
+        findMirrorExitId(document.getElementById(nextElId), children, moved), true);
       break;
     case EXIT_STRATEGY_START:
-      _activeKeyBinder(callback, findStartExitId(children, dom), true);
+      _activeKeyBinder(callback, findStartExitId(children, dom, moved), true)
       break;
     case EXIT_STRATEGY_MEMORY:
       _activeKeyBinder(callback, null, true);
@@ -126,23 +129,25 @@ export function enter(callback, nextElId) {
   if (typeof callback === 'string') {
     const nextBinderState = globalStore.getState()[NAME][callback] || {};
     const strategy = nextBinderState.enterStrategy;
+    const position = nextBinderState.position;
     if (nextBinderState.type === BINDER_TYPE) {
       enterBinder(strategy, callback);
     } else {
       const dom = document.getElementById(callback) || document;
       const children = [].slice.call(dom.querySelectorAll(nextBinderState.wChildren));
-      enterStrape(strategy, callback, nextElId, children, dom);
+      enterStrape(position, strategy, callback, nextElId, children, dom);
     }
   } else {
     callback();
   }
 }
 
-export function updateSelectedId(binderId, selectedId, marginLeft) {
+export function updateSelectedId(binderId, selectedId, marginLeft, marginTop) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
     newState[binderId].selectedId = selectedId;
     newState[binderId].marginLeft = marginLeft;
+    newState[binderId].marginTop = marginTop;
     newState.current.selectedId = selectedId;
     globalStore.dispatch({
       type: UPDATE_SELECTED_KEY,
