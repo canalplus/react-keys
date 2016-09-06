@@ -4,6 +4,7 @@ import { addListener, removeListener } from './listener';
 import {
   BACK,
   DOWN,
+  ENTER,
   UP,
   MENU,
   NEXTPROG,
@@ -29,6 +30,7 @@ const Keys = React.createClass({
       React.PropTypes.array,
     ]),
     onBack: PropTypes.func,
+    onEnter: PropTypes.func,
     onDown: PropTypes.func,
     onUp: PropTypes.func,
     onDigit: PropTypes.func,
@@ -57,6 +59,9 @@ const Keys = React.createClass({
       switch (keyCode) {
         case BACK:
           this.performAction(this.props.onBack);
+          break;
+        case ENTER:
+          this.performAction(this.props.onEnter);
           break;
         case UP:
           this.performAction(this.props.onUp);
