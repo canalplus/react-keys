@@ -34,6 +34,7 @@ class Keys extends Component {
       id: PropTypes.string.isRequired,
       onBack: PropTypes.func,
       onDown: PropTypes.func,
+      onEnter: PropTypes.func,
       onUp: PropTypes.func,
       onDigit: PropTypes.func,
       onMenu: PropTypes.func,
@@ -104,14 +105,14 @@ class Keys extends Component {
 
   componentDidMount() {
     addKeyBinderToStore(this.props.id, this.props.active);
-		_updateBinderState(this.props.id, {
-			press: false
-  });
+    _updateBinderState(this.props.id, {
+      press: false
+    });
   }
 
-	componentWillUnmount() {
-		removeListener(this.listenerId);
-	}
+  componentWillUnmount() {
+    removeListener(this.listenerId);
+  }
 
   render() {
     return <div id="hoc-keys">{this.props.children}</div>;
