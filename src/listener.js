@@ -1,5 +1,6 @@
 /* eslint import/no-mutable-exports:0 */
 import {  _updateBinderState } from './redux/actions';
+import { LONG_PRESS_TIMEOUT } from './constants';
 
 export let keysListeners = [];
 export let globalStore = function() {
@@ -14,7 +15,7 @@ export function cb(e) {
     for (const listener of keysListeners) {
       pressTimeout = setTimeout(() => {
         _updateBinderState(listener.context.props.id, { press: fired })
-      }, 1000);
+      }, LONG_PRESS_TIMEOUT);
       listener.callback.call(listener.context, keyCode);
     }
   }

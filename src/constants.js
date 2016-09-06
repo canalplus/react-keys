@@ -9,3 +9,5 @@ export const EXIT_STRATEGY_MEMORY = 'memory';
 
 export const BINDER_TYPE = 'binder';
 export const STRAPE_TYPE = 'strape';
+
+export const LONG_PRESS_TIMEOUT = 500;
