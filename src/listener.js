@@ -10,13 +10,15 @@ export let pressTimeout = null;
 
 export function cb(e) {
   const keyCode = e.keyCode ? e.keyCode : e;
+  for (const listener of keysListeners) {
+    listener.callback.call(listener.context, keyCode);
+  }
   if (!fired) {
     fired = true;
     for (const listener of keysListeners) {
       pressTimeout = setTimeout(() => {
         _updateBinderState(listener.context.props.id, { press: fired })
       }, LONG_PRESS_TIMEOUT);
-      listener.callback.call(listener.context, keyCode);
     }
   }
 }
