@@ -5,6 +5,7 @@ import { addKeyBinderToStore } from './redux/actions';
 import {
   BACK,
   DOWN,
+  ENTER,
   UP,
   MENU,
   NEXTPROG,
@@ -33,6 +34,7 @@ class Keys extends Component {
       id: PropTypes.string.isRequired,
       onBack: PropTypes.func,
       onDown: PropTypes.func,
+      onEnter: PropTypes.func,
       onUp: PropTypes.func,
       onDigit: PropTypes.func,
       onMenu: PropTypes.func,
@@ -58,6 +60,9 @@ class Keys extends Component {
       switch (keyCode) {
         case BACK:
           this.performAction(this.props.onBack);
+          break;
+        case ENTER:
+          this.performAction(this.props.onEnter);
           break;
         case UP:
           this.performAction(this.props.onUp);
@@ -102,9 +107,9 @@ class Keys extends Component {
     addKeyBinderToStore(this.props.id, this.props.active);
   }
 
-	componentWillUnmount() {
-		removeListener(this.listenerId);
-	}
+  componentWillUnmount() {
+    removeListener(this.listenerId);
+  }
 
   render() {
     return <div id="hoc-keys">{this.props.children}</div>;
