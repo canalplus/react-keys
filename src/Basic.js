@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { isBlocked, block } from './clock';
 import { addListener, removeListener } from './listener';
-import { addKeyBinderToStore, _updateBinderState } from './redux/actions';
+import { addKeyBinderToStore } from './redux/actions';
 import {
   BACK,
   DOWN,
@@ -105,9 +105,6 @@ class Keys extends Component {
 
   componentDidMount() {
     addKeyBinderToStore(this.props.id, this.props.active);
-    _updateBinderState(this.props.id, {
-      press: false
-    });
   }
 
   componentWillUnmount() {

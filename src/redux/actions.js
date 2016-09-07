@@ -65,6 +65,7 @@ export function addKeyBinderToStore(binderId, active) {
       newState[binderId] = {};
       newState[binderId].id = binderId;
       newState[binderId].active = active;
+      newState[binderId].press = false;
       globalStore.dispatch({
         type: ADD_KEYBINDER_TO_STORE,
         state: newState,
