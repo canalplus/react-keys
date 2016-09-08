@@ -17,3 +17,15 @@ export const NUM6 = 54;
 export const NUM7 = 55;
 export const NUM8 = 56;
 export const NUM9 = 57;
+export const NUMERICS = {
+  48: 0,
+  49: 1,
+  50: 2,
+  51: 3,
+  52: 4,
+  53: 5,
+  54: 6,
+  55: 7,
+  56: 8,
+  57: 9
+};
