@@ -40,24 +40,32 @@ export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, ini
   switch (dir) {
     case C_RIGHT:
       if (last.right > wrapperPosition.right && element.right + gap > wrapperPosition.right) {
+        marginLeft = initialMarginLeft + element.right - wrapperPosition.right + gap;
+      } else if (element.right + gap > wrapperPosition.right) {
         const bonus = el[C_RIGHT] ? gap : lastGap;
         marginLeft = initialMarginLeft + element.right - wrapperPosition.right + bonus;
       }
       break;
     case C_LEFT:
       if (first.left < wrapperPosition.left && element.left < wrapperPosition.left + gap) {
+        marginLeft = initialMarginLeft + element.left - wrapperPosition.left - gap;
+      } else if (element.left < wrapperPosition.left + gap) {
         const bonus = el[C_LEFT] ? gap : lastGap;
         marginLeft = initialMarginLeft + element.left - wrapperPosition.left - bonus;
       }
       break;
     case C_DOWN:
       if (last.bottom > wrapperPosition.bottom && element.bottom + gap > wrapperPosition.bottom) {
+        marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + gap;
+      } else if (element.bottom + gap > wrapperPosition.bottom) {
         const bonus = el[C_DOWN] ? gap : lastGap;
         marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + bonus;
       }
       break;
     case C_UP:
       if (first.top < wrapperPosition.top && element.top < wrapperPosition.top + gap) {
+        marginTop = initialMarginTop + element.top - wrapperPosition.top - gap;
+      } else if (element.top < wrapperPosition.top + gap) {
         const bonus = el[C_UP] ? gap : firstGap;
         marginTop = initialMarginTop + element.top - wrapperPosition.top - bonus;
       }

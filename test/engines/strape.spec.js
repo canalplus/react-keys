@@ -408,7 +408,7 @@ describe('engine/strape.js', () => {
         const firstCard = { id: 9, right: 'a2' };
         const lastCard = { id: 11, right: 'a4' };
         const props = { gap: 10, lastGap: 20 };
-        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(30);
+        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(40);
       }));
       it('should add lastGap when lastElement on top', sinon.test(function() {
         this.stub(document, 'getElementById').returns({
@@ -424,7 +424,7 @@ describe('engine/strape.js', () => {
         const firstCard = { id: 9, right: 'a2' };
         const lastCard = { id: 11, right: 'a4' };
         const props = { gap: 10, lastGap: 20, firstGap: 20, position: VERTICAL };
-        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(30);
+        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(40);
       }));
       it('should add lastGap when lastElement on right', sinon.test(function() {
         this.stub(document, 'getElementById').returns({
@@ -440,7 +440,7 @@ describe('engine/strape.js', () => {
         const firstCard = { id: 9, right: 'a2' };
         const lastCard = { id: 11, right: 'a4' };
         const props = { gap: 10, lastGap: 20 };
-        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(70);
+        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(60);
       }));
       it('should add lastGap when lastElement on bottom', sinon.test(function() {
         this.stub(document, 'getElementById').returns({
@@ -456,7 +456,7 @@ describe('engine/strape.js', () => {
         const firstCard = { id: 9, right: 'a2' };
         const lastCard = { id: 11, right: 'a4' };
         const props = { gap: 10, lastGap: 20, firstGap: 20, position: VERTICAL };
-        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(70);
+        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(60);
       }));
     });
   });
