@@ -53,6 +53,7 @@ class StrapeBinder extends Component {
 			strategy: PropTypes.string,
 			enterStrategy: PropTypes.string,
 			gap: PropTypes.number,
+			firstGap: PropTypes.number,
 			lastGap: PropTypes.number,
 			circular: PropTypes.bool,
 			wrapper: PropTypes.string,
@@ -152,13 +153,15 @@ class StrapeBinder extends Component {
 	}
 
 	performAction(dir, cb, exitCb) {
+		const lastCard = this.elements[this.elements.length - 1];
+		const firstCard = this.elements[0];
 		block();
 		this.calculateNewState(dir);
 		if (this.hasMoved) {
 			if (this.isVertical()) {
-				this.marginTop = this.calculateMargin(dir, this.nextEl.marginTop);
+				this.marginTop = this.calculateMargin(dir, this.nextEl.marginTop, lastCard, firstCard);
 			} else {
-				this.marginLeft = this.calculateMargin(dir, this.nextEl.marginLeft);
+				this.marginLeft = this.calculateMargin(dir, this.nextEl.marginLeft, lastCard, firstCard);
 			}
 			updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft, this.marginTop);
 			execCb(cb, this.nextEl, this, this.props);
@@ -167,7 +170,7 @@ class StrapeBinder extends Component {
 		}
 	}
 
-	calculateMargin(dir, margin) {
+	calculateMargin(dir, margin, lastCard, firstCard) {
 		return this.props.strategy === 'bounds'
 			? calculateBounds(
 			dir,
@@ -175,7 +178,9 @@ class StrapeBinder extends Component {
 			this.wrapperPosition,
 			this.marginLeft,
 			this.marginTop,
-			this.props)
+			this.props,
+			lastCard,
+			firstCard)
 			: margin;
 	}
 

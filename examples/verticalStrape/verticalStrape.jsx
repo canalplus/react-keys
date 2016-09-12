@@ -44,6 +44,7 @@ const PureStrape = ({selectedId, marginTop, binderId, active, onRightExit, onLef
               wrapper="#wrapper"
               position='vertical'
               gap={10}
+              firstGap={10}
               lastGap={10}
               onLeftExit={onLeftExit}
               onRightExit={onRightExit}>

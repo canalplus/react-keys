@@ -202,8 +202,10 @@ describe('engine/strape.js', () => {
             const wrapperPosition = {left: 0, right: 400};
             const initialMarginLeft = 0;
             const initialMarginTop = 0;
+            const firstCard = { id: 9, right: 'a2' };
+            const lastCard = { id: 11, right: 'a4' };
             const props = {gap: 0, position: true};
-            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(0);
+            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(0);
           }));
       it('should return same marginTop on down action when next card in inside bounds',
           sinon.test(function () {
@@ -217,8 +219,10 @@ describe('engine/strape.js', () => {
             const wrapperPosition = {top: 0, bottom: 400};
             const initialMarginLeft = 0;
             const initialMarginTop = 0;
+            const firstCard = { id: 9, right: 'a2' };
+            const lastCard = { id: 11, right: 'a4' };
             const props = {gap: 0, position: true};
-            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(0);
+            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(0);
           }));
       it('should calculate new marginLeft with new el is out of bounds on right',
           sinon.test(function () {
@@ -232,8 +236,10 @@ describe('engine/strape.js', () => {
             const wrapperPosition = {left: 0, right: 400};
             const initialMarginLeft = 0;
             const initialMarginTop = 0;
+            const firstCard = { id: 9, right: 'a2' };
+            const lastCard = { id: 11, right: 'a4' };
             const props = {gap: 0};
-            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(50);
+            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(50);
           }));
       it('should calculate new marginTop with new el is out of bounds on bottom',
           sinon.test(function () {
@@ -247,8 +253,10 @@ describe('engine/strape.js', () => {
             const wrapperPosition = {top: 0, bottom: 400};
             const initialMarginLeft = 0;
             const initialMarginTop = 0;
-            const props = { gap: 0, position: VERTICAL };
-            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(50);
+            const firstCard = { id: 9, right: 'a2' };
+            const lastCard = { id: 11, right: 'a4' };
+            const props = { gap: 0, lastGap: 0, position: VERTICAL };
+            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(50);
           }));
       it('should return same marginLeft on left action when next card in inside bounds',
         sinon.test(function() {
@@ -262,8 +270,10 @@ describe('engine/strape.js', () => {
           const wrapperPosition = { left: 0, right: 400 };
           const initialMarginLeft = 100;
           const initialMarginTop = 0;
+          const firstCard = { id: 9, right: 'a2' };
+          const lastCard = { id: 11, right: 'a4' };
           const props = { gap: 0 };
-          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(100);
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(100);
         }));
       it('should return same marginTop on up action when next card in inside bounds',
           sinon.test(function() {
@@ -277,8 +287,10 @@ describe('engine/strape.js', () => {
             const wrapperPosition = { top: 0, bottom: 400 };
             const initialMarginLeft = 0;
             const initialMarginTop = 100;
+            const firstCard = { id: 9, right: 'a2' };
+            const lastCard = { id: 11, right: 'a4' };
             const props = { gap: 0, position: VERTICAL };
-            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(100);
+            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(100);
           }));
       it('should calculate new marginLeft with new el is out of bounds on left',
         sinon.test(function() {
@@ -292,8 +304,10 @@ describe('engine/strape.js', () => {
           const wrapperPosition = { left: 100, right: 400 };
           const initialMarginLeft = 100;
           const initialMarginTop = 0;
+          const firstCard = { id: 9, right: 'a2' };
+          const lastCard = { id: 11, right: 'a4' };
           const props = { gap: 0 };
-          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(50);
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(50);
         }));
       it('should calculate new marginTop with new el is out of bounds on up',
           sinon.test(function() {
@@ -306,9 +320,11 @@ describe('engine/strape.js', () => {
             const el = { id: 10, up: 'a3' };
             const wrapperPosition = { top: 100, bottom: 400 };
             const initialMarginLeft = 0;
-            const initialMarginTop = 100;
-            const props = { gap: 0, position: VERTICAL };
-            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(50);
+            const initialMarginTop = 100
+            const firstCard = { id: 9, right: 'a2' };
+            const lastCard = { id: 11, right: 'a4' };
+            const props = { gap: 0, lastGap: 0, firstGap: 0, position: VERTICAL };
+            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(50);
           }));
       it('should add gap on right when out of bounds',
         sinon.test(function() {
@@ -322,8 +338,10 @@ describe('engine/strape.js', () => {
           const wrapperPosition = { left: 100, right: 400 };
           const initialMarginLeft = 0;
           const initialMarginTop = 0;
+          const firstCard = { id: 9, right: 'a2' };
+          const lastCard = { id: 11, right: 'a4' };
           const props = { gap: 10 };
-          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(60);
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(60);
         }));
       it('should add gap on bottom when out of bounds',
           sinon.test(function() {
@@ -337,8 +355,10 @@ describe('engine/strape.js', () => {
             const wrapperPosition = { top: 100, bottom: 400 };
             const initialMarginLeft = 0;
             const initialMarginTop = 0;
-            const props = { gap: 10, position: VERTICAL };
-            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(60);
+            const firstCard = { id: 9, right: 'a2' };
+            const lastCard = { id: 11, right: 'a4' };
+            const props = { gap: 10, lastGap: 0, firstGap: 0, position: VERTICAL };
+            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(60);
           }));
       it('should sub gap on left when out of bounds',
         sinon.test(function() {
@@ -352,8 +372,10 @@ describe('engine/strape.js', () => {
           const wrapperPosition = { left: 100, right: 400 };
           const initialMarginLeft = 100;
           const initialMarginTop = 0;
+          const firstCard = { id: 9, right: 'a2' };
+          const lastCard = { id: 11, right: 'a4' };
           const props = { gap: 10 };
-          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(40);
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(40);
         }));
       it('should sub gap on top when out of bounds',
           sinon.test(function() {
@@ -367,8 +389,10 @@ describe('engine/strape.js', () => {
             const wrapperPosition = { top: 100, bottom: 400 };
             const initialMarginLeft = 0;
             const initialMarginTop = 100;
-            const props = { gap: 10, position: VERTICAL };
-            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(40);
+            const firstCard = { id: 9, right: 'a2' };
+            const lastCard = { id: 11, right: 'a4' };
+            const props = { gap: 10, lastGap: 0, firstGap: 0, position: VERTICAL };
+            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(40);
           }));
       it('should add lastGap when lastElement on left', sinon.test(function() {
         this.stub(document, 'getElementById').returns({
@@ -381,8 +405,10 @@ describe('engine/strape.js', () => {
         const wrapperPosition = { left: 100, right: 400 };
         const initialMarginLeft = 100;
         const initialMarginTop = 0;
+        const firstCard = { id: 9, right: 'a2' };
+        const lastCard = { id: 11, right: 'a4' };
         const props = { gap: 10, lastGap: 20 };
-        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(30);
+        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(30);
       }));
       it('should add lastGap when lastElement on top', sinon.test(function() {
         this.stub(document, 'getElementById').returns({
@@ -395,8 +421,10 @@ describe('engine/strape.js', () => {
         const wrapperPosition = { top: 100, bottom: 400 };
         const initialMarginLeft = 0;
         const initialMarginTop = 100;
-        const props = { gap: 10, lastGap: 20, position: VERTICAL };
-        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(30);
+        const firstCard = { id: 9, right: 'a2' };
+        const lastCard = { id: 11, right: 'a4' };
+        const props = { gap: 10, lastGap: 20, firstGap: 20, position: VERTICAL };
+        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(30);
       }));
       it('should add lastGap when lastElement on right', sinon.test(function() {
         this.stub(document, 'getElementById').returns({
@@ -409,8 +437,10 @@ describe('engine/strape.js', () => {
         const wrapperPosition = { left: 100, right: 400 };
         const initialMarginLeft = 0;
         const initialMarginTop = 0;
+        const firstCard = { id: 9, right: 'a2' };
+        const lastCard = { id: 11, right: 'a4' };
         const props = { gap: 10, lastGap: 20 };
-        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(70);
+        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(70);
       }));
       it('should add lastGap when lastElement on bottom', sinon.test(function() {
         this.stub(document, 'getElementById').returns({
@@ -423,8 +453,10 @@ describe('engine/strape.js', () => {
         const wrapperPosition = { top: 100, bottom: 400 };
         const initialMarginLeft = 0;
         const initialMarginTop = 0;
-        const props = { gap: 10, lastGap: 20, position: VERTICAL };
-        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props).should.equal(70);
+        const firstCard = { id: 9, right: 'a2' };
+        const lastCard = { id: 11, right: 'a4' };
+        const props = { gap: 10, lastGap: 20, firstGap: 20, position: VERTICAL };
+        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(70);
       }));
     });
   });

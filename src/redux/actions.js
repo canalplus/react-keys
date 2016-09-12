@@ -84,7 +84,7 @@ export function _updateBinderState(binderId, binderState) {
     newState[binderId] = { ...newState[binderId], ...binderState };
     if (newState[binderId].active) {
       newState.current = {
-        selectedId: binderState.selectedId,
+        selectedId: binderState.selectedId ? binderState.selectedId : newState[binderId].selectedId,
         binderId: binderId,
       };
     }
