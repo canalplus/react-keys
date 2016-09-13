@@ -29,34 +29,48 @@ export function findStartExitId(children, dom, moved) {
   return nextFocusedId[0].id;
 }
 
-export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props) {
+export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard) {
   const isVertical = props.position === VERTICAL;
+  const first = document.getElementById(firstCard.id).getBoundingClientRect();
   const element = document.getElementById(el.id).getBoundingClientRect();
+  const last = document.getElementById(lastCard.id).getBoundingClientRect();
   let marginLeft = initialMarginLeft;
   let marginTop = initialMarginTop;
-  const { gap, lastGap } = props;
+  const { gap, firstGap, lastGap } = props;
   switch (dir) {
     case C_RIGHT:
-      if (element.right > wrapperPosition.right) {
+      if (last.right > wrapperPosition.right && element.right + gap > wrapperPosition.right) {
+        marginLeft = initialMarginLeft + element.right - wrapperPosition.right + gap;
+      } else if (element.right + gap > wrapperPosition.right) {
         const bonus = el[C_RIGHT] ? gap : lastGap;
         marginLeft = initialMarginLeft + element.right - wrapperPosition.right + bonus;
       }
       break;
     case C_LEFT:
-      if (element.left < wrapperPosition.left) {
+      if (first.left < wrapperPosition.left && element.left < wrapperPosition.left + gap) {
+        marginLeft = initialMarginLeft + element.left - wrapperPosition.left - gap;
+      } else if (element.left < wrapperPosition.left + gap) {
         const bonus = el[C_LEFT] ? gap : lastGap;
         marginLeft = initialMarginLeft + element.left - wrapperPosition.left - bonus;
       }
       break;
     case C_DOWN:
-      if (element.bottom > wrapperPosition.bottom) {
+      if (last.bottom > wrapperPosition.bottom && element.bottom + gap > wrapperPosition.bottom) {
+        if (Math.abs(initialMarginTop) === lastGap) {
+          marginTop = element.bottom - wrapperPosition.bottom + gap;
+        } else {
+          marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + gap;
+        }
+      } else if (element.bottom + gap > wrapperPosition.bottom) {
         const bonus = el[C_DOWN] ? gap : lastGap;
         marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + bonus;
       }
       break;
     case C_UP:
-      if (element.top < wrapperPosition.top) {
-        const bonus = el[C_UP] ? gap : lastGap;
+      if (first.top < wrapperPosition.top && element.top < wrapperPosition.top + gap) {
+        marginTop = initialMarginTop + element.top - wrapperPosition.top - gap;
+      } else if (element.top < wrapperPosition.top + gap) {
+        const bonus = el[C_UP] ? gap : firstGap;
         marginTop = initialMarginTop + element.top - wrapperPosition.top - bonus;
       }
       break;
@@ -82,7 +96,7 @@ export function defineMargin(card, wrapper, marge, lastCard, options, moved, siz
   let margin = marge;
   const gap = gapCorrection(card, wrapper, lastCard, options, moved, size);
   if (card[size] + card[moved] - wrapper[moved] >
-    wrapper[size] + margin - gap) {
+    wrapper[size] + margin + gap) {
     switch (options.strategy) {
       case 'cut':
         margin = card[moved] - wrapper[moved] + gap;
