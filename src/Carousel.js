@@ -145,17 +145,17 @@ class Carousel extends Component {
       position: 'absolute',
       overflow: 'hidden',
     }}>
-      {children.map((el, index) => {
-        if (indexs.indexOf(index) !== -1) {
-          const x = (indexs.indexOf(index) - 2) * elWidth;
-          return <div key={index} className={childrenClassName} style={{
-            transform: `translate3d(${x}px, 0, 0)`,
-            transition: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 'none' : `transform ${speed}ms`,
-            willChange: "transform",
-            opacity: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 0 : 1,
-          }}>{el}</div>;
+      {indexs.map((index) => {
+        if (index === null) {
+          return;
         }
-        return null;
+        const x = (indexs.indexOf(index) - 2) * elWidth;
+        return <div key={index} className={childrenClassName} style={{
+          transform: `translate3d(${x}px, 0, 0)`,
+          transition: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 'none' : `transform ${speed}ms`,
+          willChange: "transform",
+          opacity: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 0 : 1,
+        }}>{children[index]}</div>;
       })}
     </div>;
   }
