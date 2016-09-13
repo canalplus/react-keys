@@ -410,21 +410,29 @@ describe('engine/strape.js', () => {
         const props = { gap: 10, lastGap: 20 };
         calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(40);
       }));
-      it('should add lastGap when lastElement on top', sinon.test(function() {
+      it('should add firstGap when lastElement on top', sinon.test(function() {
+        let i = 0;
         this.stub(document, 'getElementById').returns({
           getBoundingClientRect: () => {
-            return { top: 50, bottom: 150 };
-          },
+            switch (++i) {
+              case 1:
+                return { top: 18, bottom: 118 };
+              case 2:
+                return { top: 18, bottom: 118 };
+              case 3:
+                return { top: 1558, bottom: 1658 };
+            }
+          }
         });
         const dir = C_UP;
-        const el = { id: 10, up: undefined };
-        const wrapperPosition = { top: 100, bottom: 400 };
+        const firstCard = { id: 9, up: undefined };
+        const el = { id: 9, up: undefined };
+        const wrapperPosition = { top: 8, bottom: 458 };
         const initialMarginLeft = 0;
-        const initialMarginTop = 100;
-        const firstCard = { id: 9, right: 'a2' };
-        const lastCard = { id: 11, right: 'a4' };
-        const props = { gap: 10, lastGap: 20, firstGap: 20, position: VERTICAL };
-        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(40);
+        const initialMarginTop = 0;
+        const lastCard = { id: 10 };
+        const props = { gap: 120, firstGap: 100, lastGap: 10, position: VERTICAL }
+        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(-90);
       }));
       it('should add lastGap when lastElement on right', sinon.test(function() {
         this.stub(document, 'getElementById').returns({
@@ -443,20 +451,28 @@ describe('engine/strape.js', () => {
         calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(60);
       }));
       it('should add lastGap when lastElement on bottom', sinon.test(function() {
+        let i = 0;
         this.stub(document, 'getElementById').returns({
           getBoundingClientRect: () => {
-            return { top: 450, bottom: 450 };
-          },
+            switch (++i) {
+              case 1:
+                return { top: -1192, bottom: -1092 };
+              case 2:
+                return { top: 348, bottom: 448 };
+              case 3:
+                return { top: 348, bottom: 448 };
+            }
+          }
         });
         const dir = C_DOWN;
         const el = { id: 10, down: undefined };
-        const wrapperPosition = { top: 100, bottom: 400 };
+        const wrapperPosition = { top: 8, bottom: 458 };
         const initialMarginLeft = 0;
-        const initialMarginTop = 0;
+        const initialMarginTop = 1210;
         const firstCard = { id: 9, right: 'a2' };
-        const lastCard = { id: 11, right: 'a4' };
-        const props = { gap: 10, lastGap: 20, firstGap: 20, position: VERTICAL };
-        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(60);
+        const lastCard = { id: 10, down: undefined };
+        const props = { gap: 120, lastGap: 10, firstGap: 100, position: VERTICAL };
+        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(1210);
       }));
     });
   });

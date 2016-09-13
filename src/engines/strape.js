@@ -31,9 +31,9 @@ export function findStartExitId(children, dom, moved) {
 
 export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard) {
   const isVertical = props.position === VERTICAL;
-  const last = document.getElementById(lastCard.id).getBoundingClientRect();
   const first = document.getElementById(firstCard.id).getBoundingClientRect();
   const element = document.getElementById(el.id).getBoundingClientRect();
+  const last = document.getElementById(lastCard.id).getBoundingClientRect();
   let marginLeft = initialMarginLeft;
   let marginTop = initialMarginTop;
   const { gap, firstGap, lastGap } = props;
@@ -56,7 +56,11 @@ export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, ini
       break;
     case C_DOWN:
       if (last.bottom > wrapperPosition.bottom && element.bottom + gap > wrapperPosition.bottom) {
-        marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + gap;
+        if (Math.abs(initialMarginTop) === lastGap) {
+          marginTop = element.bottom - wrapperPosition.bottom + gap;
+        } else {
+          marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + gap;
+        }
       } else if (element.bottom + gap > wrapperPosition.bottom) {
         const bonus = el[C_DOWN] ? gap : lastGap;
         marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + bonus;
