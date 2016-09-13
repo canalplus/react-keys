@@ -141,13 +141,16 @@ class Carousel extends Component {
     const { cursor } = this.state;
     const ids = children.map((el, index) => index);
     const indexs = build(ids, size + 4, cursor, circular);
-    return <div className={className}>
+    return <div className={className} style={{
+      position: 'absolute',
+      overflow: 'hidden',
+    }}>
       {children.map((el, index) => {
         if (indexs.indexOf(index) !== -1) {
           const x = (indexs.indexOf(index) - 2) * elWidth;
           return <div key={index} className={childrenClassName} style={{
             transform: `translate3d(${x}px, 0, 0)`,
-            transition: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? `transform ${speed}ms` : 'none',
+            transition: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 'none' : `transform ${speed}ms`,
             willChange: "transform",
             opacity: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 0 : 1,
           }}>{el}</div>;
