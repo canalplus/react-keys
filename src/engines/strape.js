@@ -43,7 +43,9 @@ export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, ini
         marginLeft = initialMarginLeft + element.right - wrapperPosition.right + gap;
       } else if (element.right + gap > wrapperPosition.right) {
         const bonus = el[C_RIGHT] ? gap : lastGap;
-        marginLeft = initialMarginLeft + element.right - wrapperPosition.right + bonus;
+        if (!el[C_RIGHT]) {
+          marginLeft = initialMarginLeft + element.right - wrapperPosition.right + bonus;
+        }
       }
       break;
     case C_LEFT:
@@ -51,13 +53,12 @@ export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, ini
         marginLeft = initialMarginLeft + element.left - wrapperPosition.left - gap;
       } else if (element.left < wrapperPosition.left + gap) {
         const bonus = el[C_LEFT] ? gap : lastGap;
-        marginLeft = initialMarginLeft + element.left - wrapperPosition.left - bonus;
+        if (!el[C_LEFT]) {
+          marginLeft = initialMarginLeft + element.left - wrapperPosition.left - bonus;
+        }
       }
       break;
     case C_DOWN:
-      if (initialMarginTop < 0) {
-        marginTop = 0;
-      }
       if (last.bottom > wrapperPosition.bottom && element.bottom + gap > wrapperPosition.bottom) {
         if (initialMarginTop < 0) {
           marginTop = 0;
@@ -66,7 +67,8 @@ export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, ini
         }
       } else if (element.bottom + gap > wrapperPosition.bottom) {
         if (!el[C_DOWN]) {
-          marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + lastGap;
+          const bonus = el[C_DOWN] ? gap : lastGap;
+          marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + bonus;
         }
       }
       break;
@@ -75,7 +77,8 @@ export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, ini
         marginTop = initialMarginTop + element.top - wrapperPosition.top - gap;
       } else if (element.top < wrapperPosition.top + gap) {
         if (!el[C_UP]) {
-          marginTop = initialMarginTop + element.top - wrapperPosition.top - firstGap;
+          const bonus = el[C_UP] ? gap : firstGap;
+          marginTop = initialMarginTop + element.top - wrapperPosition.top - bonus;
         }
       }
       break;

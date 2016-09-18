@@ -70,6 +70,7 @@ class StrapeBinder extends Component {
 			position: HORIZONTAL,
 			gap: 0,
 			lastGap: 0,
+			firstGap: 0,
 			accuracy: 0,
 			circular: false,
 			wrapper: 'ul',
