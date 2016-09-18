@@ -63,21 +63,22 @@ class StrapeBinder extends Component {
     };
   }
 
-  static get defaultProps() {
-    return {
-      strategy: 'progressive',
-      enterStrategy: 'none',
-      position: HORIZONTAL,
-      gap: 0,
-      lastGap: 0,
-      accuracy: 0,
-      circular: false,
-      wrapper: 'ul',
-      wChildren: 'li',
-      active: false,
-      context: {},
-    };
-  }
+	static get defaultProps() {
+		return {
+			strategy: 'progressive',
+			enterStrategy: 'none',
+			position: HORIZONTAL,
+			gap: 0,
+			lastGap: 0,
+			firstGap: 0,
+			accuracy: 0,
+			circular: false,
+			wrapper: 'ul',
+			wChildren: 'li',
+			active: false,
+			context: {},
+		};
+	}
 
   constructor(props) {
     super(props);
