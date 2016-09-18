@@ -432,7 +432,7 @@ describe('engine/strape.js', () => {
         const initialMarginTop = 0;
         const lastCard = { id: 10 };
         const props = { gap: 120, firstGap: 100, lastGap: 10, position: VERTICAL }
-        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(-110);
+        calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(-90);
       }));
       it('should add lastGap when lastElement on right', sinon.test(function() {
         this.stub(document, 'getElementById').returns({
