@@ -13,6 +13,7 @@ export const ACTIVE_KEYBINDER = [NAME, '/ACTIVE_KEYBINDER'].join('');
 export const ADD_KEYBINDER_TO_STORE = [NAME, '/ADD_KEYBINDER_TO_STORE'].join('');
 export const UPDATE_SELECTED_KEY = [NAME, '/UPDATE_SELECTED_KEY'].join('');
 export const UPDATE_BINDER_STATE = [NAME, '/UPDATE_BINDER_STATE'].join('');
+export const UPDATE_PRESS_STATUS = [NAME, '/UPDATE_PRESS_STATUS'].join('');
 
 export function clone(obj) {
   const cloneObject = {};
@@ -154,5 +155,17 @@ export function updateSelectedId(binderId, selectedId, marginLeft, marginTop) {
       type: UPDATE_SELECTED_KEY,
       state: newState,
     });
+  }
+}
+
+export function updatePressStatus(press, keyCode = null) {
+  if (globalStore.dispatch) {
+    if (globalStore.getState()[NAME]['PRESS'].press !== press) {
+      globalStore.dispatch({
+        type: UPDATE_PRESS_STATUS,
+        press: press,
+        keyCode: keyCode,
+      });
+    }
   }
 }
