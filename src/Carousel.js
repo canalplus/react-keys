@@ -1,12 +1,13 @@
 /* eslint no-unused-vars:0 */
 import React, { Component, PropTypes } from 'react';
 import { build, getNext, getPrev } from './engines/carousel';
-import { addListener, removeListener, globalStore } from './listener';
+import { addListener, removeListener } from './listener';
 import { isBlocked, block } from './clock';
 import { isActive } from './isActive';
 import { execCb } from './funcHandler';
 import { addKeyBinderToStore, _updateBinderState } from './redux/actions';
 import { LEFT, RIGHT, DOWN, UP, ENTER } from './keys';
+import { CAROUSEL_TYPE } from './constants';
 
 class Carousel extends Component {
 
@@ -60,7 +61,7 @@ class Carousel extends Component {
 
   componentWillMount() {
     const { id, active, children } = this.props;
-    addKeyBinderToStore(id, active);
+    addKeyBinderToStore(id, active, CAROUSEL_TYPE);
     if (children.length !== 0) {
       this.initializeCarousel(children);
     }

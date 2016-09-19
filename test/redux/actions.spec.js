@@ -102,7 +102,7 @@ describe('redux/actions.js', () => {
           type: actions.ADD_KEYBINDER_TO_STORE,
           state: {
             binderId: { active: false },
-            binderId2: { active: false, id: 'binderId2', press: false },
+            binderId2: { active: false, id: 'binderId2', type: undefined },
             current: {},
           },
         });
@@ -123,7 +123,7 @@ describe('redux/actions.js', () => {
           type: actions.ADD_KEYBINDER_TO_STORE,
           state: {
             binderId: { active: false },
-            binderId2: { active: true, id: 'binderId2', press: false },
+            binderId2: { active: true, id: 'binderId2', type: undefined },
             current: {},
           },
         });

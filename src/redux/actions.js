@@ -6,6 +6,7 @@ import {
   EXIT_STRATEGY_START,
   EXIT_STRATEGY_MEMORY,
   BINDER_TYPE,
+  KEYS_TYPE,
   VERTICAL,
 } from '../constants';
 
@@ -36,8 +37,10 @@ export function bindersKeys(newState) {
 export function _activeKeyBinder(binderId, id, memory = false) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
-    for (const key of bindersKeys(newState)) {
-      newState[key].active = false;
+    if (newState[binderId] && newState[binderId].type !== KEYS_TYPE) {
+      for (const key of bindersKeys(newState)) {
+        newState[key].active = false;
+      }
     }
     if (bindersKeys(newState).some(key => key === binderId)) {
       newState[binderId].active = true;
@@ -59,14 +62,14 @@ export function _activeKeyBinder(binderId, id, memory = false) {
   }
 }
 
-export function addKeyBinderToStore(binderId, active) {
+export function addKeyBinderToStore(binderId, active, type) {
   if (globalStore.dispatch) {
     const newState = clone(globalStore.getState()[NAME]);
     if (!bindersKeys(newState).some(key => key === binderId)) {
       newState[binderId] = {};
       newState[binderId].id = binderId;
+      newState[binderId].type = type;
       newState[binderId].active = active;
-      newState[binderId].press = false;
       globalStore.dispatch({
         type: ADD_KEYBINDER_TO_STORE,
         state: newState,

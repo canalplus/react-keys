@@ -22,6 +22,7 @@ import {
   NUM9,
 } from './keys';
 import { execCb } from './funcHandler';
+import { KEYS_TYPE } from './constants';
 
 class Keys extends Component {
 
@@ -104,7 +105,7 @@ class Keys extends Component {
   }
 
   componentDidMount() {
-    addKeyBinderToStore(this.props.id, this.props.active);
+    addKeyBinderToStore(this.props.id, this.props.active, KEYS_TYPE);
   }
 
   componentWillUnmount() {

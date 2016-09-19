@@ -208,7 +208,6 @@ class StrapeBinder extends Component {
       _updateBinderState(this.props.id, {
         id: this.props.id,
         elements: this.elements,
-        type: STRAPE_TYPE,
         enterStrategy: this.props.enterStrategy,
         selectedId: this.nextEl.id,
         marginLeft: this.nextEl.marginLeft,
@@ -229,7 +228,7 @@ class StrapeBinder extends Component {
   }
 
   componentDidMount() {
-    addKeyBinderToStore(this.props.id, this.props.active);
+    addKeyBinderToStore(this.props.id, this.props.active, STRAPE_TYPE);
     this.refreshState();
   }
 

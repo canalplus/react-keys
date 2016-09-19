@@ -135,7 +135,6 @@ class Binder extends Component {
       this.elements = elements;
       _updateBinderState(this.props.id, {
         id: this.props.id,
-        type: BINDER_TYPE,
         enterStrategy: this.props.enterStrategy,
         elements: this.elements,
         selectedId: this.nextEl.id,
@@ -153,7 +152,7 @@ class Binder extends Component {
   }
 
   componentDidMount() {
-    addKeyBinderToStore(this.props.id, this.props.active);
+    addKeyBinderToStore(this.props.id, this.props.active, BINDER_TYPE);
     this.refreshState();
   }
 
