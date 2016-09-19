@@ -25,8 +25,8 @@ describe('listener.js', () => {
     keysListeners.length = 0;
   });
 
-  it('globalStore should be a function', () => {
-    globalStore.should.be.instanceOf(Function);
+  it('globalStore should be an object', () => {
+    globalStore.should.be.instanceOf(Object);
   });
 
   it('should cbRelease call all listeners cb', () => {
@@ -35,7 +35,7 @@ describe('listener.js', () => {
     const internCb = {
       id: 0,
       callback: mySpy,
-      context: {props: { id:'1' } },
+      context: { props: { id: '1' } },
     };
     keysListeners.push(internCb);
     cbRelease(keyCode);
@@ -49,7 +49,7 @@ describe('listener.js', () => {
     const internCb = {
       id: 0,
       callback: mySpy,
-      context: {props: { id:'1' } },
+      context: { props: { id: '1' } },
     };
     keysListeners.push(internCb);
     cb(keyCode);
@@ -67,7 +67,7 @@ describe('listener.js', () => {
     const internCb = {
       id: 0,
       callback: mySpy,
-      context: {props: { id:'1' } },
+      context: { props: { id: '1' } },
     };
     keysListeners.push(internCb);
     cb(keyCode);

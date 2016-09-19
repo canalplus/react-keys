@@ -1,25 +1,31 @@
 import { nextFocusedElement } from '../src/nextFocusedElement';
+import { globalStore } from '../src/listener';
 import { NAME } from '../src/constants';
-import { createStore } from 'redux';
+import sinon from 'sinon';
+import { expect } from 'chai';
 
 describe('nextFocusedElement.js', () => {
+  it('should throw error when state does not exists', sinon.test(function() {
+    this.stub(globalStore, 'getState').returns({});
+    expect(() => nextFocusedElement({}, [], '')).to.throw(Error);
+  }));
   it('should return current element when no store', () => {
     const el = { id: '2' };
     const elements = [{ id: '1' }, { id: '2' }];
-    nextFocusedElement(el, () => null, elements, '1').should.equal(el);
+    nextFocusedElement(el, elements, '1').should.equal(el);
   });
-  it('should return new element from selectedId when having a store', () => {
+  it('should return new element from selectedId when having a store', sinon.test(function() {
+    this.stub(globalStore, 'getState').returns({ [NAME]: { 1: { selectedId: '2' } } });
     const el1 = { id: '1' };
     const el2 = { id: '2' };
     const elements = [el1, el2];
-    const store = createStore((state = { [NAME]: { 1: { selectedId: '2' } } }) => state);
-    nextFocusedElement(el1, store, elements, '1').should.equal(el2);
-  });
-  it('should return current element when having a store but not found element', () => {
+    nextFocusedElement(el1, elements, '1').should.equal(el2);
+  }));
+  it('should return current element when having a store but not found element', sinon.test(function() {
+    this.stub(globalStore, 'getState').returns({ [NAME]: { 1: { selectedId: '3' } } });
     const el1 = { id: '1' };
     const el2 = { id: '2' };
     const elements = [el1, el2];
-    const store = createStore((state = { [NAME]: { 1: { selectedId: '3' } } }) => state);
-    nextFocusedElement(el1, store, elements, '1').should.equal(el1);
-  });
+    nextFocusedElement(el1, elements, '1').should.equal(el1);
+  }));
 });
