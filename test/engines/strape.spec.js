@@ -209,18 +209,26 @@ describe('engine/strape.js', () => {
           }));
       it('should return same marginTop on down action when next card in inside bounds',
           sinon.test(function () {
+            let i = 0;
             this.stub(document, 'getElementById').returns({
               getBoundingClientRect: () => {
-                return {top: 100, bottom: 200};
-              },
+                switch (++i) {
+                  case 1:
+                    return { top: 0, bottom: 100 };
+                  case 2:
+                    return { top: 100, bottom: 200 };
+                  case 3:
+                    return { top: 200, bottom: 300 };
+                }
+              }
             });
             const dir = C_DOWN;
-            const el = {id: 10, down: 'a3'};
+            const el = { id: 10 };
             const wrapperPosition = {top: 0, bottom: 400};
             const initialMarginLeft = 0;
             const initialMarginTop = 0;
-            const firstCard = { id: 9, right: 'a2' };
-            const lastCard = { id: 11, right: 'a4' };
+            const firstCard = { id: 9 };
+            const lastCard = { id: 11 };
             const props = {gap: 0, position: true};
             calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(0);
           }));
@@ -241,23 +249,106 @@ describe('engine/strape.js', () => {
             const props = {gap: 0};
             calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(50);
           }));
-      it('should calculate new marginTop with new el is out of bounds on bottom',
+      it('should calculate new marginTop with lastGap with new el is out of bounds on bottom and is the last element',
           sinon.test(function () {
+            let i = 0;
             this.stub(document, 'getElementById').returns({
               getBoundingClientRect: () => {
-                return {top: 350, bottom: 450};
-              },
+                switch (++i) {
+                  case 1:
+                    return { top: 300, bottom: 400 };
+                  case 2:
+                    return { top: 400, bottom: 500 };
+                  case 3:
+                    return { top: 400, bottom: 500 };
+                }
+              }
             });
             const dir = C_DOWN;
-            const el = {id: 10, down: 'a3'};
+            const el = { id: 11, down: undefined };
             const wrapperPosition = {top: 0, bottom: 400};
             const initialMarginLeft = 0;
             const initialMarginTop = 0;
-            const firstCard = { id: 9, right: 'a2' };
-            const lastCard = { id: 11, right: 'a4' };
-            const props = { gap: 0, lastGap: 0, position: VERTICAL };
-            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(50);
+            const firstCard = { id: 9, down: 'a10' };
+            const lastCard = { id: 11, down: undefined };
+            const props = { gap: 0, lastGap: 10, position: VERTICAL };
+            calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(110);
           }));
+      it('should calculate new marginTop without lastGap with new el is out of bounds on bottom and is the last element',
+        sinon.test(function() {
+          let i = 0;
+          this.stub(document, 'getElementById').returns({
+            getBoundingClientRect: () => {
+              switch (++i) {
+                case 1:
+                  return { top: 300, bottom: 400 };
+                case 2:
+                  return { top: 400, bottom: 500 };
+                case 3:
+                  return { top: 400, bottom: 500 };
+              }
+            }
+          });
+          const dir = C_DOWN;
+          const el = { id: 11, down: undefined };
+          const wrapperPosition = { top: 0, bottom: 400 };
+          const initialMarginLeft = 0;
+          const initialMarginTop = 0;
+          const firstCard = { id: 9, down: 'a10' };
+          const lastCard = { id: 11, down: undefined };
+          const props = { gap: 0, lastGap: 0, position: VERTICAL };
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(100);
+        }));
+      it('should calculate new marginTop with lastGap with new el is out of bounds on bottom and is not the last element',
+        sinon.test(function() {
+          let i = 0;
+          this.stub(document, 'getElementById').returns({
+            getBoundingClientRect: () => {
+              switch (++i) {
+                case 1:
+                  return { top: 300, bottom: 400 };
+                case 2:
+                  return { top: 400, bottom: 500 };
+                case 3:
+                  return { top: 600, bottom: 700 };
+              }
+            }
+          });
+          const dir = C_DOWN;
+          const el = { id: 11, down: 'a11' };
+          const wrapperPosition = { top: 0, bottom: 400 };
+          const initialMarginLeft = 0;
+          const initialMarginTop = 0;
+          const firstCard = { id: 9, down: 'a10' };
+          const lastCard = { id: 11, down: undefined };
+          const props = { gap: 0, lastGap: 10, position: VERTICAL };
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(100);
+        }));
+      it('should calculate new marginTop without lastGap with new el is out of bounds on bottom and is not the last element',
+        sinon.test(function() {
+          let i = 0;
+          this.stub(document, 'getElementById').returns({
+            getBoundingClientRect: () => {
+              switch (++i) {
+                case 1:
+                  return { top: 300, bottom: 400 };
+                case 2:
+                  return { top: 400, bottom: 500 };
+                case 3:
+                  return { top: 600, bottom: 700 };
+              }
+            }
+          });
+          const dir = C_DOWN;
+          const el = { id: 11, down: 'a11' };
+          const wrapperPosition = { top: 0, bottom: 400 };
+          const initialMarginLeft = 0;
+          const initialMarginTop = 0;
+          const firstCard = { id: 9, down: 'a10' };
+          const lastCard = { id: 11, down: undefined };
+          const props = { gap: 0, position: VERTICAL };
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(100);
+        }));
       it('should return same marginLeft on left action when next card in inside bounds',
         sinon.test(function() {
           this.stub(document, 'getElementById').returns({
@@ -275,23 +366,81 @@ describe('engine/strape.js', () => {
           const props = { gap: 0 };
           calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(100);
         }));
-      it('should return same marginTop on up action when next card in inside bounds',
+      it('should return same marginTop on up action when next card in inside bounds and is not the first element',
           sinon.test(function() {
+            let i = 0;
             this.stub(document, 'getElementById').returns({
               getBoundingClientRect: () => {
-                return { top: 200, bottom: 300 };
-              },
+                switch (++i) {
+                  case 1:
+                    return { top: 100, bottom: 200 };
+                  case 2:
+                    return { top: 200, bottom: 300 };
+                  case 3:
+                    return { top: 300, bottom: 400 };
+                }
+              }
             });
             const dir = C_UP;
-            const el = { id: 10, up: 'a3' };
+            const el = { id: 10, down: 'a11' };
             const wrapperPosition = { top: 0, bottom: 400 };
             const initialMarginLeft = 0;
             const initialMarginTop = 100;
-            const firstCard = { id: 9, right: 'a2' };
-            const lastCard = { id: 11, right: 'a4' };
+            const firstCard = { id: 9, down: 'a10' };
+            const lastCard = { id: 11, down: undefined };
             const props = { gap: 0, position: VERTICAL };
             calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(100);
           }));
+      it('should return same marginTop with firstGap on up action when next card in inside bounds and is the first element',
+        sinon.test(function() {
+          let i = 0;
+          this.stub(document, 'getElementById').returns({
+            getBoundingClientRect: () => {
+              switch (++i) {
+                case 1:
+                  return { top: 18, bottom: 118 };
+                case 2:
+                  return { top: 18, bottom: 118 };
+                case 3:
+                  return { top: 300, bottom: 400 };
+              }
+            }
+          });
+          const dir = C_UP;
+          const firstCard = { id: 9, up: undefined };
+          const el = { id: 10, up: 'a9' };
+          const wrapperPosition = { top: 8, bottom: 498 };
+          const initialMarginLeft = 0;
+          const initialMarginTop = 0;
+          const lastCard = { id: 11, down: undefined };
+          const props = { gap: 0, firstGap: 100, position: VERTICAL };
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(0);
+        }));
+      it('should return same marginTop without firstGap on up action when next card in inside bounds and is the first element',
+        sinon.test(function() {
+          let i = 0;
+          this.stub(document, 'getElementById').returns({
+            getBoundingClientRect: () => {
+              switch (++i) {
+                case 1:
+                  return { top: -32, bottom: 18 };
+                case 2:
+                  return { top: 28, bottom: 78 };
+                case 3:
+                  return { top: 808, bottom: 858 };
+              }
+            }
+          });
+          const dir = C_UP;
+          const firstCard = { id: 9, up: undefined };
+          const el = { id: 10, up: 'a9' };
+          const wrapperPosition = { top: 8, bottom: 498 };
+          const initialMarginLeft = 0;
+          const initialMarginTop = 50;
+          const lastCard = { id: 11, down: undefined };
+          const props = { gap: 0, position: VERTICAL };
+          calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(50);
+        }));
       it('should calculate new marginLeft with new el is out of bounds on left',
         sinon.test(function() {
           this.stub(document, 'getElementById').returns({
@@ -321,9 +470,9 @@ describe('engine/strape.js', () => {
             const wrapperPosition = { top: 100, bottom: 400 };
             const initialMarginLeft = 0;
             const initialMarginTop = 100
-            const firstCard = { id: 9, right: 'a2' };
-            const lastCard = { id: 11, right: 'a4' };
-            const props = { gap: 0, lastGap: 0, firstGap: 0, position: VERTICAL };
+            const firstCard = { id: 9 };
+            const lastCard = { id: 11 };
+            const props = { gap: 0, position: VERTICAL };
             calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(50);
           }));
       it('should add gap on right when out of bounds',
@@ -355,8 +504,8 @@ describe('engine/strape.js', () => {
             const wrapperPosition = { top: 100, bottom: 400 };
             const initialMarginLeft = 0;
             const initialMarginTop = 0;
-            const firstCard = { id: 9, right: 'a2' };
-            const lastCard = { id: 11, right: 'a4' };
+            const firstCard = { id: 9 };
+            const lastCard = { id: 11 };
             const props = { gap: 10, lastGap: 0, firstGap: 0, position: VERTICAL };
             calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(60);
           }));
@@ -389,8 +538,8 @@ describe('engine/strape.js', () => {
             const wrapperPosition = { top: 100, bottom: 400 };
             const initialMarginLeft = 0;
             const initialMarginTop = 100;
-            const firstCard = { id: 9, right: 'a2' };
-            const lastCard = { id: 11, right: 'a4' };
+            const firstCard = { id: 9 };
+            const lastCard = { id: 11 };
             const props = { gap: 10, lastGap: 0, firstGap: 0, position: VERTICAL };
             calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(40);
           }));
@@ -469,7 +618,7 @@ describe('engine/strape.js', () => {
         const wrapperPosition = { top: 8, bottom: 458 };
         const initialMarginLeft = 0;
         const initialMarginTop = 1210;
-        const firstCard = { id: 9, right: 'a2' };
+        const firstCard = { id: 9 };
         const lastCard = { id: 10, down: undefined };
         const props = { gap: 120, lastGap: 10, firstGap: 100, position: VERTICAL };
         calculateBounds(dir, el, wrapperPosition, initialMarginLeft, initialMarginTop, props, lastCard, firstCard).should.equal(1210);
