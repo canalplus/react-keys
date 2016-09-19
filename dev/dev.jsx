@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createStore, applyMiddleware, combineReducers} from 'redux';
-import {connect, Provider} from 'react-redux';
-import {Binder, StrapeBinder, keysInit, keysReducer, activeKeyBinder} from '../src';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { connect, Provider } from 'react-redux';
+import { Binder, StrapeBinder, keysInit, keysReducer, activeKeyBinder, keysSelector } from '../src';
 
 const logger = store => next => action => {
   console.group(action.type);
@@ -17,9 +17,9 @@ const store = createStore(combineReducers({
   '@@keys': keysReducer,
 }), applyMiddleware(logger));
 
-keysInit({store: store});
+keysInit({ store: store });
 
-const PureMosaic = ({binder1, binder2, selectedId}) => {
+const PureMosaic = ({ binder1, binder2, selectedId }) => {
   const selectedId1 = binder1.selectedId;
   const active1 = binder1.active;
   const selectedId2 = binder2.selectedId;
@@ -53,11 +53,11 @@ const PureMosaic = ({binder1, binder2, selectedId}) => {
   );
 };
 
-const Mosaic = connect(state => {
+const Mosaic = connect(() => {
   return {
-    selectedId: state['@@keys'].current.selectedId,
-    binder1: state['@@keys'].getBinder('binder1'),
-    binder2: state['@@keys'].getBinder('binder2'),
+    selectedId: keysSelector('current').selectedId,
+    binder1: keysSelector('binder1'),
+    binder2: keysSelector('binder2'),
   };
 })(PureMosaic);
 

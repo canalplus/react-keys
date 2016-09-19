@@ -1,4 +1,5 @@
 import { isActive } from '../src/isActive';
+import { NAME } from '../src/constants';
 import { createStore } from 'redux';
 
 describe('isActive.js', () => {
@@ -10,24 +11,24 @@ describe('isActive.js', () => {
     const props = { id: '1', active: false };
     isActive(() => null, props).should.be.false;
   });
-  it('should return false when state and no @@keys sub state', () => {
+  it('should return false when state and no sub state', () => {
     const props = { id: '1', active: true };
     const store = createStore((state = {}) => state);
     isActive(store, props).should.be.false;
   });
-  it('should return false when state and noe @@keys.id sub state', () => {
+  it('should return false when state and one id sub state', () => {
     const props = { id: '1', active: true };
-    const store = createStore((state = { '@@keys': {} }) => state);
+    const store = createStore((state = { [NAME]: {} }) => state);
     isActive(store, props).should.be.false;
   });
-  it('should return false when state and @@keys.active = false sub state', () => {
+  it('should return false when state and active = false sub state', () => {
     const props = { id: '1', active: true };
-    const store = createStore((state = { '@@keys': { 1: { active: false } } }) => state);
+    const store = createStore((state = { [NAME]: { 1: { active: false } } }) => state);
     isActive(store, props).should.be.false;
   });
-  it('should return true when state and @@keys.id.active = true sub state', () => {
+  it('should return true when state and id.active = true sub state', () => {
     const props = { id: '1', active: true };
-    const store = createStore((state = { '@@keys': { 1: { active: true } } }) => state);
+    const store = createStore((state = { [NAME]: { 1: { active: true } } }) => state);
     isActive(store, props).should.be.true;
   });
 });

@@ -1,6 +1,6 @@
-const {Binder, keysInit, keysReducer, activeKeyBinder} = ReactKeys;
-const {createStore, combineReducers, applyMiddleware} = Redux;
-const {connect, Provider} = ReactRedux;
+const { Binder, keysInit, keysReducer, activeKeyBinder, keysSelector } = ReactKeys;
+const { createStore, combineReducers, applyMiddleware } = Redux;
+const { connect, Provider } = ReactRedux;
 
 const logger = store => next => action => {
   console.group(action.type);
@@ -15,16 +15,16 @@ const store = createStore(combineReducers({
   '@@keys': keysReducer,
 }), applyMiddleware(logger))
 
-keysInit({store: store});
+keysInit({ store: store });
 
-const Card = ({id, active}) => {
+const Card = ({ id, active }) => {
   const style = active ? 'selected' : '';
   return (
     <li id={id} className={style}>#{id}</li>
   );
 };
 
-const PureMosaic = ({selectedId}) => {
+const PureMosaic = ({ selectedId }) => {
   return (
     <Binder
       id="mosaic-1"
@@ -49,7 +49,7 @@ function onEnterKey(element) {
   alert('ELEMENT #' + element.id);
 }
 
-const Mosaic = connect(state => state['@@keys'].getBinder('mosaic-1'))(PureMosaic);
+const Mosaic = connect(()=> keysSelector('mosaic-1'))(PureMosaic);
 
 ReactDOM.render(
   <Provider store={store}>

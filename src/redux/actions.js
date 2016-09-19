@@ -1,5 +1,6 @@
 import { globalStore } from '../listener';
 import { findMirrorExitId, findStartExitId } from '../engines/strape';
+import { NAME } from '../constants';
 import {
   EXIT_STRATEGY_MIRROR,
   EXIT_STRATEGY_START,
@@ -8,7 +9,6 @@ import {
   VERTICAL,
 } from '../constants';
 
-export const NAME = '@@keys';
 export const ACTIVE_KEYBINDER = [NAME, '/ACTIVE_KEYBINDER'].join('');
 export const ADD_KEYBINDER_TO_STORE = [NAME, '/ADD_KEYBINDER_TO_STORE'].join('');
 export const UPDATE_SELECTED_KEY = [NAME, '/UPDATE_SELECTED_KEY'].join('');

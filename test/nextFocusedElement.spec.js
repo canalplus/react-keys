@@ -1,4 +1,5 @@
 import { nextFocusedElement } from '../src/nextFocusedElement';
+import { NAME } from '../src/constants';
 import { createStore } from 'redux';
 
 describe('nextFocusedElement.js', () => {
@@ -11,14 +12,14 @@ describe('nextFocusedElement.js', () => {
     const el1 = { id: '1' };
     const el2 = { id: '2' };
     const elements = [el1, el2];
-    const store = createStore((state = { '@@keys': { 1: { selectedId: '2' } } }) => state);
+    const store = createStore((state = { [NAME]: { 1: { selectedId: '2' } } }) => state);
     nextFocusedElement(el1, store, elements, '1').should.equal(el2);
   });
   it('should return current element when having a store but not found element', () => {
     const el1 = { id: '1' };
     const el2 = { id: '2' };
     const elements = [el1, el2];
-    const store = createStore((state = { '@@keys': { 1: { selectedId: '3' } } }) => state);
+    const store = createStore((state = { [NAME]: { 1: { selectedId: '3' } } }) => state);
     nextFocusedElement(el1, store, elements, '1').should.equal(el1);
   });
 });

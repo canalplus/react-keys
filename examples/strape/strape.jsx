@@ -1,21 +1,21 @@
-const {StrapeBinder, keysInit, keysReducer, activeKeyBinder} = ReactKeys;
-const {createStore, combineReducers} = Redux;
-const {connect, Provider} = ReactRedux;
+const { StrapeBinder, keysInit, keysReducer, activeKeyBinder, keysSelector } = ReactKeys;
+const { createStore, combineReducers } = Redux;
+const { connect, Provider } = ReactRedux;
 
 const store = createStore(combineReducers({
   '@@keys': keysReducer,
 }));
 
-keysInit({store: store});
+keysInit({ store: store });
 
-const Card = ({id, active}) => {
+const Card = ({ id, active }) => {
   const style = active ? 'selected' : '';
   return (
     <li id={id} className={style}>#{id}</li>
   );
 };
 
-const PureStrape = ({selectedId, marginLeft, active}) => {
+const PureStrape = ({ selectedId, marginLeft, active }) => {
   const listStyle = {
     marginLeft: -marginLeft,
   };
@@ -45,7 +45,7 @@ const PureStrape = ({selectedId, marginLeft, active}) => {
   );
 };
 
-const Strape = connect(state => state['@@keys'].getBinder('strape-1'))(PureStrape);
+const Strape = connect(() => keysSelector('strape-1'))(PureStrape);
 
 function onEnterKey(element) {
   alert('ELEMENT #' + element.id);
