@@ -112,7 +112,7 @@ class Keys extends Component {
   }
 
   render() {
-    return <div id="hoc-keys">{this.props.children}</div>;
+    return <div id={this.props.id}>{this.props.children}</div>;
   }
 }
 
