@@ -103,7 +103,7 @@ class Carousel extends Component {
   }
 
   keysHandler(keyCode) {
-    if (isActive(globalStore, this.props) && !isBlocked()) {
+    if (isActive(this.props) && !isBlocked()) {
       const { cursor } = this.state;
       switch (keyCode) {
         case LEFT:

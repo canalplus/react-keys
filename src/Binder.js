@@ -9,7 +9,7 @@ import { isActive } from './isActive';
 import { nextFocusedElement } from './nextFocusedElement';
 import { execCb, enterTo } from './funcHandler';
 import { calculateNewState } from './calculateNewState';
-import { addListener, removeListener, globalStore } from './listener';
+import { addListener, removeListener } from './listener';
 import { addKeyBinderToStore, updateSelectedId, _updateBinderState } from './redux/actions';
 import { hasDiff } from './hasDiff';
 
@@ -73,7 +73,7 @@ class Binder extends Component {
   }
 
   keysHandler(keyCode) {
-    if (isActive(globalStore, this.props) && !isBlocked()) {
+    if (isActive(this.props) && !isBlocked()) {
       this.nextEl = nextFocusedElement(
         this.nextEl,
         this.elements,
