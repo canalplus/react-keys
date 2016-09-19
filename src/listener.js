@@ -1,5 +1,5 @@
 /* eslint import/no-mutable-exports:0 */
-import { _updateBinderState } from './redux/actions';
+import { updatePressStatus } from './redux/actions';
 import { LONG_PRESS_TIMEOUT, NAME } from './constants';
 
 export let keysListeners = [];
