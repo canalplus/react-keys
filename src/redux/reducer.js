@@ -10,9 +10,6 @@ const initialKeysSate = {
     selectedId: null,
     binderId: null,
   },
-  getBinder: function(binderId) {
-    return this[binderId] || { marginLeft: 0, marginTop: 0 };
-  },
 };
 
 export function _keyReducer(state = initialKeysSate, action) {

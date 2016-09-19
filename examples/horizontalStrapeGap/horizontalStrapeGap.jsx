@@ -1,4 +1,4 @@
-const { StrapeBinder, keysInit, keysReducer, activeKeyBinder } = ReactKeys;
+const { StrapeBinder, keysInit, keysReducer, activeKeyBinder, keysSelector } = ReactKeys;
 const { createStore, combineReducers, applyMiddleware } = Redux;
 const { connect, Provider } = ReactRedux;
 
@@ -56,8 +56,8 @@ const PureStrape = ({ selectedId, marginLeft, binderId, active, onDownExit, onUp
   );
 };
 
-const Strape1 = connect(state => state['@@keys'].getBinder('strape-1'))(PureStrape);
-const Strape2 = connect(state => state['@@keys'].getBinder('strape-2'))(PureStrape);
+const Strape1 = connect(() => keysSelector('strape-1'))(PureStrape);
+const Strape2 = connect(() => keysSelector('strape-2'))(PureStrape);
 
 ReactDOM.render(<Provider store={store}>
   <div>

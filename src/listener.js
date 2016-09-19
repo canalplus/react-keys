@@ -1,9 +1,12 @@
 /* eslint import/no-mutable-exports:0 */
-import {  _updateBinderState } from './redux/actions';
-import { LONG_PRESS_TIMEOUT } from './constants';
+import { _updateBinderState } from './redux/actions';
+import { LONG_PRESS_TIMEOUT, NAME } from './constants';
 
 export let keysListeners = [];
-export let globalStore = function() {
+export let globalStore = {
+  getState: () => {
+    return { [NAME]: {} };
+  },
 };
 export let fired = false;
 export let pressTimeout = null;
@@ -33,8 +36,7 @@ export function cbRelease() {
 
 
 export function _init(ops) {
-  globalStore = ops && ops.store ? ops.store : function() {
-  };
+  globalStore = ops && ops.store ? ops.store : globalStore;
   if (!ops || (ops && !ops.bindkeys)) {
     document.addEventListener('keydown', cb);
     document.addEventListener('keyup', cbRelease);

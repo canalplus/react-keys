@@ -1,6 +1,6 @@
-const {StrapeBinder, keysInit, keysReducer, activeKeyBinder} = ReactKeys;
-const {createStore, combineReducers, applyMiddleware} = Redux;
-const {connect, Provider} = ReactRedux;
+const { StrapeBinder, keysInit, keysReducer, activeKeyBinder, keysSelector } = ReactKeys;
+const { createStore, combineReducers, applyMiddleware } = Redux;
+const { connect, Provider } = ReactRedux;
 
 const logger = store => next => action => {
   console.group(action.type);
@@ -15,16 +15,16 @@ const store = createStore(combineReducers({
   '@@keys': keysReducer,
 }), applyMiddleware(logger));
 
-keysInit({store: store});
+keysInit({ store: store });
 
-const Card = ({id, active}) => {
+const Card = ({ id, active }) => {
   const style = active ? 'selected' : '';
   return (
     <li id={id} className={style}>#{id}</li>
   );
 };
 
-const PureStrape = ({selectedId, marginLeft, binderId, active, onDownExit, onUpExit}) => {
+const PureStrape = ({ selectedId, marginLeft, binderId, active, onDownExit, onUpExit }) => {
   const listStyle = {
     marginLeft: -marginLeft,
   };
@@ -56,8 +56,8 @@ const PureStrape = ({selectedId, marginLeft, binderId, active, onDownExit, onUpE
   );
 };
 
-const Strape1 = connect(state => state['@@keys'].getBinder('strape-1'))(PureStrape);
-const Strape2 = connect(state => state['@@keys'].getBinder('strape-2'))(PureStrape);
+const Strape1 = connect(() => keysSelector('strape-1'))(PureStrape);
+const Strape2 = connect(() => keysSelector('strape-2'))(PureStrape);
 
 ReactDOM.render(<Provider store={store}>
   <div>

@@ -76,7 +76,6 @@ class Binder extends Component {
     if (isActive(globalStore, this.props) && !isBlocked()) {
       this.nextEl = nextFocusedElement(
         this.nextEl,
-        globalStore,
         this.elements,
         this.props.id);
       switch (keyCode) {

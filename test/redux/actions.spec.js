@@ -4,6 +4,7 @@ import { createStore } from 'redux';
 import sinon from 'sinon';
 import { expect } from 'chai';
 import * as strape from '../../src/engines/strape';
+import { NAME } from '../../src/constants';
 
 describe('redux/actions.js', () => {
   describe('clone', () => {
@@ -30,7 +31,7 @@ describe('redux/actions.js', () => {
     it('should dispatch new state with binderId activated and others disactivated',
       sinon.test(function() {
         const store = createStore((state = {
-          '@@keys': {
+          [NAME]: {
             current: {},
             binderId: { active: false, elements: [{ id: '1' }] },
             binderId2: { active: true, elements: [{ id: '2' }] },
@@ -52,7 +53,7 @@ describe('redux/actions.js', () => {
       }));
     it('should not dispatch anything if binderId not found in state', sinon.test(function() {
       const store = createStore((state = {
-        '@@keys': {
+        [NAME]: {
           binderId: { active: false },
         },
       }) => state);
@@ -64,7 +65,7 @@ describe('redux/actions.js', () => {
     }));
     it('should keep in memory the selected Id when memory is true', sinon.test(function() {
       const store = createStore((state = {
-        '@@keys': {
+        [NAME]: {
           current: {},
           binderId: { active: false, selectedId: '2', elements: [{ id: '1' }] },
           binderId2: { active: true, selectedId: '3' },
@@ -88,7 +89,7 @@ describe('redux/actions.js', () => {
   describe('_addKeyBinderToStore', () => {
     it('should add new binder to store if not exists yet', sinon.test(function() {
       const store = createStore((state = {
-        '@@keys': {
+        [NAME]: {
           current: {},
           binderId: { active: false },
         },
@@ -109,7 +110,7 @@ describe('redux/actions.js', () => {
     }));
     it('should activated binder when active is true', sinon.test(function() {
       const store = createStore((state = {
-        '@@keys': {
+        [NAME]: {
           current: {},
           binderId: { active: false },
         },
@@ -130,7 +131,7 @@ describe('redux/actions.js', () => {
     }));
     it('should not dipatch if binderId already exists in state', sinon.test(function() {
       const store = createStore((state = {
-        '@@keys': {
+        [NAME]: {
           current: {},
           binderId: { active: false },
         },
@@ -145,7 +146,7 @@ describe('redux/actions.js', () => {
   describe('_updateSelectedId', () => {
     it('should update margin and selectedId to state', sinon.test(function() {
       const store = createStore((state = {
-        '@@keys': {
+        [NAME]: {
           current: { selectedId: null },
           binderId: { active: false, selectedId: 1, marginLeft: 0, marginTop: 0 },
         },
@@ -168,7 +169,7 @@ describe('redux/actions.js', () => {
   describe('_updateBinderState', () => {
     it('should update state', sinon.test(function() {
       const store = createStore((state = {
-        '@@keys': {
+        [NAME]: {
           binderId: { active: false, selectedId: 1, marginLeft: 0 },
         },
       }) => state);

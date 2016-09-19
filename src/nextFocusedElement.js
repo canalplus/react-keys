@@ -1,7 +1,10 @@
-export function nextFocusedElement(nextElement, store, elements, binderId) {
-  if (store.getState) {
-    const binderState = store.getState()['@@keys'][binderId];
-    return elements.find(el => el.id === binderState.selectedId) || nextElement;
+import{ NAME } from './constants';
+import { globalStore } from './listener';
+
+export function nextFocusedElement(nextElement, elements, binderId) {
+  if (!globalStore.getState()[NAME]) {
+    throw new Error('keys state not present un global state');
   }
-  return nextElement;
+  const binderState = globalStore.getState()[NAME][binderId] || {};
+  return elements.find(el => el.id === binderState.selectedId) || nextElement;
 }
