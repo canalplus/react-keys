@@ -1,5 +1,5 @@
 /* eslint import/no-mutable-exports:0 */
-import { _updateBinderState } from './redux/actions';
+import { updatePressStatus } from './redux/actions';
 import { LONG_PRESS_TIMEOUT, NAME } from './constants';
 
 export let keysListeners = [];
@@ -18,20 +18,16 @@ export function cb(e) {
   }
   if (!fired) {
     fired = true;
-    for (const listener of keysListeners) {
-      pressTimeout = setTimeout(() => {
-        _updateBinderState(listener.context.props.id, { press: fired })
-      }, LONG_PRESS_TIMEOUT);
-    }
+    pressTimeout = setTimeout(() => {
+      updatePressStatus(true, keyCode);
+    }, LONG_PRESS_TIMEOUT);
   }
 }
 
 export function cbRelease() {
   clearTimeout(pressTimeout);
   fired = false;
-  for (const listener of keysListeners) {
-    _updateBinderState(listener.context.props.id, { press: fired })
-  }
+  updatePressStatus(fired);
 }
 
 

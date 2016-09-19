@@ -3,6 +3,7 @@ import {
   ADD_KEYBINDER_TO_STORE,
   UPDATE_SELECTED_KEY,
   UPDATE_BINDER_STATE,
+  UPDATE_PRESS_STATUS,
 } from './actions';
 
 const initialKeysSate = {
@@ -10,6 +11,9 @@ const initialKeysSate = {
     selectedId: null,
     binderId: null,
   },
+  'PRESS': {
+    press: false,
+  }
 };
 
 export function _keyReducer(state = initialKeysSate, action) {
@@ -19,6 +23,8 @@ export function _keyReducer(state = initialKeysSate, action) {
     case UPDATE_BINDER_STATE:
     case UPDATE_SELECTED_KEY:
       return { ...state, ...action.state };
+    case UPDATE_PRESS_STATUS:
+      return { ...state, ...{ 'PRESS': { press: action.press, keyCode: action.keyCode } } };
     default:
       return state;
   }

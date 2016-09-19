@@ -44,7 +44,7 @@ describe('listener.js', () => {
 
   it('should cb call all listeners cb', sinon.test(function() {
     const mySpy = this.spy();
-    const updateBinderStateSpy = this.spy(actions, '_updateBinderState');
+    const updateBinderStateSpy = this.spy(actions, 'updatePressStatus');
     const keyCode = 'keyCode';
     const internCb = {
       id: 0,
@@ -58,7 +58,7 @@ describe('listener.js', () => {
     mySpy.should.have.been.calledOnce;
     mySpy.should.have.been.calledWith(keyCode);
     updateBinderStateSpy.should.have.been.calledOnce;
-    updateBinderStateSpy.should.have.been.calledWith('1');
+    updateBinderStateSpy.should.have.been.calledWith(true);
   }));
 
   it('should cb and cbRelease call all listeners cb', sinon.test(function() {
