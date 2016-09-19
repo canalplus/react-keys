@@ -27,8 +27,8 @@ describe('Basic', () => {
   }
 
   it('should wrap with div hoc-keys id', () => {
-    const wrapper = mount(<Basic id="'1"></Basic>);
-    wrapper.find('#hoc-keys').should.have.length(1);
+    const wrapper = mount(<Basic id="1"></Basic>);
+    wrapper.find('#1').should.have.length(1);
   });
   it('should bind back event', () => {
     const onBackKey = sinon.spy();
@@ -74,7 +74,7 @@ describe('Basic', () => {
   });
   it('should bind enter event', () => {
     const onEnter = sinon.spy();
-    const wrapper = mount(<Basic onEnter={onEnter} active={true}></Basic>);
+    const wrapper = mount(<Basic id="1" onEnter={onEnter} active={true}></Basic>);
     trigger(ENTER);
     onEnter.should.have.been.calledOnce;
     wrapper.unmount();
