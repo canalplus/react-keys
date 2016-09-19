@@ -60,10 +60,11 @@ export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, ini
       break;
     case C_DOWN:
       if (last.bottom > wrapperPosition.bottom && element.bottom + gap > wrapperPosition.bottom) {
+        const bonus = el[C_DOWN] ? gap : lastGap;
         if (initialMarginTop < 0) {
           marginTop = 0;
         } else {
-          marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + gap;
+          marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + bonus;
         }
       } else if (element.bottom + gap > wrapperPosition.bottom) {
         if (!el[C_DOWN]) {
@@ -74,7 +75,8 @@ export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, ini
       break;
     case C_UP:
       if (first.top < wrapperPosition.top && element.top < wrapperPosition.top + gap) {
-        marginTop = initialMarginTop + element.top - wrapperPosition.top - gap;
+        const bonus = el[C_UP] ? gap : firstGap;
+        marginTop = initialMarginTop + element.top - wrapperPosition.top - bonus;
       } else if (element.top < wrapperPosition.top + gap) {
         if (!el[C_UP]) {
           const bonus = el[C_UP] ? gap : firstGap;
