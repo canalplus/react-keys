@@ -1,34 +1,35 @@
 import { isActive } from '../src/isActive';
+import sinon from 'sinon';
+import { globalStore } from '../src/listener';
 import { NAME } from '../src/constants';
-import { createStore } from 'redux';
 
 describe('isActive.js', () => {
   it('should return true when no state and props active = true', () => {
     const props = { id: '1', active: true };
-    isActive(() => null, props).should.be.true;
+    isActive(props).should.be.true;
   });
   it('should return false when no state and props active = false', () => {
     const props = { id: '1', active: false };
-    isActive(() => null, props).should.be.false;
+    isActive(props).should.be.false;
   });
-  it('should return false when state and no sub state', () => {
+  it('should return active status when state and no sub state', sinon.test(function() {
+    this.stub(globalStore, 'getState').returns({});
     const props = { id: '1', active: true };
-    const store = createStore((state = {}) => state);
-    isActive(store, props).should.be.false;
-  });
-  it('should return false when state and one id sub state', () => {
+    isActive(props).should.be.true;
+  }));
+  it('should return active status when state and one id sub state', sinon.test(function() {
+    this.stub(globalStore, 'getState').returns({ [NAME]: {} });
+    const props = { id: '1', active: false };
+    isActive(props).should.be.false;
+  }));
+  it('should return false when state and active = false sub state', sinon.test(function() {
+    this.stub(globalStore, 'getState').returns({ [NAME]: { 1: { active: false } } });
     const props = { id: '1', active: true };
-    const store = createStore((state = { [NAME]: {} }) => state);
-    isActive(store, props).should.be.false;
-  });
-  it('should return false when state and active = false sub state', () => {
-    const props = { id: '1', active: true };
-    const store = createStore((state = { [NAME]: { 1: { active: false } } }) => state);
-    isActive(store, props).should.be.false;
-  });
-  it('should return true when state and id.active = true sub state', () => {
-    const props = { id: '1', active: true };
-    const store = createStore((state = { [NAME]: { 1: { active: true } } }) => state);
-    isActive(store, props).should.be.true;
-  });
+    isActive(props).should.be.false;
+  }));
+  it('should return true when state and id.active = true sub state', sinon.test(function() {
+    this.stub(globalStore, 'getState').returns({ [NAME]: { 1: { active: true } } });
+    const props = { id: '1', active: false };
+    isActive(props).should.be.true;
+  }));
 });

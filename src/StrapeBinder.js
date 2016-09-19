@@ -8,7 +8,7 @@ import { isActive } from './isActive';
 import { execCb, enterTo } from './funcHandler';
 import { nextFocusedElement } from './nextFocusedElement';
 import { calculateNewState } from './calculateNewState';
-import { addListener, removeListener, globalStore } from './listener';
+import { addListener, removeListener } from './listener';
 import {
   addKeyBinderToStore,
   updateSelectedId,
@@ -97,7 +97,7 @@ class StrapeBinder extends Component {
   }
 
   keysHandler(keyCode) {
-    if (isActive(globalStore, this.props) && !isBlocked()) {
+    if (isActive(this.props) && !isBlocked()) {
       this.nextEl = nextFocusedElement(
         this.nextEl,
         this.elements,
