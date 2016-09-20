@@ -82,8 +82,8 @@ PureStrape.propTypes = {
   onLeftExit: React.PropTypes.func
 }
 
-const Strape1 = connect(() => keysSelector('strape-1'))(PureStrape);
-const Strape2 = connect(() => keysSelector('strape-2'))(PureStrape);
+const Strape1 = connect(() => keysSelector('strape-1')())(PureStrape);
+const Strape2 = connect(() => keysSelector('strape-2')())(PureStrape);
 
 
 ReactDOM.render(<Provider store={store}>

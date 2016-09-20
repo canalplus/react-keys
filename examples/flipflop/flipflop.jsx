@@ -49,7 +49,7 @@ function onEnterKey(element) {
   alert('ELEMENT #' + element.id);
 }
 
-const Mosaic = connect(()=> keysSelector('mosaic-1'))(PureMosaic);
+const Mosaic = connect(()=> keysSelector('mosaic-1')())(PureMosaic);
 
 ReactDOM.render(
   <Provider store={store}>

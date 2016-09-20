@@ -55,9 +55,9 @@ const PureMosaic = ({ binder1, binder2, selectedId }) => {
 
 const Mosaic = connect(() => {
   return {
-    selectedId: keysSelector('current').selectedId,
-    binder1: keysSelector('binder1'),
-    binder2: keysSelector('binder2'),
+    selectedId: keysSelector('current')().selectedId,
+    binder1: keysSelector('binder1')(),
+    binder2: keysSelector('binder2')(),
   };
 })(PureMosaic);
 

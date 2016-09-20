@@ -45,7 +45,7 @@ const PureStrape = ({ selectedId, marginLeft, active }) => {
   );
 };
 
-const Strape = connect(() => keysSelector('strape-1'))(PureStrape);
+const Strape = connect(() => keysSelector('strape-1')())(PureStrape);
 
 function onEnterKey(element) {
   alert('ELEMENT #' + element.id);
