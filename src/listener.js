@@ -9,12 +9,16 @@ export let globalStore = {
   },
 };
 export let fired = false;
+export let block = false;
 export let pressTimeout = null;
 
 export function cb(e) {
   const keyCode = e.keyCode ? e.keyCode : e;
-  for (const listener of keysListeners) {
-    listener.callback.call(listener.context, keyCode);
+  if (!block || globalStore.getState()[NAME]['PRESS'].press) {
+    for (const listener of keysListeners) {
+      listener.callback.call(listener.context, keyCode);
+    }
+    block = true;
   }
   if (!fired) {
     fired = true;
@@ -26,6 +30,7 @@ export function cb(e) {
 
 export function cbRelease() {
   clearTimeout(pressTimeout);
+  block = false;
   fired = false;
   updatePressStatus(fired);
 }
