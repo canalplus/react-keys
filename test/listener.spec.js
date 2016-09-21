@@ -1,6 +1,7 @@
 import {
   keysListeners,
   fired,
+  block,
   _init,
   cb,
   cbRelease,
@@ -8,6 +9,7 @@ import {
   removeListener,
   globalStore,
 } from '../src/listener';
+import { NAME } from '../src/constants';
 import * as actions from '../src/redux/actions';
 
 import sinon from 'sinon';
@@ -63,6 +65,9 @@ describe('listener.js', () => {
 
   it('should cb and cbRelease call all listeners cb', sinon.test(function() {
     const mySpy = this.spy();
+    this.stub(globalStore, 'getState').returns({
+      [NAME]: { 'PRESS': { press: false } }
+    });
     const keyCode = 'keyCode';
     const internCb = {
       id: 0,
@@ -78,7 +83,7 @@ describe('listener.js', () => {
 
   it('_init should listen on keydown event by default', sinon.test(function() {
     this.mock(document).expects('addEventListener')
-      .twice()
+      .twice();
     _init();
   }));
 
@@ -110,4 +115,39 @@ describe('listener.js', () => {
     removeListener(listenerId);
     keysListeners.should.be.empty;
   });
+
+  it('should not call any callback when block is true', sinon.test(function() {
+    const callback = sinon.spy();
+    this.stub(globalStore, 'getState').returns({
+      [NAME]: { 'PRESS': { press: false } }
+    });
+    addListener(callback, 'CONTEXT');
+    cb('keyCode');
+    block.should.be.true;
+    cb('keyCode'); // NO MORE CALL
+    callback.should.have.been.calledOnce;
+    cbRelease(); // SET BLOCK TO FALSE
+  }));
+
+  it('should cbRelease set block to false', sinon.test(function() {
+    this.stub(globalStore, 'getState').returns({
+      [NAME]: { 'PRESS': { press: false } }
+    });
+    cb('keyCode');
+    block.should.be.true;
+    cbRelease();
+    block.should.be.false;
+  }));
+
+  it('should call callback when longPress', sinon.test(function() {
+    const callback = sinon.spy();
+    this.stub(globalStore, 'getState').returns({
+      [NAME]: { 'PRESS': { press: true } }
+    });
+    addListener(callback, 'CONTEXT');
+    cb('keyCode');
+    cb('keyCode');
+    callback.should.have.been.calledTwice;
+    cbRelease(); // SET BLOCK TO FALSE
+  }));
 });
