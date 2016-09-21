@@ -5,6 +5,7 @@ export const DOWN = 40;
 export const ENTER = 13;
 export const BACK = 27;
 export const MENU = 120;
+export const REC = 117;
 export const NEXTPROG = 33;
 export const PREVPROG = 34;
 export const NUM0 = 48;
