@@ -8,6 +8,7 @@ import {
   ENTER,
   UP,
   MENU,
+  REC,
   NEXTPROG,
   PREVPROG,
   NUM0,
@@ -38,6 +39,7 @@ class Keys extends Component {
       onUp: PropTypes.func,
       onDigit: PropTypes.func,
       onMenu: PropTypes.func,
+      onRec: PropTypes.func,
       onNextProg: PropTypes.func,
       onPrevProg: PropTypes.func,
       active: PropTypes.bool,
@@ -72,6 +74,9 @@ class Keys extends Component {
           break;
         case MENU:
           this.performAction(this.props.onMenu);
+          break;
+        case REC:
+          this.performAction(this.props.onRec);
           break;
         case NEXTPROG:
           this.performAction(this.props.onNextProg);
