@@ -2,7 +2,7 @@ import React from 'react';
 import Basic from '../src/Basic';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
-import { BACK, ENTER, NUM0, MENU, NEXTPROG, PREVPROG } from '../src/keys';
+import { BACK, ENTER, NUM0, MENU, REC, NEXTPROG, PREVPROG } from '../src/keys';
 
 describe('Basic', () => {
   let clock;
@@ -56,6 +56,13 @@ describe('Basic', () => {
     const wrapper = mount(<Basic id="1" onMenu={onMenu} active={true}></Basic>);
     trigger(MENU);
     onMenu.should.have.been.calledOnce;
+    wrapper.unmount();
+  });
+  it('should bind Rec event', () => {
+    const onRec = sinon.spy();
+    const wrapper = mount(<Basic id="1" onRec={onRec} active={true}></Basic>);
+    trigger(REC);
+    onRec.should.have.been.calledOnce;
     wrapper.unmount();
   });
   it('should bind nextprog event', () => {
