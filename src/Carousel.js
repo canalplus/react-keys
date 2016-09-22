@@ -153,7 +153,9 @@ class Carousel extends Component {
         const x = (indexs.indexOf(index) - 2) * elWidth;
         return <div key={index} className={childrenClassName} style={{
           transform: `translate3d(${x}px, 0, 0)`,
+          WebkitTransform: `translate3d(${x}px, 0, 0)`,
           transition: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 'none' : `transform ${speed}ms`,
+          WebkitTransition: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 'none' : `transform ${speed}ms`,
           willChange: "transform",
           opacity: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 0 : 1,
         }}>{children[index]}</div>;
