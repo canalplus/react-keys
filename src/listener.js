@@ -38,8 +38,14 @@ export function cbRelease() {
 
 export function _init(ops) {
   globalStore = ops && ops.store ? ops.store : globalStore;
+  function eventCb(e) {
+    return ops.eventCb.call(this, e.keyCode, globalStore.getState()[NAME]['PRESS'].press);
+  }
   if (!ops || (ops && !ops.bindkeys)) {
     document.addEventListener('keydown', cb);
+    if (ops && ops.eventCb) {
+      document.addEventListener('keydown', eventCb);
+    }
     document.addEventListener('keyup', cbRelease);
   } else {
     ops.bindkeys(cb, cbRelease);
