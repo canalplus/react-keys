@@ -11,9 +11,13 @@ export let globalStore = {
 export let fired = false;
 export let block = false;
 export let pressTimeout = null;
+export let eventCb = null;
 
 export function cb(e) {
   const keyCode = e.keyCode ? e.keyCode : e;
+  if (!block) {
+    eventCb(keyCode, 'short');
+  }
   if (!block || globalStore.getState()[NAME]['PRESS'].press) {
     for (const listener of keysListeners) {
       listener.callback.call(listener.context, keyCode);
@@ -23,6 +27,7 @@ export function cb(e) {
   if (!fired) {
     fired = true;
     pressTimeout = setTimeout(() => {
+      eventCb(keyCode, 'long');
       updatePressStatus(true, keyCode);
     }, LONG_PRESS_TIMEOUT);
   }
@@ -38,6 +43,8 @@ export function cbRelease() {
 
 export function _init(ops) {
   globalStore = ops && ops.store ? ops.store : globalStore;
+  eventCb= ops && ops.eventCb ? ops.eventCb : function() {
+  };
   if (!ops || (ops && !ops.bindkeys)) {
     document.addEventListener('keydown', cb);
     document.addEventListener('keyup', cbRelease);
