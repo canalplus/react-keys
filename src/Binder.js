@@ -23,6 +23,10 @@ class Binder extends Component {
       ]),
       id: PropTypes.string.isRequired,
       selector: PropTypes.string,
+      filter: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.func,
+      ]),
       focusedElementId: PropTypes.string,
       enterStrategy: PropTypes.string,
       context: PropTypes.object,
@@ -59,6 +63,7 @@ class Binder extends Component {
       active: false,
       strict: false,
       enterStrategy: 'none',
+      filter: null,
     };
   }
 
@@ -127,6 +132,7 @@ class Binder extends Component {
       this.elements,
       this.props.selector,
       this.props.focusedElementId,
+      { filter: this.props.filter }
     );
     const { elements, selectedElement } = value;
     this.nextEl = selectedElement || this.nextEl || {};

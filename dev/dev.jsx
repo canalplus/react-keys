@@ -22,7 +22,7 @@ keysInit({ store: store });
 const PureMosaic = ({ binder1 }) => {
   const { selectedId } = binder1;
   return (
-    <Binder id="binder1" active={true} selector="td">
+    <Binder id="binder1" active={true} filter="disabled" selector="td">
       <table colSpan="2">
         <tbody>
         <tr>
@@ -46,13 +46,19 @@ const PureMosaic = ({ binder1 }) => {
           <td id="7" className={selectedId === '7' ? 'selected' : ''}>7</td>
           <td id="8" className={selectedId === '8' ? 'selected' : ''}>8</td>
           <td id="9" className={selectedId === '9' ? 'selected' : ''}>9</td>
-          <td id="10" className={selectedId === '10' ? 'selected' : ''}>10</td>
+          <td id="10" className={selectedId === '10' ? 'selected' : 'disabled'}>10</td>
         </tr>
         <tr>
           <td id="11" className={selectedId === '11' ? 'selected' : ''}>11</td>
           <td id="12" className={selectedId === '12' ? 'selected' : ''}>12</td>
           <td id="13" className={selectedId === '13' ? 'selected' : ''}>13</td>
           <td id="14" className={selectedId === '14' ? 'selected' : ''}>14</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td id="20" className={selectedId === '20' ? 'selected' : ''}>20</td>
+          <td></td>
+          <td></td>
         </tr>
         <tr>
           <td id="19" colSpan="4" className={selectedId === '19' ? 'selected' : ''}>19</td>

@@ -44,9 +44,10 @@ export const calculUpScore =
 export const calculDowScore =
   (el, elCoords) => Math.abs(el.top - elCoords.down) + Math.abs(el.left - elCoords.left);
 
-export function build(mosaic) {
+export function build(mosaic, options) {
   const mosaicCoords = mosaic
     .filter(el => el.id !== "")
+    .filter(el => [].slice.call(el.classList).indexOf(options.filter) === -1)
     .map((createCoordsObject));
 
   return mosaicCoords.map((el) => {
