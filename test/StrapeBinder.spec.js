@@ -131,6 +131,7 @@ describe('StrapeBinder.jsx', () => {
       id: '1',
     };
     this.stub(strape, 'calculateNewState').returns(null);
+    this.stub(actions, 'updateSelectedId').returns(null);
     this.mock(engine)
       .expects('calculateBounds')
       .once()
@@ -151,6 +152,7 @@ describe('StrapeBinder.jsx', () => {
         id: '1',
       };
       this.stub(strape, 'calculateNewState').returns(null);
+      this.stub(actions, 'updateSelectedId').returns(null);
       this.mock(engine)
         .expects('calculateBounds')
         .never();
@@ -176,11 +178,10 @@ describe('StrapeBinder.jsx', () => {
         .expects('calculateNewState')
         .once()
         .withArgs(dir);
-      const updateSelectedIdSpy = this.spy(actions, 'updateSelectedId');
+      this.stub(actions, 'updateSelectedId').returns(null);
       const execCbSpy = this.spy(funcHandler, 'execCb');
       const enterCbSpy = this.spy(funcHandler, 'enterTo');
       strape.performAction(dir, cb, enterCb);
-      updateSelectedIdSpy.should.have.been.calledOnce;
       execCbSpy.should.have.been.calledOnce;
       enterCbSpy.should.have.been.callCount(0);
     }));
@@ -299,9 +300,9 @@ describe('StrapeBinder.jsx', () => {
 
   it('should call enter and init prevDir on LEFT key with position true', sinon.test(function() {
     this.mock(actions)
-        .expects('enter')
-        .once()
-        .withArgs('myLeft', 'nextEl2');
+      .expects('enter')
+      .once()
+      .withArgs('myLeft', 'nextEl2');
     this.stub(active, 'isActive').returns(true);
     this.stub(clock, 'isBlocked').returns(false);
     const strape = new StrapeBinder();
@@ -319,9 +320,9 @@ describe('StrapeBinder.jsx', () => {
 
   it('should call enter and init prevDir on RIGHT key with position true', sinon.test(function() {
     this.mock(actions)
-        .expects('enter')
-        .once()
-        .withArgs('myRight', 'nextEl2');
+      .expects('enter')
+      .once()
+      .withArgs('myRight', 'nextEl2');
     this.stub(active, 'isActive').returns(true);
     this.stub(clock, 'isBlocked').returns(false);
     const strape = new StrapeBinder();

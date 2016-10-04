@@ -26,6 +26,7 @@ class Binder extends Component {
       focusedElementId: PropTypes.string,
       enterStrategy: PropTypes.string,
       context: PropTypes.object,
+      strict: PropTypes.bool,
       active: PropTypes.bool,
       accuracy: PropTypes.number,
       onRight: PropTypes.func,
@@ -58,6 +59,7 @@ class Binder extends Component {
       selector: 'li',
       accuracy: 0,
       active: false,
+      strict: false,
       enterStrategy: 'none',
     };
   }
