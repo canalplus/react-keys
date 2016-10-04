@@ -28,7 +28,6 @@ class Binder extends Component {
       context: PropTypes.object,
       strict: PropTypes.bool,
       active: PropTypes.bool,
-      accuracy: PropTypes.number,
       onRight: PropTypes.func,
       onLeft: PropTypes.func,
       onUp: PropTypes.func,
@@ -57,7 +56,6 @@ class Binder extends Component {
   static get defaultProps() {
     return {
       selector: 'li',
-      accuracy: 0,
       active: false,
       strict: false,
       enterStrategy: 'none',
@@ -129,7 +127,6 @@ class Binder extends Component {
       this.elements,
       this.props.selector,
       this.props.focusedElementId,
-      { accuracy: this.props.accuracy },
     );
     const { elements, selectedElement } = value;
     this.nextEl = selectedElement || this.nextEl || {};
