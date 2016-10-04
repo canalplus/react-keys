@@ -23,11 +23,15 @@ class Binder extends Component {
       ]),
       id: PropTypes.string.isRequired,
       selector: PropTypes.string,
+      filter: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.func,
+      ]),
       focusedElementId: PropTypes.string,
       enterStrategy: PropTypes.string,
       context: PropTypes.object,
+      strict: PropTypes.bool,
       active: PropTypes.bool,
-      accuracy: PropTypes.number,
       onRight: PropTypes.func,
       onLeft: PropTypes.func,
       onUp: PropTypes.func,
@@ -56,9 +60,10 @@ class Binder extends Component {
   static get defaultProps() {
     return {
       selector: 'li',
-      accuracy: 0,
       active: false,
+      strict: false,
       enterStrategy: 'none',
+      filter: null,
     };
   }
 
@@ -127,7 +132,7 @@ class Binder extends Component {
       this.elements,
       this.props.selector,
       this.props.focusedElementId,
-      { accuracy: this.props.accuracy },
+      { filter: this.props.filter }
     );
     const { elements, selectedElement } = value;
     this.nextEl = selectedElement || this.nextEl || {};

@@ -1,68 +1,64 @@
 import { hasDiff } from '../hasDiff';
 
-function createCoordsObject(el) {
-  const bounds = el.getBoundingClientRect();
+export function createCoordsObject(el) {
+  const { left, top, width, height } = el.getBoundingClientRect();
   return {
     id: el.id,
-    left: bounds.left,
-    top: bounds.top,
+    right: left + width,
+    down: top + height,
+    left,
+    top,
   };
 }
 
-export function isBetween(value, max, min) {
-  return typeof value === 'number' && value <= max && value >= min;
-}
+export const rightArray = (elCoords, coords) => coords
+  .filter(el => elCoords.right <= el.left)
+  .sort(elementSort(elCoords, calculRightScore));
 
-export function findRightElement(elCoords, coords, options) {
-  const rightElement = coords
-    .filter(el =>
-    isBetween(el.top, elCoords.top + options.accuracy, elCoords.top - options.accuracy)
-    && el.left > elCoords.left)
-    .sort((prev, next) => prev.left - next.left);
-  return rightElement[0] ? rightElement[0].id : undefined;
-}
+export const leftArray = (elCoords, coords) => coords
+  .filter(el => elCoords.left >= el.right)
+  .sort(elementSort(elCoords, calculLeftScore));
 
-export function findLeftElement(elCoords, coords, options) {
-  const leftElement = coords
-    .filter(el =>
-    isBetween(el.top, elCoords.top + options.accuracy, elCoords.top - options.accuracy)
-    && el.left < elCoords.left)
-    .sort((prev, next) => next.left - prev.left);
-  return leftElement[0] ? leftElement[0].id : undefined;
-}
+export const downArray = (elCoords, coords) => coords
+  .filter(el => elCoords.down <= el.top)
+  .sort(elementSort(elCoords, calculDowScore));
 
-export function findDownElement(elCoords, coords, options) {
-  const downElement = coords
-    .filter(el => el.left <= elCoords.left + options.accuracy && el.top > elCoords.top)
-    .sort((prev, next) => (prev.top - next.top) - (prev.left - next.left));
-  return downElement[0] ? downElement[0].id : undefined;
-}
+export const upArray = (elCoords, coords) => coords
+  .filter(el => elCoords.top >= el.down)
+  .sort(elementSort(elCoords, calculUpScore));
 
-export function findUpElement(elCoords, coords, options) {
-  const upElement = coords
-    .filter(el => el.left <= elCoords.left + options.accuracy && el.top < elCoords.top)
-    .sort((prev, next) => (next.top + next.left) - (prev.top + prev.left));
-  return upElement[0] ? upElement[0].id : undefined;
-}
+export const findElement = array => array[0] ? array[0].id : undefined;
 
+export const elementSort = (elCoords, score) =>
+  (prev, next) => score(prev, elCoords) - score(next, elCoords);
+
+export const calculRightScore =
+  (el, elCoords) => Math.abs(el.top - elCoords.top) + Math.abs(el.left - elCoords.right);
+
+export const calculLeftScore =
+  (el, elCoords) => Math.abs(el.top - elCoords.top) + Math.abs(el.right - elCoords.left);
+
+export const calculUpScore =
+  (el, elCoords) => Math.abs(el.down - elCoords.top) + Math.abs(el.left - elCoords.left);
+
+export const calculDowScore =
+  (el, elCoords) => Math.abs(el.top - elCoords.down) + Math.abs(el.left - elCoords.left);
 
 export function build(mosaic, options) {
-  const builtMosaic = [];
-  const mosaicCoords = mosaic.map(createCoordsObject);
+  const mosaicCoords = mosaic
+    .filter(el => el.id !== "")
+    .filter(el => [].slice.call(el.classList).indexOf(options.filter) === -1)
+    .map((createCoordsObject));
 
-  mosaic.forEach((el) => {
-    const elCoords = mosaicCoords.find(e => e.id === el.id);
-    const coords = {
+  return mosaicCoords.map((el) => {
+    return {
       id: el.id,
-      left: findLeftElement(elCoords, mosaicCoords, options),
-      right: findRightElement(elCoords, mosaicCoords, options),
-      up: findUpElement(elCoords, mosaicCoords, options),
-      down: findDownElement(elCoords, mosaicCoords, options),
+      left: findElement(leftArray(el, mosaicCoords)),
+      right: findElement(rightArray(el, mosaicCoords)),
+      up: findElement(upArray(el, mosaicCoords)),
+      down: findElement(downArray(el, mosaicCoords)),
     };
-    builtMosaic.push(coords);
   });
-
-  return builtMosaic;
 }
 
 export function createList(dom, selector) {

@@ -1,17 +1,154 @@
 import {
-  findRightElement,
-  findLeftElement,
-  findDownElement,
-  findUpElement,
-  isBetween,
   createList,
+  createCoordsObject,
+  calculDowScore,
+  calculLeftScore,
+  calculUpScore,
+  calculRightScore,
+  elementSort,
+  findElement,
   selectedElement,
+  upArray,
+  downArray,
+  leftArray,
+  rightArray,
   build,
 } from '../../src/engines/mosaic';
 import { expect } from 'chai';
 import jsdom from 'jsdom';
 
 describe('engine/mosaic.js', () => {
+  describe('createCoordsObject', () => {
+    it('should return right and bottom values', () => {
+      const el = {
+        id: 'C+',
+        getBoundingClientRect: () => {
+          return {
+            left: 10,
+            top: 20,
+            width: 30,
+            height: 40
+          }
+        }
+      };
+      createCoordsObject(el).id.should.equal('C+');
+      createCoordsObject(el).down.should.equal(60);
+      createCoordsObject(el).right.should.equal(40);
+    });
+  });
+  describe('calculDowScore', () => {
+    it('should return 5 with values', () => {
+      const el = { top: 10, left: 15 };
+      const elCoords = { down: 5, left: 15 };
+      calculDowScore(el, elCoords).should.equal(5);
+    });
+    it('should return 10 with values', () => {
+      const el = { top: 10, left: 15 };
+      const elCoords = { down: 5, left: 10 };
+      calculDowScore(el, elCoords).should.equal(10);
+    });
+    it('should return 20 with values', () => {
+      const el = { top: 10, left: 15 };
+      const elCoords = { down: 25, left: 10 };
+      calculDowScore(el, elCoords).should.equal(20);
+    });
+  });
+  describe('calculLeftScore', () => {
+    it('should return 5 with values', () => {
+      const el = { top: 10, right: 15 };
+      const elCoords = { top: 5, left: 15 };
+      calculLeftScore(el, elCoords).should.equal(5);
+    });
+    it('should return 10 with values', () => {
+      const el = { top: 10, right: 15 };
+      const elCoords = { top: 5, left: 10 };
+      calculLeftScore(el, elCoords).should.equal(10);
+    });
+    it('should return 20 with values', () => {
+      const el = { top: 10, right: 15 };
+      const elCoords = { top: 25, left: 10 };
+      calculLeftScore(el, elCoords).should.equal(20);
+    });
+  });
+  describe('calculUpScore', () => {
+    it('should return 5 with values', () => {
+      const el = { down: 10, left: 15 };
+      const elCoords = { top: 5, left: 15 };
+      calculUpScore(el, elCoords).should.equal(5);
+    });
+    it('should return 10 with values', () => {
+      const el = { down: 10, left: 15 };
+      const elCoords = { top: 5, left: 10 };
+      calculUpScore(el, elCoords).should.equal(10);
+    });
+    it('should return 20 with values', () => {
+      const el = { down: 10, left: 15 };
+      const elCoords = { top: 25, left: 10 };
+      calculUpScore(el, elCoords).should.equal(20);
+    });
+  });
+  describe('calculRightScore', () => {
+    it('should return 5 with values', () => {
+      const el = { top: 10, left: 15 };
+      const elCoords = { top: 5, right: 15 };
+      calculRightScore(el, elCoords).should.equal(5);
+    });
+    it('should return 10 with values', () => {
+      const el = { top: 10, left: 15 };
+      const elCoords = { top: 5, right: 10 };
+      calculRightScore(el, elCoords).should.equal(10);
+    });
+    it('should return 20 with values', () => {
+      const el = { top: 10, left: 15 };
+      const elCoords = { top: 25, right: 10 };
+      calculRightScore(el, elCoords).should.equal(20);
+    });
+  });
+  describe('elementSort', () => {
+    it('should return score for two elements', () => {
+      const elCoords = { top: 25, right: 10 };
+      const prev = { top: 25, left: 15 };
+      const next = { top: 25, left: 20 };
+      const rightScore = elementSort(elCoords, calculRightScore);
+      rightScore(prev, next).should.equal(-5);
+    });
+  });
+  describe('findElement', () => {
+    it('should return first id element of table', () => {
+      findElement([{ id: 1 }, { id: 2 }]).should.equal(1);
+    });
+    it('should return underfined if empty', () => {
+      expect(findElement([])).to.equal(undefined);
+    });
+  });
+  describe('upArray', () => {
+    it('should filter and sort array', () => {
+      const elCoords = { top: 30, left: 10 };
+      const coords = [{ down: 40, left: 10 }, { down: 10, left: 10 }, { down: 20, left: 10 }];
+      upArray(elCoords, coords).should.eql([{ down: 20, left: 10 }, { down: 10, left: 10 }]);
+    });
+  });
+  describe('downArray', () => {
+    it('should filter and sort array', () => {
+      const elCoords = { down: 30, left: 10 };
+      const coords = [{ top: 40, left: 10 }, { top: 10, left: 10 }, { top: 30, left: 10 }];
+      downArray(elCoords, coords).should.eql([{ top: 30, left: 10 }, { top: 40, left: 10 }]);
+    });
+  });
+  describe('leftArray', () => {
+    it('should filter and sort array', () => {
+      const elCoords = { top: 30, left: 10 };
+      const coords = [{ top: 40, right: 20 }, { top: 10, right: 5 }, { top: 30, right: 10 }];
+      leftArray(elCoords, coords).should.eql([{ top: 30, right: 10 }, { top: 10, right: 5 }]);
+    });
+  });
+  describe('rightArray', () => {
+    it('should filter and sort array', () => {
+      const elCoords = { top: 30, right: 10 };
+      const coords = [{ top: 40, left: 20 }, { top: 10, left: 5 }, { top: 30, left: 10 }];
+      rightArray(elCoords, coords).should.eql([{ top: 30, left: 10 }, { top: 40, left: 20 }]);
+    });
+  });
   it('createList should return an array', () => {
     const dom = jsdom.jsdom('<li id="0"></li><li id="1"></li><li id="2"></li>');
     createList(dom, 'li').should.be.an.array;
@@ -26,133 +163,6 @@ describe('engine/mosaic.js', () => {
     builded[1].id.should.equal('1');
     builded[2].id.should.equal('2');
   });
-  const mosaicCoords = [
-    {
-      id: 1,
-      top: 0,
-      left: 0,
-    },
-    {
-      id: 2,
-      top: 0,
-      left: 10,
-    },
-    {
-      id: 3,
-      top: 0,
-      left: 20,
-    },
-    {
-      id: 4,
-      top: 10,
-      left: 0,
-    },
-    {
-      id: 5,
-      top: 10,
-      left: 10,
-    },
-    {
-      id: 6,
-      top: 10,
-      left: 20,
-    },
-  ];
-
-  it('findRightElement should find first id element at right', () => {
-    const secondEl = {
-      id: 2,
-      top: 0,
-      left: 10,
-    };
-    const options = { accuracy: 0 };
-    findRightElement(secondEl, mosaicCoords, options).should.equal(3);
-  });
-
-  it('findRightElement should return undefined when there is no elements at right', () => {
-    const thirdEl = {
-      id: 3,
-      top: 0,
-      left: 20,
-    };
-    const options = { accuracy: 0 };
-    expect(findRightElement(thirdEl, mosaicCoords, options)).to.be.undefined;
-  });
-
-  it('findLeftElement should find first element id at left', () => {
-    const secondEl = {
-      id: 2,
-      top: 0,
-      left: 10,
-    };
-    const options = { accuracy: 0 };
-    findLeftElement(secondEl, mosaicCoords, options).should.equal(1);
-  });
-
-  it('findLeftElement should return undefined when there is no elements at left', () => {
-    const firstEl = {
-      id: 1,
-      top: 0,
-      left: 0,
-    };
-    const options = { accuracy: 0 };
-    expect(findLeftElement(firstEl, mosaicCoords, options)).to.be.undefined;
-  });
-
-  it('findDownElement should return first element id at down', () => {
-    const secondEl = {
-      id: 2,
-      top: 0,
-      left: 10,
-    };
-    const options = { accuracy: 0 };
-    findDownElement(secondEl, mosaicCoords, options).should.equal(5);
-  });
-
-  it('findDownElement should return undefined when there is no elements at down', () => {
-    const fifthEl = {
-      id: 5,
-      top: 10,
-      left: 10,
-    };
-    const options = { accuracy: 0 };
-    expect(findDownElement(fifthEl, mosaicCoords, options)).to.be.undefined;
-  });
-
-  it('findUpElement should return first element id at up', () => {
-    const fifthEl = {
-      id: 5,
-      top: 10,
-      left: 10,
-    };
-    const options = { accuracy: 0 };
-    findUpElement(fifthEl, mosaicCoords, options).should.equal(2);
-  });
-
-  it('findUpElement should return undefined when there is no elements at up', () => {
-    const secondEl = {
-      id: 2,
-      top: 0,
-      left: 10,
-    };
-    const options = { accuracy: 0 };
-    expect(findUpElement(secondEl, mosaicCoords, options)).to.be.undefined;
-  });
-
-  describe('isBetween', () => {
-    it('should return true if is in between', () => {
-      isBetween(5, 5, 5).should.be.true;
-      isBetween(5, 6, 4).should.be.true;
-      isBetween(5, 10, 1).should.be.true;
-    });
-
-    it('should return false when not between or NaN', () => {
-      isBetween(5, 4, 3).should.be.false;
-      isBetween(5, 2, 5).should.be.false;
-      isBetween('5', 10, 1).should.be.false;
-    });
-  });
-
   describe('selectedElement', () => {
     it('should return element from id when it exists in array', () => {
       const array = [{ id: '1' }, { id: '2' }];

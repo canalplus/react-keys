@@ -19,45 +19,59 @@ const store = createStore(combineReducers({
 
 keysInit({ store: store });
 
-const PureMosaic = ({ binder1, binder2, selectedId }) => {
-  const selectedId1 = binder1.selectedId;
-  const active1 = binder1.active;
-  const selectedId2 = binder2.selectedId;
-  const active2 = binder2.active;
-  const binder2Style = {
-    marginLeft: -binder2.marginLeft,
-  };
+const PureMosaic = ({ binder1 }) => {
+  const { selectedId } = binder1;
   return (
-    <div className="container">
-      <Binder id="binder1" onDownExit="binder2" active={true}>
-        <li id="b1" className={active1 && selectedId1 === 'b1' ? 'selected' : ''}>BOUTON 1</li>
-        <li id="b2" className={active1 && selectedId1 === 'b2' ? 'selected' : ''}>BOUTON 2</li>
-      </Binder>
-      <StrapeBinder id="binder2" onUpExit="binder1" enterStrategy="start" strategy="bounds"
-                    wrapper=".wrapper">
-        <div className="wrapper">
-          <ul style={binder2Style}>
-            <li id="b7" className={active2 && selectedId2 === 'b7' ? 'selected' : ''}>BOUTON 7</li>
-            <li id="b8" className={active2 && selectedId2 === 'b8' ? 'selected' : ''}>BOUTON 8</li>
-            <li id="b9" className={active2 && selectedId2 === 'b9' ? 'selected' : ''}>BOUTON 9</li>
-            <li id="b10" className={active2 && selectedId2 === 'b10' ? 'selected' : ''}>BOUTON 10
-            </li>
-            <li id="b11" className={active2 && selectedId2 === 'b11' ? 'selected' : ''}>BOUTON 11
-            </li>
-            <li id="b12" className={active2 && selectedId2 === 'b12' ? 'selected' : ''}>BOUTON 12
-            </li>
-          </ul>
-        </div>
-      </StrapeBinder>
-    </div>
+    <Binder id="binder1" active={true} filter="disabled" selector="td">
+      <table colSpan="2">
+        <tbody>
+        <tr>
+          <td id="15" className={selectedId === '15' ? 'selected' : ''}>15</td>
+          <td id="16" className={selectedId === '16' ? 'selected' : ''}>16</td>
+          <td id="17" className={selectedId === '17' ? 'selected' : ''}>17</td>
+          <td id="18" className={selectedId === '18' ? 'selected' : ''}>18</td>
+        </tr>
+
+        <tr>
+          <td id="1" rowSpan="2" className={selectedId === '1' ? 'selected' : ''}>1</td>
+          <td id="2" className={selectedId === '2' ? 'selected' : ''}>2</td>
+          <td id="5" className={selectedId === '5' ? 'selected' : ''}>5</td>
+          <td id="6" rowSpan="2" className={selectedId === '6' ? 'selected' : ''}>6</td>
+        </tr>
+        <tr>
+          <td id="3" className={selectedId === '3' ? 'selected' : ''}>3</td>
+          <td id="4" className={selectedId === '4' ? 'selected' : ''}>4</td>
+        </tr>
+        <tr>
+          <td id="7" className={selectedId === '7' ? 'selected' : ''}>7</td>
+          <td id="8" className={selectedId === '8' ? 'selected' : ''}>8</td>
+          <td id="9" className={selectedId === '9' ? 'selected' : ''}>9</td>
+          <td id="10" className={selectedId === '10' ? 'selected' : 'disabled'}>10</td>
+        </tr>
+        <tr>
+          <td id="11" className={selectedId === '11' ? 'selected' : ''}>11</td>
+          <td id="12" className={selectedId === '12' ? 'selected' : ''}>12</td>
+          <td id="13" className={selectedId === '13' ? 'selected' : ''}>13</td>
+          <td id="14" className={selectedId === '14' ? 'selected' : ''}>14</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td id="20" className={selectedId === '20' ? 'selected' : ''}>20</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td id="19" colSpan="4" className={selectedId === '19' ? 'selected' : ''}>19</td>
+        </tr>
+        </tbody>
+      </table>
+    </Binder>
   );
 };
 
 const Mosaic = connect(() => {
   return {
-    selectedId: keysSelector('current')().selectedId,
     binder1: keysSelector('binder1')(),
-    binder2: keysSelector('binder2')(),
   };
 })(PureMosaic);
 
