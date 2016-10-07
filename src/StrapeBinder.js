@@ -63,22 +63,22 @@ class StrapeBinder extends Component {
     };
   }
 
-	static get defaultProps() {
-		return {
-			strategy: 'progressive',
-			enterStrategy: 'none',
-			position: HORIZONTAL,
-			gap: 0,
-			lastGap: 0,
-			firstGap: 0,
-			accuracy: 0,
-			circular: false,
-			wrapper: 'ul',
-			wChildren: 'li',
-			active: false,
-			context: {},
-		};
-	}
+  static get defaultProps() {
+    return {
+      strategy: 'progressive',
+      enterStrategy: 'none',
+      position: HORIZONTAL,
+      gap: 0,
+      lastGap: 0,
+      firstGap: 0,
+      accuracy: 0,
+      circular: false,
+      wrapper: 'ul',
+      wChildren: 'li',
+      active: false,
+      context: {},
+    };
+  }
 
   constructor(props) {
     super(props);
@@ -206,6 +206,8 @@ class StrapeBinder extends Component {
     if (hasDiff(elements, this.elements)) {
       this.wrapperPosition = wrapper || this.wrapperPosition;
       this.elements = elements;
+      this.marginLeft = this.nextEl.marginLeft;
+      this.marginTop = this.nextEl.marginTop;
       _updateBinderState(this.props.id, {
         id: this.props.id,
         elements: this.elements,
