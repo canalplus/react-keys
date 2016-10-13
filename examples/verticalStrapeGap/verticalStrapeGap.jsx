@@ -29,7 +29,17 @@ Card.propTypes = {
   active: React.PropTypes.bool
 }
 
-const PureStrape = ({ selectedId, marginTop, binderId, active, onRightExit, onLeftExit }) => {
+const PureStrape = ({
+  selectedId,
+  marginTop,
+  binderId,
+  active,
+  onRightExit,
+  onLeftExit,
+  gap,
+  lastGap,
+  firstGap
+}) => {
 
   const listStyle = {
     marginTop: -marginTop,
@@ -43,9 +53,9 @@ const PureStrape = ({ selectedId, marginTop, binderId, active, onRightExit, onLe
         strategy="bounds"
         wrapper="#wrapper"
         position='vertical'
-        gap={130}
-        firstGap={100}
-        lastGap={10}
+        gap={gap}
+        firstGap={firstGap}
+        lastGap={lastGap}
         onLeftExit={onLeftExit}
         onRightExit={onRightExit}>
         <div id="wrapper">
@@ -79,16 +89,47 @@ PureStrape.propTypes = {
   binderId: React.PropTypes.object,
   active: React.PropTypes.bool,
   onRightExit: React.PropTypes.func,
-  onLeftExit: React.PropTypes.func
+  onLeftExit: React.PropTypes.func,
+  gap: React.PropTypes.number,
+  lastGap: React.PropTypes.number,
+  firstGap: React.PropTypes.number,
 }
 
 const Strape1 = connect(() => keysSelector('strape-1')())(PureStrape);
 const Strape2 = connect(() => keysSelector('strape-2')())(PureStrape);
+const Strape3 = connect(() => keysSelector('strape-3')())(PureStrape);
+const Strape4 = connect(() => keysSelector('strape-4')())(PureStrape);
 
 
 ReactDOM.render(<Provider store={store}>
   <div>
-    <Strape1 binderId="strape-1" onRightExit="strape-2" active={true}/>
-    <Strape2 binderId="strape-2" onLeftExit="strape-1" active={false}/>
+    <Strape1
+      binderId="strape-1"
+      onRightExit="strape-2"
+      active={true}
+      gap={130}
+      lastGap={130}
+      firstGap={100}/>
+    <Strape2
+      binderId="strape-2"
+      onLeftExit="strape-1"
+      onRightExit="strape-3"
+      active={false}
+      gap={130}
+      lastGap={10}
+      firstGap={10}/>
+    <Strape3
+      binderId="strape-3"
+      onLeftExit="strape-2"
+      onRightExit="strape-4"
+      active={false}
+      gap={130}
+      lastGap={10}
+      firstGap={50}/>
+    <Strape4
+      binderId="strape-4"
+      onLeftExit="strape-3"
+      active={false}
+      gap={130}/>
   </div>
 </Provider>, document.getElementById('body'));

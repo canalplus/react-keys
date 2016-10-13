@@ -18,14 +18,14 @@ export function findMirrorExitId(leftElement, children, moved) {
 export function findStartExitId(children, dom, moved) {
   const leftContainer = dom.getBoundingClientRect()[moved];
   const nextFocusedId = children
-      .map(el => {
-        return {
-          id: el.id,
-          [moved]: el.getBoundingClientRect()[moved] - leftContainer,
-        };
-      })
-      .filter(el => el[moved] > 0)
-      .sort((a, b) => a[moved] - b[moved]);
+    .map(el => {
+      return {
+        id: el.id,
+        [moved]: el.getBoundingClientRect()[moved] - leftContainer,
+      };
+    })
+    .filter(el => el[moved] > 0)
+    .sort((a, b) => a[moved] - b[moved]);
   return nextFocusedId[0].id;
 }
 
@@ -41,21 +41,15 @@ export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, ini
     case C_RIGHT:
       if (last.right > wrapperPosition.right && element.right + gap > wrapperPosition.right) {
         marginLeft = initialMarginLeft + element.right - wrapperPosition.right + gap;
-      } else if (element.right + gap > wrapperPosition.right) {
-        const bonus = el[C_RIGHT] ? gap : lastGap;
-        if (!el[C_RIGHT]) {
-          marginLeft = initialMarginLeft + element.right - wrapperPosition.right + bonus;
-        }
+      } else if (element.right + gap > wrapperPosition.right && !el[C_RIGHT]) {
+        marginLeft = initialMarginLeft + element.right - wrapperPosition.right + lastGap;
       }
       break;
     case C_LEFT:
       if (first.left < wrapperPosition.left && element.left < wrapperPosition.left + gap) {
         marginLeft = initialMarginLeft + element.left - wrapperPosition.left - gap;
-      } else if (element.left < wrapperPosition.left + gap) {
-        const bonus = el[C_LEFT] ? gap : lastGap;
-        if (!el[C_LEFT]) {
-          marginLeft = initialMarginLeft + element.left - wrapperPosition.left - bonus;
-        }
+      } else if (element.left < wrapperPosition.left + gap && !el[C_LEFT]) {
+        marginLeft = initialMarginLeft + element.left - wrapperPosition.left - lastGap;
       }
       break;
     case C_DOWN:
@@ -67,9 +61,11 @@ export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, ini
           marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + bonus;
         }
       } else if (element.bottom + gap > wrapperPosition.bottom) {
-        if (!el[C_DOWN]) {
+        if (lastGap >= gap) {
           const bonus = el[C_DOWN] ? gap : lastGap;
           marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + bonus;
+        } else if (!el[C_DOWN]) {
+          marginTop = initialMarginTop + element.bottom - wrapperPosition.bottom + lastGap;
         }
       }
       break;
@@ -77,11 +73,8 @@ export function calculateBounds(dir, el, wrapperPosition, initialMarginLeft, ini
       if (first.top < wrapperPosition.top && element.top < wrapperPosition.top + gap) {
         const bonus = el[C_UP] ? gap : firstGap;
         marginTop = initialMarginTop + element.top - wrapperPosition.top - bonus;
-      } else if (element.top < wrapperPosition.top + gap) {
-        if (!el[C_UP]) {
-          const bonus = el[C_UP] ? gap : firstGap;
-          marginTop = initialMarginTop + element.top - wrapperPosition.top - bonus;
-        }
+      } else if (element.top < wrapperPosition.top + gap && !el[C_UP]) {
+        marginTop = initialMarginTop + element.top - wrapperPosition.top - firstGap;
       }
       break;
     default:
