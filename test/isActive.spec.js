@@ -30,4 +30,14 @@ describe('isActive.js', () => {
     const store = createStore((state = { '@@keys': { 1: { active: true } } }) => state);
     isActive(store, props).should.be.true;
   });
+  it('should return false when state and @@keys.id.active = true sub state and props active === false', () => {
+    const props = { id: '1', active: false };
+    const store = createStore((state = { '@@keys': { 1: { active: true } } }) => state);
+    isActive(store, props).should.be.false;
+  });
+  it('should return false when state and @@keys.id.active = false sub state and props active === false', () => {
+    const props = { id: '1', active: false };
+    const store = createStore((state = { '@@keys': { 1: { active: false } } }) => state);
+    isActive(store, props).should.be.false;
+  });
 });
