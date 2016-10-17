@@ -27,7 +27,8 @@
     "build": "babel src/ -d build",
     "lint": "eslint src/** test/**",
     "dist": "npm run test && webpack --progress --colors --optimize-minimize",
-    "test": "npm run lint && mocha --compilers js:babel-core/register --require test/dom-config.js test/config.js test/*.spec.js test/**/*.spec.js --recursive",
+    "mocha": "mocha --compilers js:babel-core/register --require test/dom-config.js test/config.js test/*.spec.js test/**/*.spec.js --recursive",
+    "test": "npm run lint && npm run mocha",
     "coverage": "babel-node ./node_modules/istanbul/lib/cli.js cover _mocha -- test/dom-config.js test/config.js test/*.spec.js test/**/*.spec.js"
   },
   "devDependencies": {
