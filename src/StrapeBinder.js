@@ -75,7 +75,7 @@ class StrapeBinder extends Component {
       circular: false,
       wrapper: 'ul',
       wChildren: 'li',
-      active: false,
+      active: true,
       context: {},
     };
   }

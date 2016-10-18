@@ -60,7 +60,7 @@ class Binder extends Component {
   static get defaultProps() {
     return {
       selector: 'li',
-      active: false,
+      active: true,
       strict: false,
       enterStrategy: 'none',
       filter: null,
