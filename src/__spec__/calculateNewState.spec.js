@@ -1,5 +1,5 @@
-import { flipflop, calculateNewState } from '../src/calculateNewState';
-import { C_UP, C_DOWN, C_LEFT, C_RIGHT } from '../src/constants';
+import { flipflop, calculateNewState } from '../calculateNewState';
+import { C_UP, C_DOWN, C_LEFT, C_RIGHT } from '../constants';
 
 describe('calculateNewState.js', () => {
   describe('flipflop', () => {

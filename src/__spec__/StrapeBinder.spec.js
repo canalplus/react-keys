@@ -1,17 +1,17 @@
 /* eslint react/prop-types:0 */
 import React from 'react';
-import StrapeBinder from '../src/StrapeBinder';
+import StrapeBinder from '../StrapeBinder';
 import { shallow, mount } from 'enzyme';
-import { DOWN, UP, BACK, LEFT, RIGHT } from '../src/keys';
-import { HORIZONTAL, VERTICAL } from '../src/constants';
-import * as actions from '../src/redux/actions';
-import * as listener from '../src/listener';
-import * as funcHandler from '../src/funcHandler';
-import * as calculation from '../src/calculateNewState';
-import * as next from '../src/nextFocusedElement';
-import * as clock from '../src/clock';
-import * as active from '../src/isActive';
-import * as engine from '../src/engines/strape';
+import { DOWN, UP, BACK, LEFT, RIGHT } from '../keys';
+import { HORIZONTAL, VERTICAL } from '../constants';
+import * as actions from '../redux/actions';
+import * as listener from '../listener';
+import * as funcHandler from '../funcHandler';
+import * as calculation from '../calculateNewState';
+import * as next from '../nextFocusedElement';
+import * as clock from '../clock';
+import * as active from '../isActive';
+import * as engine from '../engines/strape';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
@@ -35,7 +35,7 @@ describe('StrapeBinder.jsx', () => {
 
   it('should call refreshState and _addKeyBinderToStore on mount', sinon.test(function() {
     const refreshStateSpy = this.spy(StrapeBinder.prototype, 'refreshState');
-    const addToStoreSpy = this.spy(actions, 'addKeyBinderToStore');
+    const addToStoreSpy = this.spy(actions, 'addBinderToStore');
     mount(<StrapeBinder id="1">
       <ul>
         <li id="li1"></li>
@@ -131,7 +131,7 @@ describe('StrapeBinder.jsx', () => {
       id: '1',
     };
     this.stub(strape, 'calculateNewState').returns(null);
-    this.stub(actions, 'updateSelectedId').returns(null);
+    this.stub(actions, 'updateBinderSelectedId').returns(null);
     this.mock(engine)
       .expects('calculateBounds')
       .once()
@@ -152,7 +152,7 @@ describe('StrapeBinder.jsx', () => {
         id: '1',
       };
       this.stub(strape, 'calculateNewState').returns(null);
-      this.stub(actions, 'updateSelectedId').returns(null);
+      this.stub(actions, 'updateBinderSelectedId').returns(null);
       this.mock(engine)
         .expects('calculateBounds')
         .never();
@@ -178,7 +178,7 @@ describe('StrapeBinder.jsx', () => {
         .expects('calculateNewState')
         .once()
         .withArgs(dir);
-      this.stub(actions, 'updateSelectedId').returns(null);
+      this.stub(actions, 'updateBinderSelectedId').returns(null);
       const execCbSpy = this.spy(funcHandler, 'execCb');
       const enterCbSpy = this.spy(funcHandler, 'enterTo');
       strape.performAction(dir, cb, enterCb);
@@ -204,7 +204,7 @@ describe('StrapeBinder.jsx', () => {
       .expects('calculateNewState')
       .once()
       .withArgs(dir);
-    const updateSelectedIdSpy = this.spy(actions, 'updateSelectedId');
+    const updateSelectedIdSpy = this.spy(actions, 'updateBinderSelectedId');
     const execCbSpy = this.spy(funcHandler, 'execCb');
     const enterCbSpy = this.spy(funcHandler, 'enterTo');
     strape.performAction(dir, cb, enterCb);
@@ -281,7 +281,7 @@ describe('StrapeBinder.jsx', () => {
 
   it('should call enter and init prevDir on UP key', sinon.test(function() {
     this.mock(actions)
-      .expects('enter')
+      .expects('activateBinder')
       .once()
       .withArgs('myup', 'nextEl2');
     this.stub(active, 'isActive').returns(true);
@@ -300,7 +300,7 @@ describe('StrapeBinder.jsx', () => {
 
   it('should call enter and init prevDir on LEFT key with position true', sinon.test(function() {
     this.mock(actions)
-      .expects('enter')
+      .expects('activateBinder')
       .once()
       .withArgs('myLeft', 'nextEl2');
     this.stub(active, 'isActive').returns(true);
@@ -320,7 +320,7 @@ describe('StrapeBinder.jsx', () => {
 
   it('should call enter and init prevDir on RIGHT key with position true', sinon.test(function() {
     this.mock(actions)
-      .expects('enter')
+      .expects('activateBinder')
       .once()
       .withArgs('myRight', 'nextEl2');
     this.stub(active, 'isActive').returns(true);
@@ -341,7 +341,7 @@ describe('StrapeBinder.jsx', () => {
 
   it('should call enter and init prevDir on DOWN key', sinon.test(function() {
     this.mock(actions)
-      .expects('enter')
+      .expects('activateBinder')
       .once()
       .withArgs('mydown', 'nextEl2');
     this.stub(active, 'isActive').returns(true);

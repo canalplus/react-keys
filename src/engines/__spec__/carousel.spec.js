@@ -2,10 +2,10 @@ import {
   build,
   getPrev,
   getNext,
-} from '../../src/engines/carousel';
+} from '../carousel';
 import { expect } from 'chai';
 
-describe('engine/carousel', () => {
+describe('engine/carousel.js', () => {
   describe('build', () => {
     it('should get initial state of a carousel depend of its index', () => {
       const table = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];

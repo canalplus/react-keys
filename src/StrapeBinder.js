@@ -10,10 +10,9 @@ import { nextFocusedElement } from './nextFocusedElement';
 import { calculateNewState } from './calculateNewState';
 import { addListener, removeListener } from './listener';
 import {
-  addKeyBinderToStore,
-  updateSelectedId,
+  addBinderToStore,
+  updateBinderSelectedId,
   _updateBinderState,
-  enter,
 } from './redux/actions';
 import { hasDiff } from './hasDiff';
 
@@ -148,7 +147,7 @@ class StrapeBinder extends Component {
     if (callback) {
       block();
       this.prevDir = null;
-      enter(callback, this.nextEl.id);
+      enterTo(callback, this.nextEl.id);
     }
   }
 
@@ -163,7 +162,7 @@ class StrapeBinder extends Component {
       } else {
         this.marginLeft = this.calculateMargin(dir, this.nextEl.marginLeft, lastCard, firstCard);
       }
-      updateSelectedId(this.props.id, this.nextEl.id, this.marginLeft, this.marginTop);
+      updateBinderSelectedId(this.props.id, this.nextEl.id, this.marginLeft, this.marginTop);
       execCb(cb, this.nextEl, this, this.props);
     } else {
       enterTo(exitCb);
@@ -231,7 +230,7 @@ class StrapeBinder extends Component {
   }
 
   componentDidMount() {
-    addKeyBinderToStore(this.props.id, this.props.active, STRAPE_TYPE);
+    addBinderToStore(this.props.id, this.props.active, STRAPE_TYPE);
     this.refreshState();
   }
 

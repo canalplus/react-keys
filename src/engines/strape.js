@@ -1,6 +1,32 @@
 import { trigger } from '../events';
 import { hasDiff } from '../hasDiff';
-import { C_LEFT, C_RIGHT, C_UP, C_DOWN, VERTICAL } from '../constants';
+import {
+  C_LEFT,
+  C_RIGHT,
+  C_UP,
+  C_DOWN,
+  VERTICAL,
+  EXIT_STRATEGY_MIRROR,
+  EXIT_STRATEGY_START,
+  EXIT_STRATEGY_MEMORY,
+} from '../constants';
+
+export function findIdByStrategy(state, binderId, nextElId) {
+  const { position, enterStrategy, selectedId, wChildren, elements } = state[binderId];
+  const moved = position === VERTICAL ? 'top' : 'left';
+  const dom = document.getElementById(binderId) || document;
+  const children = [].slice.call(dom.querySelectorAll(wChildren));
+  switch (enterStrategy) {
+    case EXIT_STRATEGY_MEMORY:
+      return selectedId;
+    case EXIT_STRATEGY_MIRROR:
+      return findMirrorExitId(document.getElementById(nextElId), children, moved);
+    case EXIT_STRATEGY_START:
+      return findStartExitId(children, dom, moved);
+    default:
+      return elements[0].id;
+  }
+}
 
 export function findMirrorExitId(leftElement, children, moved) {
   const leftPx = leftElement ? leftElement.getBoundingClientRect()[moved] : 0;

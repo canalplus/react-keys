@@ -3,14 +3,14 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { refresh } from './engines/mosaic';
 import { UP, DOWN, LEFT, RIGHT, ENTER, BACK } from './keys';
-import { C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE } from './constants';
+import { C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE, EXIT_STRATEGY_MEMORY } from './constants';
 import { isBlocked, block } from './clock';
 import { isActive } from './isActive';
 import { nextFocusedElement } from './nextFocusedElement';
 import { execCb, enterTo } from './funcHandler';
 import { calculateNewState } from './calculateNewState';
 import { addListener, removeListener } from './listener';
-import { addKeyBinderToStore, updateSelectedId, _updateBinderState } from './redux/actions';
+import { addBinderToStore, updateBinderSelectedId, _updateBinderState } from './redux/actions';
 import { hasDiff } from './hasDiff';
 
 class Binder extends Component {
@@ -118,10 +118,17 @@ class Binder extends Component {
     block();
     this.calculateNewState(dir);
     if (this.hasMoved) {
-      updateSelectedId(this.props.id, this.nextEl.id, this.nextEl.marginLeft);
+      updateBinderSelectedId(this.props.id, this.nextEl.id);
       execCb(cb, this.nextEl, this, this.props);
     } else {
-      enterTo(exitCb);
+      this.resetFlipFlop();
+      enterTo(exitCb, this.nextEl.id);
+    }
+  }
+
+  resetFlipFlop() {
+    if (this.props.enterStrategy !== EXIT_STRATEGY_MEMORY) {
+      this.prevDir = null;
     }
   }
 
@@ -157,7 +164,7 @@ class Binder extends Component {
   }
 
   componentDidMount() {
-    addKeyBinderToStore(this.props.id, this.props.active, BINDER_TYPE);
+    addBinderToStore(this.props.id, this.props.active, BINDER_TYPE);
     this.refreshState();
   }
 

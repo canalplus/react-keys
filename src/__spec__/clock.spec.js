@@ -1,4 +1,4 @@
-import { block, isBlocked } from '../src/clock';
+import { block, isBlocked } from '../clock';
 import sinon from 'sinon';
 
 describe('clock.js', () => {

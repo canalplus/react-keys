@@ -1,4 +1,4 @@
-import { keysActions, _register, trigger } from '../src/events';
+import { keysActions, _register, trigger } from '../events';
 import sinon from 'sinon';
 
 describe('events.js', () => {

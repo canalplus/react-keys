@@ -1,5 +1,5 @@
-import { execCb, enterTo } from '../src/funcHandler';
-import * as actions from '../src/redux/actions';
+import { execCb, enterTo } from '../funcHandler';
+import * as actions from '../redux/actions';
 import sinon from 'sinon';
 
 describe('funcHandler.js', () => {
@@ -45,7 +45,7 @@ describe('funcHandler.js', () => {
 
     it('should call enter when callback is a string', sinon.test(function() {
       this.mock(actions)
-        .expects('enter')
+        .expects('activateBinder')
         .once();
       enterTo('binder1', '1');
     }));

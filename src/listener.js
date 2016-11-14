@@ -43,7 +43,7 @@ export function cbRelease() {
 
 export function _init(ops) {
   globalStore = ops && ops.store ? ops.store : globalStore;
-  eventCb= ops && ops.eventCb ? ops.eventCb : function() {
+  eventCb = ops && ops.eventCb ? ops.eventCb : function() {
   };
   if (!ops || (ops && !ops.bindkeys)) {
     document.addEventListener('keydown', cb);
@@ -51,7 +51,6 @@ export function _init(ops) {
   } else {
     ops.bindkeys(cb, cbRelease);
   }
-
 }
 
 export function addListener(callback, context) {

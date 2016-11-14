@@ -1,14 +1,14 @@
 /* eslint react/prop-types:0 */
 import React from 'react';
-import Binder from '../src/Binder';
+import Binder from '../Binder';
 import { shallow, mount } from 'enzyme';
-import * as actions from '../src/redux/actions';
-import * as listener from '../src/listener';
-import * as funcHandler from '../src/funcHandler';
-import * as calculation from '../src/calculateNewState';
-import * as next from '../src/nextFocusedElement';
-import * as clock from '../src/clock';
-import * as active from '../src/isActive';
+import * as actions from '../redux/actions';
+import * as listener from '../listener';
+import * as funcHandler from '../funcHandler';
+import * as calculation from '../calculateNewState';
+import * as next from '../nextFocusedElement';
+import * as clock from '../clock';
+import * as active from '../isActive';
 import sinon from 'sinon';
 import { expect } from 'chai';
 
@@ -20,7 +20,7 @@ describe('Binder.jsx', () => {
 
   it('should call refreshState and _addKeyBinderToStore on mount', sinon.test(function() {
     const refreshStateSpy = this.spy(Binder.prototype, 'refreshState');
-    const addToStoreSpy = this.spy(actions, 'addKeyBinderToStore');
+    const addToStoreSpy = this.spy(actions, 'addBinderToStore');
     mount(<Binder id="1">
       <li id="li1"></li>
     </Binder>);
@@ -87,18 +87,6 @@ describe('Binder.jsx', () => {
     mosaic.setProps({ elems: [{ id: 1 }, { id: 2 }] });
   }));
 
-  it('should perform action call calculateNewState with right dir', sinon.test(function() {
-    const mosaic = new Binder({ props: {} });
-    const dir = 'left';
-    const cb = () => null;
-    const exitCb = () => null;
-    this.mock(mosaic)
-      .expects('calculateNewState')
-      .once()
-      .withArgs(dir);
-    mosaic.performAction(dir, cb, exitCb);
-  }));
-
   it('should update selected id et exec cb when it has moved on performAction',
     sinon.test(function() {
       const mosaic = new Binder();
@@ -117,7 +105,7 @@ describe('Binder.jsx', () => {
         .expects('calculateNewState')
         .once()
         .withArgs(dir);
-      const updateSelectedIdSpy = this.spy(actions, 'updateSelectedId');
+      const updateSelectedIdSpy = this.spy(actions, 'updateBinderSelectedId');
       const execCbSpy = this.spy(funcHandler, 'execCb');
       const enterCbSpy = this.spy(funcHandler, 'enterTo');
       mosaic.performAction(dir, cb, enterCb);
@@ -143,7 +131,7 @@ describe('Binder.jsx', () => {
       .expects('calculateNewState')
       .once()
       .withArgs(dir);
-    const updateSelectedIdSpy = this.spy(actions, 'updateSelectedId');
+    const updateSelectedIdSpy = this.spy(actions, 'updateBinderSelectedId');
     const execCbSpy = this.spy(funcHandler, 'execCb');
     const enterCbSpy = this.spy(funcHandler, 'enterTo');
     mosaic.performAction(dir, cb, enterCb);

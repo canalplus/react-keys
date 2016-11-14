@@ -1,6 +1,6 @@
-import { nextFocusedElement } from '../src/nextFocusedElement';
-import { globalStore } from '../src/listener';
-import { NAME } from '../src/constants';
+import { nextFocusedElement } from '../nextFocusedElement';
+import { globalStore } from '../listener';
+import { NAME } from '../constants';
 import sinon from 'sinon';
 import { expect } from 'chai';
 

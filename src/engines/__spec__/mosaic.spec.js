@@ -13,7 +13,7 @@ import {
   leftArray,
   rightArray,
   build,
-} from '../../src/engines/mosaic';
+} from '../mosaic';
 import { expect } from 'chai';
 import jsdom from 'jsdom';
 

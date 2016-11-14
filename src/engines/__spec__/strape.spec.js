@@ -11,8 +11,8 @@ import {
   selectedElement,
   findMirrorExitId,
   findStartExitId,
-} from '../../src/engines/strape';
-import { C_RIGHT, C_LEFT, C_DOWN, C_UP, VERTICAL } from '../../src/constants';
+} from '../strape';
+import { C_RIGHT, C_LEFT, C_DOWN, C_UP, VERTICAL } from '../../constants';
 import { expect } from 'chai';
 import jsdom from 'jsdom';
 import sinon from 'sinon';
