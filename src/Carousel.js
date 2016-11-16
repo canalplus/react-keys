@@ -5,7 +5,7 @@ import { addListener, removeListener } from './listener';
 import { isBlocked, block } from './clock';
 import { isActive } from './isActive';
 import { execCb } from './funcHandler';
-import { addKeyBinderToStore, _updateBinderState } from './redux/actions';
+import { addBinderToStore, _updateBinderState } from './redux/actions';
 import { LEFT, RIGHT, DOWN, UP, ENTER } from './keys';
 import { CAROUSEL_TYPE } from './constants';
 
@@ -61,7 +61,7 @@ class Carousel extends Component {
 
   componentWillMount() {
     const { id, active, children } = this.props;
-    addKeyBinderToStore(id, active, CAROUSEL_TYPE);
+    addBinderToStore(id, active, CAROUSEL_TYPE);
     if (children.length !== 0) {
       this.initializeCarousel(children);
     }

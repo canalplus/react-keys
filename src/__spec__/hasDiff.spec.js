@@ -1,4 +1,4 @@
-import { hasDiff } from '../src/hasDiff';
+import { hasDiff } from '../hasDiff';
 
 describe('hasDiff.js', () => {
   it('should return false if nextEls is empty', () => {

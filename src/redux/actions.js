@@ -1,174 +1,82 @@
 import { globalStore } from '../listener';
-import { findMirrorExitId, findStartExitId } from '../engines/strape';
+import { findIdByStrategy } from '../engines/strape';
 import { NAME } from '../constants';
-import {
-  EXIT_STRATEGY_MIRROR,
-  EXIT_STRATEGY_START,
-  EXIT_STRATEGY_MEMORY,
-  BINDER_TYPE,
-  KEYS_TYPE,
-  VERTICAL,
-} from '../constants';
+import { ensureDispatch, ensureMountedBinder, ensureUnmountedBinder } from './ensure';
 
-export const ACTIVE_KEYBINDER = [NAME, '/ACTIVE_KEYBINDER'].join('');
-export const ADD_KEYBINDER_TO_STORE = [NAME, '/ADD_KEYBINDER_TO_STORE'].join('');
+export const ACTIVATE_BINDER = [NAME, '/ACTIVATE_BINDER'].join('');
+export const ADD_BINDER_TO_STORE = [NAME, '/ADD_BINDER_TO_STORE'].join('');
 export const UPDATE_SELECTED_KEY = [NAME, '/UPDATE_SELECTED_KEY'].join('');
+export const UPDATE_BINDER_SELECTED_KEY = [NAME, '/UPDATE_BINDER_SELECTED_KEY'].join('');
 export const UPDATE_BINDER_STATE = [NAME, '/UPDATE_BINDER_STATE'].join('');
+export const UPDATE_CURRENT = [NAME, '/UPDATE_CURRENT'].join('');
 export const UPDATE_PRESS_STATUS = [NAME, '/UPDATE_PRESS_STATUS'].join('');
 
-export function clone(obj) {
-  const cloneObject = {};
-  for (const property in obj) {
-    if (typeof obj[property] === 'object') {
-      cloneObject[property] = clone(obj[property]);
-    } else if (typeof obj[property] !== 'function') {
-      cloneObject[property] = obj[property];
-    }
-  }
-  return cloneObject;
-}
-
-export function bindersKeys(newState) {
-  const keys = Object.keys(newState);
-  keys.splice(keys.indexOf('current'), 1);
-  return keys;
-}
-
-export function _activeKeyBinder(binderId, id, memory = false) {
-  if (globalStore.dispatch) {
-    const newState = clone(globalStore.getState()[NAME]);
-    if (newState[binderId] && newState[binderId].type !== KEYS_TYPE) {
-      for (const key of bindersKeys(newState)) {
-        newState[key].active = false;
-      }
-    }
-    if (bindersKeys(newState).some(key => key === binderId)) {
-      newState[binderId].active = true;
-      if (!memory) {
-        newState[binderId].selectedId =
-          newState[binderId].elements && newState[binderId].elements[0].id;
-      } else {
-        newState[binderId].selectedId = id || newState[binderId].selectedId;
-      }
-      newState.current = {
-        selectedId: newState[binderId].selectedId,
-        binderId: binderId,
-      };
-      globalStore.dispatch({
-        type: ACTIVE_KEYBINDER,
-        state: newState,
-      });
-    }
-  }
-}
-
-export function addKeyBinderToStore(binderId, active, type) {
-  if (globalStore.dispatch) {
-    const newState = clone(globalStore.getState()[NAME]);
-    if (!bindersKeys(newState).some(key => key === binderId)) {
-      newState[binderId] = {};
-      newState[binderId].id = binderId;
-      newState[binderId].type = type;
-      newState[binderId].active = active;
-      globalStore.dispatch({
-        type: ADD_KEYBINDER_TO_STORE,
-        state: newState,
-      });
-    }
-    if (active) {
-      _activeKeyBinder(binderId,
-        newState[binderId].elements && newState[binderId].elements[0].id);
-    }
-  }
+export function addBinderToStore(binderId, active, type) {
+  ensureDispatch();
+  ensureUnmountedBinder();
+  globalStore.dispatch({
+    type: ADD_BINDER_TO_STORE,
+    newBinder: { [binderId]: { id: binderId, active, type } },
+  });
 }
 
 export function _updateBinderState(binderId, binderState) {
-  if (globalStore.dispatch) {
-    const newState = clone(globalStore.getState()[NAME]);
-    newState[binderId] = { ...newState[binderId], ...binderState };
-    if (newState[binderId].active) {
-      newState.current = {
-        selectedId: binderState.selectedId ? binderState.selectedId : newState[binderId].selectedId,
-        binderId: binderId,
-      };
-    }
+  ensureDispatch();
+  ensureMountedBinder(binderId);
+  const { active, selectedId } = globalStore.getState()[NAME][binderId];
+  globalStore.dispatch({
+    type: UPDATE_BINDER_STATE,
+    binderId,
+    binderState,
+  });
+  if (active) {
     globalStore.dispatch({
-      type: UPDATE_BINDER_STATE,
-      state: newState,
+      type: UPDATE_CURRENT,
+      binderId,
+      selectedId,
     });
   }
 }
 
-export function enterStrape(position, strategy, callback, nextElId, children, dom) {
-  const isVertical = position === VERTICAL;
-  const moved = isVertical ? 'top' : 'left';
-  switch (strategy) {
-    case EXIT_STRATEGY_MIRROR:
-      _activeKeyBinder(callback,
-        findMirrorExitId(document.getElementById(nextElId), children, moved), true);
-      break;
-    case EXIT_STRATEGY_START:
-      _activeKeyBinder(callback, findStartExitId(children, dom, moved), true)
-      break;
-    case EXIT_STRATEGY_MEMORY:
-      _activeKeyBinder(callback, null, true);
-      break;
-    default:
-      _activeKeyBinder(callback);
-      break;
-  }
+export function updateBinderSelectedId(binderId, selectedId, marginLeft = 0, marginTop = 0) {
+  ensureDispatch();
+  globalStore.dispatch({
+    type: UPDATE_BINDER_SELECTED_KEY,
+    binderId,
+    selectedId,
+    marginLeft,
+    marginTop,
+  });
 }
 
-export function enterBinder(strategy, callback) {
-  switch (strategy) {
-    case EXIT_STRATEGY_MEMORY:
-      _activeKeyBinder(callback, null, true);
-      break;
-    default:
-      _activeKeyBinder(callback);
-      break;
-  }
+export function desactivateBinders(binders, binderId) {
+  let updatedBinders = {};
+  Object.keys(binders).map(key => {
+    if (key !== 'current' && key !== 'PRESS' && key !== binderId)
+      updatedBinders[key] = { ...binders[key], active: false };
+  });
+  return updatedBinders;
 }
 
-export function enter(callback, nextElId) {
-  if (typeof callback === 'string') {
-    const nextBinderState = globalStore.getState()[NAME][callback] || {};
-    const strategy = nextBinderState.enterStrategy;
-    const position = nextBinderState.position;
-    if (nextBinderState.type === BINDER_TYPE) {
-      enterBinder(strategy, callback);
-    } else {
-      const dom = document.getElementById(callback) || document;
-      const children = [].slice.call(dom.querySelectorAll(nextBinderState.wChildren));
-      enterStrape(position, strategy, callback, nextElId, children, dom);
-    }
-  } else {
-    callback();
-  }
-}
-
-export function updateSelectedId(binderId, selectedId, marginLeft, marginTop) {
-  if (globalStore.dispatch) {
-    const newState = clone(globalStore.getState()[NAME]);
-    newState[binderId].selectedId = selectedId;
-    newState[binderId].marginLeft = marginLeft;
-    newState[binderId].marginTop = marginTop;
-    newState.current.selectedId = selectedId;
-    globalStore.dispatch({
-      type: UPDATE_SELECTED_KEY,
-      state: newState,
-    });
-  }
+export function activateBinder(binderId, nextElId) {
+  ensureDispatch();
+  ensureMountedBinder(binderId);
+  const state = globalStore.getState()[NAME];
+  globalStore.dispatch({
+    type: ACTIVATE_BINDER,
+    binderId,
+    inactiveBinders: desactivateBinders(state, binderId),
+    selectedId: findIdByStrategy(state, binderId, nextElId),
+  });
 }
 
 export function updatePressStatus(press, keyCode = null) {
-  if (globalStore.dispatch) {
-    if (globalStore.getState()[NAME]['PRESS'].press !== press) {
-      globalStore.dispatch({
-        type: UPDATE_PRESS_STATUS,
-        press: press,
-        keyCode: keyCode,
-      });
-    }
+  ensureDispatch();
+  if (globalStore.getState()[NAME]['PRESS'].press !== press) {
+    globalStore.dispatch({
+      type: UPDATE_PRESS_STATUS,
+      press,
+      keyCode,
+    });
   }
 }

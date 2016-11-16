@@ -1,7 +1,7 @@
-import { isActive } from '../src/isActive';
+import { isActive } from '../isActive';
 import sinon from 'sinon';
-import { globalStore } from '../src/listener';
-import { NAME } from '../src/constants';
+import { globalStore } from '../listener';
+import { NAME } from '../constants';
 
 describe('isActive.js', () => {
   it('should return true when no state and props active = true', () => {
@@ -10,7 +10,7 @@ describe('isActive.js', () => {
   });
   it('should return false when no state and props active = false', () => {
     const props = { id: '1', active: false };
-    isActive(props).should.be.false;
+    isActive(props).should.be.true;
   });
   it('should return active status when state and no sub state', sinon.test(function() {
     this.stub(globalStore, 'getState').returns({});
@@ -32,9 +32,9 @@ describe('isActive.js', () => {
     const props = { id: '1', active: true };
     isActive(props).should.be.true;
   }));
-  it('should return false when state and id.active = true  and props = false sub state', sinon.test(function() {
+  it('should return true when state and id.active = true  and props = false sub state', sinon.test(function() {
     this.stub(globalStore, 'getState').returns({ [NAME]: { 1: { active: true } } });
     const props = { id: '1', active: false };
-    isActive(props).should.be.false;
+    isActive(props).should.be.true;
   }));
 });

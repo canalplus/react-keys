@@ -1,6 +1,6 @@
-import { _selector } from '../src/selector';
-import { globalStore } from '../src/listener';
-import { NAME } from '../src/constants';
+import { _selector } from '../selector';
+import { globalStore } from '../listener';
+import { NAME } from '../constants';
 import sinon from 'sinon';
 import { expect } from 'chai';
 

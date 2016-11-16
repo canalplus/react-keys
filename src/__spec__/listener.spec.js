@@ -8,9 +8,9 @@ import {
   addListener,
   removeListener,
   globalStore,
-} from '../src/listener';
-import { NAME } from '../src/constants';
-import * as actions from '../src/redux/actions';
+} from '../listener';
+import { NAME } from '../constants';
+import * as actions from '../redux/actions';
 
 import sinon from 'sinon';
 
