@@ -2,13 +2,13 @@
 import React from 'react';
 import Binder from '../Binder';
 import { shallow, mount } from 'enzyme';
-import * as actions from '../redux/actions';
-import * as listener from '../listener';
-import * as funcHandler from '../funcHandler';
-import * as calculation from '../calculateNewState';
-import * as next from '../nextFocusedElement';
-import * as clock from '../clock';
-import * as active from '../isActive';
+import * as actions from '../../redux/actions';
+import * as listener from '../../listener';
+import * as funcHandler from '../../funcHandler';
+import * as calculation from '../../calculateNewState';
+import * as next from '../../nextFocusedElement';
+import * as clock from '../../clock';
+import * as active from '../../isActive';
 import sinon from 'sinon';
 import { expect } from 'chai';
 

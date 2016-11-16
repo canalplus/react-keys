@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { isBlocked, block } from './clock';
-import { addListener, removeListener } from './listener';
-import { addBinderToStore } from './redux/actions';
+import { isBlocked, block } from '../clock';
+import { addListener, removeListener } from '../listener';
+import { addBinderToStore } from '../redux/actions';
 import {
   BACK,
   DOWN,
@@ -22,9 +22,9 @@ import {
   NUM7,
   NUM8,
   NUM9,
-} from './keys';
-import { execCb } from './funcHandler';
-import { KEYS_TYPE } from './constants';
+} from '../keys';
+import { execCb } from '../funcHandler';
+import { KEYS_TYPE } from '../constants';
 
 class Keys extends Component {
 

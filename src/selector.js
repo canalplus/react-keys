@@ -1,9 +1,8 @@
 import { globalStore } from './listener';
 import { NAME } from './constants';
+import { ensureState } from './ensure';
 
 export function _selector(id) {
-  if (!globalStore.getState()[NAME]) {
-    throw new Error('keys state not present un global state');
-  }
+  ensureState();
   return () => globalStore.getState()[NAME][id] || { marginLeft: 0, marginTop: 0 };
 }

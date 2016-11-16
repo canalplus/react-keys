@@ -1,7 +1,7 @@
 import { globalStore } from '../listener';
 import { findIdByStrategy } from '../engines/strape';
 import { NAME } from '../constants';
-import { ensureDispatch, ensureMountedBinder, ensureUnmountedBinder } from './ensure';
+import { ensureDispatch, ensureMountedBinder, ensureUnmountedBinder } from '../ensure';
 
 export const ACTIVATE_BINDER = [NAME, '/ACTIVATE_BINDER'].join('');
 export const ADD_BINDER_TO_STORE = [NAME, '/ADD_BINDER_TO_STORE'].join('');

@@ -1,7 +1,7 @@
-import _StrapeBinder from './StrapeBinder';
-import _Binder from './Binder';
-import _Keys from './Basic';
-import _Carousel from './Carousel';
+import _StrapeBinder from './components/StrapeBinder';
+import _Binder from './components/Binder';
+import _Keys from './components/Basic';
+import _Carousel from './components/Carousel';
 import { _register } from './events';
 import { _init } from './listener';
 import { UP, DOWN, LEFT, RIGHT, ENTER, NUMERICS } from './keys';

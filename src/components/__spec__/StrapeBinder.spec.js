@@ -2,16 +2,16 @@
 import React from 'react';
 import StrapeBinder from '../StrapeBinder';
 import { shallow, mount } from 'enzyme';
-import { DOWN, UP, BACK, LEFT, RIGHT } from '../keys';
-import { HORIZONTAL, VERTICAL } from '../constants';
-import * as actions from '../redux/actions';
-import * as listener from '../listener';
-import * as funcHandler from '../funcHandler';
-import * as calculation from '../calculateNewState';
-import * as next from '../nextFocusedElement';
-import * as clock from '../clock';
-import * as active from '../isActive';
-import * as engine from '../engines/strape';
+import { DOWN, UP, BACK, LEFT, RIGHT } from '../../keys';
+import { HORIZONTAL, VERTICAL } from '../../constants';
+import * as actions from '../../redux/actions';
+import * as listener from '../../listener';
+import * as funcHandler from '../../funcHandler';
+import * as calculation from '../../calculateNewState';
+import * as next from '../../nextFocusedElement';
+import * as clock from '../../clock';
+import * as active from '../../isActive';
+import * as engine from '../../engines/strape';
 import { expect } from 'chai';
 import sinon from 'sinon';
 

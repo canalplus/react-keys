@@ -1,13 +1,13 @@
 /* eslint no-unused-vars:0 */
 import React, { Component, PropTypes } from 'react';
-import { build, getNext, getPrev } from './engines/carousel';
-import { addListener, removeListener } from './listener';
-import { isBlocked, block } from './clock';
-import { isActive } from './isActive';
-import { execCb } from './funcHandler';
-import { addBinderToStore, _updateBinderState } from './redux/actions';
-import { LEFT, RIGHT, DOWN, UP, ENTER } from './keys';
-import { CAROUSEL_TYPE } from './constants';
+import { build, getNext, getPrev } from '../engines/carousel';
+import { addListener, removeListener } from '../listener';
+import { isBlocked, block } from '../clock';
+import { isActive } from '../isActive';
+import { execCb } from '../funcHandler';
+import { addBinderToStore, _updateBinderState } from '../redux/actions';
+import { LEFT, RIGHT, DOWN, UP, ENTER } from '../keys';
+import { CAROUSEL_TYPE } from '../constants';
 
 class Carousel extends Component {
 

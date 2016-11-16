@@ -1,17 +1,17 @@
 /* eslint no-unused-vars:0 */
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import { refresh } from './engines/mosaic';
-import { UP, DOWN, LEFT, RIGHT, ENTER, BACK } from './keys';
-import { C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE, EXIT_STRATEGY_MEMORY } from './constants';
-import { isBlocked, block } from './clock';
-import { isActive } from './isActive';
-import { nextFocusedElement } from './nextFocusedElement';
-import { execCb, enterTo } from './funcHandler';
-import { calculateNewState } from './calculateNewState';
-import { addListener, removeListener } from './listener';
-import { addBinderToStore, updateBinderSelectedId, _updateBinderState } from './redux/actions';
-import { hasDiff } from './hasDiff';
+import { refresh } from '../engines/mosaic';
+import { UP, DOWN, LEFT, RIGHT, ENTER, BACK } from '../keys';
+import { C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE, EXIT_STRATEGY_MEMORY } from '../constants';
+import { isBlocked, block } from '../clock';
+import { isActive } from '../isActive';
+import { nextFocusedElement } from '../nextFocusedElement';
+import { execCb, enterTo } from '../funcHandler';
+import { calculateNewState } from '../calculateNewState';
+import { addListener, removeListener } from '../listener';
+import { addBinderToStore, updateBinderSelectedId, _updateBinderState } from '../redux/actions';
+import { hasDiff } from '../hasDiff';
 
 class Binder extends Component {
 

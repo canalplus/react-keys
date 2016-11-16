@@ -11,7 +11,7 @@ import {
   updatePressStatus,
   UPDATE_PRESS_STATUS,
 } from '../actions';
-import * as ensure from '../ensure';
+import * as ensure from '../../ensure';
 import * as listener from '../../listener';
 import * as strape from '../../engines/strape';
 import sinon from 'sinon';

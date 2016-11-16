@@ -1,20 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import { UP, DOWN, LEFT, RIGHT, ENTER, BACK } from './keys';
-import { C_LEFT, C_RIGHT, C_UP, C_DOWN, STRAPE_TYPE, HORIZONTAL, VERTICAL } from './constants';
-import { refresh, calculateBounds } from './engines/strape';
-import { isBlocked, block } from './clock';
-import { isActive } from './isActive';
-import { execCb, enterTo } from './funcHandler';
-import { nextFocusedElement } from './nextFocusedElement';
-import { calculateNewState } from './calculateNewState';
-import { addListener, removeListener } from './listener';
+import { UP, DOWN, LEFT, RIGHT, ENTER, BACK } from '../keys';
+import { C_LEFT, C_RIGHT, C_UP, C_DOWN, STRAPE_TYPE, HORIZONTAL, VERTICAL } from '../constants';
+import { refresh, calculateBounds } from '../engines/strape';
+import { isBlocked, block } from '../clock';
+import { isActive } from '../isActive';
+import { execCb, enterTo } from '../funcHandler';
+import { nextFocusedElement } from '../nextFocusedElement';
+import { calculateNewState } from '../calculateNewState';
+import { addListener, removeListener } from '../listener';
 import {
   addBinderToStore,
   updateBinderSelectedId,
   _updateBinderState,
-} from './redux/actions';
-import { hasDiff } from './hasDiff';
+} from '../redux/actions';
+import { hasDiff } from '../hasDiff';
 
 class StrapeBinder extends Component {
 

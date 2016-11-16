@@ -1,5 +1,11 @@
-import { globalStore } from '../listener';
-import { NAME } from '../constants';
+import { globalStore } from './listener';
+import { NAME } from './constants';
+
+export function ensureState() {
+  if (!globalStore.getState()[NAME]) {
+    throw new Error('keys state not present un global state');
+  }
+}
 
 export function ensureDispatch() {
   if (!globalStore.dispatch) {
