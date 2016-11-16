@@ -17,20 +17,19 @@ class Binder extends Component {
 
   static get propTypes() {
     return {
+      id: PropTypes.string.isRequired,
       children: React.PropTypes.oneOfType([
         React.PropTypes.object,
         React.PropTypes.array,
       ]),
-      id: PropTypes.string.isRequired,
       selector: PropTypes.string,
       filter: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.func,
       ]),
-      focusedElementId: PropTypes.string,
+      focusedId: PropTypes.string,
       enterStrategy: PropTypes.string,
       context: PropTypes.object,
-      strict: PropTypes.bool,
       active: PropTypes.bool,
       onRight: PropTypes.func,
       onLeft: PropTypes.func,
@@ -61,7 +60,6 @@ class Binder extends Component {
     return {
       selector: 'li',
       active: true,
-      strict: false,
       enterStrategy: 'none',
       filter: null,
     };
@@ -69,8 +67,8 @@ class Binder extends Component {
 
   constructor(props) {
     super(props);
-    this.elements = [];
     this.listenerId = addListener(this.keysHandler, this);
+    this.elements = [];
     this.prevEl = null;
     this.nextEl = null;
     this.prevDir = null;
@@ -138,7 +136,7 @@ class Binder extends Component {
       dom,
       this.elements,
       this.props.selector,
-      this.props.focusedElementId,
+      this.props.focusedId,
       { filter: this.props.filter }
     );
     const { elements, selectedElement } = value;

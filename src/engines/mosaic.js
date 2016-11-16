@@ -64,13 +64,13 @@ export function createList(dom, selector) {
   return [].slice.call(elements);
 }
 
-export function selectedElement(elements, focusedElementId) {
-  const focusedElement = focusedElementId
-    ? elements.find(e => e.id === focusedElementId) : null;
-  return focusedElement || elements[0];
+export function selectedElement(elements, focusedId) {
+  const focusedEl = focusedId
+    ? elements.find(e => e.id === focusedId) : null;
+  return focusedEl || elements[0];
 }
 
-export function refresh(dom, prevElement, selector, focusedElementId, options) {
+export function refresh(dom, prevElement, selector, focusedId, options) {
   const elements = createList(dom, selector);
   if (!hasDiff(elements, prevElement)) {
     return {
@@ -81,6 +81,6 @@ export function refresh(dom, prevElement, selector, focusedElementId, options) {
   const nextElements = build(elements, options);
   return {
     elements: nextElements,
-    selectedElement: selectedElement(nextElements, focusedElementId),
+    selectedElement: selectedElement(nextElements, focusedId),
   };
 }

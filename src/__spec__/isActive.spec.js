@@ -2,15 +2,19 @@ import { isActive } from '../isActive';
 import sinon from 'sinon';
 import { globalStore } from '../listener';
 import { NAME } from '../constants';
+import { reset } from '../../test/mocks';
 
 describe('isActive.js', () => {
+
+  beforeEach(() => reset());
+
   it('should return true when no state and props active = true', () => {
     const props = { id: '1', active: true };
     isActive(props).should.be.true;
   });
   it('should return false when no state and props active = false', () => {
     const props = { id: '1', active: false };
-    isActive(props).should.be.true;
+    isActive(props).should.be.false;
   });
   it('should return active status when state and no sub state', sinon.test(function() {
     this.stub(globalStore, 'getState').returns({});

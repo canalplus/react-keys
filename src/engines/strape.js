@@ -248,7 +248,7 @@ export function refresh(dom, prevElements, wrapper, children, options) {
   return {
     elements: nextElements,
     wrapper: wrapperPosition,
-    selectedElement: selectedElement(nextElements, options.focusedElementId),
+    selectedElement: selectedElement(nextElements, options.focusedId),
   };
 }
 

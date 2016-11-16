@@ -195,7 +195,7 @@ class StrapeBinder extends Component {
         lastGap: this.props.lastGap,
         strategy: this.props.strategy,
         cicrular: this.props.circular,
-        focusedElementId: this.props.focusedElementId,
+        focusedElementId: this.props.focusedId,
         position: this.props.position
       }
     );

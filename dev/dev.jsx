@@ -72,6 +72,7 @@ const PureMosaic = ({ binder1, binder2 }) => {
               filter="disabled"
               selector="td"
               onDownExit="strape-1"
+              focusedId="7"
               enterStrategy="memory">
         <table colSpan="2">
           <tbody>
