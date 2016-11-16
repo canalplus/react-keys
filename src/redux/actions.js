@@ -5,7 +5,6 @@ import { ensureDispatch, ensureMountedBinder, ensureUnmountedBinder } from './en
 
 export const ACTIVATE_BINDER = [NAME, '/ACTIVATE_BINDER'].join('');
 export const ADD_BINDER_TO_STORE = [NAME, '/ADD_BINDER_TO_STORE'].join('');
-export const UPDATE_SELECTED_KEY = [NAME, '/UPDATE_SELECTED_KEY'].join('');
 export const UPDATE_BINDER_SELECTED_KEY = [NAME, '/UPDATE_BINDER_SELECTED_KEY'].join('');
 export const UPDATE_BINDER_STATE = [NAME, '/UPDATE_BINDER_STATE'].join('');
 export const UPDATE_CURRENT = [NAME, '/UPDATE_CURRENT'].join('');

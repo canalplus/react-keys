@@ -1,7 +1,6 @@
 import {
   ACTIVATE_BINDER,
   ADD_BINDER_TO_STORE,
-  UPDATE_SELECTED_KEY,
   UPDATE_BINDER_STATE,
   UPDATE_PRESS_STATUS,
   UPDATE_BINDER_SELECTED_KEY,
@@ -68,8 +67,6 @@ export function _keyReducer(state = initialKeysSate, action) {
           selectedId: action.selectedId
         }
       };
-    case UPDATE_SELECTED_KEY:
-      return { ...state, ...action.state };
     case UPDATE_PRESS_STATUS:
       return { ...state, 'PRESS': { press: action.press, keyCode: action.keyCode } };
     case 'RESET_STATE':
