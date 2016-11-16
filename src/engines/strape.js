@@ -31,12 +31,10 @@ export function findIdByStrategy(state, binderId, nextElId) {
 export function findMirrorExitId(leftElement, children, moved) {
   const leftPx = leftElement ? leftElement.getBoundingClientRect()[moved] : 0;
   const nextFocusedId = children
-    .map(el => {
-      return {
-        id: el.id,
-        diff: Math.abs(el.getBoundingClientRect()[moved] - leftPx),
-      };
-    })
+    .map(el => ({
+      id: el.id,
+      diff: Math.abs(el.getBoundingClientRect()[moved] - leftPx),
+    }))
     .sort((a, b) => a.diff - b.diff);
   return nextFocusedId[0].id;
 }
@@ -44,12 +42,10 @@ export function findMirrorExitId(leftElement, children, moved) {
 export function findStartExitId(children, dom, moved) {
   const leftContainer = dom.getBoundingClientRect()[moved];
   const nextFocusedId = children
-    .map(el => {
-      return {
-        id: el.id,
-        [moved]: el.getBoundingClientRect()[moved] - leftContainer,
-      };
-    })
+    .map(el => ({
+      id: el.id,
+      [moved]: el.getBoundingClientRect()[moved] - leftContainer,
+    }))
     .filter(el => el[moved] > 0)
     .sort((a, b) => a[moved] - b[moved]);
   return nextFocusedId[0].id;

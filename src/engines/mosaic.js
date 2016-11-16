@@ -50,15 +50,13 @@ export function build(mosaic, options) {
     .filter(el => [].slice.call(el.classList).indexOf(options.filter) === -1)
     .map((createCoordsObject));
 
-  return mosaicCoords.map((el) => {
-    return {
-      id: el.id,
-      left: findElement(leftArray(el, mosaicCoords)),
-      right: findElement(rightArray(el, mosaicCoords)),
-      up: findElement(upArray(el, mosaicCoords)),
-      down: findElement(downArray(el, mosaicCoords)),
-    };
-  });
+  return mosaicCoords.map((el) => ({
+    id: el.id,
+    left: findElement(leftArray(el, mosaicCoords)),
+    right: findElement(rightArray(el, mosaicCoords)),
+    up: findElement(upArray(el, mosaicCoords)),
+    down: findElement(downArray(el, mosaicCoords)),
+  }));
 }
 
 export function createList(dom, selector) {
