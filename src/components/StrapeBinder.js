@@ -25,7 +25,7 @@ class StrapeBinder extends Component {
         React.PropTypes.array,
       ]),
       id: PropTypes.string.isRequired,
-      focusedElementId: PropTypes.string,
+      focusedId: PropTypes.string,
       context: PropTypes.object,
       onRight: PropTypes.func,
       onLeft: PropTypes.func,
@@ -195,7 +195,7 @@ class StrapeBinder extends Component {
         lastGap: this.props.lastGap,
         strategy: this.props.strategy,
         cicrular: this.props.circular,
-        focusedElementId: this.props.focusedId,
+        focusedId: this.props.focusedId,
         position: this.props.position
       }
     );

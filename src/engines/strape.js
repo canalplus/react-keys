@@ -227,9 +227,9 @@ export function createList(dom, children) {
   return elements ? [].slice.call(elements) : [];
 }
 
-export function selectedElement(elements, focusedElementId) {
-  const focusedElement = focusedElementId
-    ? elements.find(e => e.id === focusedElementId) : null;
+export function selectedElement(elements, focusedId) {
+  const focusedElement = focusedId
+    ? elements.find(e => e.id === focusedId) : null;
   return focusedElement || elements[0];
 }
 
