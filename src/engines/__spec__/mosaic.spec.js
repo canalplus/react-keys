@@ -1,6 +1,5 @@
 import {
   createList,
-  createCoordsObject,
   calculDowScore,
   calculLeftScore,
   calculUpScore,
@@ -18,24 +17,6 @@ import { expect } from 'chai';
 import jsdom from 'jsdom';
 
 describe('engine/mosaic.js', () => {
-  describe('createCoordsObject', () => {
-    it('should return right and bottom values', () => {
-      const el = {
-        id: 'C+',
-        getBoundingClientRect: () => {
-          return {
-            left: 10,
-            top: 20,
-            width: 30,
-            height: 40
-          }
-        }
-      };
-      createCoordsObject(el).id.should.equal('C+');
-      createCoordsObject(el).down.should.equal(60);
-      createCoordsObject(el).right.should.equal(40);
-    });
-  });
   describe('calculDowScore', () => {
     it('should return 5 with values', () => {
       const el = { top: 10, left: 15 };

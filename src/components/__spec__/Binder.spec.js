@@ -5,7 +5,7 @@ import { shallow, mount } from 'enzyme';
 import * as actions from '../../redux/actions';
 import * as listener from '../../listener';
 import * as funcHandler from '../../funcHandler';
-import * as calculation from '../../calculateNewState';
+import * as calculation from '../../engines/helpers';
 import * as next from '../../nextFocusedElement';
 import * as clock from '../../clock';
 import * as active from '../../isActive';

@@ -1,7 +1,25 @@
 import { C_UP, C_DOWN, C_LEFT, C_RIGHT } from '../../constants';
-import { hasDiff, calculateNewState, flipflop } from '../helpers';
+import { hasDiff, calculateNewState, flipflop, calculateElSpace } from '../helpers';
 
 describe('helpers.js', () => {
+  describe('calculateElSpace', () => {
+    it('should return right and bottom values', () => {
+      const el = {
+        id: 'C+',
+        getBoundingClientRect: () => {
+          return {
+            left: 10,
+            top: 20,
+            width: 30,
+            height: 40
+          }
+        }
+      };
+      calculateElSpace(el).id.should.equal('C+');
+      calculateElSpace(el).down.should.equal(60);
+      calculateElSpace(el).right.should.equal(40);
+    });
+  });
   describe('hasDiff', () => {
     it('should return false if nextEls is empty', () => {
       const nextEls = [];

@@ -1,7 +1,8 @@
 import { globalStore } from '../listener';
 import { findIdByStrategy } from '../engines/strategy';
 import { boundsMargin } from '../engines/bounds';
-import { NAME } from '../constants';
+import { calculateNewState } from '../engines/helpers';
+import { NAME, EXIT_STRATEGY_MEMORY } from '../constants';
 import { ensureDispatch, ensureMountedBinder, ensureUnmountedBinder } from '../ensure';
 
 export const ACTIVATE_BINDER = [NAME, '/ACTIVATE_BINDER'].join('');
@@ -24,6 +25,7 @@ export function addBinderToStore(props, type) {
     rightGap,
     leftGap,
     downGap,
+    enterStrategy,
   } = props;
   globalStore.dispatch({
     type: ADD_BINDER_TO_STORE,
@@ -39,6 +41,12 @@ export function addBinderToStore(props, type) {
         rightGap,
         leftGap,
         downGap,
+        enterStrategy,
+        elements: [],
+        prevEl: null,
+        prevDir: null,
+        nextEl: null,
+        hasMoved: false,
         marginLeft: 0,
         marginTop: 0
       }
@@ -106,5 +114,22 @@ export function updatePressStatus(press, keyCode = null) {
       press,
       keyCode,
     });
+  }
+}
+
+export function determineNewState(binderId, dir) {
+  ensureDispatch();
+  ensureMountedBinder(binderId);
+  const { nextEl, prevEl, prevDir, elements } = globalStore.getState()[NAME][binderId];
+  const newState = calculateNewState(dir, nextEl, prevEl, prevDir, elements);
+  _updateBinderState(binderId, newState);
+}
+
+export function resetFlipFlop(binderId) {
+  ensureDispatch();
+  ensureMountedBinder(binderId);
+  const { enterStrategy } = globalStore.getState()[NAME];
+  if (enterStrategy !== EXIT_STRATEGY_MEMORY) {
+    _updateBinderState(binderId, { prevDir: null });
   }
 }

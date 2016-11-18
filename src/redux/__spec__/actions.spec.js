@@ -13,7 +13,7 @@ import {
 } from '../actions';
 import * as ensure from '../../ensure';
 import * as listener from '../../listener';
-import * as strape from '../../engines/strape';
+import * as strategy from '../../engines/strategy';
 import sinon from 'sinon';
 import { reset } from '../../../test/mocks';
 
@@ -141,7 +141,7 @@ describe('redux/actions.js', () => {
 
     it('should call ensureDispatch', sinon.test(function() {
       addBinderToStore('myId', true, 'TYPE');
-      this.stub(strape, 'findIdByStrategy').returns({});
+      this.stub(strategy, 'findIdByStrategy').returns({});
       this.mock(ensure)
         .expects('ensureDispatch')
         .once();
@@ -151,7 +151,7 @@ describe('redux/actions.js', () => {
     it('should call ensureUnmountedBinder', sinon.test(function() {
       const binderId = 'myId';
       addBinderToStore(binderId, true, 'TYPE');
-      this.stub(strape, 'findIdByStrategy').returns({});
+      this.stub(strategy, 'findIdByStrategy').returns({});
       this.mock(ensure)
         .expects('ensureMountedBinder')
         .once()
@@ -162,7 +162,7 @@ describe('redux/actions.js', () => {
     it('should dispatch to activate binder selected id', sinon.test(function() {
       const binderId = 'myId';
       addBinderToStore(binderId, true, 'TYPE');
-      this.stub(strape, 'findIdByStrategy').returns('');
+      this.stub(strategy, 'findIdByStrategy').returns('');
       this.mock(listener.globalStore)
         .expects('dispatch')
         .once()

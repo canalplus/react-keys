@@ -3,19 +3,23 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { refresh } from '../engines/mosaic';
 import { UP, DOWN, LEFT, RIGHT, ENTER, BACK } from '../keys';
-import { C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE, EXIT_STRATEGY_MEMORY } from '../constants';
+import { NAME, C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE } from '../constants';
 import { isBlocked, block } from '../clock';
 import { isActive } from '../isActive';
-import { nextFocusedElement } from '../nextFocusedElement';
 import { execCb, enterTo } from '../funcHandler';
-import { addListener, removeListener } from '../listener';
-import { addBinderToStore, updateBinderSelectedId, _updateBinderState } from '../redux/actions';
+import { globalStore, addListener, removeListener } from '../listener';
+import {
+  addBinderToStore,
+  updateBinderSelectedId,
+  _updateBinderState,
+  determineNewState,
+  resetFlipFlop,
+} from '../redux/actions';
 import {
   calculateElSpace,
   downLimit,
   rightLimit,
   hasDiff,
-  calculateNewState
 } from '../engines/helpers';
 
 class Binder extends Component {
@@ -86,42 +90,47 @@ class Binder extends Component {
   constructor(props) {
     super(props);
     this.listenerId = addListener(this.keysHandler, this);
-    this.elements = [];
-    this.prevEl = null;
-    this.nextEl = null;
-    this.prevDir = null;
-    this.hasMoved = false;
   }
 
   keysHandler(keyCode) {
     if (isActive(this.props) && !isBlocked()) {
-      this.nextEl = nextFocusedElement(
-        this.nextEl,
-        this.elements,
-        this.props.id);
+      const {
+        id,
+        onLeft,
+        onLeftExit,
+        onUp,
+        onUpExit,
+        onRight,
+        onRightExit,
+        onDown,
+        onDownExit,
+        onEnter,
+        onBack,
+      } = this.props;
+      const { nextEl } = globalStore.getState()['@@keys'][id];
       switch (keyCode) {
         case LEFT:
-          this.performAction(C_LEFT, this.props.onLeft, this.props.onLeftExit);
+          this.performAction(C_LEFT, onLeft, onLeftExit);
           break;
         case UP:
-          this.performAction(C_UP, this.props.onUp, this.props.onUpExit);
+          this.performAction(C_UP, onUp, onUpExit);
           break;
         case RIGHT:
-          this.performAction(C_RIGHT, this.props.onRight, this.props.onRightExit);
+          this.performAction(C_RIGHT, onRight, onRightExit);
           break;
         case DOWN:
-          this.performAction(C_DOWN, this.props.onDown, this.props.onDownExit);
+          this.performAction(C_DOWN, onDown, onDownExit);
           break;
         case ENTER:
-          if (this.props.onEnter) {
+          if (onEnter) {
             block();
-            execCb(this.props.onEnter, this.nextEl, this, this.props);
+            execCb(onEnter, nextEl, this, this.props);
           }
           break;
         case BACK:
-          if (this.props.onBack) {
+          if (onBack) {
             block();
-            execCb(this.props.onBack, this.nextEl, this, this.props);
+            execCb(onBack, nextEl, this, this.props);
           }
           break;
         default:
@@ -132,58 +141,40 @@ class Binder extends Component {
 
   performAction(dir, cb, exitCb) {
     block();
-    this.calculateNewState(dir);
-    if (this.hasMoved) {
-      updateBinderSelectedId(
-        this.props.id,
-        this.nextEl.id,
-        dir,
-      );
-      execCb(cb, this.nextEl, this, this.props);
+    const { id } = this.props;
+    determineNewState(id, dir);
+    const { hasMoved, nextEl } = globalStore.getState()[NAME][id];
+    if (hasMoved) {
+      updateBinderSelectedId(id, nextEl.id, dir);
+      execCb(cb, nextEl, this, this.props);
     } else {
-      this.resetFlipFlop();
-      enterTo(exitCb, this.nextEl.id);
-    }
-  }
-
-  resetFlipFlop() {
-    if (this.props.enterStrategy !== EXIT_STRATEGY_MEMORY) {
-      this.prevDir = null;
+      resetFlipFlop(id);
+      enterTo(exitCb, nextEl.id);
     }
   }
 
   refreshState() {
     const dom = ReactDOM.findDOMNode(this);
+    const { id, focusedId, filter, wrapper } = this.props;
+    const state = globalStore.getState()[NAME][id];
     const value = refresh(
       dom,
-      this.elements,
-      this.props.selector,
-      this.props.focusedId,
-      { filter: this.props.filter }
+      state.elements,
+      state.selector,
+      focusedId,
+      { filter: filter }
     );
     const { elements, selectedElement } = value;
-    this.nextEl = selectedElement || this.nextEl || {};
-    if (hasDiff(elements, this.elements)) {
-      this.elements = elements;
-      _updateBinderState(this.props.id, {
-        id: this.props.id,
-        enterStrategy: this.props.enterStrategy,
-        wrapper: calculateElSpace(this.props.wrapper ? document.querySelector(this.props.wrapper) : document.body),
+    if (hasDiff(elements, state.elements)) {
+      _updateBinderState(id, {
+        wrapper: calculateElSpace(wrapper ? document.querySelector(wrapper) : document.body),
         downLimit: downLimit(elements),
         rightLimit: rightLimit(elements),
         elements: elements,
-        selectedId: this.nextEl.id,
+        nextEl: selectedElement || {},
+        selectedId: selectedElement.id,
       });
     }
-  }
-
-  calculateNewState(direction) {
-    const response =
-      calculateNewState(direction, this.nextEl, this.prevEl, this.prevDir, this.elements);
-    this.nextEl = response.nextEl;
-    this.prevEl = response.prevEl;
-    this.prevDir = response.prevDir;
-    this.hasMoved = response.hasMoved;
   }
 
   componentDidMount() {
