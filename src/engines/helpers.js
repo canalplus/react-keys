@@ -1,4 +1,46 @@
-import { C_UP, C_DOWN, C_LEFT, C_RIGHT } from './constants';
+import { C_UP, C_DOWN, C_LEFT, C_RIGHT } from '../constants';
+
+export function calculateElSpace(el) {
+  const { left, top, width, height } = el.getBoundingClientRect();
+  return {
+    id: el.id,
+    width,
+    height,
+    left,
+    top,
+    down: top + height,
+    right: left + width,
+  };
+}
+
+export function downLimit(elements) {
+  return Math.max.apply(null, (elements.map(el => el.coords.down)));
+}
+
+export function rightLimit(elements) {
+  return Math.max.apply(null, elements.map(el => el.coords.right));
+}
+
+export function hasDiff(nextEls, prevEls) {
+  if (nextEls.length === 0) {
+    return false;
+  }
+
+  if (prevEls.length === 0 || prevEls.length !== nextEls.length) {
+    return true;
+  }
+
+  let diff = false;
+  let index = 0;
+  while (index < nextEls.length && !diff) {
+    if (nextEls[index].id !== prevEls[index].id) {
+      diff = true;
+    }
+    index++;
+  }
+
+  return diff;
+}
 
 export function flipflop(direction, nextEl, prevEl, prevDir) {
   let _hasMoved = false;

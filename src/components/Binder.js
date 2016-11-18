@@ -8,10 +8,15 @@ import { isBlocked, block } from '../clock';
 import { isActive } from '../isActive';
 import { nextFocusedElement } from '../nextFocusedElement';
 import { execCb, enterTo } from '../funcHandler';
-import { calculateNewState } from '../calculateNewState';
 import { addListener, removeListener } from '../listener';
 import { addBinderToStore, updateBinderSelectedId, _updateBinderState } from '../redux/actions';
-import { hasDiff } from '../hasDiff';
+import {
+  calculateElSpace,
+  downLimit,
+  rightLimit,
+  hasDiff,
+  calculateNewState
+} from '../engines/helpers';
 
 class Binder extends Component {
 
@@ -23,11 +28,18 @@ class Binder extends Component {
         React.PropTypes.array,
       ]),
       selector: PropTypes.string,
+      wrapper: PropTypes.string,
       filter: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.func,
       ]),
       focusedId: PropTypes.string,
+      gap: PropTypes.number,
+      boundedGap: PropTypes.number,
+      topGap: PropTypes.number,
+      rightGap: PropTypes.number,
+      leftGap: PropTypes.number,
+      downGap: PropTypes.number,
       enterStrategy: PropTypes.string,
       context: PropTypes.object,
       active: PropTypes.bool,
@@ -62,6 +74,12 @@ class Binder extends Component {
       active: true,
       enterStrategy: 'none',
       filter: null,
+      gap: 20,
+      boundedGap: 0,
+      topGap: 0,
+      rightGap: 0,
+      leftGap: 0,
+      downGap: 0,
     };
   }
 
@@ -116,7 +134,11 @@ class Binder extends Component {
     block();
     this.calculateNewState(dir);
     if (this.hasMoved) {
-      updateBinderSelectedId(this.props.id, this.nextEl.id);
+      updateBinderSelectedId(
+        this.props.id,
+        this.nextEl.id,
+        dir,
+      );
       execCb(cb, this.nextEl, this, this.props);
     } else {
       this.resetFlipFlop();
@@ -146,7 +168,10 @@ class Binder extends Component {
       _updateBinderState(this.props.id, {
         id: this.props.id,
         enterStrategy: this.props.enterStrategy,
-        elements: this.elements,
+        wrapper: calculateElSpace(this.props.wrapper ? document.querySelector(this.props.wrapper) : document.body),
+        downLimit: downLimit(elements),
+        rightLimit: rightLimit(elements),
+        elements: elements,
         selectedId: this.nextEl.id,
       });
     }
@@ -162,7 +187,7 @@ class Binder extends Component {
   }
 
   componentDidMount() {
-    addBinderToStore(this.props.id, this.props.active, BINDER_TYPE);
+    addBinderToStore(this.props, BINDER_TYPE);
     this.refreshState();
   }
 

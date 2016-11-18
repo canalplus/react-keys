@@ -1,4 +1,3 @@
-import _StrapeBinder from './components/StrapeBinder';
 import _Binder from './components/Binder';
 import _Keys from './components/Basic';
 import _Carousel from './components/Carousel';
@@ -14,7 +13,6 @@ export const keysInit = _init;
 
 export const Keys = _Keys;
 export const Binder = _Binder;
-export const StrapeBinder = _StrapeBinder;
 export const Carousel = _Carousel;
 
 export const keysReducer = _keyReducer;

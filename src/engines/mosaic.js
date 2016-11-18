@@ -1,15 +1,4 @@
-import { hasDiff } from '../hasDiff';
-
-export function createCoordsObject(el) {
-  const { left, top, width, height } = el.getBoundingClientRect();
-  return {
-    id: el.id,
-    right: left + width,
-    down: top + height,
-    left,
-    top,
-  };
-}
+import { calculateElSpace, hasDiff } from './helpers';
 
 export const rightArray = (elCoords, coords) => coords
   .filter(el => elCoords.right <= el.left)
@@ -44,18 +33,21 @@ export const calculUpScore =
 export const calculDowScore =
   (el, elCoords) => Math.abs(el.top - elCoords.down) + Math.abs(el.left - elCoords.left);
 
-export function build(mosaic, options) {
-  const mosaicCoords = mosaic
+export function build(elements, options) {
+  const elementsCoords = elements
     .filter(el => el.id !== "")
     .filter(el => [].slice.call(el.classList).indexOf(options.filter) === -1)
-    .map((createCoordsObject));
+    .map((calculateElSpace));
 
-  return mosaicCoords.map((el) => ({
+  return elementsCoords.map((el) => ({
     id: el.id,
-    left: findElement(leftArray(el, mosaicCoords)),
-    right: findElement(rightArray(el, mosaicCoords)),
-    up: findElement(upArray(el, mosaicCoords)),
-    down: findElement(downArray(el, mosaicCoords)),
+    coords: el,
+    left: findElement(leftArray(el, elementsCoords)),
+    right: findElement(rightArray(el, elementsCoords)),
+    up: findElement(upArray(el, elementsCoords)),
+    down: findElement(downArray(el, elementsCoords)),
+    marginTop: 0,
+    marginLeft: 0,
   }));
 }
 
@@ -65,8 +57,7 @@ export function createList(dom, selector) {
 }
 
 export function selectedElement(elements, focusedId) {
-  const focusedEl = focusedId
-    ? elements.find(e => e.id === focusedId) : null;
+  const focusedEl = focusedId ? elements.find(e => e.id === focusedId) : null;
   return focusedEl || elements[0];
 }
 

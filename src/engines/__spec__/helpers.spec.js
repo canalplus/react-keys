@@ -1,7 +1,44 @@
-import { flipflop, calculateNewState } from '../calculateNewState';
-import { C_UP, C_DOWN, C_LEFT, C_RIGHT } from '../constants';
+import { C_UP, C_DOWN, C_LEFT, C_RIGHT } from '../../constants';
+import { hasDiff, calculateNewState, flipflop } from '../helpers';
 
-describe('calculateNewState.js', () => {
+describe('helpers.js', () => {
+  describe('hasDiff', () => {
+    it('should return false if nextEls is empty', () => {
+      const nextEls = [];
+      const prevEls = [{ id: '1' }];
+      hasDiff(nextEls, prevEls).should.be.false;
+    });
+
+    it('should return true if prevEls is empty', () => {
+      const nextEls = [{ id: '1' }];
+      const prevEls = [];
+      hasDiff(nextEls, prevEls).should.be.true;
+    });
+
+    it('should return true if first id is different', () => {
+      const nextEls = [{ id: '1' }, { id: '2' }];
+      const prevEls = [{ id: '2' }, { id: '4' }];
+      hasDiff(nextEls, prevEls).should.be.true;
+    });
+
+    it('should return true if length is different', () => {
+      const nextEls = [{ id: '2' }, { id: '4' }, { id: '5' }];
+      const prevEls = [{ id: '2' }, { id: '4' }];
+      hasDiff(nextEls, prevEls).should.be.true;
+    });
+
+    it('should return false is elements are identicals', () => {
+      const nextEls = [{ id: '2' }, { id: '4' }];
+      const prevEls = [{ id: '2' }, { id: '4' }];
+      hasDiff(nextEls, prevEls).should.be.false;
+    });
+
+    it('should return false when ids are differents', () => {
+      const nextEls = [{ id: '2' }, { id: '3' }, { id: '5' }];
+      const prevEls = [{ id: '2' }, { id: '4' }, { id: '5' }];
+      hasDiff(nextEls, prevEls).should.be.true;
+    });
+  });
   describe('flipflop', () => {
     it('should flipflop from down to up', () => {
       const nextEl = { id: 2 };
@@ -82,8 +119,7 @@ describe('calculateNewState.js', () => {
       const el2 = { id: 2, [C_UP]: 3 };
       const el3 = { id: 3 };
       const elements = [el1, el2, el3];
-      const prevDir = C_LEFT;
-      const response = calculateNewState(C_UP, el2, el1, prevDir, elements);
+      const response = calculateNewState(C_UP, el2, el1, C_LEFT, elements);
       response.hasMoved.should.be.true;
       response.prevDir.should.equal(C_UP);
       response.nextEl.should.equal(el3);
@@ -94,8 +130,7 @@ describe('calculateNewState.js', () => {
       const el2 = { id: 2, [C_UP]: 2 };
       const el3 = { id: 3 };
       const elements = [el1, el2, el3];
-      const prevDir = C_LEFT;
-      const response = calculateNewState(C_UP, el2, el1, prevDir, elements);
+      const response = calculateNewState(C_UP, el2, el1, C_LEFT, elements);
       response.hasMoved.should.be.false;
       response.prevDir.should.equal(C_LEFT);
       response.nextEl.should.equal(el2);
@@ -103,3 +138,4 @@ describe('calculateNewState.js', () => {
     });
   });
 });
+

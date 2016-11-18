@@ -1,5 +1,6 @@
 import { globalStore } from '../listener';
-import { findIdByStrategy } from '../engines/strape';
+import { findIdByStrategy } from '../engines/strategy';
+import { boundsMargin } from '../engines/bounds';
 import { NAME } from '../constants';
 import { ensureDispatch, ensureMountedBinder, ensureUnmountedBinder } from '../ensure';
 
@@ -10,12 +11,38 @@ export const UPDATE_BINDER_STATE = [NAME, '/UPDATE_BINDER_STATE'].join('');
 export const UPDATE_CURRENT = [NAME, '/UPDATE_CURRENT'].join('');
 export const UPDATE_PRESS_STATUS = [NAME, '/UPDATE_PRESS_STATUS'].join('');
 
-export function addBinderToStore(binderId, active, type) {
+export function addBinderToStore(props, type) {
   ensureDispatch();
   ensureUnmountedBinder();
+  const {
+    id,
+    active,
+    selector,
+    gap,
+    boundedGap,
+    topGap,
+    rightGap,
+    leftGap,
+    downGap,
+  } = props;
   globalStore.dispatch({
     type: ADD_BINDER_TO_STORE,
-    newBinder: { [binderId]: { id: binderId, active, type } },
+    newBinder: {
+      [id]: {
+        id,
+        active,
+        type,
+        selector,
+        gap,
+        boundedGap,
+        topGap,
+        rightGap,
+        leftGap,
+        downGap,
+        marginLeft: 0,
+        marginTop: 0
+      }
+    },
   });
 }
 
@@ -37,14 +64,16 @@ export function _updateBinderState(binderId, binderState) {
   }
 }
 
-export function updateBinderSelectedId(binderId, selectedId, marginLeft = 0, marginTop = 0) {
+export function updateBinderSelectedId(binderId, selectedId, dir) {
   ensureDispatch();
+  ensureMountedBinder(binderId);
+  const margin = boundsMargin(dir, selectedId, globalStore.getState()[NAME][binderId]);
   globalStore.dispatch({
     type: UPDATE_BINDER_SELECTED_KEY,
     binderId,
     selectedId,
-    marginLeft,
-    marginTop,
+    marginLeft: margin.marginLeft,
+    marginTop: margin.marginTop,
   });
 }
 
