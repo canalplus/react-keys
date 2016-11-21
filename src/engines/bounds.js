@@ -53,19 +53,19 @@ export function boundsMargin(dir, selectedId, state) {
 }
 
 export function isInsideTop(wrapper, selectedEl, gap) {
-  return selectedEl.top > wrapper.top + gap;
+  return selectedEl.top >= wrapper.top + gap;
 }
 
 export function isInsideDown(wrapper, selectedEl, gap) {
-  return wrapper.down > selectedEl.down + gap;
+  return wrapper.down >= selectedEl.down + gap;
 }
 
 export function isInsideLeft(wrapper, selectedEl, gap) {
-  return selectedEl.left > wrapper.left + gap;
+  return selectedEl.left >= wrapper.left + gap;
 }
 
 export function isInsideRight(wrapper, selectedEl, gap) {
-  return wrapper.right > selectedEl.right + gap;
+  return wrapper.right >= selectedEl.right + gap;
 }
 
 export function calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap) {
