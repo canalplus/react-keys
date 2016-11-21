@@ -10,10 +10,14 @@ import {
   ACTIVATE_BINDER,
   updatePressStatus,
   UPDATE_PRESS_STATUS,
+  determineNewState,
+  resetFlipFlop,
 } from '../actions';
+import { EXIT_STRATEGY_MEMORY } from '../../constants';
 import * as ensure from '../../ensure';
 import * as listener from '../../listener';
 import * as strategy from '../../engines/strategy';
+import * as helpers from '../../engines/helpers';
 import * as bounds from '../../engines/bounds';
 import sinon from 'sinon';
 import { reset } from '../../../test/mocks';
@@ -194,6 +198,9 @@ describe('redux/actions.js', () => {
   });
 
   describe('updatePressStatus', () => {
+
+    afterEach(reset);
+
     it('should call ensureDispatch', sinon.test(function() {
       addBinderToStore(props, type);
       this.mock(ensure)
@@ -215,6 +222,69 @@ describe('redux/actions.js', () => {
       updatePressStatus(false);
     }));
 
-  })
+  });
+
+  describe('determineNewState', () => {
+
+    afterEach(reset);
+
+    it('should call ensureDispatch', sinon.test(function() {
+      addBinderToStore(props, type);
+      this.mock(ensure)
+        .expects('ensureDispatch')
+        .twice(); // because of _updateBinderState
+      this.stub(helpers, 'calculateNewState').returns({});
+      determineNewState('myId', 'dir');
+    }));
+
+    it('should call ensureUnmountedBinder', sinon.test(function() {
+      const binderId = 'myId';
+      addBinderToStore(props, type);
+      this.stub(helpers, 'calculateNewState').returns({});
+      this.mock(ensure)
+        .expects('ensureMountedBinder')
+        .twice() // because of _updateBinderState
+        .withArgs(binderId);
+      determineNewState(binderId, 'dir');
+    }));
+
+  });
+
+  describe('resetFlipFlop', () => {
+
+    afterEach(reset);
+
+    it('should call ensureDispatch', sinon.test(function() {
+      addBinderToStore({ ...props, enterStrategy: EXIT_STRATEGY_MEMORY }, type);
+      this.mock(ensure)
+        .expects('ensureDispatch')
+        .once();
+      resetFlipFlop('myId');
+    }));
+
+    it('should call ensureUnmountedBinder', sinon.test(function() {
+      const binderId = 'myId';
+      addBinderToStore({ ...props, enterStrategy: EXIT_STRATEGY_MEMORY }, type);
+      this.mock(ensure)
+        .expects('ensureMountedBinder')
+        .once() // because of _updateBinderState
+        .withArgs(binderId);
+      resetFlipFlop('myId');
+    }));
+
+    it('should set prevDir at null when exit strategy !== memory', sinon.test(function() {
+      addBinderToStore(props, type);
+      this.mock(listener.globalStore)
+        .expects('dispatch')
+        .once()
+        .withArgs({
+          type: UPDATE_BINDER_STATE,
+          binderId: 'myId',
+          binderState: { prevDir: null },
+        });
+      resetFlipFlop('myId');
+    }));
+
+  });
 
 });

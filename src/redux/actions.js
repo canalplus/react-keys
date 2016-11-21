@@ -128,7 +128,7 @@ export function determineNewState(binderId, dir) {
 export function resetFlipFlop(binderId) {
   ensureDispatch();
   ensureMountedBinder(binderId);
-  const { enterStrategy } = globalStore.getState()[NAME];
+  const { enterStrategy } = globalStore.getState()[NAME][binderId];
   if (enterStrategy !== EXIT_STRATEGY_MEMORY) {
     _updateBinderState(binderId, { prevDir: null });
   }
