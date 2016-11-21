@@ -6,6 +6,19 @@ describe('strategy', () => {
 
   describe('findIdByStrategy', () => {
 
+    it('should return first elements id when no strategy', sinon.test(function() {
+      const canvas = document.createElement('canvas');
+      this.stub(document, 'getElementById').returns(canvas);
+      const state = {
+        'myId': {
+          selectedId: 'xoxo',
+          enterStrategy: 'none',
+          elements: [{ id: 'xixi' }]
+        }
+      };
+      findIdByStrategy(state, 'myId', {}).should.equal('xixi');
+    }));
+
     it('should return selectedId when strategy is memory', sinon.test(function() {
       const canvas = document.createElement('canvas');
       this.stub(document, 'getElementById').returns(canvas);
