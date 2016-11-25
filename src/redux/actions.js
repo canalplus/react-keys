@@ -4,6 +4,7 @@ import { boundsMargin } from '../engines/bounds';
 import { calculateNewState } from '../engines/helpers';
 import { NAME, EXIT_STRATEGY_MEMORY } from '../constants';
 import { ensureDispatch, ensureMountedBinder, ensureUnmountedBinder } from '../ensure';
+import { execCb, enterTo } from '../funcHandler';
 
 export const ACTIVATE_BINDER = [NAME, '/ACTIVATE_BINDER'].join('');
 export const ADD_BINDER_TO_STORE = [NAME, '/ADD_BINDER_TO_STORE'].join('');
@@ -23,6 +24,7 @@ export function addBinderToStore(props, type) {
     boundedGap,
     topGap,
     rightGap,
+    elements,
     leftGap,
     downGap,
     enterStrategy,
@@ -42,7 +44,7 @@ export function addBinderToStore(props, type) {
         leftGap,
         downGap,
         enterStrategy,
-        elements: [],
+        elements: elements || [],
         prevEl: null,
         prevDir: null,
         nextEl: null,
@@ -98,11 +100,13 @@ export function activateBinder(binderId, nextElId) {
   ensureDispatch();
   ensureMountedBinder(binderId);
   const state = globalStore.getState()[NAME];
+  const selectedId = findIdByStrategy(state[binderId], binderId, nextElId);
   globalStore.dispatch({
     type: ACTIVATE_BINDER,
     binderId,
     inactiveBinders: desactivateBinders(state, binderId),
-    selectedId: findIdByStrategy(state, binderId, nextElId),
+    selectedId: selectedId,
+    nextEl: state[binderId].elements.find(e => e.id === selectedId),
   });
 }
 
@@ -117,12 +121,23 @@ export function updatePressStatus(press, keyCode = null) {
   }
 }
 
-export function determineNewState(binderId, dir) {
+export function determineNewState(binderId, dir, cb, exitCb, _this, context) {
   ensureDispatch();
   ensureMountedBinder(binderId);
   const { nextEl, prevEl, prevDir, elements } = globalStore.getState()[NAME][binderId];
   const newState = calculateNewState(dir, nextEl, prevEl, prevDir, elements);
-  _updateBinderState(binderId, newState);
+  globalStore.dispatch({
+    type: UPDATE_BINDER_STATE,
+    binderId,
+    binderState: newState,
+  });
+  if (newState.hasMoved) {
+    updateBinderSelectedId(binderId, newState.nextEl.id, dir);
+    execCb(cb, nextEl, _this, context);
+  } else {
+    resetFlipFlop(binderId);
+    enterTo(exitCb, newState.nextEl.id);
+  }
 }
 
 export function resetFlipFlop(binderId) {
@@ -130,6 +145,10 @@ export function resetFlipFlop(binderId) {
   ensureMountedBinder(binderId);
   const { enterStrategy } = globalStore.getState()[NAME][binderId];
   if (enterStrategy !== EXIT_STRATEGY_MEMORY) {
-    _updateBinderState(binderId, { prevDir: null });
+    globalStore.dispatch({
+      type: UPDATE_BINDER_STATE,
+      binderId,
+      binderState: { prevDir: null },
+    });
   }
 }

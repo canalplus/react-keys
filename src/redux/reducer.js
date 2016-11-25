@@ -28,6 +28,7 @@ export function _keyReducer(state = initialKeysSate, action) {
         [action.binderId]: {
           ...state[action.binderId],
           selectedId: action.selectedId,
+          nextEl: action.nextEl,
           active: true,
         },
         current: {

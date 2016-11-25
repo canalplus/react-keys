@@ -32,6 +32,8 @@ const props = {
   rightGap: 0,
   leftGap: 0,
   downGap: 0,
+  nextEl: {},
+  elements: [{ id: 'myId' }],
   enterStrategy: 'none',
 };
 
@@ -182,7 +184,7 @@ describe('redux/actions.js', () => {
     it('should dispatch to activate binder selected id', sinon.test(function() {
       const binderId = 'myId';
       addBinderToStore(props, type);
-      this.stub(strategy, 'findIdByStrategy').returns('');
+      this.stub(strategy, 'findIdByStrategy').returns('myId');
       this.mock(listener.globalStore)
         .expects('dispatch')
         .once()
@@ -191,6 +193,7 @@ describe('redux/actions.js', () => {
           binderId,
           inactiveBinders: sinon.match.object,
           selectedId: sinon.match.string,
+          nextEl: sinon.match.object,
         });
       activateBinder(binderId, {});
     }));
@@ -233,14 +236,14 @@ describe('redux/actions.js', () => {
       this.mock(ensure)
         .expects('ensureDispatch')
         .twice(); // because of _updateBinderState
-      this.stub(helpers, 'calculateNewState').returns({});
+      this.stub(helpers, 'calculateNewState').returns({ nextEl: { id: 'myId' } });
       determineNewState('myId', 'dir');
     }));
 
     it('should call ensureUnmountedBinder', sinon.test(function() {
       const binderId = 'myId';
       addBinderToStore(props, type);
-      this.stub(helpers, 'calculateNewState').returns({});
+      this.stub(helpers, 'calculateNewState').returns({ nextEl: { id: 'myId' } });
       this.mock(ensure)
         .expects('ensureMountedBinder')
         .twice() // because of _updateBinderState

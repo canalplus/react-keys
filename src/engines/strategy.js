@@ -5,8 +5,8 @@ import {
   EXIT_STRATEGY_MEMORY,
 } from '../constants';
 
-export function findIdByStrategy(state, binderId, nextElId) {
-  const { position, enterStrategy, selectedId, selector, elements } = state[binderId];
+export function findIdByStrategy(binderState, binderId, nextElId) {
+  const { position, enterStrategy, selectedId, selector, elements } = binderState;
   const moved = position === VERTICAL ? 'top' : 'left';
   const dom = document.getElementById(binderId) || document;
   const children = [].slice.call(dom.querySelectorAll(selector));

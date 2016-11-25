@@ -6,14 +6,12 @@ import { UP, DOWN, LEFT, RIGHT, ENTER, BACK } from '../keys';
 import { NAME, C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE } from '../constants';
 import { isBlocked, block } from '../clock';
 import { isActive } from '../isActive';
-import { execCb, enterTo } from '../funcHandler';
+import { execCb } from '../funcHandler';
 import { globalStore, addListener, removeListener } from '../listener';
 import {
   addBinderToStore,
-  updateBinderSelectedId,
   _updateBinderState,
   determineNewState,
-  resetFlipFlop,
 } from '../redux/actions';
 import {
   calculateElSpace,
@@ -75,6 +73,7 @@ class Binder extends Component {
   static get defaultProps() {
     return {
       selector: 'li',
+      context: {},
       active: true,
       enterStrategy: 'none',
       filter: null,
@@ -141,16 +140,8 @@ class Binder extends Component {
 
   performAction(dir, cb, exitCb) {
     block();
-    const { id } = this.props;
-    determineNewState(id, dir);
-    const { hasMoved, nextEl } = globalStore.getState()[NAME][id];
-    if (hasMoved) {
-      updateBinderSelectedId(id, nextEl.id, dir);
-      execCb(cb, nextEl, this, this.props);
-    } else {
-      resetFlipFlop(id);
-      enterTo(exitCb, nextEl.id);
-    }
+    const { id, context } = this.props;
+    determineNewState(id, dir, cb, exitCb, this, context);
   }
 
   refreshState() {

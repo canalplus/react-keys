@@ -26,10 +26,10 @@ describe('funcHandler.js', () => {
     it('should call with el and context if props.context', () => {
       const spy = sinon.spy();
       const el = { id: 1 };
-      const props = { context: { obladi: 'olbada' } };
-      execCb(spy, el, this, props);
+      const context = { obladi: 'olbada' };
+      execCb(spy, el, this, context);
       spy.should.have.been.calledOnce;
-      spy.should.have.been.calledWith(el, props.context);
+      spy.should.have.been.calledWith(el, context);
     });
   });
   describe('enterTo', () => {

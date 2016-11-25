@@ -10,11 +10,9 @@ describe('strategy', () => {
       const canvas = document.createElement('canvas');
       this.stub(document, 'getElementById').returns(canvas);
       const state = {
-        'myId': {
-          selectedId: 'xoxo',
-          enterStrategy: 'none',
-          elements: [{ id: 'xixi' }]
-        }
+        selectedId: 'xoxo',
+        enterStrategy: 'none',
+        elements: [{ id: 'xixi' }]
       };
       findIdByStrategy(state, 'myId', {}).should.equal('xixi');
     }));
@@ -24,10 +22,8 @@ describe('strategy', () => {
       this.stub(document, 'getElementById').returns(canvas);
       const id = 'xoxo';
       const state = {
-        'myId': {
-          selectedId: id,
-          enterStrategy: EXIT_STRATEGY_MEMORY,
-        }
+        selectedId: id,
+        enterStrategy: EXIT_STRATEGY_MEMORY,
       };
       findIdByStrategy(state, 'myId', {}).should.equal(id);
     }));
@@ -45,11 +41,9 @@ describe('strategy', () => {
 
       this.stub(document, 'getElementById').returns(canvas);
       const state = {
-        'myId': {
-          selectedId: 'xoxo',
-          enterStrategy: EXIT_STRATEGY_MIRROR,
-          selector: 'li',
-        }
+        selectedId: 'xoxo',
+        enterStrategy: EXIT_STRATEGY_MIRROR,
+        selector: 'li',
       };
       findIdByStrategy(state, 'myId', {}).should.equal('elTwo');
     }));
@@ -67,11 +61,9 @@ describe('strategy', () => {
 
       this.stub(document, 'getElementById').returns(canvas);
       const state = {
-        'myId': {
-          selectedId: 'xoxo',
-          enterStrategy: EXIT_STRATEGY_START,
-          selector: 'li',
-        }
+        selectedId: 'xoxo',
+        enterStrategy: EXIT_STRATEGY_START,
+        selector: 'li',
       };
       findIdByStrategy(state, 'myId', {}).should.equal('elOne');
     }));
