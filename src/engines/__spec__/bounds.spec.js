@@ -1,3 +1,4 @@
+import sinon from 'sinon';
 import {
   calculMarginOnLeft,
   calculMarginOnRight,
@@ -7,9 +8,100 @@ import {
   isInsideLeft,
   isInsideDown,
   isInsideTop,
+  boundsMargin,
 } from '../bounds';
+import { C_LEFT, C_RIGHT, C_UP, C_DOWN } from '../../constants';
+import * as helpers from '../helpers';
 
 describe('bounds', () => {
+
+  describe('boundsMargin', () => {
+
+    it('should calcul left dir', sinon.test(function() {
+      const state = {
+        wrapper: { left: 10, top: 10, right: 10, down: 10 },
+        marginLeft: 0,
+        marginTop: 0,
+        elements: [{ id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } }],
+        downLimit: 0,
+        rightLimit: 0,
+        gap: 0,
+        boundedGap: 0,
+        topGap: 0,
+        rightGap: 0,
+        leftGap: 0,
+        downGap: 0,
+      };
+      this.stub(helpers, 'calculateElSpace').returns({
+        id: '1', top: 5, left: 5, right: 5, down: 5
+      });
+      boundsMargin(C_LEFT, '1', state).should.eql({ marginTop: 0, marginLeft: -5 });
+    }));
+
+    it('should calcul right dir', sinon.test(function() {
+      const state = {
+        wrapper: { left: 10, top: 10, right: 10, down: 10 },
+        marginLeft: 0,
+        marginTop: 0,
+        elements: [{ id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } }],
+        downLimit: 0,
+        rightLimit: 0,
+        gap: 0,
+        boundedGap: 0,
+        topGap: 0,
+        rightGap: 0,
+        leftGap: 0,
+        downGap: 0,
+      };
+      this.stub(helpers, 'calculateElSpace').returns({
+        id: '1', top: 5, left: 5, right: 5, down: 5
+      });
+      boundsMargin(C_RIGHT, '1', state).should.eql({ marginTop: 0, marginLeft: 0 });
+    }));
+
+    it('should calcul up dir', sinon.test(function() {
+      const state = {
+        wrapper: { left: 10, top: 10, right: 10, down: 10 },
+        marginLeft: 0,
+        marginTop: 0,
+        elements: [{ id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } }],
+        downLimit: 0,
+        rightLimit: 0,
+        gap: 0,
+        boundedGap: 0,
+        topGap: 0,
+        rightGap: 0,
+        leftGap: 0,
+        downGap: 0,
+      };
+      this.stub(helpers, 'calculateElSpace').returns({
+        id: '1', top: 5, left: 5, right: 5, down: 5
+      });
+      boundsMargin(C_UP, '1', state).should.eql({ marginTop: -5, marginLeft: 0 });
+    }));
+
+    it('should calcul down dir', sinon.test(function() {
+      const state = {
+        wrapper: { left: 10, top: 10, right: 10, down: 10 },
+        marginLeft: 0,
+        marginTop: 0,
+        elements: [{ id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } }],
+        downLimit: 0,
+        rightLimit: 0,
+        gap: 0,
+        boundedGap: 0,
+        topGap: 0,
+        rightGap: 0,
+        leftGap: 0,
+        downGap: 0,
+      };
+      this.stub(helpers, 'calculateElSpace').returns({
+        id: '1', top: 5, left: 5, right: 5, down: 5
+      });
+      boundsMargin(C_DOWN, '1', state).should.eql({ marginTop: 0, marginLeft: 0 });
+    }));
+
+  });
 
   describe('isInsideTop', () => {
 
