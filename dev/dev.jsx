@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { connect, Provider } from 'react-redux';
-import { Binder, keysInit, keysReducer, activeKeyBinder, keysSelector } from '../src';
+import { Binder, keysInit, keysReducer, activeKeyBinder, keysSelector, Keys } from '../src';
 
 const store = createStore(combineReducers({
   '@@keys': keysReducer,
@@ -63,6 +63,7 @@ const PureMosaic = ({ binder1, binder2 }) => {
   const active2 = binder2.active;
   return (
     <div>
+      <Keys id="rk" on65={() => console.log('OK')}/>
       <Binder id="binder1"
               filter="disabled"
               wrapper="#myWrapper"

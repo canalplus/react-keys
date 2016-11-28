@@ -103,6 +103,7 @@ class Keys extends Component {
           this.performAction(this.props.onDigit, keyCode);
           break;
         default:
+          this.performAction(this.props[`on${keyCode}`]);
       }
     }
   }
