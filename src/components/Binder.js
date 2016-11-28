@@ -31,10 +31,7 @@ class Binder extends Component {
       ]),
       selector: PropTypes.string,
       wrapper: PropTypes.string,
-      filter: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.func,
-      ]),
+      filter: PropTypes.string,
       focusedId: PropTypes.string,
       gap: PropTypes.number,
       boundedGap: PropTypes.number,

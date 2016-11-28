@@ -1,5 +1,5 @@
 # React Keys
-Simple way to bind keyboard to react with redux (or not).
+Simple way to bind keyboard to react with redux.
 
 [![Build Status](https://travis-ci.org/canalplus/react-keys.svg?branch=master)](https://travis-ci.org/canalplus/react-keys)
 [![npm version](https://badge.fury.io/js/react-keys.svg)](https://badge.fury.io/js/react-keys)
@@ -8,7 +8,7 @@ Simple way to bind keyboard to react with redux (or not).
 
 ## Why ?
 
-The need of a non-intrusive and fast way to bind keys to a react-powered UI.
+The need a fast way to bind keys to a react-powered UI with awesome redux for state management.
 
 ## Installation
 `react-keys` requires **React 0.14 or later**
@@ -17,40 +17,63 @@ The need of a non-intrusive and fast way to bind keys to a react-powered UI.
 
 ## Dependencies
 
-While not having direct dependencies, react-keys have to be used with `react` and `react-dom`:
+While not having direct dependencies, react-keys have to be used with `react`, `react-dom` and `redux` :
 
 ```javscript
 npm i react -S
 npm i react-dom -S
+npm i redux -S
+```
+
+# Link it with Redux (Otherwise it doesn't work !) 
+```javascript
+import { keysInit, keyReducer, keysSelector } from 'react-keys';
+import { connect } from 'react-redux';
+import PureMosaic from '../PureMosaic' // Pure React Component
+
+//ONE
+const store = createStore(combineReducers({
+  '@@keys': keysReducer, // you need to link the react-keys reducer with the @@keys id
+}));
+
+//TWO
+keysInit({store: store}); // add the store there
+
+//TRHEE
+const Mosaic = connect(() => keysSelector('OneBinderId'))(PureMosaic); // listen every changes of your mosaic like that
 ```
 
 # Keys
+Very basic way to handle keyboard events. Yet is pretty powerfull :-)
 
 ```javascript
-import {Keys} from 'react-keys';
+import { Keys } from 'react-keys';
 
 function onBack(){
   alert('alert bro');
 }
 
-const Component = () => {
+const Component = ({ isActive }) => {
   return(
-    <Keys onBack={onBack}>
+    <div>
+      <Keys id="rk-basic" 
+            on65={ () => console.log('Did I just push A ?') } 
+            active={ isActive } />
       <h1>Check that out !</h1>
-    </Keys>
+    </div>
   );
 }
 ```
 
 ### <Keys ..options/>
-* onBack (function / *optional*): handler for back (keyCode 27) keys event (keyCode 27)
+* `id` (string / **mandatory**) component id
+* `on${keyCode}` (function / *optional*) keyCode callback 
+* `active` (boolean / *optional*) determine is `Keys` component is active (default `true`)
 
-`react-keys` has some interesting features that allow you building advanced interfaces reacting with keys :
+
 
 # Binder
-
-![mosaic-gif](https://dl.dropboxusercontent.com/u/20177628/mosaic-screen.gif)
-
+Fancy React component to deal with space navigation. It handles communication with multiple `Binder` compoments to create something great !
 
 ```javascript
 import {Binder, keysInit} from 'react-keys';
@@ -95,10 +118,17 @@ renderWithId('mosaic-1-1');
 * `id` (string / **mandatory**) Define the binder id
 * `active` (boolean / *optional*) determine if binder is active (default `false`)
 * `selector` (string / *optional*) DOM selector which define each element (default `li`)
-* `focusedElementId` (string / *optional*) id to define the element focused (first element by default)
+* `wrapper` (string / *optional*) DOM selector which define parent element (default `document`)
+* `filter` (string / *optional*) Class name which exclude element 
 * `context` (object / *optional*) context object passed within every callback
-* `enterStrategy` (string / *optional*) define strape strategy on enter : `memory` / `none` (default `none`)
-* `accuracy` (number / *optional*) give tolerance for elements calculation, useful when your elements are not well aligned (default `O`)
+* `focusedId` (string / *optional*) id to define the element focused (first element by default)
+* `enterStrategy` (string / *optional*) define strape strategy on enter: `start` / `mirror` / `memory` / `none` (default `none`)
+* `gap` (number / *optional*) reduce or increase elements margin (default `0`)
+* `boundedGap` (number / *optional*) reduce or increase bounded margin (default `0`)
+* `topGap` (number / *optional*) reduce or increase last top margin (default `0`)
+* `rightGap` (number / *optional*) reduce or increase last right margin (default `0`)
+* `leftGap` (number / *optional*) reduce or increase last left margin (default `0`)
+* `downGap` (number / *optional*) reduce or increase last down margin (default `0`)
 * `onRight` (function / *optional*) callback for right events `function(nextElement, {context})`
 * `onLeft` (function / *optional*) callback for left events `function(nextElement, {context})`
 * `onUp` (function / *optional*) callback for up events `function(nextElement, {context})`
@@ -110,158 +140,122 @@ renderWithId('mosaic-1-1');
 * `onUpExit` (function/string / *optional*) triggered when up event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onDownExit` (function/string / *optional*) triggered when down event would go outside the elements block, it can be a function or the binder id we want to reach
 
-# Strape
-
-![mosaic-gif](https://dl.dropboxusercontent.com/u/20177628/strape-screen.gif)
-
-### `<StrapeBinder ..options />`
-* `id` (string / **mandatory**) Define the binder id
-* `active` (boolean / *optional*) determine if binder is active (default `false`)
-* `wrapper` (string / *optional*) DOM selector which define parent element (default `ul`)
-* `wChildren` (string / *optional*) DOM selector which define children elements (default `li`)
-* `strategy` (string / *optional*) define strape strategy : `progressive` / `cut` / `bounds` (default `progressive`)
-* `enterStrategy` (string / *optional*) define strape strategy on enter: `start` / `mirror` / `memory` / `none` (default `none`)
-* `circular` (boolean / *optional*) define if strape has no boundaries (default `false`)
-* `gap` (number / *optional*) reduce or increase elements margin (default `0`)
-* `lastGap` (number / *optional*) reduce or increase last element margin (default `0`)
-* `focusedElementId` (string / *optional*) id to define the element focused (first element by default)
-* `context` (object / *optional*) context object passed within every callback
-* `onRight` (function / *optional*) callback for right events `function(nextElement, {context})`
-* `onLeft` (function / *optional*) callback for left events `function(nextElement, {context})`
-* `onUp` (function / *optional*) callback for up events `function(nextElement, {context})`
-* `onDown` (function / *optional*) callback for down events `function(nextElement, {context})`
-* `onEnter` (function / *optional*) callback for enter events `function(nextElement, {context})`
-* `onRightExit` (function/string / *optional*) triggered when right event would go outside the elements block, it can be a function or the binder id we want to reach
-* `onLeftExit` (function/string / *optional*) triggered when left event would go outside the elements block, it can be a function or the binder id we want to reach
-* `onUpExit` (function/string / *optional*) triggered when up event would go outside the elements block, it can be a function or the binder id we want to reach
-* `onDownExit` (function/string / *optional*) triggered when down event would go outside the elements block, it can be a function or the binder id we want to reach
-
-### `keysInit({store, bindKeys})` **mandatory**
-You have to call this function to boot all binders `keysInit()`
-* `store` (ReduxStore / *optional*) if you want to link your binders with your redux store, add it there.
-* `bindKeys` (function / *optional*) by default `react-keys` use `keydown` event to trigger actions, but you can overwride the behavior to better suite your needs.
-
-```javascript
-import {keysInit, keys} from 'react-keys';
-
-keysInit({
-  bindKeys : (cb) => {
-     R7.grabKey('Left', () => cb(keys.LEFT));
-     R7.grabKey('Up', () => cb(keys.UP));
-     R7.grabKey('Right', () => cb(keys.RIGHT));
-     R7.grabKey('Down', () => cb(keys.DOWN));
-     R7.grabKey('Enter', () => cb(keys.ENTER));
-   }
-});
-```
-
-### `register` (function)
-
-React keys send some events when some stuff have been done with infos like geo positions. You can listen these events with `register`
-
-```javascript
-import {register} from 'react-keys';
-
-register('strape:update', (elements) => {
-    for(const element of elements){
-      console.log(element.marginLeft);
-    }
-});
-```
-
-#### available events
-
-+ `strape:update` --> triggered everytime strape structure is updated
-
-### `keys`
-
-list of available keys triggered :
-+ LEFT
-+ UP
-+ RIGHT
-+ DOWN
-+ ENTER
-
-## With Redux
-
-`react-keys` is built to be used with redux, it reduces lot of boilerplate and give you more controle to your actions.
-
 ### Example
 
 ```javascript
-import {createStore, applyMiddleware, combineReducers} from 'redux';
-import {connect, Provider} from 'react-redux';
-import {Binder, keysInit, keysReducer, activeKeyBinder} from 'react-keys';
+import { Binder, keysSelector } from 'react-keys';
 
-const store = createStore(combineReducers({
-  '@@keys': keysReducer, // you have to had the react-keys reducer with the @@keys id
-}));``
-
-keysInit({store: store}); // add the store there
-
-const PureMosaic = ({selectedId}) => {
+const PureMosaic = ({ selectedId, marginTop, marginLeft }) => {
   return (
     <Binder
-      id="mosaic-1"
-      active={true} // activate your binder
-      onEnter={onEnter}
-    >
-      <ul>
-        <li id="1" className={selectedId === '1' ? 'selected' : ''}>#1</li>
-        <li id="2" className={selectedId === '2' ? 'selected' : ''}>#2</li>
-        <li id="3" className={selectedId === '3' ? 'selected' : ''}>#3</li>
-        <li id="4" className={selectedId === '4' ? 'selected' : ''}>#4</li>
-        <li id="5" className={selectedId === '5' ? 'selected' : ''}>#5</li>
-        <li id="6" className={selectedId === '6' ? 'selected' : ''}>#6</li>
-      </ul>
+      id="rk-binder"
+      wrapper="#myWrapper"
+      gap={20}
+      onEnter={ ( element, { context }) => console.log(`ENTER with ${element.id}`) }>
+      <div id="myWrapper">
+          <ul style={{ marginTop: marginTop, marginLeft: marginLeft}}>
+            <li id="1" className={selectedId === '1' ? 'selected' : ''}>#1</li>
+            <li id="2" className={selectedId === '2' ? 'selected' : ''}>#2</li>
+            <li id="3" className={selectedId === '3' ? 'selected' : ''}>#3</li>
+            <li id="4" className={selectedId === '4' ? 'selected' : ''}>#4</li>
+            <li id="5" className={selectedId === '5' ? 'selected' : ''}>#5</li>
+            <li id="6" className={selectedId === '6' ? 'selected' : ''}>#6</li>
+          </ul>
+      </div>
     </Binder>
   );
 };
 
-function onEnter(element) {alert('ELEMENT #' + element.id)}
-
-const Mosaic = connect(state => state['@@keys'].getBinder('mosaic-1'))(PureMosaic); // listen every changes of your mosaic like that
-
-ReactDOM.render(<Provider store={store}>
-    <Mosaic/> // your mosaic
-</Provider>, document.getElementById('body'));
-```
-
-three steps are needed to link `react-keys` to your redux store :-)
-```javascript
-//ONE
-const store = createStore(combineReducers({
-  '@@keys': keysReducer, // you have to had the react-keys reducer with the @@keys id
-}));``
-//TWO
-keysInit({store: store}); // add the store there
-//TRHEE
-const Mosaic = connect(state => state['@@keys'].getBinder('mosaic-1'))(PureMosaic); // listen every changes of your mosaic like that
+const Mosaic = connect(() => keysSelector('rk-binder'))(PureMosaic); // listen every changes of your mosaic like that
 ```
 
 the keys store will manage the state of each binders (no matter how many they are). Each state is structured as following
 ```javascipt
 {
-    id: 'binder id',
-    selectedId: 'current selected id',
-    marginLeft: 'margin for strapes',
-    elements: 'array of all elements',
-    active: 'boolean to know if binder is active'
-    visibleElements: 'length of elements visible',
+    binder2: {
+      id: 'binder2',
+      active: false,
+      type: 'binder',
+      selector: 'li',
+      gap: 20,
+      boundedGap: 0,
+      topGap: 0,
+      rightGap: 0,
+      leftGap: 0,
+      downGap: 0,
+      enterStrategy: 'none',
+      elements: [
+        {
+          id: '43',
+          coords: {
+            id: '43',
+            width: 1049,
+            height: 37,
+            left: 48,
+            top: 500,
+            down: 537,
+            right: 1097
+          },
+          down: '44',
+          marginTop: 0,
+          marginLeft: 0
+        },
+        ...
+      ],
+      prevEl: {
+        id: '44',
+        coords: {
+          id: '44',
+          width: 1049,
+          height: 37,
+          left: 48,
+          top: 537,
+          down: 574,
+          right: 1097
+        },
+        up: '43',
+        down: '45',
+        marginTop: 0,
+        marginLeft: 0
+      },
+      prevDir: {...},
+      nextEl: {
+        id: '43',
+        coords: {
+          id: '43',
+          width: 1049,
+          height: 37,
+          left: 48,
+          top: 500,
+          down: 537,
+          right: 1097
+        },
+        down: '44',
+        marginTop: 0,
+        marginLeft: 0
+      },
+      hasMoved: false,
+      marginLeft: 0,
+      marginTop: 0,
+      wrapper: {
+        id: '',
+        width: 1089,
+        height: 672,
+        left: 8,
+        top: 8,
+        down: 680,
+        right: 1097
+      },
+      downLimit: 611,
+      rightLimit: 1097,
+      selectedId: '43'
+    }
 }
 ```
-So  you can listen the change of theses values for each binder
-
-### Actions
-
-Here list of actions emitted by `react-router`
-* `ADD_KEYBINDER_TO_STORE` when a new binder is mount
-* `ACTIVE_KEYBINDER` when a new binder is activated
-* `UPDATE_SELECTED_KEY` when a new element is selected
-* `UPDATE_BINDER_STATE` when state is updated
+So you can listen the change of theses values for each binder
 
 ### Action launchers
-* `activeKeyBinder([binderId])` activate a new binder by giving its id
+* `activeKeyBinder(binderId, selectedId)` activate a new binder by giving its id
 * `updateBinderState(binderId, binderState)` when you want to update the state manually
 
 # Tests
