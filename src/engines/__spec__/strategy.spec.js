@@ -1,31 +1,32 @@
 import sinon from 'sinon';
 import { EXIT_STRATEGY_MEMORY, EXIT_STRATEGY_MIRROR, EXIT_STRATEGY_START } from '../../constants';
 import { findMirrorExitId, findStartExitId, findIdByStrategy } from '../strategy';
+import * as helpers from '../helpers';
 
 describe('strategy', () => {
 
   describe('findIdByStrategy', () => {
 
     it('should return first elements id when no strategy', sinon.test(function() {
-      const canvas = document.createElement('canvas');
-      this.stub(document, 'getElementById').returns(canvas);
       const state = {
-        selectedId: 'xoxo',
-        enterStrategy: 'none',
-        elements: [{ id: 'xixi' }]
+        'myId': {
+          selectedId: 'xoxo',
+          enterStrategy: 'none',
+          elements: [{ id: 'xixi' }]
+        }
       };
-      findIdByStrategy(state, 'myId', {}).should.equal('xixi');
+      findIdByStrategy(state, 'myId', null).should.equal('xixi');
     }));
 
     it('should return selectedId when strategy is memory', sinon.test(function() {
-      const canvas = document.createElement('canvas');
-      this.stub(document, 'getElementById').returns(canvas);
       const id = 'xoxo';
       const state = {
-        selectedId: id,
-        enterStrategy: EXIT_STRATEGY_MEMORY,
+        'myId': {
+          selectedId: id,
+          enterStrategy: EXIT_STRATEGY_MEMORY,
+        }
       };
-      findIdByStrategy(state, 'myId', {}).should.equal(id);
+      findIdByStrategy(state, 'myId', null).should.equal(id);
     }));
 
     it('should return mirrorId on strategy mirror', sinon.test(function() {
@@ -41,11 +42,14 @@ describe('strategy', () => {
 
       this.stub(document, 'getElementById').returns(canvas);
       const state = {
-        selectedId: 'xoxo',
-        enterStrategy: EXIT_STRATEGY_MIRROR,
-        selector: 'li',
+        current: { selectedId: 1 },
+        'myId': {
+          selectedId: 'xoxo',
+          enterStrategy: EXIT_STRATEGY_MIRROR,
+          selector: 'li',
+        }
       };
-      findIdByStrategy(state, 'myId', {}).should.equal('elTwo');
+      findIdByStrategy(state, 'myId', null).should.equal('elTwo');
     }));
 
     it('should return startId on start id', sinon.test(function() {
@@ -61,42 +65,49 @@ describe('strategy', () => {
 
       this.stub(document, 'getElementById').returns(canvas);
       const state = {
-        selectedId: 'xoxo',
-        enterStrategy: EXIT_STRATEGY_START,
-        selector: 'li',
+        'myId': {
+          selectedId: 'xoxo',
+          enterStrategy: EXIT_STRATEGY_START,
+          selector: 'li',
+        }
       };
-      findIdByStrategy(state, 'myId', {}).should.equal('elOne');
+      findIdByStrategy(state, 'myId', null).should.equal('elOne');
     }));
 
   });
 
   describe('findMirrorExitId', () => {
 
-    it('should find mirrored id', () => {
+    it('should find mirrored id', sinon.test(function() {
+      const state = { current: { selectedId: 1 } };
       const leftElement = { getBoundingClientRect: () => ({ left: 20 }) };
+      this.stub(helpers, 'getDomElement').returns(leftElement);
       const children = [
         { id: '1', getBoundingClientRect: () => ({ left: 0 }) },
         { id: '2', getBoundingClientRect: () => ({ left: 10 }) },
         { id: '3', getBoundingClientRect: () => ({ left: 20 }) },
         { id: '4', getBoundingClientRect: () => ({ left: 30 }) },
       ];
-      findMirrorExitId(leftElement, children, 'left').should.equal('3');
-    });
+      this.stub(helpers, 'getCurrentChildren').returns(children);
+      findMirrorExitId('binderId', 'selector', 'left', state).should.equal('3');
+    }));
 
   });
 
   describe('findStartExitId', () => {
 
-    it('should find first started id', () => {
+    it('should find first started id', sinon.test(function() {
       const dom = { getBoundingClientRect: () => ({ left: 15 }) };
+      this.stub(helpers, 'getDomElement').returns(dom);
       const children = [
         { id: '1', getBoundingClientRect: () => ({ left: 0 }) },
         { id: '2', getBoundingClientRect: () => ({ left: 10 }) },
         { id: '3', getBoundingClientRect: () => ({ left: 20 }) },
         { id: '4', getBoundingClientRect: () => ({ left: 30 }) },
       ];
-      findStartExitId(children, dom, 'left').should.equal('3');
-    });
+      this.stub(helpers, 'getCurrentChildren').returns(children);
+      findStartExitId('selector', 'left', 'binderId').should.equal('3');
+    }));
 
   });
 

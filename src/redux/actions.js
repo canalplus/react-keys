@@ -100,7 +100,7 @@ export function activateBinder(binderId, nextElId) {
   ensureDispatch();
   ensureMountedBinder(binderId);
   const state = globalStore.getState()[NAME];
-  const selectedId = findIdByStrategy(state[binderId], binderId, nextElId);
+  const selectedId = findIdByStrategy(state, binderId, nextElId);
   globalStore.dispatch({
     type: ACTIVATE_BINDER,
     binderId,
@@ -136,7 +136,7 @@ export function determineNewState(binderId, dir, cb, exitCb, _this, context) {
     execCb(cb, nextEl, _this, context);
   } else {
     resetFlipFlop(binderId);
-    enterTo(exitCb, newState.nextEl.id);
+    enterTo(exitCb);
   }
 }
 

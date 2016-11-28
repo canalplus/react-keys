@@ -146,12 +146,12 @@ class Carousel extends Component {
       position: 'absolute',
       overflow: 'hidden',
     }}>
-      {indexs.map((index) => {
+      {indexs.map((index, inc) => {
         if (index === null) {
           return;
         }
         const x = (indexs.indexOf(index) - 2) * elWidth;
-        return <div key={index} className={childrenClassName} style={{
+        return <div key={inc} className={childrenClassName} style={{
           transform: `translate3d(${x}px, 0, 0)`,
           WebkitTransform: `translate3d(${x}px, 0, 0)`,
           transition: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 'none' : `transform ${speed}ms`,

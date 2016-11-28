@@ -5,10 +5,10 @@ export function execCb(func, nextEl, _this, context) {
   func.call(_this, nextEl || {}, context);
 }
 
-export function enterTo(callback, nextId) {
+export function enterTo(callback) {
   if (callback) {
     if (typeof callback === 'string') {
-      activateBinder(callback, nextId);
+      activateBinder(callback);
     } else {
       callback();
     }

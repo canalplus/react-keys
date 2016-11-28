@@ -21,6 +21,14 @@ export function rightLimit(elements) {
   return Math.max.apply(null, elements.map(el => el.coords.right));
 }
 
+export function getCurrentChildren(dom, selector) {
+  return [].slice.call(dom.querySelectorAll(selector));
+}
+
+export function getDomElement(binderId) {
+  return document.getElementById(binderId);
+}
+
 export function hasDiff(nextEls, prevEls) {
   if (nextEls.length === 0) {
     return false;
