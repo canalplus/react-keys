@@ -23,30 +23,24 @@ describe('engine/carousel.js', () => {
   });
   describe('getPrev', () => {
     it('should get prev element when index not 0', () => {
-      const table = ['A', 'B', 'C'];
-      getPrev(table, 1).should.equal(0);
+      getPrev(3, 1).should.equal(0);
     });
     it('should get last element when index is 0', () => {
-      const table = ['A', 'B', 'C'];
-      getPrev(table, 0).should.equal(2);
+      getPrev(3, 0).should.equal(2);
     });
     it('should return null if first element and no circular', () => {
-      const table = ['A', 'B', 'C'];
-      expect(getPrev(table, 0, false)).to.be.null;
+      expect(getPrev(3, 0, false)).to.be.null;
     });
   });
   describe('getNext', () => {
     it('should get next element when index not last', () => {
-      const table = ['A', 'B', 'C'];
-      getNext(table, 1).should.equal(2);
+      getNext(3, 1).should.equal(2);
     });
     it('should get first element when index is last', () => {
-      const table = ['A', 'B', 'C'];
-      getNext(table, 2).should.equal(0);
+      getNext(3, 2).should.equal(0);
     });
     it('should return null if first element and no circular', () => {
-      const table = ['A', 'B', 'C'];
-      expect(getNext(table, 2, false)).to.be.null;
+      expect(getNext(3, 2, false)).to.be.null;
     });
   });
 });

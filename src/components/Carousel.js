@@ -110,7 +110,7 @@ class Carousel extends Component {
     _updateBinderState(id, { selectedId: this.selectedId, cursor, moving: true });
     this.setState({
       cursor,
-      elements: build(size + 4, cursor, circular, children),
+      elements: build(children, size + 4, cursor, circular),
     });
   }
 

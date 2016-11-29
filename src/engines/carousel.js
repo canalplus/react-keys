@@ -1,14 +1,14 @@
 export function getPrev(size, index, circular = true) {
-  if (!circular && index === 0) return null;
+  if (!circular && (index === 0 || index === null)) return null;
   return index > 0 ? index - 1 : size - 1;
 }
 
 export function getNext(size, index, circular = true) {
-  if (!circular && index === size - 1) return null;
+  if (!circular && (index === null || index === size - 1)) return null;
   return index < size - 1 ? index + 1 : 0;
 }
 
-export function build(size, index, circular = true, children) {
+export function build(children, size, index, circular = true) {
   const carousel = [children[index]];
   const bounds = Math.floor(size / 2);
   let prev = index;
