@@ -52,39 +52,32 @@ class Carousel extends Component {
     super(props);
     this.listenerId = addListener(this.keysHandler, this);
     this.timeout = null;
-    this.sketch = [];
-    this.ids = [];
-    this.movingCountDown = () => {
-      this.timeout = setTimeout(() => _updateBinderState(props.id, {
-        moving: false,
-        speed: props.speed,
-      }));
-    };
-    this.state = { cursor: props.index };
+    this.movingCountDown = () => this.timeout = setTimeout(() =>
+      _updateBinderState(props.id, { moving: false }), props.speed);
+    this.state = { cursor: props.index, elements: [] };
   }
 
   keysHandler(keyCode) {
+    const { children, circular, onDownExit, onUpExit, onEnter } = this.props;
+    const { cursor } = this.state;
     if (isActive(this.props) && !isBlocked()) {
-      const { cursor } = this.state;
       switch (keyCode) {
         case LEFT:
-          if (!this.props.circular && cursor === 0) return;
-          this.performAction(getPrev(this.sketch, cursor));
+          if (!circular && cursor === 0) return;
+          this.performAction(getPrev(children.length, cursor));
           break;
         case RIGHT:
-          if (!this.props.circular && cursor === this.props.children.length - 1) return;
-          this.performAction(getNext(this.sketch, cursor));
+          if (!circular && cursor === children.length - 1) return;
+          this.performAction(getNext(children.length, cursor));
           break;
         case DOWN:
-          this.performCallback(this.props.onDownExit);
+          this.performCallback(onDownExit);
           break;
         case UP:
-          this.performCallback(this.props.onUpExit);
+          this.performCallback(onUpExit);
           break;
         case ENTER:
-          this.performCallback(this.props.onEnter);
-          break;
-        default:
+          this.performCallback(onEnter);
           break;
       }
     }
@@ -92,47 +85,33 @@ class Carousel extends Component {
 
   componentWillMount() {
     addBinderToStore(this.props, CAROUSEL_TYPE);
-    if (this.props.children.length !== 0) {
-      this.ids = this.props.children.map((el, index) => index);
-      this.initializeCarousel(this.props.children);
+    this.updateState(this.state.cursor, this.props.children);
+  }
+
+  componentWillUpdate({ children }) {
+    if (this.props.children.length === 0) {
+      this.updateState(this.state.cursor, children);
     }
-  }
-
-  componentWillUpdate(nextProps) {
-    const { children } = nextProps;
-    if (this.props.children.length === 0 && children.length !== 0) {
-      this.ids = this.props.children.map((el, index) => index);
-      this.initializeCarousel(children);
-    }
-  }
-
-  initializeCarousel(children) {
-    const { id, index } = this.props;
-    this.selectedId = children[index].props.id;
-    this.sketch = children.map(() => '');
-    _updateBinderState(id, {
-      selectedId: this.selectedId,
-      cursor: index,
-      moving: false,
-    });
-  }
-
-  componentWillUnmount() {
-    removeListener(this.listenerId);
   }
 
   performAction(cursor) {
-    block(this.props.debounce);
+    const { debounce, onChange, children } = this.props;
+    block(debounce);
     clearTimeout(this.timeout);
-    this.selectedId = this.props.children[cursor].props.id;
-    _updateBinderState(this.props.id, {
-      selectedId: this.selectedId,
-      cursor: cursor,
-      moving: true,
-    });
-    this.setState({ cursor: cursor });
+    this.updateState(cursor, children);
     this.movingCountDown();
-    execCb(this.props.onChange, this.selectedId, this, this.props);
+    execCb(onChange, this.selectedId, this, this.props);
+  }
+
+  updateState(cursor, children) {
+    if (!children || children.length === 0) return;
+    const { id, size, circular } = this.props;
+    this.selectedId = children[cursor].props.id;
+    _updateBinderState(id, { selectedId: this.selectedId, cursor, moving: true });
+    this.setState({
+      cursor,
+      elements: build(size + 4, cursor, circular, children),
+    });
   }
 
   performCallback(callback) {
@@ -143,20 +122,24 @@ class Carousel extends Component {
   }
 
   render() {
-    const { size, elWidth, speed, childrenClassName, circular, children, className, id } = this.props;
+    const { size, elWidth, speed, childrenClassName, className } = this.props;
+    const { elements } = this.state;
     return <div className={className} style={{ position: 'absolute', overflow: 'hidden' }}>
-      {build(this.ids, size + 4, this.state.cursor, circular).map((index, inc) => {
-        const x = (inc - 2) * elWidth;
-        return <div key={inc} id={`${id}-${index}`} className={childrenClassName} style={{
-          transform: `translate3d(${x}px, 0, 0)`,
-          WebkitTransform: `translate3d(${x}px, 0, 0)`,
-          transition: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 'none' : `transform ${speed}ms`,
-          WebkitTransition: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 'none' : `transform ${speed}ms`,
-          willChange: "transform",
-          opacity: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 0 : 1,
-        }}>{children[index]}</div>;
+      {elements.map((element, inc) => {
+        const gap = (inc - 2) * elWidth;
+        return <div key={element.props.id} className={childrenClassName} style={{
+          marginLeft: `${gap}px`,
+          position: 'absolute',
+          width: `${elWidth}px`,
+          display: 'block',
+          opacity: (gap === -(2 * elWidth) || gap === (size + 1) * elWidth) ? 0 : 1,
+        }}>{element}</div>;
       })}
     </div>;
+  }
+
+  componentWillUnmount() {
+    removeListener(this.listenerId);
   }
 
 }
