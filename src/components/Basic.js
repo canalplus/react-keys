@@ -36,6 +36,7 @@ class Keys extends Component {
       ]),
       id: PropTypes.string.isRequired,
       onBack: PropTypes.func,
+      context: PropTypes.object,
       onDown: PropTypes.func,
       onEnter: PropTypes.func,
       onUp: PropTypes.func,
@@ -52,6 +53,7 @@ class Keys extends Component {
   static get defaultProps() {
     return {
       active: true,
+      context: {},
     }
   }
 
@@ -111,7 +113,7 @@ class Keys extends Component {
   performAction(callback, keyCode) {
     if (callback) {
       block();
-      execCb(callback, keyCode, this, this.props);
+      execCb(callback, keyCode, this, this.props.context);
     }
   }
 

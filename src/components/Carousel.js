@@ -23,6 +23,7 @@ class Carousel extends Component {
       size: PropTypes.number,
       speed: PropTypes.number,
       debounce: PropTypes.number,
+      context: PropTypes.object,
       elWidth: PropTypes.number,
       circular: PropTypes.bool,
       className: PropTypes.string,
@@ -39,6 +40,7 @@ class Carousel extends Component {
       index: 0,
       size: 3,
       elWidth: 100,
+      context: {},
       circular: true,
       active: true,
       speed: 100,
@@ -117,12 +119,12 @@ class Carousel extends Component {
   performCallback(callback) {
     if (callback) {
       block();
-      execCb(callback, this.selectedId, this, this.props);
+      execCb(callback, this.selectedId, this, this.props.context);
     }
   }
 
   render() {
-    const { size, elWidth, speed, childrenClassName, className } = this.props;
+    const { size, elWidth, childrenClassName, className } = this.props;
     const { elements } = this.state;
     return <div className={className} style={{ position: 'absolute', overflow: 'hidden' }}>
       {elements.map((element, inc) => {

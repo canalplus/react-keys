@@ -102,6 +102,7 @@ class Binder extends Component {
         onDownExit,
         onEnter,
         onBack,
+        context,
       } = this.props;
       const { nextEl } = globalStore.getState()['@@keys'][id];
       switch (keyCode) {
@@ -120,13 +121,13 @@ class Binder extends Component {
         case ENTER:
           if (onEnter) {
             block();
-            execCb(onEnter, nextEl, this, this.props);
+            execCb(onEnter, nextEl, this, context);
           }
           break;
         case BACK:
           if (onBack) {
             block();
-            execCb(onBack, nextEl, this, this.props);
+            execCb(onBack, nextEl, this, context);
           }
           break;
         default:
