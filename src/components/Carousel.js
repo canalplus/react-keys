@@ -102,7 +102,7 @@ class Carousel extends Component {
     clearTimeout(this.timeout);
     this.updateState(cursor, children);
     this.movingCountDown();
-    execCb(onChange, this.selectedId, this, this.props);
+    execCb(onChange, this.selectedId, this, this.props.context);
   }
 
   updateState(cursor, children) {
