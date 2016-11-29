@@ -13,6 +13,21 @@ export const UPDATE_BINDER_STATE = [NAME, '/UPDATE_BINDER_STATE'].join('');
 export const UPDATE_CURRENT = [NAME, '/UPDATE_CURRENT'].join('');
 export const UPDATE_PRESS_STATUS = [NAME, '/UPDATE_PRESS_STATUS'].join('');
 
+export function addKeyToStore(props, type) {
+  ensureDispatch();
+  ensureUnmountedBinder();
+  const { id } = props;
+  globalStore.dispatch({
+    type: ADD_BINDER_TO_STORE,
+    newBinder: {
+      [id]: {
+        id,
+        type,
+      }
+    },
+  });
+}
+
 export function addBinderToStore(props, type) {
   ensureDispatch();
   ensureUnmountedBinder();
@@ -90,7 +105,7 @@ export function updateBinderSelectedId(binderId, selectedId, dir) {
 export function desactivateBinders(binders, binderId) {
   let updatedBinders = {};
   Object.keys(binders).map(key => {
-    if (key !== 'current' && key !== 'PRESS' && key !== binderId)
+    if (key !== 'current' && key !== 'PRESS' && key !== binderId && binders[key].type !== 'keys')
       updatedBinders[key] = { ...binders[key], active: false };
   });
   return updatedBinders;

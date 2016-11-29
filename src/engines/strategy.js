@@ -3,11 +3,13 @@ import {
   EXIT_STRATEGY_MIRROR,
   EXIT_STRATEGY_START,
   EXIT_STRATEGY_MEMORY,
+  CAROUSEL_TYPE,
 } from '../constants';
 import { getDomElement, getCurrentChildren } from './helpers';
 
 export function findIdByStrategy(state, binderId, nextElId = null) {
   if (nextElId) return nextElId;
+  if (state[binderId].type === CAROUSEL_TYPE) return state[binderId].selectedId;
   const { position, enterStrategy, selectedId, selector, elements } = state[binderId];
   const moved = position === VERTICAL ? 'top' : 'left';
   switch (enterStrategy) {

@@ -59,11 +59,37 @@ class Carousel extends Component {
     this.state = { cursor: props.index };
   }
 
+  keysHandler(keyCode) {
+    if (isActive(this.props) && !isBlocked()) {
+      const { cursor } = this.state;
+      switch (keyCode) {
+        case LEFT:
+          if (!this.props.circular && cursor === 0) return;
+          this.performAction(getPrev(this.sketch, cursor));
+          break;
+        case RIGHT:
+          if (!this.props.circular && cursor === this.props.children.length - 1) return;
+          this.performAction(getNext(this.sketch, cursor));
+          break;
+        case DOWN:
+          this.performCallback(this.props.onDownExit);
+          break;
+        case UP:
+          this.performCallback(this.props.onUpExit);
+          break;
+        case ENTER:
+          this.performCallback(this.props.onEnter);
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
   componentWillMount() {
-    const { id, active, children } = this.props;
-    addBinderToStore(id, active, CAROUSEL_TYPE);
-    if (children.length !== 0) {
-      this.initializeCarousel(children);
+    addBinderToStore(this.props, CAROUSEL_TYPE);
+    if (this.props.children.length !== 0) {
+      this.initializeCarousel(this.props.children);
     }
   }
 
@@ -103,33 +129,6 @@ class Carousel extends Component {
     execCb(this.props.onChange, this.selectedId, this, this.props);
   }
 
-  keysHandler(keyCode) {
-    if (isActive(this.props) && !isBlocked()) {
-      const { cursor } = this.state;
-      switch (keyCode) {
-        case LEFT:
-          if (!this.props.circular && cursor === 0) return;
-          this.performAction(getPrev(this.sketch, cursor));
-          break;
-        case RIGHT:
-          if (!this.props.circular && cursor === this.props.children.length - 1) return;
-          this.performAction(getNext(this.sketch, cursor));
-          break;
-        case DOWN:
-          this.performCallback(this.props.onDownExit);
-          break;
-        case UP:
-          this.performCallback(this.props.onUpExit);
-          break;
-        case ENTER:
-          this.performCallback(this.props.onEnter);
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
   performCallback(callback) {
     if (callback) {
       block();
@@ -147,9 +146,7 @@ class Carousel extends Component {
       overflow: 'hidden',
     }}>
       {indexs.map((index, inc) => {
-        if (index === null) {
-          return;
-        }
+        if (index === null) return;
         const x = (indexs.indexOf(index) - 2) * elWidth;
         return <div key={inc} className={childrenClassName} style={{
           transform: `translate3d(${x}px, 0, 0)`,

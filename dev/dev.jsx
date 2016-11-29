@@ -2,7 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { connect, Provider } from 'react-redux';
-import { Binder, keysInit, keysReducer, activeKeyBinder, keysSelector, Keys } from '../src';
+import {
+  Binder,
+  keysInit,
+  keysReducer,
+  activeKeyBinder,
+  keysSelector,
+  Keys,
+  Carousel
+} from '../src';
 
 const store = createStore(combineReducers({
   '@@keys': keysReducer,
@@ -63,7 +71,43 @@ const PureMosaic = ({ binder1, binder2 }) => {
   const active2 = binder2.active;
   return (
     <div>
-      <Keys id="rk" on65={() => console.log('OK')}/>
+      <Carousel
+        id="rk-carousel"
+        className="carousel-wrapper"
+        childrenClassName="carousel-children"
+        elWidth={280}
+      >
+        <span id="c1">
+          <img
+            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163084_1_280_157.jpg"/>
+        </span>
+        <span id="c2">
+          <img
+            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1168811_1_280_157.jpg"/>
+        </span>
+        <span id="c3">
+          <img
+            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163084_1_280_157.jpg"/>
+        </span>
+        <span id="c4">
+          <img
+            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163084_1_280_157.jpg"/>
+        </span>
+        <span id="c5">
+          <img
+            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163084_1_280_157.jpg"/>
+        </span>
+        <span id="c6">
+          <img
+            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163084_1_280_157.jpg"/>
+        </span>
+        <span id="c7">
+          <img
+            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163084_1_280_157.jpg"/>
+        </span>
+      </Carousel>
+      <Keys id="rk2" on65={(keyCode) => console.log('OK', keyCode)}/>
+      <Keys id="rk" onEnter={() => console.log('ENTER')}/>
       <Binder id="binder1"
               filter="disabled"
               wrapper="#myWrapper"
@@ -149,8 +193,10 @@ const Mosaic = connect(() => {
   };
 })(PureMosaic);
 
-ReactDOM.render(<Provider store={store}>
-  <Mosaic/>
-</Provider>, document.getElementById('body'));
+ReactDOM.render(
+  <Provider store={store}>
+    <Mosaic/>
+  </Provider>
+  , document.getElementById('body'));
 
-activeKeyBinder('strape-1');
+activeKeyBinder('rk-carousel');

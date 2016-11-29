@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { isBlocked, block } from '../clock';
 import { addListener, removeListener } from '../listener';
-import { addBinderToStore } from '../redux/actions';
+import { addKeyToStore } from '../redux/actions';
 import {
   BACK,
   DOWN,
@@ -64,31 +64,31 @@ class Keys extends Component {
     if (this.props.active && !isBlocked()) {
       switch (keyCode) {
         case BACK:
-          this.performAction(this.props.onBack);
+          this.performAction(this.props.onBack, keyCode);
           break;
         case ENTER:
-          this.performAction(this.props.onEnter);
+          this.performAction(this.props.onEnter, keyCode);
           break;
         case UP:
-          this.performAction(this.props.onUp);
+          this.performAction(this.props.onUp, keyCode);
           break;
         case DOWN:
-          this.performAction(this.props.onDown);
+          this.performAction(this.props.onDown, keyCode);
           break;
         case MENU:
-          this.performAction(this.props.onMenu);
+          this.performAction(this.props.onMenu, keyCode);
           break;
         case INFO:
-          this.performAction(this.props.onInfo);
+          this.performAction(this.props.onInfo, keyCode);
           break;
         case REC:
-          this.performAction(this.props.onRec);
+          this.performAction(this.props.onRec, keyCode);
           break;
         case NEXTPROG:
-          this.performAction(this.props.onNextProg);
+          this.performAction(this.props.onNextProg, keyCode);
           break;
         case PREVPROG:
-          this.performAction(this.props.onPrevProg);
+          this.performAction(this.props.onPrevProg, keyCode);
           break;
         case NUM0:
         case NUM1:
@@ -103,7 +103,7 @@ class Keys extends Component {
           this.performAction(this.props.onDigit, keyCode);
           break;
         default:
-          this.performAction(this.props[`on${keyCode}`]);
+          this.performAction(this.props[`on${keyCode}`], keyCode);
       }
     }
   }
@@ -116,7 +116,7 @@ class Keys extends Component {
   }
 
   componentDidMount() {
-    addBinderToStore(this.props.id, this.props.active, KEYS_TYPE);
+    addKeyToStore(this.props, KEYS_TYPE);
   }
 
   componentWillUnmount() {
