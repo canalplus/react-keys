@@ -53,8 +53,12 @@ class Carousel extends Component {
     this.listenerId = addListener(this.keysHandler, this);
     this.timeout = null;
     this.sketch = [];
+    this.ids = [];
     this.movingCountDown = () => {
-      this.timeout = setTimeout(() => _updateBinderState(props.id, { moving: false }), props.speed);
+      this.timeout = setTimeout(() => _updateBinderState(props.id, {
+        moving: false,
+        speed: props.speed,
+      }));
     };
     this.state = { cursor: props.index };
   }
@@ -89,6 +93,7 @@ class Carousel extends Component {
   componentWillMount() {
     addBinderToStore(this.props, CAROUSEL_TYPE);
     if (this.props.children.length !== 0) {
+      this.ids = this.props.children.map((el, index) => index);
       this.initializeCarousel(this.props.children);
     }
   }
@@ -96,6 +101,7 @@ class Carousel extends Component {
   componentWillUpdate(nextProps) {
     const { children } = nextProps;
     if (this.props.children.length === 0 && children.length !== 0) {
+      this.ids = this.props.children.map((el, index) => index);
       this.initializeCarousel(children);
     }
   }
@@ -137,18 +143,11 @@ class Carousel extends Component {
   }
 
   render() {
-    const { size, elWidth, speed, childrenClassName, circular, children, className } = this.props;
-    const { cursor } = this.state;
-    const ids = children.map((el, index) => index);
-    const indexs = build(ids, size + 4, cursor, circular);
-    return <div className={className} style={{
-      position: 'absolute',
-      overflow: 'hidden',
-    }}>
-      {indexs.map((index, inc) => {
-        if (index === null) return;
-        const x = (indexs.indexOf(index) - 2) * elWidth;
-        return <div key={inc} className={childrenClassName} style={{
+    const { size, elWidth, speed, childrenClassName, circular, children, className, id } = this.props;
+    return <div className={className} style={{ position: 'absolute', overflow: 'hidden' }}>
+      {build(this.ids, size + 4, this.state.cursor, circular).map((index, inc) => {
+        const x = (inc - 2) * elWidth;
+        return <div key={inc} id={`${id}-${index}`} className={childrenClassName} style={{
           transform: `translate3d(${x}px, 0, 0)`,
           WebkitTransform: `translate3d(${x}px, 0, 0)`,
           transition: (x === -(2 * elWidth) || x === (size + 1) * elWidth) ? 'none' : `transform ${speed}ms`,

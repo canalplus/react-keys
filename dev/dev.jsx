@@ -75,6 +75,8 @@ const PureMosaic = ({ binder1, binder2 }) => {
         id="rk-carousel"
         className="carousel-wrapper"
         childrenClassName="carousel-children"
+        debounce={90}
+        speed={220}
         elWidth={280}
       >
         <span id="c1">
@@ -87,23 +89,23 @@ const PureMosaic = ({ binder1, binder2 }) => {
         </span>
         <span id="c3">
           <img
-            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163084_1_280_157.jpg"/>
+            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1158341_1_280_157.jpg"/>
         </span>
         <span id="c4">
           <img
-            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163084_1_280_157.jpg"/>
+            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1166105_1_280_157.jpg"/>
         </span>
         <span id="c5">
           <img
-            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163084_1_280_157.jpg"/>
+            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1168594_1_280_157.jpg"/>
         </span>
         <span id="c6">
           <img
-            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163084_1_280_157.jpg"/>
+            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1169173_1_280_157.jpg"/>
         </span>
         <span id="c7">
           <img
-            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163084_1_280_157.jpg"/>
+            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163388_1_280_157.jpg"/>
         </span>
       </Carousel>
       <Keys id="rk2" on65={(keyCode) => console.log('OK', keyCode)}/>
