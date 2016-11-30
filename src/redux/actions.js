@@ -3,7 +3,7 @@ import { findIdByStrategy } from '../engines/strategy';
 import { boundsMargin } from '../engines/bounds';
 import { calculateNewState } from '../engines/helpers';
 import { NAME, EXIT_STRATEGY_MEMORY } from '../constants';
-import { ensureDispatch, ensureMountedBinder, ensureUnmountedBinder } from '../ensure';
+import { ensureDispatch, ensureMountedBinder, isUnmountedBinder } from '../ensure';
 import { execCb, enterTo } from '../funcHandler';
 
 export const ACTIVATE_BINDER = [NAME, '/ACTIVATE_BINDER'].join('');
@@ -14,9 +14,9 @@ export const UPDATE_CURRENT = [NAME, '/UPDATE_CURRENT'].join('');
 export const UPDATE_PRESS_STATUS = [NAME, '/UPDATE_PRESS_STATUS'].join('');
 
 export function addKeyToStore(props, type) {
-  ensureDispatch();
-  ensureUnmountedBinder();
   const { id } = props;
+  ensureDispatch();
+  if (!isUnmountedBinder(id)) return;
   globalStore.dispatch({
     type: ADD_BINDER_TO_STORE,
     newBinder: {
@@ -30,7 +30,7 @@ export function addKeyToStore(props, type) {
 
 export function addBinderToStore(props, type) {
   ensureDispatch();
-  ensureUnmountedBinder();
+  if (!isUnmountedBinder(props.id)) return;
   const state = globalStore.getState()[NAME];
   const {
     id,

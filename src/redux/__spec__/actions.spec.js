@@ -49,8 +49,8 @@ describe('redux/actions.js', () => {
       addBinderToStore(props, type);
     }));
 
-    it('should call ensureUnmountedBinder', sinon.test(function() {
-      this.mock(ensure).expects('ensureUnmountedBinder').once();
+    it('should call isUnmountedBinder', sinon.test(function() {
+      this.mock(ensure).expects('isUnmountedBinder').once();
       addBinderToStore(props, type);
     }));
 

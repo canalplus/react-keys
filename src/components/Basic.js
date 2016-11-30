@@ -4,6 +4,7 @@ import { addListener, removeListener } from '../listener';
 import { addKeyToStore } from '../redux/actions';
 import {
   BACK,
+  ESC,
   DOWN,
   ENTER,
   UP,
@@ -66,6 +67,7 @@ class Keys extends Component {
     if (this.props.active && !isBlocked()) {
       switch (keyCode) {
         case BACK:
+        case ESC:
           this.performAction(this.props.onBack, keyCode);
           break;
         case ENTER:

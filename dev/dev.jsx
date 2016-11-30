@@ -12,8 +12,20 @@ import {
   Carousel
 } from '../src';
 
+function reducer(state = { active: false }, action) {
+  switch (action.type) {
+    case 'LOOL':
+      return { ...state, active: true };
+    default:
+      return state;
+  }
+}
+
+setTimeout(() => store.dispatch({ type: 'LOOL' }), 2000);
+
 const store = createStore(combineReducers({
   '@@keys': keysReducer,
+  'LOL': reducer,
 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 keysInit({ store: store });
@@ -65,7 +77,7 @@ const PureStrape = ({ selectedId, marginLeft, binderId, active, onDownExit, onUp
 const Strape1 = connect(() => keysSelector('strape-1')())(PureStrape);
 const Strape2 = connect(() => keysSelector('strape-2')())(PureStrape);
 
-const PureMosaic = ({ binder1, binder2 }) => {
+const PureMosaic = ({ binder1, binder2, lool }) => {
   const { selectedId, active, marginTop, marginLeft } = binder1;
   const selectedId2 = binder2.selectedId;
   const active2 = binder2.active;
@@ -175,22 +187,23 @@ const PureMosaic = ({ binder1, binder2 }) => {
       </Binder>
       <Strape1 binderId="strape-1" onDownExit="strape-2" onUpExit="binder1" active={false}/>
       <Strape2 binderId="strape-2" onUpExit="strape-1" onDownExit="binder2" active={false}/>
-      <Binder id="binder2" onUpExit="strape-2" active={false}>
+      {lool ? <Binder id="binder2" onUpExit="strape-2">
         <ul>
           <li id="43" className={selectedId2 === '43' && active2 ? 'selected' : ''}>LALA</li>
           <li id="44" className={selectedId2 === '44' && active2 ? 'selected' : ''}>LILI</li>
           <li id="45" className={selectedId2 === '45' && active2 ? 'selected' : ''}>LULU</li>
         </ul>
-      </Binder>
+      </Binder> : null}
       <button onClick={clickHandler}>ON CLICK</button>
     </div>
   );
 };
 
-const Mosaic = connect(() => {
+const Mosaic = connect((state) => {
   return {
     binder1: keysSelector('binder1')(),
     binder2: keysSelector('binder2')(),
+    lool: state['LOL'].active,
   };
 })(PureMosaic);
 

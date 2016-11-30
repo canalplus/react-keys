@@ -21,8 +21,6 @@ export function ensureMountedBinder(binderId) {
   }
 }
 
-export function ensureUnmountedBinder(binderId) {
-  if (Object.keys(globalStore.getState()[NAME]).some(key => binderId === key)) {
-    throw new Error(`${prefix}Already mounted (${binderId}).`);
-  }
+export function isUnmountedBinder(binderId) {
+  return !Object.keys(globalStore.getState()[NAME]).some(key => binderId === key);
 }

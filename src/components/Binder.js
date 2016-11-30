@@ -47,7 +47,6 @@ class Binder extends Component {
       onUp: PropTypes.func,
       onDown: PropTypes.func,
       onEnter: PropTypes.func,
-      onBack: PropTypes.func,
       onLeftExit: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.func,
@@ -102,7 +101,6 @@ class Binder extends Component {
         onDown,
         onDownExit,
         onEnter,
-        onBack,
         context,
       } = this.props;
       const { nextEl } = globalStore.getState()['@@keys'][id];
@@ -123,12 +121,6 @@ class Binder extends Component {
           if (onEnter) {
             block();
             execCb(onEnter, nextEl, this, context);
-          }
-          break;
-        case BACK:
-          if (onBack) {
-            block();
-            execCb(onBack, nextEl, this, context);
           }
           break;
         default:

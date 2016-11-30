@@ -2,7 +2,7 @@ import { createStore } from 'redux';
 import { _init } from '../listener';
 import { ops, reset } from '../../test/mocks';
 import { addBinderToStore } from '../redux/actions';
-import { ensureState, ensureDispatch, ensureMountedBinder, ensureUnmountedBinder } from '../ensure';
+import { ensureState, ensureDispatch, ensureMountedBinder, isUnmountedBinder } from '../ensure';
 
 describe('ensure', () => {
 
@@ -56,20 +56,19 @@ describe('ensure', () => {
 
   });
 
-  describe('ensureUnmountedBinder', () => {
+  describe('isUnmountedBinder', () => {
 
-    it('should throw exception when binderId exists', () => {
+    it('return false when binder already exists', () => {
       const binderId = 'myId';
       addBinderToStore({ id: binderId }, '');
-      const fn = () => ensureUnmountedBinder(binderId);
-      fn.should.throw(Error);
+      isUnmountedBinder(binderId).should.be.false;
       reset();
     });
 
-    it('should not throw exception when binderId does not exist', () => {
+    it('return true when there is no binder in state', () => {
+      reset();
       const binderId = 'myId';
-      const fn = () => ensureUnmountedBinder(binderId);
-      fn.should.not.throw(Error);
+      isUnmountedBinder(binderId).should.be.true;
     });
 
   });
