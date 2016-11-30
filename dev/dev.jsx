@@ -75,10 +75,9 @@ const PureMosaic = ({ binder1, binder2 }) => {
         id="rk-carousel"
         className="carousel-wrapper"
         childrenClassName="carousel-children"
-        debounce={90}
-        speed={220}
-        elWidth={280}
-      >
+        circular={false}
+        index={4}
+        elWidth={280}>
         <span id="c1">
           <img
             src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163084_1_280_157.jpg"/>
