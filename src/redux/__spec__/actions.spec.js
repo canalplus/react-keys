@@ -61,6 +61,7 @@ describe('redux/actions.js', () => {
         .once()
         .withArgs({
           type: ADD_BINDER_TO_STORE,
+          inactiveBinders: sinon.match.object,
           newBinder: sinon.match.object,
         });
       addBinderToStore(props, type);

@@ -20,7 +20,7 @@ const initialKeysSate = {
 export function _keyReducer(state = initialKeysSate, action) {
   switch (action.type) {
     case ADD_BINDER_TO_STORE:
-      return { ...state, ...action.newBinder };
+      return { ...state, ...action.inactiveBinders, ...action.newBinder };
     case ACTIVATE_BINDER:
       return {
         ...state,

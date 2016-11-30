@@ -72,6 +72,7 @@ class Binder extends Component {
       selector: 'li',
       context: {},
       active: true,
+      focusedId: null,
       enterStrategy: 'none',
       filter: null,
       gap: 20,

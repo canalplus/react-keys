@@ -31,6 +31,7 @@ export function addKeyToStore(props, type) {
 export function addBinderToStore(props, type) {
   ensureDispatch();
   ensureUnmountedBinder();
+  const state = globalStore.getState()[NAME];
   const {
     id,
     active,
@@ -42,10 +43,12 @@ export function addBinderToStore(props, type) {
     elements,
     leftGap,
     downGap,
+    focusedId,
     enterStrategy,
   } = props;
   globalStore.dispatch({
     type: ADD_BINDER_TO_STORE,
+    inactiveBinders: active ? desactivateBinders(state, id) : {},
     newBinder: {
       [id]: {
         id,
@@ -58,6 +61,7 @@ export function addBinderToStore(props, type) {
         rightGap,
         leftGap,
         downGap,
+        focusedId,
         enterStrategy,
         elements: elements || [],
         prevEl: null,
@@ -74,7 +78,9 @@ export function addBinderToStore(props, type) {
 export function _updateBinderState(binderId, binderState) {
   ensureDispatch();
   ensureMountedBinder(binderId);
-  const { active, selectedId } = globalStore.getState()[NAME][binderId];
+  const { active, selectedId, focusedId } = globalStore.getState()[NAME][binderId];
+  const binderStateElement = focusedId || (binderState.elements && binderState.elements[0].id);
+  const effectiveId = selectedId ? selectedId : binderStateElement;
   globalStore.dispatch({
     type: UPDATE_BINDER_STATE,
     binderId,
@@ -84,7 +90,7 @@ export function _updateBinderState(binderId, binderState) {
     globalStore.dispatch({
       type: UPDATE_CURRENT,
       binderId,
-      selectedId,
+      selectedId: effectiveId,
     });
   }
 }
