@@ -5,7 +5,7 @@ import { addListener, removeListener } from '../listener';
 import { isBlocked, block } from '../clock';
 import { isActive } from '../isActive';
 import { execCb } from '../funcHandler';
-import { addBinderToStore, _updateBinderState } from '../redux/actions';
+import { addCarouselToStore, _updateBinderState } from '../redux/actions';
 import { LEFT, RIGHT, DOWN, UP, ENTER } from '../keys';
 import { CAROUSEL_TYPE } from '../constants';
 
@@ -86,7 +86,7 @@ class Carousel extends Component {
   }
 
   componentWillMount() {
-    addBinderToStore(this.props, CAROUSEL_TYPE);
+    addCarouselToStore(this.props, CAROUSEL_TYPE);
     this.updateState(this.state.cursor, this.props.children);
   }
 

@@ -28,10 +28,46 @@ export function addKeyToStore(props, type) {
   });
 }
 
+export function addCarouselToStore(props, type) {
+  ensureDispatch();
+  const {
+    id,
+    active,
+    circular,
+    size,
+    index,
+    elements,
+  } = props;
+  if (!isUnmountedBinder(id)) {
+    if (!isUnmountedBinder(id)) {
+      activateBinder(id, index);
+      return;
+    }
+  }
+  globalStore.dispatch({
+    type: ADD_BINDER_TO_STORE,
+    newBinder: {
+      [id]: {
+        id,
+        type,
+        active,
+        circular,
+        size,
+        index,
+        elements: elements || [],
+      }
+    },
+  });
+}
+
 export function addBinderToStore(props, type) {
   ensureDispatch();
-  if (!isUnmountedBinder(props.id)) return;
   const state = globalStore.getState()[NAME];
+  if (!isUnmountedBinder(props.id)) {
+    const { selectedId } = globalStore.getState()[NAME][props.id];
+    activateBinder(props.id, selectedId);
+    return;
+  }
   const {
     id,
     active,
