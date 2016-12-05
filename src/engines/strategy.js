@@ -44,7 +44,7 @@ export function findStartExitId(selector, moved, binderId) {
       id: el.id,
       [moved]: el.getBoundingClientRect()[moved] - currentContainer,
     }))
-    .filter(el => el[moved] > 0)
+    .filter(el => el[moved] >= 0)
     .sort((a, b) => a[moved] - b[moved]);
   return nextFocusedId[0].id;
 }

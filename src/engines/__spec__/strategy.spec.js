@@ -71,7 +71,7 @@ describe('strategy', () => {
           selector: 'li',
         }
       };
-      findIdByStrategy(state, 'myId', null).should.equal('elOne');
+      findIdByStrategy(state, 'myId', null).should.equal('elTwo');
     }));
 
   });
@@ -107,6 +107,19 @@ describe('strategy', () => {
       ];
       this.stub(helpers, 'getCurrentChildren').returns(children);
       findStartExitId('selector', 'left', 'binderId').should.equal('3');
+    }));
+
+    it('should get first item when its left : 0', sinon.test(function() {
+      const dom = { getBoundingClientRect: () => ({ left: 0 }) };
+      this.stub(helpers, 'getDomElement').returns(dom);
+      const children = [
+        { id: '1', getBoundingClientRect: () => ({ left: 0 }) },
+        { id: '2', getBoundingClientRect: () => ({ left: 10 }) },
+        { id: '3', getBoundingClientRect: () => ({ left: 20 }) },
+        { id: '4', getBoundingClientRect: () => ({ left: 30 }) },
+      ];
+      this.stub(helpers, 'getCurrentChildren').returns(children);
+      findStartExitId('selector', 'left', 'binderId').should.equal('1');
     }));
 
   });

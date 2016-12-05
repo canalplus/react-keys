@@ -24,6 +24,7 @@ import { reset } from '../../../test/mocks';
 
 const props = {
   id: 'myId',
+  selectedId: 'first',
   active: false,
   selector: 'li',
   gap: 0,
@@ -50,6 +51,7 @@ describe('redux/actions.js', () => {
     }));
 
     it('should call isUnmountedBinder', sinon.test(function() {
+      addBinderToStore(props, type);
       this.mock(ensure).expects('isUnmountedBinder').once();
       addBinderToStore(props, type);
     }));
