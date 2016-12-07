@@ -16,13 +16,19 @@ export function boundsMargin(nextId, state) {
     downGap,
     selectedId,
   } = state;
-  const nextEl = elements.find(el => el.id === nextId);
-  const currentElSpace = calculateElSpace(document.getElementById(selectedId));
-  const nextElSpace = calculateElSpace(document.getElementById(nextId));
-  const geo = determineGeo(currentElSpace, nextElSpace);
 
   let newMarginLeft = marginLeft;
   let newMarginTop = marginTop;
+  const current = document.getElementById(selectedId);
+  const next = document.getElementById(nextId);
+
+  if (!current || !next) {
+    return { marginLeft: newMarginLeft, marginTop: newMarginTop };
+  }
+  const nextEl = elements.find(el => el.id === nextId);
+  const currentElSpace = calculateElSpace(current);
+  const nextElSpace = calculateElSpace(next);
+  const geo = determineGeo(currentElSpace, nextElSpace);
 
   if (geo.horizontal === 'left' && !isInsideLeft(wrapper, nextElSpace, gap)) {
     newMarginLeft = calculMarginOnLeft(wrapper, nextEl, gap, boundedGap, leftGap);

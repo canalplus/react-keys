@@ -41,7 +41,7 @@ describe('bounds', () => {
         .returns({
           id: '0', top: 5, left: 0, right: 10, down: 5
         });
-      boundsMargin('1', state).should.eql({ marginTop: 0, marginLeft: -5 });
+      boundsMargin('1', state).should.eql({ marginTop: 0, marginLeft: 0 });
     }));
 
     it('should calcul right dir', sinon.test(function() {
