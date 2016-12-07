@@ -2,7 +2,7 @@ import { globalStore } from '../listener';
 import { findIdByStrategy } from '../engines/strategy';
 import { boundsMargin } from '../engines/bounds';
 import { calculateNewState } from '../engines/helpers';
-import { NAME, EXIT_STRATEGY_MEMORY, C_DOWN } from '../constants';
+import { NAME, EXIT_STRATEGY_MEMORY } from '../constants';
 import { ensureDispatch, ensureMountedBinder, isUnmountedBinder } from '../ensure';
 import { execCb, enterTo } from '../funcHandler';
 

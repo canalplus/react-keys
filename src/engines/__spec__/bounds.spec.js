@@ -7,10 +7,9 @@ import {
   isInsideRight,
   isInsideLeft,
   isInsideDown,
-  isInsideTop,
+  isInsideTop,a
   boundsMargin,
 } from '../bounds';
-import { C_LEFT, C_RIGHT, C_UP, C_DOWN } from '../../constants';
 import * as helpers from '../helpers';
 
 describe('bounds', () => {

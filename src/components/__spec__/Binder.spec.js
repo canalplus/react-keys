@@ -3,7 +3,6 @@ import React from 'react';
 import Binder from '../Binder';
 import { shallow, mount } from 'enzyme';
 import * as actions from '../../redux/actions';
-import * as listener from '../../listener';
 import sinon from 'sinon';
 
 describe('Binder.jsx', () => {
