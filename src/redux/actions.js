@@ -146,9 +146,7 @@ export function _resetBinder(binderId, wishedId) {
 export function _updateBinder(binderId, state) {
   ensureDispatch();
   ensureMountedBinder(binderId);
-  const { active, selectedId, focusedId } = globalStore.getState()[NAME][binderId];
-  const binderStateElement = focusedId || (state.elements && state.elements[0].id);
-  const effectiveId = selectedId ? selectedId : binderStateElement;
+  const { active } = globalStore.getState()[NAME][binderId];
   globalStore.dispatch({
     type: UPDATE_BINDER_STATE,
     binderId,
@@ -158,7 +156,7 @@ export function _updateBinder(binderId, state) {
     globalStore.dispatch({
       type: UPDATE_CURRENT,
       binderId,
-      selectedId: effectiveId,
+      selectedId: state.selectedId,
     });
   }
 }
