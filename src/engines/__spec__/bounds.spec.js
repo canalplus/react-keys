@@ -7,7 +7,7 @@ import {
   isInsideRight,
   isInsideLeft,
   isInsideDown,
-  isInsideTop,a
+  isInsideTop,
   boundsMargin,
 } from '../bounds';
 import * as helpers from '../helpers';
