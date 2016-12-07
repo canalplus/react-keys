@@ -31,16 +31,23 @@ describe('bounds', () => {
         rightGap: 0,
         leftGap: 0,
         downGap: 0,
+        selectedId: 0,
       };
-      this.stub(helpers, 'calculateElSpace').returns({
-        id: '1', top: 5, left: 5, right: 5, down: 5
-      });
-      boundsMargin(C_LEFT, '1', state).should.eql({ marginTop: 0, marginLeft: -5 });
+      this.stub(helpers, 'calculateElSpace')
+        .onCall(0)
+        .returns({
+          id: '1', top: 5, left: 5, right: 5, down: 5
+        })
+        .onCall(1)
+        .returns({
+          id: '0', top: 5, left: 0, right: 10, down: 5
+        });
+      boundsMargin('1', state).should.eql({ marginTop: 0, marginLeft: -5 });
     }));
 
     it('should calcul right dir', sinon.test(function() {
       const state = {
-        wrapper: { left: 10, top: 10, right: 10, down: 10 },
+        wrapper: { left: 10, top: 10, right: 20, down: 20 },
         marginLeft: 0,
         marginTop: 0,
         elements: [{ id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } }],
@@ -52,11 +59,18 @@ describe('bounds', () => {
         rightGap: 0,
         leftGap: 0,
         downGap: 0,
+        selectedId: 0,
       };
-      this.stub(helpers, 'calculateElSpace').returns({
-        id: '1', top: 5, left: 5, right: 5, down: 5
-      });
-      boundsMargin(C_RIGHT, '1', state).should.eql({ marginTop: 0, marginLeft: 0 });
+      this.stub(helpers, 'calculateElSpace')
+        .onCall(0)
+        .returns({
+          id: '1', top: 5, left: 20, right: 5, down: 5
+        })
+        .onCall(1)
+        .returns({
+          id: '0', top: 5, left: 25, right: 10, down: 5
+        });
+      boundsMargin('1', state).should.eql({ marginTop: 0, marginLeft: 0 });
     }));
 
     it('should calcul up dir', sinon.test(function() {
@@ -73,11 +87,18 @@ describe('bounds', () => {
         rightGap: 0,
         leftGap: 0,
         downGap: 0,
+        selectedId: 0
       };
-      this.stub(helpers, 'calculateElSpace').returns({
-        id: '1', top: 5, left: 5, right: 5, down: 5
-      });
-      boundsMargin(C_UP, '1', state).should.eql({ marginTop: -5, marginLeft: 0 });
+      this.stub(helpers, 'calculateElSpace')
+        .onCall(0)
+        .returns({
+          id: '1', top: 5, left: 10, right: 5, down: 5
+        })
+        .onCall(1)
+        .returns({
+          id: '0', top: 5, left: 15, right: 10, down: 5
+        });
+      boundsMargin('1', state).should.eql({ marginTop: 0, marginLeft: 0 });
     }));
 
     it('should calcul down dir', sinon.test(function() {
@@ -98,7 +119,7 @@ describe('bounds', () => {
       this.stub(helpers, 'calculateElSpace').returns({
         id: '1', top: 5, left: 5, right: 5, down: 5
       });
-      boundsMargin(C_DOWN, '1', state).should.eql({ marginTop: 0, marginLeft: 0 });
+      boundsMargin('1', state).should.eql({ marginTop: 0, marginLeft: 0 });
     }));
 
   });

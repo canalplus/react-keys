@@ -28,21 +28,14 @@ export function _keyReducer(state = initialKeysSate, action) {
         ...action.inactiveBinders,
         [action.binderId]: {
           ...state[action.binderId],
-          selectedId: action.selectedId,
-          nextEl: state[action.binderId].elements.find(e => e.id === action.selectedId),
           active: true,
-        },
-        current: {
-          ...state['current'],
-          binderId: action.binderId,
-          selectedId: action.selectedId,
         },
       };
     case UPDATE_BINDER_STATE:
       return {
         ...state,
         [action.binderId]: {
-          ...state[action.binderId], ...action.binderState,
+          ...state[action.binderId], ...action.state,
         },
       };
     case RESET_BINDER:

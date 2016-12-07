@@ -32,7 +32,7 @@ const store = createStore(combineReducers({
 keysInit({ store: store });
 
 function clickHandler() {
-  resetBinder('binder2', '44');
+  activeBinder('binder1', '15', 'left');
 }
 
 const Card = ({ id, active }) => {
@@ -84,42 +84,6 @@ const PureMosaic = ({ binder1, binder2, lool }) => {
   const active2 = binder2.active;
   return (
     <div>
-      <Carousel
-        id="rk-carousel"
-        className="carousel-wrapper"
-        childrenClassName="carousel-children"
-        circular={false}
-        index={4}
-        elWidth={280}>
-        <span id="c1">
-          <img
-            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163084_1_280_157.jpg"/>
-        </span>
-        <span id="c2">
-          <img
-            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1168811_1_280_157.jpg"/>
-        </span>
-        <span id="c3">
-          <img
-            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1158341_1_280_157.jpg"/>
-        </span>
-        <span id="c4">
-          <img
-            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1166105_1_280_157.jpg"/>
-        </span>
-        <span id="c5">
-          <img
-            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1168594_1_280_157.jpg"/>
-        </span>
-        <span id="c6">
-          <img
-            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1169173_1_280_157.jpg"/>
-        </span>
-        <span id="c7">
-          <img
-            src="http://image.canal-plus.com/media_cpa/img/movie/default/280_157/jpg/ANT_1163388_1_280_157.jpg"/>
-        </span>
-      </Carousel>
       <Keys id="rk2" on65={(keyCode) => console.log('OK', keyCode)}/>
       <Keys id="rk" onEnter={() => console.log('ENTER')}/>
       <Binder id="binder1"
@@ -214,4 +178,4 @@ ReactDOM.render(
   </Provider>
   , document.getElementById('body'));
 
-activeBinder('rk-carousel');
+// activeBinder('rk-carousel');

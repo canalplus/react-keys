@@ -7,7 +7,6 @@ import {
   UPDATE_BINDER_SELECTED_KEY,
   desactivateBinders,
   _activeBinder,
-  ACTIVATE_BINDER,
   updatePressStatus,
   UPDATE_PRESS_STATUS,
   determineNewState,
@@ -53,6 +52,8 @@ describe('redux/actions.js', () => {
     it('should call isUnmountedBinder', sinon.test(function() {
       addBinderToStore(props, type);
       this.mock(ensure).expects('isUnmountedBinder').once();
+      this.stub(helpers, 'calculateElSpace').returns({});
+      this.stub(bounds, 'boundsMargin').returns({});
       addBinderToStore(props, type);
     }));
 
@@ -100,7 +101,7 @@ describe('redux/actions.js', () => {
         .withArgs({
           binderId: 'myId',
           type: UPDATE_BINDER_STATE,
-          binderState: { active: false },
+          state: { active: false },
         });
       _updateBinder(binderId, binderState);
     }));
@@ -167,9 +168,11 @@ describe('redux/actions.js', () => {
     it('should call ensureDispatch', sinon.test(function() {
       addBinderToStore(props, type);
       this.stub(strategy, 'findIdByStrategy').returns({});
+      this.stub(helpers, 'calculateElSpace').returns({});
+      this.stub(bounds, 'boundsMargin').returns({});
       this.mock(ensure)
         .expects('ensureDispatch')
-        .once();
+        .atLeast(1);
       _activeBinder('myId', {});
     }));
 
@@ -177,9 +180,11 @@ describe('redux/actions.js', () => {
       const binderId = 'myId';
       addBinderToStore(props, type);
       this.stub(strategy, 'findIdByStrategy').returns({});
+      this.stub(helpers, 'calculateElSpace').returns({});
+      this.stub(bounds, 'boundsMargin').returns({});
       this.mock(ensure)
         .expects('ensureMountedBinder')
-        .once()
+        .atLeast(1)
         .withArgs(binderId);
       _activeBinder(binderId, {});
     }));
@@ -188,15 +193,11 @@ describe('redux/actions.js', () => {
       const binderId = 'myId';
       addBinderToStore(props, type);
       this.stub(strategy, 'findIdByStrategy').returns('myId');
+      this.stub(helpers, 'calculateElSpace').returns({});
+      this.stub(bounds, 'boundsMargin').returns({});
       this.mock(listener.globalStore)
         .expects('dispatch')
-        .once()
-        .withArgs({
-          type: ACTIVATE_BINDER,
-          binderId,
-          inactiveBinders: sinon.match.object,
-          selectedId: sinon.match.string,
-        });
+        .atLeast(1);
       _activeBinder(binderId, {});
     }));
 
@@ -285,7 +286,7 @@ describe('redux/actions.js', () => {
         .withArgs({
           type: UPDATE_BINDER_STATE,
           binderId: 'myId',
-          binderState: { prevDir: null },
+          state: { prevDir: null },
         });
       resetFlipFlop('myId');
     }));

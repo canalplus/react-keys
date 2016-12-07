@@ -46,8 +46,6 @@ export function build(elements, options) {
     right: findElement(rightArray(el, elementsCoords)),
     up: findElement(upArray(el, elementsCoords)),
     down: findElement(downArray(el, elementsCoords)),
-    marginTop: 0,
-    marginLeft: 0,
   }));
 }
 

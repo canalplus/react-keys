@@ -14,7 +14,7 @@ export function calculateElSpace(el) {
 }
 
 export function downLimit(elements) {
-  return Math.max.apply(null, (elements.map(el => el.coords.down)));
+  return Math.max.apply(null, elements.map(el => el.coords.down));
 }
 
 export function rightLimit(elements) {

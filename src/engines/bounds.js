@@ -1,7 +1,6 @@
-import { C_DOWN, C_LEFT, C_RIGHT, C_UP } from '../constants';
 import { calculateElSpace } from './helpers';
 
-export function boundsMargin(dir, selectedId, state) {
+export function boundsMargin(nextId, state) {
   const {
     wrapper,
     elements,
@@ -15,41 +14,45 @@ export function boundsMargin(dir, selectedId, state) {
     rightGap,
     leftGap,
     downGap,
+    selectedId,
   } = state;
-  const selectedEl = elements.find(el => el.id === selectedId);
-  const currentEl = calculateElSpace(document.getElementById(selectedId));
-  switch (dir) {
-    case C_LEFT:
-      return {
-        marginTop,
-        marginLeft: isInsideLeft(wrapper, currentEl, gap)
-          ? marginLeft
-          : calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap),
-      };
-    case C_UP:
-      return {
-        marginTop: isInsideTop(wrapper, currentEl, gap)
-          ? marginTop
-          : calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap),
-        marginLeft,
-      };
-    case C_RIGHT:
-      return {
-        marginTop,
-        marginLeft: isInsideRight(wrapper, currentEl, gap)
-          ? marginLeft
-          : calculMarginOnRight(wrapper, selectedEl, gap, rightLimit, boundedGap, rightGap),
-      };
-    case C_DOWN:
-      return {
-        marginTop: isInsideDown(wrapper, currentEl, gap)
-          ? marginTop
-          : calculMarginOnDown(wrapper, selectedEl, gap, downLimit, boundedGap, downGap),
-        marginLeft,
-      };
-    default:
-      return { marginTop, marginLeft };
+  const nextEl = elements.find(el => el.id === nextId);
+  const currentElSpace = calculateElSpace(document.getElementById(selectedId));
+  const nextElSpace = calculateElSpace(document.getElementById(nextId));
+  const geo = determineGeo(currentElSpace, nextElSpace);
+
+  let newMarginLeft = marginLeft;
+  let newMarginTop = marginTop;
+
+  if (geo.horizontal === 'left' && !isInsideLeft(wrapper, nextElSpace, gap)) {
+    newMarginLeft = calculMarginOnLeft(wrapper, nextEl, gap, boundedGap, leftGap);
+  } else if (geo.horizontal === 'right' && !isInsideRight(wrapper, nextElSpace, gap)) {
+    newMarginLeft = calculMarginOnRight(wrapper, nextEl, gap, rightLimit, boundedGap, rightGap);
   }
+
+  if (geo.vertial === 'top' && !isInsideTop(wrapper, nextElSpace, gap)) {
+    newMarginTop = calculMarginOnTop(wrapper, nextEl, gap, boundedGap, topGap);
+  } else if (geo.vertial === 'down' && !isInsideDown(wrapper, nextElSpace, gap)) {
+    newMarginTop = calculMarginOnDown(wrapper, nextEl, gap, downLimit, boundedGap, downGap);
+  }
+
+  return { marginLeft: newMarginLeft, marginTop: newMarginTop };
+}
+
+export function determineGeo(current, next) {
+  let vertial = 'equal';
+  let horizontal = 'equal';
+  if (current.left > next.left) {
+    horizontal = 'left';
+  } else if (current.left < next.left) {
+    horizontal = 'right';
+  }
+  if (current.top > next.top) {
+    vertial = 'top';
+  } else if (current.top < next.top) {
+    vertial = 'down';
+  }
+  return { vertial, horizontal }
 }
 
 export function isInsideTop(wrapper, selectedEl, gap) {
