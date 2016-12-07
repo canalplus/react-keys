@@ -12,6 +12,7 @@ export const UPDATE_BINDER_SELECTED_KEY = [NAME, '/UPDATE_BINDER_SELECTED_KEY'].
 export const UPDATE_BINDER_STATE = [NAME, '/UPDATE_BINDER_STATE'].join('');
 export const UPDATE_CURRENT = [NAME, '/UPDATE_CURRENT'].join('');
 export const UPDATE_PRESS_STATUS = [NAME, '/UPDATE_PRESS_STATUS'].join('');
+export const RESET_BINDER = [NAME, '/RESET_BINDER'].join('');
 
 export function addKeyToStore(props, type) {
   const { id } = props;
@@ -40,7 +41,7 @@ export function addCarouselToStore(props, type) {
   } = props;
   if (!isUnmountedBinder(id)) {
     if (!isUnmountedBinder(id)) {
-      activateBinder(id, index);
+      _activeBinder(id, index);
       return;
     }
   }
@@ -64,8 +65,7 @@ export function addBinderToStore(props, type) {
   ensureDispatch();
   const state = globalStore.getState()[NAME];
   if (!isUnmountedBinder(props.id)) {
-    const { selectedId } = globalStore.getState()[NAME][props.id];
-    activateBinder(props.id, selectedId);
+    _activeBinder(props.id);
     return;
   }
   const {
@@ -111,7 +111,26 @@ export function addBinderToStore(props, type) {
   });
 }
 
-export function _updateBinderState(binderId, binderState) {
+export function _resetBinder(binderId, wishedId) {
+  ensureDispatch();
+  ensureMountedBinder(binderId);
+  const { active, elements } = globalStore.getState()[NAME][binderId];
+  const selectedId = wishedId || elements[0].id;
+  globalStore.dispatch({
+    type: RESET_BINDER,
+    binderId,
+    selectedId,
+  });
+  if (active) {
+    globalStore.dispatch({
+      type: UPDATE_CURRENT,
+      binderId,
+      selectedId,
+    });
+  }
+}
+
+export function _updateBinder(binderId, binderState) {
   ensureDispatch();
   ensureMountedBinder(binderId);
   const { active, selectedId, focusedId } = globalStore.getState()[NAME][binderId];
@@ -153,7 +172,7 @@ export function desactivateBinders(binders, binderId) {
   return updatedBinders;
 }
 
-export function activateBinder(binderId, nextElId) {
+export function _activeBinder(binderId, nextElId) {
   ensureDispatch();
   ensureMountedBinder(binderId);
   const state = globalStore.getState()[NAME];
@@ -163,7 +182,6 @@ export function activateBinder(binderId, nextElId) {
     binderId,
     inactiveBinders: desactivateBinders(state, binderId),
     selectedId: selectedId,
-    nextEl: state[binderId].elements.find(e => e.id === selectedId),
   });
 }
 

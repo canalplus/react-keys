@@ -28,6 +28,7 @@ npm i redux -S
 # Link it with Redux (Otherwise it doesn't work !) 
 ```javascript
 import { keysInit, keyReducer, keysSelector } from 'react-keys';
+import { createStore, combineReducers } from 'redux';
 import { connect } from 'react-redux';
 import PureMosaic from '../PureMosaic' // Pure React Component
 
@@ -255,8 +256,9 @@ the keys store will manage the state of each binders (no matter how many they ar
 So you can listen the change of theses values for each binder
 
 ### Action launchers
-* `activeKeyBinder(binderId, selectedId)` activate a new binder by giving its id
-* `updateBinderState(binderId, binderState)` when you want to update the state manually
+* `activeBinder(binderId, selectedId(optional))` activate a new binder by giving its id (first id by default)
+* `resetBInder(binderId, selectedId(optional))` reset binder by giving its id (first id by default)
+* `updateBinder(binderId, binderState)` when you want to update the state manually (you must know what you do !)
 
 # Tests
 

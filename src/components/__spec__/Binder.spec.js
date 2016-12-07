@@ -41,7 +41,7 @@ describe('Binder.jsx', () => {
   }));
 
   it('should send action updateBinderState when elements are updated', sinon.test(function() {
-    this.mock(actions).expects('_updateBinderState')
+    this.mock(actions).expects('_updateBinder')
       .once()
       .withArgs('1', sinon.match.object);
     const Component = ({ elems }) => {

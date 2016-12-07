@@ -1,4 +1,4 @@
-import { activateBinder } from './redux/actions';
+import { _activeBinder } from './redux/actions';
 
 export function execCb(func, nextEl, _this, context) {
   if (!func) return;
@@ -8,7 +8,7 @@ export function execCb(func, nextEl, _this, context) {
 export function enterTo(callback) {
   if (callback) {
     if (typeof callback === 'string') {
-      activateBinder(callback);
+      _activeBinder(callback);
     } else {
       callback();
     }

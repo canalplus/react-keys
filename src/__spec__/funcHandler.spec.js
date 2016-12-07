@@ -45,7 +45,7 @@ describe('funcHandler.js', () => {
 
     it('should call enter when callback is a string', sinon.test(function() {
       this.mock(actions)
-        .expects('activateBinder')
+        .expects('_activeBinder')
         .once();
       enterTo('binder1', '1');
     }));

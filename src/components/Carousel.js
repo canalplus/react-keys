@@ -5,7 +5,7 @@ import { addListener, removeListener } from '../listener';
 import { isBlocked, block } from '../clock';
 import { isActive } from '../isActive';
 import { execCb } from '../funcHandler';
-import { addCarouselToStore, _updateBinderState } from '../redux/actions';
+import { addCarouselToStore, _updateBinder } from '../redux/actions';
 import { LEFT, RIGHT, DOWN, UP, ENTER } from '../keys';
 import { CAROUSEL_TYPE } from '../constants';
 
@@ -55,7 +55,7 @@ class Carousel extends Component {
     this.listenerId = addListener(this.keysHandler, this);
     this.timeout = null;
     this.movingCountDown = () => this.timeout = setTimeout(() =>
-      _updateBinderState(props.id, { moving: false }), props.speed);
+      _updateBinder(props.id, { moving: false }), props.speed);
     this.state = { cursor: props.index, elements: [] };
   }
 
@@ -109,7 +109,7 @@ class Carousel extends Component {
     if (!children || children.length === 0) return;
     const { id, size, circular } = this.props;
     this.selectedId = children[cursor].props.id;
-    _updateBinderState(id, { selectedId: this.selectedId, cursor, moving: true });
+    _updateBinder(id, { selectedId: this.selectedId, cursor, moving: true });
     this.setState({
       cursor,
       elements: build(children, size + 4, cursor, circular),

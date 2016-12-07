@@ -1,12 +1,12 @@
 import {
   addBinderToStore,
   ADD_BINDER_TO_STORE,
-  _updateBinderState,
+  _updateBinder,
   UPDATE_BINDER_STATE,
   updateBinderSelectedId,
   UPDATE_BINDER_SELECTED_KEY,
   desactivateBinders,
-  activateBinder,
+  _activeBinder,
   ACTIVATE_BINDER,
   updatePressStatus,
   UPDATE_PRESS_STATUS,
@@ -77,7 +77,7 @@ describe('redux/actions.js', () => {
       this.mock(ensure)
         .expects('ensureDispatch')
         .once();
-      _updateBinderState('myId', {});
+      _updateBinder('myId', {});
     }));
 
     it('should call ensureUnmountedBinder', sinon.test(function() {
@@ -87,7 +87,7 @@ describe('redux/actions.js', () => {
         .expects('ensureMountedBinder')
         .once()
         .withArgs(id);
-      _updateBinderState(id, {});
+      _updateBinder(id, {});
     }));
 
     it('should dispatch to update binder state', sinon.test(function() {
@@ -102,7 +102,7 @@ describe('redux/actions.js', () => {
           type: UPDATE_BINDER_STATE,
           binderState: { active: false },
         });
-      _updateBinderState(binderId, binderState);
+      _updateBinder(binderId, binderState);
     }));
 
     it('should update current when binder is active', sinon.test(function() {
@@ -112,7 +112,7 @@ describe('redux/actions.js', () => {
       this.mock(listener.globalStore)
         .expects('dispatch')
         .twice();
-      _updateBinderState(binderId, binderState);
+      _updateBinder(binderId, binderState);
     }));
   });
 
@@ -170,7 +170,7 @@ describe('redux/actions.js', () => {
       this.mock(ensure)
         .expects('ensureDispatch')
         .once();
-      activateBinder('myId', {});
+      _activeBinder('myId', {});
     }));
 
     it('should call ensureUnmountedBinder', sinon.test(function() {
@@ -181,7 +181,7 @@ describe('redux/actions.js', () => {
         .expects('ensureMountedBinder')
         .once()
         .withArgs(binderId);
-      activateBinder(binderId, {});
+      _activeBinder(binderId, {});
     }));
 
     it('should dispatch to activate binder selected id', sinon.test(function() {
@@ -196,9 +196,8 @@ describe('redux/actions.js', () => {
           binderId,
           inactiveBinders: sinon.match.object,
           selectedId: sinon.match.string,
-          nextEl: sinon.match.object,
         });
-      activateBinder(binderId, {});
+      _activeBinder(binderId, {});
     }));
 
   });

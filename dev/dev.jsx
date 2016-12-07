@@ -6,7 +6,8 @@ import {
   Binder,
   keysInit,
   keysReducer,
-  activeKeyBinder,
+  activeBinder,
+  resetBinder,
   keysSelector,
   Keys,
   Carousel
@@ -31,7 +32,7 @@ const store = createStore(combineReducers({
 keysInit({ store: store });
 
 function clickHandler() {
-  activeKeyBinder('binder1', '4');
+  resetBinder('binder2', '44');
 }
 
 const Card = ({ id, active }) => {
@@ -213,4 +214,4 @@ ReactDOM.render(
   </Provider>
   , document.getElementById('body'));
 
-activeKeyBinder('rk-carousel');
+activeBinder('rk-carousel');

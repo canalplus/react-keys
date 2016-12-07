@@ -5,6 +5,7 @@ import {
   UPDATE_PRESS_STATUS,
   UPDATE_BINDER_SELECTED_KEY,
   UPDATE_CURRENT,
+  RESET_BINDER,
 } from './actions';
 
 const initialKeysSate = {
@@ -28,7 +29,7 @@ export function _keyReducer(state = initialKeysSate, action) {
         [action.binderId]: {
           ...state[action.binderId],
           selectedId: action.selectedId,
-          nextEl: action.nextEl,
+          nextEl: state[action.binderId].elements.find(e => e.id === action.selectedId),
           active: true,
         },
         current: {
@@ -42,6 +43,15 @@ export function _keyReducer(state = initialKeysSate, action) {
         ...state,
         [action.binderId]: {
           ...state[action.binderId], ...action.binderState,
+        },
+      };
+    case RESET_BINDER:
+      return {
+        ...state,
+        [action.binderId]: {
+          ...state[action.binderId],
+          selectedId: action.selectedId,
+          nextEl: state[action.binderId].elements.find(e => e.id === action.selectedId),
         },
       };
     case UPDATE_BINDER_SELECTED_KEY:

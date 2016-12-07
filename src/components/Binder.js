@@ -10,7 +10,7 @@ import { execCb } from '../funcHandler';
 import { globalStore, addListener, removeListener } from '../listener';
 import {
   addBinderToStore,
-  _updateBinderState,
+  _updateBinder,
   determineNewState,
 } from '../redux/actions';
 import {
@@ -148,7 +148,7 @@ class Binder extends Component {
     );
     const { elements, selectedElement } = value;
     if (hasDiff(elements, state.elements)) {
-      _updateBinderState(id, {
+      _updateBinder(id, {
         wrapper: calculateElSpace(wrapper ? document.querySelector(wrapper) : document.body),
         downLimit: downLimit(elements),
         rightLimit: rightLimit(elements),
