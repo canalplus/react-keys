@@ -101,6 +101,6 @@ export function calculMarginOnRight(wrapper, selectedEl, gap, rightLimit, bounde
 export function calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap) {
   const { left } = selectedEl.coords;
   const lastGap = boundedGap || leftGap;
-  var computedLeft = left - ((left - (wrapper.left + gap)) < 0 ? lastGap : gap);
+  const computedLeft = left - ((left - (wrapper.left + gap)) < 0 ? lastGap : gap);
   return computedLeft - wrapper.left;
 }
