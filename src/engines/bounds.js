@@ -80,7 +80,7 @@ export function isInsideRight(wrapper, selectedEl, gap) {
 export function calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap) {
   const { top } = selectedEl.coords;
   const lastGap = boundedGap || topGap;
-  const computedTop = top - (top - gap < 0 ? lastGap : gap);
+  const computedTop = top - (top - (wrapper.top + gap) < 0 ? lastGap : gap);
   return computedTop - wrapper.top;
 }
 
@@ -101,6 +101,6 @@ export function calculMarginOnRight(wrapper, selectedEl, gap, rightLimit, bounde
 export function calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap) {
   const { left } = selectedEl.coords;
   const lastGap = boundedGap || leftGap;
-  const computedLeft = left - (left - gap < 0 ? lastGap : gap);
+  var computedLeft = left - ((left - (wrapper.left + gap)) < 0 ? lastGap : gap);
   return computedLeft - wrapper.left;
 }
