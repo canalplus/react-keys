@@ -28,7 +28,12 @@ export function boundsMargin(nextId, state) {
   const nextEl = elements.find(el => el.id === nextId);
   const currentElSpace = calculateElSpace(current);
   const nextElSpace = calculateElSpace(next);
-  const geo = determineGeo(currentElSpace, nextElSpace);
+
+  const selectedElementChanded = state.selectedId !== nextId;
+  const currentForGeo = selectedElementChanded ? currentElSpace : { top: state.marginTop, left: state.marginLeft };
+  const nextForGeo = selectedElementChanded ? nextElSpace : { top: nextElSpace.top - wrapper.top, left: wrapper.left - nextElSpace.left };
+
+  const geo = determineGeo(currentForGeo, nextForGeo);
 
   if (geo.horizontal === 'left' && !isInsideLeft(wrapper, nextElSpace, gap)) {
     newMarginLeft = calculMarginOnLeft(wrapper, nextEl, gap, boundedGap, leftGap);
@@ -80,7 +85,8 @@ export function isInsideRight(wrapper, selectedEl, gap) {
 export function calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap) {
   const { top } = selectedEl.coords;
   const lastGap = boundedGap || topGap;
-  const computedTop = top - (top - (wrapper.top + gap) < 0 ? lastGap : gap);
+  const nextGap = lastGap + top - wrapper.top;
+  const computedTop = top - (top - (wrapper.top + gap) < 0 ? nextGap : gap);
   return computedTop - wrapper.top;
 }
 

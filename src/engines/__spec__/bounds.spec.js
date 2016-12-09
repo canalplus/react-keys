@@ -257,7 +257,7 @@ describe('bounds', () => {
       const gap = 15;
       const boundedGap = 2;
       const topGap = 3;
-      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(3);
+      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(-boundedGap);
     });
 
     it('should use topGap if boundedGap does not exist', () => {
@@ -266,7 +266,7 @@ describe('bounds', () => {
       const gap = 15;
       const boundedGap = 0;
       const topGap = 3;
-      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(2);
+      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(-topGap);
     });
 
   });

@@ -137,8 +137,8 @@ export function _resetBinder(binderId, wishedId) {
     prevEl: elements.find(e => e.id === selectedId),
     nextEl: elements.find(e => e.id === newSelectedId),
     prevDir: null,
-    marginLeft: margin.marginLeft,
-    marginTop: margin.marginTop,
+    marginLeft: originalState.enterStrategy === 'memory' ? margin.marginLeft : 0,
+    marginTop: originalState.enterStrategy === 'memory' ? margin.marginTop : 0,
   };
   _updateBinder(binderId, state);
 }
@@ -147,6 +147,7 @@ export function _updateBinder(binderId, state) {
   ensureDispatch();
   ensureMountedBinder(binderId);
   const { active } = globalStore.getState()[NAME][binderId];
+  updateBinderSelectedId(id, state.selectedId);
   globalStore.dispatch({
     type: UPDATE_BINDER_STATE,
     binderId,
