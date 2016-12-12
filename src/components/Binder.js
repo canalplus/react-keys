@@ -137,13 +137,13 @@ class Binder extends Component {
 
   refreshState() {
     const dom = ReactDOM.findDOMNode(this);
-    const { id, focusedId, filter, wrapper } = this.props;
+    const { id, filter, wrapper } = this.props;
     const state = globalStore.getState()[NAME][id];
     const value = refresh(
       dom,
       state.elements,
       state.selector,
-      focusedId,
+      this.props.enterStrategy === 'memory' ? state.selectedId : null,
       { filter: filter }
     );
     const { elements, selectedElement } = value;
