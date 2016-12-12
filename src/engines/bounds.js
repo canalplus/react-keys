@@ -39,7 +39,7 @@ export function boundsMargin(nextId, state) {
   if (geo.vertial === 'top' && !isInsideTop(wrapper, nextElSpace, gap)) {
     newMarginTop = calculMarginOnTop(wrapper, nextEl, gap, boundedGap, topGap);
   } else if (geo.vertial === 'down' && !isInsideDown(wrapper, nextElSpace, gap)) {
-    newMarginTop = calculMarginOnDown(wrapper, nextEl, gap, downLimit, boundedGap, downGap);
+    newMarginTop = calculMarginOnDown(wrapper, nextEl, gap, downLimit, boundedGap, downGap, marginTop);
   }
 
   return { marginLeft: newMarginLeft, marginTop: newMarginTop };
@@ -80,27 +80,37 @@ export function isInsideRight(wrapper, selectedEl, gap) {
 export function calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap) {
   const { top } = selectedEl.coords;
   const lastGap = boundedGap || topGap;
-  const computedTop = top - (top - (wrapper.top + gap) < 0 ? lastGap : gap);
-  return computedTop - wrapper.top;
+  const isLastGap = top - (wrapper.top + lastGap) < 0;
+  const computedTop = top - (isLastGap ? lastGap : gap);
+  const finalTop = computedTop - wrapper.top;
+  return finalTop < 0 && !isLastGap ? 0 : -finalTop;
 }
 
 export function calculMarginOnDown(wrapper, selectedEl, gap, downLimit, boundedGap, downGap) {
   const { down } = selectedEl.coords;
   const lastGap = boundedGap || downGap;
-  const computedDown = down + (down + gap > downLimit ? lastGap : gap);
-  return computedDown - wrapper.down;
+  const isLastGap = down + lastGap > downLimit;
+  const computedDown = down + (isLastGap ? lastGap : gap);
+  return computedDown > downLimit && !isLastGap
+    ? -(downLimit - wrapper.down)
+    : -(computedDown - wrapper.down);
 }
 
 export function calculMarginOnRight(wrapper, selectedEl, gap, rightLimit, boundedGap, rightGap) {
   const { right } = selectedEl.coords;
   const lastGap = boundedGap || rightGap;
-  const computedRight = right + (right + gap > rightLimit ? lastGap : gap);
-  return computedRight - wrapper.right;
+  const isLastGap = right + lastGap > rightLimit;
+  const computedRight = right + (isLastGap ? lastGap : gap);
+  return computedRight > rightLimit && !isLastGap
+    ? -(rightLimit - wrapper.right)
+    : -(computedRight - wrapper.right);
 }
 
 export function calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap) {
   const { left } = selectedEl.coords;
   const lastGap = boundedGap || leftGap;
-  const computedLeft = left - ((left - (wrapper.left + gap)) < 0 ? lastGap : gap);
-  return computedLeft - wrapper.left;
+  const isLastGap = left - (wrapper.left + lastGap) < 0;
+  const computedLeft = left - (isLastGap ? lastGap : gap);
+  const finalLeft = computedLeft - wrapper.left;
+  return finalLeft < 0 && !isLastGap ? 0 : -finalLeft;
 }

@@ -230,7 +230,7 @@ describe('bounds', () => {
       const gap = 0;
       const boundedGap = 0;
       const topGap = 0;
-      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(10);
+      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(-10);
     });
 
     it('should minor wrapper top from selectedEL cords top', () => {
@@ -239,7 +239,7 @@ describe('bounds', () => {
       const gap = 0;
       const boundedGap = 0;
       const topGap = 0;
-      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(5);
+      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(-5);
     });
 
     it('should minor gap from that', () => {
@@ -248,7 +248,7 @@ describe('bounds', () => {
       const gap = 3;
       const boundedGap = 0;
       const topGap = 0;
-      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(2);
+      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(-2);
     });
 
     it('should use boundedGap if gap < 0', () => {
@@ -257,7 +257,7 @@ describe('bounds', () => {
       const gap = 15;
       const boundedGap = 2;
       const topGap = 3;
-      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(3);
+      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(0);
     });
 
     it('should use topGap if boundedGap does not exist', () => {
@@ -266,7 +266,7 @@ describe('bounds', () => {
       const gap = 15;
       const boundedGap = 0;
       const topGap = 3;
-      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(2);
+      calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap).should.equal(0);
     });
 
   });
@@ -281,7 +281,7 @@ describe('bounds', () => {
       const downLimit = 50;
       const downGap = 0;
       calculMarginOnDown(wrapper, selectedEl, gap, downLimit, boundedGap, downGap)
-        .should.equal(10);
+        .should.equal(-10);
     });
 
     it('should minor wrapper from selectedEl coords down', () => {
@@ -292,7 +292,7 @@ describe('bounds', () => {
       const downLimit = 50;
       const downGap = 0;
       calculMarginOnDown(wrapper, selectedEl, gap, downLimit, boundedGap, downGap)
-        .should.equal(5);
+        .should.equal(-5);
     });
 
     it('should add gap from that', () => {
@@ -303,7 +303,7 @@ describe('bounds', () => {
       const downLimit = 50;
       const downGap = 0;
       calculMarginOnDown(wrapper, selectedEl, gap, downLimit, boundedGap, downGap)
-        .should.equal(8);
+        .should.equal(-8);
     });
 
     it('should use boundedGap if gap > downLimit', () => {
@@ -314,7 +314,7 @@ describe('bounds', () => {
       const downLimit = 50;
       const downGap = 0;
       calculMarginOnDown(wrapper, selectedEl, gap, downLimit, boundedGap, downGap)
-        .should.equal(15);
+        .should.equal(-45);
     });
 
     it('should use downGap if downLimit does not exist', () => {
@@ -325,7 +325,7 @@ describe('bounds', () => {
       const downLimit = 50;
       const downGap = 5;
       calculMarginOnDown(wrapper, selectedEl, gap, downLimit, boundedGap, downGap)
-        .should.equal(10);
+        .should.equal(-45);
     });
 
   });
@@ -340,7 +340,7 @@ describe('bounds', () => {
       const rightLimit = 50;
       const rightGap = 0;
       calculMarginOnRight(wrapper, selectedEl, gap, rightLimit, boundedGap, rightGap)
-        .should.equal(10);
+        .should.equal(-10);
     });
 
     it('should minor wrapper right from selectedEl coords right', () => {
@@ -351,7 +351,7 @@ describe('bounds', () => {
       const rightLimit = 50;
       const rightGap = 0;
       calculMarginOnRight(wrapper, selectedEl, gap, rightLimit, boundedGap, rightGap)
-        .should.equal(5);
+        .should.equal(-5);
     });
 
 
@@ -363,7 +363,7 @@ describe('bounds', () => {
       const rightLimit = 50;
       const rightGap = 0;
       calculMarginOnRight(wrapper, selectedEl, gap, rightLimit, boundedGap, rightGap)
-        .should.equal(7);
+        .should.equal(-7);
     });
 
     it('should use boundedGap if gap > rightLimit', () => {
@@ -374,7 +374,7 @@ describe('bounds', () => {
       const rightLimit = 50;
       const rightGap = 0;
       calculMarginOnRight(wrapper, selectedEl, gap, rightLimit, boundedGap, rightGap)
-        .should.equal(10);
+        .should.equal(-45);
     });
 
     it('should use right gap if boundedGap does not exist', () => {
@@ -385,7 +385,7 @@ describe('bounds', () => {
       const rightLimit = 50;
       const rightGap = 2;
       calculMarginOnRight(wrapper, selectedEl, gap, rightLimit, boundedGap, rightGap)
-        .should.equal(7);
+        .should.equal(-45);
     });
 
   });
@@ -398,7 +398,7 @@ describe('bounds', () => {
       const gap = 0;
       const boundedGap = 0;
       const leftGap = 0;
-      calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap).should.equal(10);
+      calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap).should.equal(-10);
     });
 
     it('should minor wrapper left from selectedEl coords left', () => {
@@ -407,7 +407,7 @@ describe('bounds', () => {
       const gap = 0;
       const boundedGap = 0;
       const leftGap = 0;
-      calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap).should.equal(5);
+      calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap).should.equal(-5);
     });
 
     it('should minor gap from that', () => {
@@ -416,7 +416,7 @@ describe('bounds', () => {
       const gap = 2;
       const boundedGap = 0;
       const leftGap = 0;
-      calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap).should.equal(3);
+      calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap).should.equal(-3);
     });
 
     it('should take bounded gap when gap is > to marginLeft', () => {
@@ -425,7 +425,7 @@ describe('bounds', () => {
       const gap = 20;
       const boundedGap = 2;
       const leftGap = 1;
-      calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap).should.equal(3);
+      calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap).should.equal(0);
     });
 
     it('should take left gap when there is no bounded gap', () => {
@@ -434,7 +434,7 @@ describe('bounds', () => {
       const gap = 20;
       const boundedGap = 0;
       const leftGap = 1;
-      calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap).should.equal(4);
+      calculMarginOnLeft(wrapper, selectedEl, gap, boundedGap, leftGap).should.equal(0);
     });
 
   });
