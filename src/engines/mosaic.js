@@ -59,7 +59,7 @@ export function selectedElement(elements, focusedId) {
   return focusedEl || elements[0];
 }
 
-export function refresh(dom, prevElement, selector, focusedId, options) {
+export function refresh(dom, prevElement, selector, selectedId, options) {
   const elements = createList(dom, selector);
   if (!hasDiff(elements, prevElement)) {
     return {
@@ -70,6 +70,6 @@ export function refresh(dom, prevElement, selector, focusedId, options) {
   const nextElements = build(elements, options);
   return {
     elements: nextElements,
-    selectedElement: selectedElement(nextElements, focusedId),
+    selectedElement: selectedElement(nextElements, selectedId),
   };
 }

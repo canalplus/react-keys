@@ -122,7 +122,6 @@ renderWithId('mosaic-1-1');
 * `wrapper` (string / *optional*) DOM selector which define parent element (default `document`)
 * `filter` (string / *optional*) Class name which exclude element 
 * `context` (object / *optional*) context object passed within every callback
-* `focusedId` (string / *optional*) id to define the element focused (first element by default)
 * `enterStrategy` (string / *optional*) define strape strategy on enter: `start` / `mirror` / `memory` / `none` (default `none`)
 * `gap` (number / *optional*) reduce or increase elements margin (default `0`)
 * `boundedGap` (number / *optional*) reduce or increase bounded margin (default `0`)
@@ -135,7 +134,6 @@ renderWithId('mosaic-1-1');
 * `onUp` (function / *optional*) callback for up events `function(nextElement, {context})`
 * `onDown` (function / *optional*) callback for down events `function(nextElement, {context})`
 * `onEnter` (function / *optional*) callback for enter events `function(nextElement, {context})`
-* `onBack` (function / *optional*) callback for back events `function(nextElement, {context})`
 * `onRightExit` (function/string / *optional*) triggered when right event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onLeftExit` (function/string / *optional*) triggered when left event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onUpExit` (function/string / *optional*) triggered when up event would go outside the elements block, it can be a function or the binder id we want to reach
