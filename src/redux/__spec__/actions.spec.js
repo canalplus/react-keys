@@ -77,7 +77,7 @@ describe('redux/actions.js', () => {
       addBinderToStore(props, type);
       this.mock(ensure)
         .expects('ensureDispatch')
-        .once();
+        .twice();
       _updateBinder('myId', {});
     }));
 
@@ -86,24 +86,9 @@ describe('redux/actions.js', () => {
       const id = 'myId';
       this.mock(ensure)
         .expects('ensureMountedBinder')
-        .once()
+        .twice()
         .withArgs(id);
       _updateBinder(id, {});
-    }));
-
-    it('should dispatch to update binder state', sinon.test(function() {
-      const binderId = 'myId';
-      addBinderToStore(props, type);
-      const binderState = { active: false };
-      this.mock(listener.globalStore)
-        .expects('dispatch')
-        .once()
-        .withArgs({
-          binderId: 'myId',
-          type: UPDATE_BINDER_STATE,
-          state: { active: false },
-        });
-      _updateBinder(binderId, binderState);
     }));
 
     it('should update current when binder is active', sinon.test(function() {
@@ -112,7 +97,7 @@ describe('redux/actions.js', () => {
       const binderState = { active: false };
       this.mock(listener.globalStore)
         .expects('dispatch')
-        .twice();
+        .thrice();
       _updateBinder(binderId, binderState);
     }));
   });
