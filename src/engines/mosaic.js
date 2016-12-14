@@ -39,9 +39,15 @@ export function build(elements, options) {
     .filter(el => [].slice.call(el.classList).indexOf(options.filter) === -1)
     .map((calculateElSpace));
 
-  return elementsCoords.map((el) => ({
+  return elementsCoords.map(el => ({
     id: el.id,
-    coords: el,
+    coords: ({
+      ...el,
+      right: el.right - options.marginLeft,
+      left: el.left - options.marginLeft,
+      top: el.top - options.marginTop,
+      down: el.down - options.marginTop,
+    }),
     left: findElement(leftArray(el, elementsCoords)),
     right: findElement(rightArray(el, elementsCoords)),
     up: findElement(upArray(el, elementsCoords)),

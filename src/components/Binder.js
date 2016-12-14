@@ -142,7 +142,7 @@ class Binder extends Component {
       state.elements,
       state.selector,
       state.selectedId,
-      { filter: filter }
+      { filter: filter, marginLeft: state.marginLeft, marginTop: state.marginTop }
     );
     const { elements, selectedElement } = value;
     if (hasDiff(elements, state.elements)) {

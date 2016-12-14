@@ -152,6 +152,7 @@ export function _updateBinder(binderId, state) {
     binderId,
     state,
   });
+  updateBinderSelectedId(binderId, state.selectedId);
   if (active) {
     globalStore.dispatch({
       type: UPDATE_CURRENT,

@@ -32,13 +32,13 @@ export function boundsMargin(nextId, state) {
 
   if (geo.horizontal === 'left' && !isInsideLeft(wrapper, nextElSpace, gap)) {
     newMarginLeft = calculMarginOnLeft(wrapper, nextEl, gap, boundedGap, leftGap);
-  } else if (geo.horizontal === 'right' && !isInsideRight(wrapper, nextElSpace, gap)) {
+  } else if ((geo.horizontal === 'right' || geo.horizontal === 'equal') && !isInsideRight(wrapper, nextElSpace, gap)) {
     newMarginLeft = calculMarginOnRight(wrapper, nextEl, gap, rightLimit, boundedGap, rightGap);
   }
 
   if (geo.vertial === 'top' && !isInsideTop(wrapper, nextElSpace, gap)) {
     newMarginTop = calculMarginOnTop(wrapper, nextEl, gap, boundedGap, topGap);
-  } else if (geo.vertial === 'down' && !isInsideDown(wrapper, nextElSpace, gap)) {
+  } else if ((geo.vertial === 'down' || geo.horizontal === 'equal') && !isInsideDown(wrapper, nextElSpace, gap)) {
     newMarginTop = calculMarginOnDown(wrapper, nextEl, gap, downLimit, boundedGap, downGap, marginTop);
   }
 
