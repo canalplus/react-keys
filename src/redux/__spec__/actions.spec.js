@@ -77,7 +77,7 @@ describe('redux/actions.js', () => {
       addBinderToStore(props, type);
       this.mock(ensure)
         .expects('ensureDispatch')
-        .twice();
+        .once();
       _updateBinder('myId', {});
     }));
 
@@ -86,7 +86,7 @@ describe('redux/actions.js', () => {
       const id = 'myId';
       this.mock(ensure)
         .expects('ensureMountedBinder')
-        .twice()
+        .once()
         .withArgs(id);
       _updateBinder(id, {});
     }));
@@ -97,7 +97,7 @@ describe('redux/actions.js', () => {
       const binderState = { active: false };
       this.mock(listener.globalStore)
         .expects('dispatch')
-        .thrice();
+        .twice();
       _updateBinder(binderId, binderState);
     }));
   });
