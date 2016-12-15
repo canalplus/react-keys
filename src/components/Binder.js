@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { refresh } from '../engines/mosaic';
-import { UP, DOWN, LEFT, RIGHT, ENTER, BACK } from '../keys';
+import { UP, DOWN, LEFT, RIGHT, ENTER } from '../keys';
 import { NAME, C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE } from '../constants';
 import { isBlocked, block } from '../clock';
 import { isActive } from '../isActive';
@@ -12,6 +12,7 @@ import {
   addBinderToStore,
   _updateBinder,
   determineNewState,
+  updateBinderSelectedId,
 } from '../redux/actions';
 import {
   calculateElSpace,
@@ -137,14 +138,13 @@ class Binder extends Component {
     const dom = ReactDOM.findDOMNode(this);
     const { id, filter, wrapper } = this.props;
     const state = globalStore.getState()[NAME][id];
-    const value = refresh(
+    const { elements, selectedElement } = refresh(
       dom,
       state.elements,
       state.selector,
       state.selectedId,
       { filter: filter, marginLeft: state.marginLeft, marginTop: state.marginTop }
     );
-    const { elements, selectedElement } = value;
     if (hasDiff(elements, state.elements)) {
       _updateBinder(id, {
         wrapper: calculateElSpace(wrapper ? document.querySelector(wrapper) : document.body),
@@ -154,6 +154,7 @@ class Binder extends Component {
         nextEl: selectedElement || {},
         selectedId: selectedElement.id,
       });
+      updateBinderSelectedId(id, selectedElement.id);
     }
   }
 

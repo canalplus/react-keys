@@ -60,22 +60,19 @@ export function createList(dom, selector) {
   return [].slice.call(elements);
 }
 
-export function selectedElement(elements, focusedId) {
-  const focusedEl = focusedId ? elements.find(e => e.id === focusedId) : null;
+export function selectedElement(elements, selectedId) {
+  const focusedEl = selectedId ? elements.find(e => e.id === selectedId) : null;
   return focusedEl || elements[0];
 }
 
 export function refresh(dom, prevElement, selector, selectedId, options) {
   const elements = createList(dom, selector);
-  if (!hasDiff(elements, prevElement)) {
-    return {
-      elements: prevElement,
-      selectedElement: null,
-    };
+  let returnedElements = prevElement;
+  if (hasDiff(elements, prevElement)) {
+    returnedElements = build(elements, options);
   }
-  const nextElements = build(elements, options);
   return {
-    elements: nextElements,
-    selectedElement: selectedElement(nextElements, selectedId),
+    elements: returnedElements,
+    selectedElement: selectedElement(returnedElements, selectedId),
   };
 }
