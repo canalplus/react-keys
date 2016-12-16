@@ -7,6 +7,7 @@ export const BACK = 27;
 export const MENU = 120;
 export const NEXTPROG = 33;
 export const PREVPROG = 34;
+export const SHUTDOWN = 123;
 export const NUM0 = 48;
 export const NUM1 = 49;
 export const NUM2 = 50;
