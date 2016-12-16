@@ -13,6 +13,7 @@ import {
   REC,
   NEXTPROG,
   PREVPROG,
+  SHUTDOWN,
   NUM0,
   NUM1,
   NUM2,
@@ -47,6 +48,7 @@ class Keys extends Component {
       onRec: PropTypes.func,
       onNextProg: PropTypes.func,
       onPrevProg: PropTypes.func,
+      onShutDown: PropTypes.func,
       active: PropTypes.bool,
     }
   }
@@ -93,6 +95,9 @@ class Keys extends Component {
           break;
         case PREVPROG:
           this.performAction(this.props.onPrevProg, keyCode);
+          break;
+        case SHUTDOWN:
+          this.performAction(this.props.onShutDown, keyCode);
           break;
         case NUM0:
         case NUM1:

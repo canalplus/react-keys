@@ -10,6 +10,7 @@ export const INFO = 118;
 export const REC = 117;
 export const NEXTPROG = 33;
 export const PREVPROG = 34;
+export const SHUTDOWN = 123;
 export const NUM0 = 48;
 export const NUM1 = 49;
 export const NUM2 = 50;
