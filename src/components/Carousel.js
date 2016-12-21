@@ -8,6 +8,7 @@ import { execCb } from '../funcHandler';
 import { addCarouselToStore, _updateBinder } from '../redux/actions';
 import { LEFT, RIGHT, DOWN, UP, ENTER } from '../keys';
 import { CAROUSEL_TYPE } from '../constants';
+import { hasDiff } from '../engines/helpers';
 
 class Carousel extends Component {
 
@@ -91,7 +92,7 @@ class Carousel extends Component {
   }
 
   componentWillUpdate({ children }) {
-    if (this.props.children.length === 0) {
+    if (hasDiff(children, this.props.children)) {
       this.updateState(this.state.cursor, children);
     }
   }
