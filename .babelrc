@@ -6,7 +6,11 @@
     "stage-1",
     "react"
   ],
-  "ignore": [
-    "*.spec.js"
-  ]
+  "env":{
+    "build":{
+      "ignore": [
+        "*.spec.js"
+      ]
+    }
+  }
 }

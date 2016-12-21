@@ -24,10 +24,10 @@
     "preversion": "npm run test",
     "postversion": "git push && git push --tags",
     "version": "npm run build",
-    "build": "babel src/ -d build",
+    "build": "BABEL_ENV=build babel src/ -d build",
     "lint": "eslint src/** test/**",
     "dist": "webpack --progress --colors --optimize-minimize",
-    "test": "npm run lint && mocha --compilers js:babel-core/register --require test/dom-config.js test/config.js --ui bdd src/**/*.spec.js src/**/**/*.spec.js",
+    "test": "BABEL_ENV=test npm run lint && mocha --compilers js:babel-core/register --require test/dom-config.js test/config.js --ui bdd src/**/*.spec.js src/**/**/*.spec.js",
     "coverage": "istanbul cover _mocha -- -r babel-register test/dom-config.js test/config.js src/**/*.spec.js src/**/**/*.spec.js -x **/__spec__/**"
   },
   "devDependencies": {
