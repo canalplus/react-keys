@@ -56,7 +56,7 @@ class Carousel extends Component {
     this.listenerId = addListener(this.keysHandler, this);
     this.timeout = null;
     this.movingCountDown = () => this.timeout = setTimeout(() =>
-      _updateBinder(props.id, { moving: false }), props.speed);
+      _updateBinder(props.id, { moving: false, selectedId: this.selectedId }), props.speed);
     this.state = { cursor: props.index, elements: [] };
   }
 

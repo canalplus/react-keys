@@ -2,7 +2,7 @@ import { globalStore } from '../listener';
 import { findIdByStrategy } from '../engines/strategy';
 import { boundsMargin } from '../engines/bounds';
 import { calculateNewState } from '../engines/helpers';
-import { NAME, EXIT_STRATEGY_MEMORY } from '../constants';
+import { NAME, EXIT_STRATEGY_MEMORY, CAROUSEL_TYPE } from '../constants';
 import { ensureDispatch, ensureMountedBinder, isUnmountedBinder } from '../ensure';
 import { execCb, enterTo } from '../funcHandler';
 
@@ -115,13 +115,34 @@ export function _activeBinder(binderId, nextElId, dir) {
   ensureDispatch();
   ensureMountedBinder(binderId);
   const state = globalStore.getState()[NAME];
+  var toActivate = state[binderId];
   const selectedId = findIdByStrategy(state, binderId, nextElId);
   globalStore.dispatch({
     type: ACTIVATE_BINDER,
     binderId,
     inactiveBinders: desactivateBinders(state, binderId),
   });
-  _resetBinder(binderId, selectedId, dir);
+  if (toActivate && toActivate.type === CAROUSEL_TYPE) {
+    _resetCarousel(binderId, selectedId, dir);
+  } else {
+    _resetBinder(binderId, selectedId, dir);
+  }
+}
+
+export function _resetCarousel(binderId, wishedId) {
+  ensureDispatch();
+  ensureMountedBinder(binderId);
+  const originalState = globalStore.getState()[NAME][binderId];
+  const { elements, selectedId } = originalState;
+  const newSelectedId = wishedId || elements[0].id;
+  const state = {
+    selectedId: newSelectedId,
+    hasMoved: true,
+    prevEl: elements.find(e => e.id === selectedId),
+    nextEl: elements.find(e => e.id === newSelectedId),
+    prevDir: null
+  };
+  _updateBinder(binderId, state);
 }
 
 export function _resetBinder(binderId, wishedId) {

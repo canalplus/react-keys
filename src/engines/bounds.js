@@ -22,7 +22,7 @@ export function boundsMargin(nextId, state) {
   const current = document.getElementById(selectedId);
   const next = document.getElementById(nextId);
 
-  if (!current || !next) {
+  if (!current || !next || !wrapper) {
     return { marginLeft: newMarginLeft, marginTop: newMarginTop };
   }
   const nextEl = elements.find(el => el.id === nextId);
@@ -36,17 +36,16 @@ export function boundsMargin(nextId, state) {
     newMarginLeft = calculMarginOnRight(wrapper, nextEl, gap, rightLimit, boundedGap, rightGap);
   }
 
-  if (geo.vertial === 'top' && !isInsideTop(wrapper, nextElSpace, gap)) {
+  if (geo.vertical === 'top' && !isInsideTop(wrapper, nextElSpace, gap)) {
     newMarginTop = calculMarginOnTop(wrapper, nextEl, gap, boundedGap, topGap);
-  } else if ((geo.vertial === 'down' || geo.horizontal === 'equal') && !isInsideDown(wrapper, nextElSpace, gap)) {
+  } else if ((geo.vertical === 'down' || geo.horizontal === 'equal') && !isInsideDown(wrapper, nextElSpace, gap)) {
     newMarginTop = calculMarginOnDown(wrapper, nextEl, gap, downLimit, boundedGap, downGap, marginTop);
   }
-
-  return { marginLeft: newMarginLeft, marginTop: newMarginTop };
+  return { marginLeft: newMarginLeft, marginTop: newMarginTop, toto: 'tata' };
 }
 
 export function determineGeo(current, next) {
-  let vertial = 'equal';
+  let vertical = 'equal';
   let horizontal = 'equal';
   if (current.left > next.left) {
     horizontal = 'left';
@@ -54,11 +53,11 @@ export function determineGeo(current, next) {
     horizontal = 'right';
   }
   if (current.top > next.top) {
-    vertial = 'top';
+    vertical = 'top';
   } else if (current.top < next.top) {
-    vertial = 'down';
+    vertical = 'down';
   }
-  return { vertial, horizontal }
+  return { vertical, horizontal };
 }
 
 export function isInsideTop(wrapper, selectedEl, gap) {
