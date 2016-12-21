@@ -5,5 +5,8 @@
     "es2017",
     "stage-1",
     "react"
+  ],
+  "ignore": [
+    "*.spec.js"
   ]
 }
