@@ -33,6 +33,7 @@ class Carousel extends Component {
       onDownExit: PropTypes.func,
       onUpExit: PropTypes.func,
       onEnter: PropTypes.func,
+      updateIndex: PropTypes.bool
     };
   }
 
@@ -48,6 +49,7 @@ class Carousel extends Component {
       debounce: 82,
       className: 'carousel',
       childrenClassName: 'carousel-child',
+      updateIndex: false
     };
   }
 
@@ -91,9 +93,10 @@ class Carousel extends Component {
     this.updateState(this.state.cursor, this.props.children);
   }
 
-  componentWillUpdate({ children }) {
+  componentWillUpdate({ index, children, updateIndex }) {
     if (hasDiff(children, this.props.children)) {
-      this.updateState(this.state.cursor, children);
+      const cursor = updateIndex ? index : this.state.cursor;
+      this.updateState(cursor, children);
     }
   }
 
