@@ -79,7 +79,6 @@ export function addBinderToStore(props, type) {
     elements,
     leftGap,
     downGap,
-    focusedId,
     enterStrategy,
   } = props;
   globalStore.dispatch({
@@ -97,7 +96,6 @@ export function addBinderToStore(props, type) {
         rightGap,
         leftGap,
         downGap,
-        focusedId,
         enterStrategy,
         elements: elements || [],
         prevEl: null,

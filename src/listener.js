@@ -44,7 +44,7 @@ export function cbRelease() {
 export function _init(ops) {
   globalStore = ops && ops.store ? ops.store : globalStore;
   eventCb = ops && ops.eventCb ? ops.eventCb : function() {
-  };
+    };
   if (!ops || (ops && !ops.bindkeys)) {
     document.addEventListener('keydown', cb);
     document.addEventListener('keyup', cbRelease);
