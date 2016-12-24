@@ -222,4 +222,63 @@ describe('Binder.jsx', () => {
     this.clock.tick(10);
 
   }));
+
+  it('should exec callback on enter', sinon.test(function() {
+    // Setup
+    const spy = this.spy();
+    const wrapperBCR = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
+    const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
+    this.stub(window.Element.prototype, 'getBoundingClientRect')
+      .onCall(0).returns(wrapperBCR)
+      .onCall(1).returns(fistChild);
+
+    // Given
+    const id = "1";
+    mount(
+      <Binder id={id} onEnter={spy}>
+        <ul id="wrapper">
+          <li id="01"></li>
+        </ul>
+      </Binder>, {
+        attachTo: document.getElementById('container'),
+      });
+
+    // When
+    keyDown(keys.ENTER);
+
+    // Then
+    spy.should.have.been.calledOnce;
+
+    // release keys
+    keyUp(keys.DOWN);
+    this.clock.tick(10);
+  }));
+
+  it.only('should call refreshState on update', sinon.test(function() {
+
+    const wrapperBCR = { top: 0, left: 0, right: 20, bottom: 10, width: 20, height: 10 };
+    const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
+    this.stub(window.Element.prototype, 'getBoundingClientRect')
+      .onCall(0).returns(wrapperBCR)
+      .onCall(1).returns(fistChild);
+
+    // Given
+    let children = <li id="01"></li>;
+    const binder = mount(
+      <Binder id={"1"}>
+        <ul id="wrapper">
+          {children}
+        </ul>
+      </Binder>, {
+        attachTo: document.getElementById('container'),
+      });
+
+    this.mock(Binder.prototype)
+      .expects('refreshState')
+      .once();
+
+    binder.update();
+
+  }));
+
 });
