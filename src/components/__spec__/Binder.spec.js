@@ -1,3 +1,4 @@
+/* istanbul ignore next */
 import React from 'react';
 import Binder from '../Binder';
 import { createStore, combineReducers } from 'redux';
@@ -254,7 +255,7 @@ describe('Binder.jsx', () => {
     this.clock.tick(10);
   }));
 
-  it.only('should call refreshState on update', sinon.test(function() {
+  it('should call refreshState on update', sinon.test(function() {
 
     const wrapperBCR = { top: 0, left: 0, right: 20, bottom: 10, width: 20, height: 10 };
     const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
