@@ -19,6 +19,10 @@ export function boundsMargin(nextId, state) {
 
   let newMarginLeft = marginLeft;
   let newMarginTop = marginTop;
+
+  if (selectedId === nextId) {
+    return { marginLeft: newMarginLeft, marginTop: newMarginTop };
+  }
   const current = document.getElementById(selectedId);
   const next = document.getElementById(nextId);
 

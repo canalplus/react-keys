@@ -20,26 +20,56 @@ describe('Binder.jsx', () => {
     mosaic.should.have.tagName('div');
   });
 
-  it('should get ul as wrapper and li as children by default', sinon.test(function() {
+  it('should setup wrapper and children with custom tag', sinon.test(function() {
+
+    // Setup
+    const wrapperBCR = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
+    const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
+    this.stub(window.Element.prototype, 'getBoundingClientRect')
+      .onCall(0).returns(wrapperBCR)
+      .onCall(1).returns(fistChild);
+
+    // Given
+    const id = "1";
+    mount(<div id="wrapper">
+      <Binder id={id} wrapper="#wrapper" selector="div">
+        <div id="01"></div>
+      </Binder>
+    </div>, {
+      attachTo: document.getElementById('container'),
+    });
+
+    // Then
+    const state = store.getState()['@@keys'][id];
+    const current = store.getState()['@@keys']['current'];
+    state.active.should.be.true;
+    state.wrapper.should.have.not.be.empty;
+    state.elements.should.have.lengthOf(1);
+    state.selectedId.should.equal('01');
+    current.binderId.should.equal('1');
+    current.selectedId.should.equal('01');
+
+  }));
+
+  it('should navigate on right', sinon.test(function() {
 
     // _______________
     // || 1 - 2 - 3 ||
     // ||___________||
 
-    // Given
-    const stub = this.stub(window.Element.prototype, 'getBoundingClientRect');
-    // wrapper call
-    stub.onCall(0).returns({ top: 0, left: 0, right: 50, bottom: 10, width: 10, height: 10 });
-    // first li call
-    stub.onCall(0).returns({ top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 });
-    // second li call
-    stub.onCall(1).returns({ top: 0, left: 10, right: 20, bottom: 10, width: 10, height: 10 });
-    // third li call
-    stub.onCall(2).returns({ top: 0, left: 20, right: 30, bottom: 10, width: 10, height: 10 });
-    // fourth li call
-    stub.onCall(3).returns({ top: 0, left: 30, right: 40, bottom: 10, width: 10, height: 10 });
+    // Setup
+    const wrapperBCR = { top: 0, left: 0, right: 50, bottom: 10, width: 10, height: 10 };
+    const firstLiBCR = { top: 0, left: 10, right: 20, bottom: 10, width: 10, height: 10 };
+    const secondLiBCR = { top: 0, left: 20, right: 30, bottom: 10, width: 10, height: 10 };
+    const thirdLiBCR = { top: 0, left: 30, right: 40, bottom: 10, width: 10, height: 10 };
 
-    // When
+    const stub = this.stub(window.Element.prototype, 'getBoundingClientRect');
+    stub.onCall(0).returns(wrapperBCR)
+      .onCall(1).returns(firstLiBCR)
+      .onCall(2).returns(secondLiBCR)
+      .onCall(3).returns(thirdLiBCR);
+
+    // Given
     const id = "1";
     mount(<Binder id={id}>
       <ul>
@@ -47,9 +77,10 @@ describe('Binder.jsx', () => {
         <li id="02"></li>
         <li id="03"></li>
       </ul>
-    </Binder>);
+    </Binder>, {
+      attachTo: document.getElementById('container'),
+    });
 
-    // Then
     const state = store.getState()['@@keys'][id];
     const current = store.getState()['@@keys']['current'];
     state.active.should.be.true;
@@ -60,6 +91,8 @@ describe('Binder.jsx', () => {
     current.selectedId.should.equal('01');
 
     // When
+    stub.onCall(4).returns(firstLiBCR)
+      .onCall(5).returns(secondLiBCR);
     keyDown(keys.RIGHT);
 
     // Then I move to right
@@ -72,6 +105,8 @@ describe('Binder.jsx', () => {
     // When
     keyUp(keys.RIGHT); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
+    stub.onCall(6).returns(secondLiBCR)
+      .onCall(7).returns(thirdLiBCR);
     keyDown(keys.RIGHT);
 
     // Then I move to right
@@ -84,6 +119,8 @@ describe('Binder.jsx', () => {
     // When
     keyUp(keys.RIGHT); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
+    stub.onCall(8).returns(secondLiBCR)
+      .onCall(9).returns(thirdLiBCR);
     keyDown(keys.RIGHT);
 
     // Then stay on last child
@@ -92,6 +129,97 @@ describe('Binder.jsx', () => {
     movedState3.selectedId.should.equal('03');
     movedCurrent3.binderId.should.equal('1');
     movedCurrent3.selectedId.should.equal('03');
+
+    // release keys
+    keyUp(keys.RIGHT);
+    this.clock.tick(10);
+  }));
+
+  it('should navigate on bottom', sinon.test(function() {
+
+    //_____
+    //| 1 |
+    //| 2 |
+    //| 3 |
+    //-----
+
+    // Setup
+    const wrapperBCR = { top: 0, left: 0, right: 10, bottom: 40, width: 10, height: 10 };
+    const firstLiBCR = { top: 10, left: 0, right: 10, bottom: 20, width: 10, height: 10 };
+    const secondLiBCR = { top: 20, left: 0, right: 10, bottom: 30, width: 10, height: 10 };
+    const thirdLiBCR = { top: 30, left: 0, right: 10, bottom: 40, width: 10, height: 10 };
+
+    const stub = this.stub(window.Element.prototype, 'getBoundingClientRect');
+    stub.onCall(0).returns(wrapperBCR)
+      .onCall(1).returns(firstLiBCR)
+      .onCall(2).returns(secondLiBCR)
+      .onCall(3).returns(thirdLiBCR);
+
+    // Given
+    const id = "1";
+    mount(<Binder id={id}>
+      <ul>
+        <li id="01"></li>
+        <li id="02"></li>
+        <li id="03"></li>
+      </ul>
+    </Binder>, {
+      attachTo: document.getElementById('container'),
+    });
+
+    // Then
+    const state = store.getState()['@@keys'][id];
+    const current = store.getState()['@@keys']['current'];
+    state.active.should.be.true;
+    state.wrapper.should.have.not.be.empty;
+    state.elements.should.have.lengthOf(3);
+    state.selectedId.should.equal('01');
+    current.binderId.should.equal('1');
+    current.selectedId.should.equal('01');
+
+    // When
+    stub.onCall(4).returns(firstLiBCR)
+      .onCall(5).returns(secondLiBCR);
+    keyDown(keys.DOWN);
+
+    // Then I move to bottom
+    const movedState = store.getState()['@@keys'][id];
+    const movedCurrent = store.getState()['@@keys']['current'];
+    movedState.selectedId.should.equal('02');
+    movedCurrent.binderId.should.equal('1');
+    movedCurrent.selectedId.should.equal('02');
+
+    // When
+    keyUp(keys.DOWN); // I need to keyUp to unlock callback
+    this.clock.tick(10); // I need to tick 10 to unlock Binder
+    stub.onCall(6).returns(secondLiBCR)
+      .onCall(7).returns(thirdLiBCR);
+    keyDown(keys.DOWN);
+
+    // Then I move to bottom
+    const movedState2 = store.getState()['@@keys'][id];
+    const movedCurrent2 = store.getState()['@@keys']['current'];
+    movedState2.selectedId.should.equal('03');
+    movedCurrent2.binderId.should.equal('1');
+    movedCurrent2.selectedId.should.equal('03');
+
+    // When
+    keyUp(keys.DOWN); // I need to keyUp to unlock callback
+    this.clock.tick(10); // I need to tick 10 to unlock Binder
+    stub.onCall(8).returns(secondLiBCR)
+      .onCall(9).returns(thirdLiBCR);
+    keyDown(keys.DOWN);
+
+    // Then stay on last child
+    const movedState3 = store.getState()['@@keys'][id];
+    const movedCurrent3 = store.getState()['@@keys']['current'];
+    movedState3.selectedId.should.equal('03');
+    movedCurrent3.binderId.should.equal('1');
+    movedCurrent3.selectedId.should.equal('03');
+
+    // release keys
+    keyUp(keys.DOWN);
+    this.clock.tick(10);
 
   }));
 });
