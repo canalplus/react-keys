@@ -1,4 +1,3 @@
-/* istanbul ignore next */
 import React from 'react';
 import Binder from '../Binder';
 import { createStore, combineReducers } from 'redux';

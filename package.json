@@ -28,7 +28,7 @@
     "lint": "eslint src/** test/**",
     "dist": "webpack --progress --colors --optimize-minimize",
     "test": "BABEL_ENV=test npm run lint && mocha --compilers js:babel-core/register --require test/dom-config.js test/config.js --ui bdd src/**/*.spec.js src/**/**/*.spec.js",
-    "coverage": "istanbul cover _mocha -- -r babel-register test/dom-config.js test/config.js src/**/*.spec.js src/**/**/*.spec.js -x **/__spec__/**"
+    "coverage": "istanbul cover _mocha -- -r babel-register test/dom-config.js test/config.js src/**/*.spec.js src/**/**/*.spec.js"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
