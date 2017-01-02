@@ -40,10 +40,11 @@ export function hasDiff(nextEls, prevEls) {
 
   let diff = false;
   let index = 0;
-  while (index < nextEls.length && !diff) {
-    if (nextEls[index].id !== prevEls[index].id) {
-      diff = true;
-    }
+  const minLength = Math.min(nextEls.length, prevEls.length);
+  while (index < minLength && !diff) {
+    const nextId = nextEls[index].id || nextEls[index].props.id;
+    const prevId = prevEls[index].id || prevEls[index].props.id;
+    diff = nextId !== prevId;
     index++;
   }
 

@@ -62,6 +62,23 @@ class Carousel extends Component {
     this.state = { cursor: props.index, elements: [] };
   }
 
+  computeChildren(children) {
+    let returnValue = children;
+    if (Object.prototype.toString.call(children) !== '[object Array]') {
+      returnValue = [children];
+    }
+    let inc = 1;
+    while (returnValue.length < this.props.size + 4) {
+      const addedValues = returnValue.map(child => {
+        const props = { ...child.props, id: child.props.id + '_' + inc };
+        return { ...child, props: props };
+      });
+      returnValue = returnValue.concat(addedValues);
+      inc++;
+    }
+    return returnValue;
+  }
+
   keysHandler(keyCode) {
     const { children, circular, onDownExit, onUpExit, onEnter } = this.props;
     const { cursor } = this.state;
@@ -110,13 +127,13 @@ class Carousel extends Component {
   }
 
   updateState(cursor, children) {
-    if (!children || children.length === 0) return;
+    const computedChildren = this.computeChildren(children);
     const { id, size, circular } = this.props;
-    this.selectedId = children[cursor].props.id;
+    this.selectedId = computedChildren[cursor].props.id;
     _updateBinder(id, { selectedId: this.selectedId, cursor, moving: true });
     this.setState({
       cursor,
-      elements: build(children, size + 4, cursor, circular),
+      elements: build(computedChildren, size + 4, cursor, circular),
     });
   }
 
