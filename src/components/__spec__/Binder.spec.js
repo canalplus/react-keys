@@ -26,8 +26,9 @@ describe('Binder.jsx', () => {
     const wrapperBCR = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     this.stub(window.Element.prototype, 'getBoundingClientRect')
-      .onCall(0).returns(wrapperBCR)
-      .onCall(1).returns(fistChild);
+      .onCall(0).returns(fistChild)
+      .onCall(1).returns(wrapperBCR)
+      .onCall(2).returns(fistChild);
 
     // Given
     const id = "1";
@@ -64,10 +65,11 @@ describe('Binder.jsx', () => {
     const thirdLiBCR = { top: 0, left: 30, right: 40, bottom: 10, width: 10, height: 10 };
 
     const stub = this.stub(window.Element.prototype, 'getBoundingClientRect');
-    stub.onCall(0).returns(wrapperBCR)
-      .onCall(1).returns(firstLiBCR)
-      .onCall(2).returns(secondLiBCR)
-      .onCall(3).returns(thirdLiBCR);
+    stub.onCall(0).returns(firstLiBCR)
+      .onCall(1).returns(secondLiBCR)
+      .onCall(2).returns(thirdLiBCR)
+      .onCall(3).returns(wrapperBCR)
+      .onCall(4).returns(firstLiBCR);
 
     // Given
     const id = "1";
@@ -91,8 +93,8 @@ describe('Binder.jsx', () => {
     current.selectedId.should.equal('01');
 
     // When
-    stub.onCall(4).returns(firstLiBCR)
-      .onCall(5).returns(secondLiBCR);
+    stub.onCall(5).returns(firstLiBCR)
+      .onCall(6).returns(secondLiBCR);
     keyDown(keys.RIGHT);
 
     // Then I move to right
@@ -105,8 +107,8 @@ describe('Binder.jsx', () => {
     // When
     keyUp(keys.RIGHT); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
-    stub.onCall(6).returns(secondLiBCR)
-      .onCall(7).returns(thirdLiBCR);
+    stub.onCall(7).returns(secondLiBCR)
+      .onCall(8).returns(thirdLiBCR);
     keyDown(keys.RIGHT);
 
     // Then I move to right
@@ -119,8 +121,8 @@ describe('Binder.jsx', () => {
     // When
     keyUp(keys.RIGHT); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
-    stub.onCall(8).returns(secondLiBCR)
-      .onCall(9).returns(thirdLiBCR);
+    stub.onCall(9).returns(secondLiBCR)
+      .onCall(10).returns(thirdLiBCR);
     keyDown(keys.RIGHT);
 
     // Then stay on last child
@@ -150,10 +152,11 @@ describe('Binder.jsx', () => {
     const thirdLiBCR = { top: 30, left: 0, right: 10, bottom: 40, width: 10, height: 10 };
 
     const stub = this.stub(window.Element.prototype, 'getBoundingClientRect');
-    stub.onCall(0).returns(wrapperBCR)
-      .onCall(1).returns(firstLiBCR)
-      .onCall(2).returns(secondLiBCR)
-      .onCall(3).returns(thirdLiBCR);
+    stub.onCall(0).returns(firstLiBCR)
+      .onCall(1).returns(secondLiBCR)
+      .onCall(2).returns(thirdLiBCR)
+      .onCall(3).returns(wrapperBCR)
+      .onCall(4).returns(firstLiBCR);
 
     // Given
     const id = "1";
@@ -178,8 +181,8 @@ describe('Binder.jsx', () => {
     current.selectedId.should.equal('01');
 
     // When
-    stub.onCall(4).returns(firstLiBCR)
-      .onCall(5).returns(secondLiBCR);
+    stub.onCall(5).returns(firstLiBCR)
+      .onCall(6).returns(secondLiBCR);
     keyDown(keys.DOWN);
 
     // Then I move to bottom
@@ -192,8 +195,8 @@ describe('Binder.jsx', () => {
     // When
     keyUp(keys.DOWN); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
-    stub.onCall(6).returns(secondLiBCR)
-      .onCall(7).returns(thirdLiBCR);
+    stub.onCall(7).returns(secondLiBCR)
+      .onCall(8).returns(thirdLiBCR);
     keyDown(keys.DOWN);
 
     // Then I move to bottom
@@ -206,8 +209,8 @@ describe('Binder.jsx', () => {
     // When
     keyUp(keys.DOWN); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
-    stub.onCall(8).returns(secondLiBCR)
-      .onCall(9).returns(thirdLiBCR);
+    stub.onCall(9).returns(secondLiBCR)
+      .onCall(10).returns(thirdLiBCR);
     keyDown(keys.DOWN);
 
     // Then stay on last child
@@ -229,8 +232,9 @@ describe('Binder.jsx', () => {
     const wrapperBCR = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     this.stub(window.Element.prototype, 'getBoundingClientRect')
-      .onCall(0).returns(wrapperBCR)
-      .onCall(1).returns(fistChild);
+      .onCall(0).returns(fistChild)
+      .onCall(1).returns(wrapperBCR)
+      .onCall(2).returns(fistChild);
 
     // Given
     const id = "1";
@@ -259,8 +263,9 @@ describe('Binder.jsx', () => {
     const wrapperBCR = { top: 0, left: 0, right: 20, bottom: 10, width: 20, height: 10 };
     const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     this.stub(window.Element.prototype, 'getBoundingClientRect')
-      .onCall(0).returns(wrapperBCR)
-      .onCall(1).returns(fistChild);
+      .onCall(0).returns(fistChild)
+      .onCall(1).returns(wrapperBCR)
+      .onCall(2).returns(fistChild);
 
     // Given
     let children = <li id="01"></li>;

@@ -12,7 +12,7 @@ import {
   addBinderToStore,
   _updateBinder,
   determineNewState,
-  updateBinderSelectedId,
+  updatePosition,
 } from '../redux/actions';
 import {
   calculateElSpace,
@@ -154,7 +154,7 @@ class Binder extends Component {
         nextEl: selectedElement || {},
         selectedId: selectedElement.id,
       });
-      updateBinderSelectedId(id, selectedElement.id);
+      updatePosition(id, selectedElement.id);
     }
   }
 

@@ -1,6 +1,6 @@
 import { globalStore } from '../listener';
 import { findIdByStrategy } from '../engines/strategy';
-import { boundsMargin } from '../engines/bounds';
+import { boundsMargin, correctBoundsMargin } from '../engines/bounds';
 import { calculateNewState } from '../engines/helpers';
 import { NAME, EXIT_STRATEGY_MEMORY, CAROUSEL_TYPE } from '../constants';
 import { ensureDispatch, ensureMountedBinder, isUnmountedBinder } from '../ensure';
@@ -184,6 +184,20 @@ export function updateBinderSelectedId(binderId, selectedId) {
   ensureDispatch();
   ensureMountedBinder(binderId);
   const margin = boundsMargin(selectedId, globalStore.getState()[NAME][binderId]);
+  globalStore.dispatch({
+    type: UPDATE_BINDER_SELECTED_KEY,
+    binderId,
+    selectedId,
+    marginLeft: margin.marginLeft,
+    marginTop: margin.marginTop,
+  });
+}
+
+export function updatePosition(binderId, selectedId) {
+  ensureDispatch();
+  ensureMountedBinder(binderId);
+  resetFlipFlop(binderId);
+  const margin = correctBoundsMargin(selectedId, globalStore.getState()[NAME][binderId]);
   globalStore.dispatch({
     type: UPDATE_BINDER_SELECTED_KEY,
     binderId,

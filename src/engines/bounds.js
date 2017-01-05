@@ -1,5 +1,31 @@
 import { calculateElSpace } from './helpers';
 
+export function correctBoundsMargin(focusedId, state) {
+  const {
+    wrapper,
+    elements,
+    marginLeft,
+    marginTop,
+    gap,
+    boundedGap,
+    topGap,
+    leftGap,
+  } = state;
+
+  const focusedEl = elements.find(el => el.id === focusedId);
+  const focusedElSpace = calculateElSpace(document.getElementById(focusedId));
+
+  return {
+    marginLeft: isHorizontalInside(wrapper, focusedElSpace)
+      ? marginLeft
+      : calculMarginOnLeft(wrapper, focusedEl, gap, boundedGap, leftGap),
+    marginTop: isVerticalInside(wrapper, focusedElSpace)
+      ? marginTop
+      : calculMarginOnTop(wrapper, focusedEl, gap, boundedGap, topGap),
+  };
+}
+
+
 export function boundsMargin(nextId, state) {
   const {
     wrapper,
@@ -23,6 +49,7 @@ export function boundsMargin(nextId, state) {
   if (selectedId === nextId) {
     return { marginLeft: newMarginLeft, marginTop: newMarginTop };
   }
+
   const current = document.getElementById(selectedId);
   const next = document.getElementById(nextId);
 
@@ -45,7 +72,8 @@ export function boundsMargin(nextId, state) {
   } else if ((geo.vertical === 'down' || geo.horizontal === 'equal') && !isInsideDown(wrapper, nextElSpace, gap)) {
     newMarginTop = calculMarginOnDown(wrapper, nextEl, gap, downLimit, boundedGap, downGap, marginTop);
   }
-  return { marginLeft: newMarginLeft, marginTop: newMarginTop, toto: 'tata' };
+
+  return { marginLeft: newMarginLeft, marginTop: newMarginTop };
 }
 
 export function determineGeo(current, next) {
@@ -78,6 +106,16 @@ export function isInsideLeft(wrapper, selectedEl, gap) {
 
 export function isInsideRight(wrapper, selectedEl, gap) {
   return wrapper.right >= selectedEl.right + gap;
+}
+
+export function isVerticalInside(wrapper, nextElSpace) {
+  return isInsideTop(wrapper, nextElSpace, 0)
+    && isInsideDown(wrapper, nextElSpace, 0);
+}
+
+export function isHorizontalInside(wrapper, nextElSpace) {
+  return isInsideLeft(wrapper, nextElSpace, 0)
+    && isInsideRight(wrapper, nextElSpace, 0);
 }
 
 export function calculMarginOnTop(wrapper, selectedEl, gap, boundedGap, topGap) {
