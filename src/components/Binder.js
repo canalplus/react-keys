@@ -91,7 +91,7 @@ class Binder extends Component {
   keysHandler(keyCode) {
     if (isActive(this.props)
       && !isBlocked()
-      && blocks.getStuff().indexOf(this.props.id) === -1) {
+      && !blocks.isBlocked(this.props.id)) {
       const {
         id,
         onLeft,

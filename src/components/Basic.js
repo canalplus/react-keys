@@ -69,7 +69,7 @@ class Keys extends Component {
   keysHandler(keyCode) {
     if (this.props.active
       && !isBlocked()
-      && blocks.getStuff().indexOf(this.props.id) === -1) {
+      && !blocks.isBlocked(this.props.id)) {
       switch (keyCode) {
         case BACK:
         case ESC:

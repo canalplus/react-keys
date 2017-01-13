@@ -155,8 +155,18 @@ describe('listener.js', () => {
   it('should block callback when blocks has a key', sinon.test(function() {
     const callback = sinon.spy();
     addListener(callback, 'CONTEXT');
-    this.stub(blocks, 'getStuff').returns([31]);
+    this.stub(blocks, 'isBlocked').returns(true);
     cb(31);
     callback.should.have.callCount(0);
   }));
+
+  it('should block callback when blocks has a key', sinon.test(function() {
+    const callback = sinon.spy();
+    addListener(callback, 'CONTEXT');
+    this.stub(blocks, 'isBlocked').returns(false);
+    cb(31);
+    callback.should.have.been.calledOnce;
+    cbRelease(); // SET BLOCK TO FALSE
+  }));
+
 });

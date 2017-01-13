@@ -25,3 +25,6 @@ export const resetCarousel = _resetCarousel;
 
 export const block = blocks.block;
 export const unblock = blocks.unblock;
+export const blockExcept = blocks.blockExcept;
+export const unblockExcept = blocks.unblockExcept;
+export const _blocks = blocks;

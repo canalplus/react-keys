@@ -16,7 +16,7 @@ export let eventCb = null;
 
 export function cb(e) {
   const keyCode = e.keyCode ? e.keyCode : e;
-  if (blocks.getStuff().indexOf(keyCode) !== -1) return;
+  if (blocks.isBlocked(keyCode)) return;
   if (!block) {
     eventCb(keyCode, 'short');
   }
