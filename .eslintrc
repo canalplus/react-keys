@@ -23,7 +23,8 @@
     "node": true
   },
   "globals": {
-    "global": true
+    "global": true,
+    "Set": true
   },
   "rules": {
     "react/no-find-dom-node": 0

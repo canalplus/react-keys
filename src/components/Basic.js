@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { isBlocked, block } from '../clock';
 import { addListener, removeListener } from '../listener';
+import blocks from '../blocks';
 import { addKeyToStore } from '../redux/actions';
 import {
   BACK,
@@ -66,7 +67,9 @@ class Keys extends Component {
   }
 
   keysHandler(keyCode) {
-    if (this.props.active && !isBlocked()) {
+    if (this.props.active
+      && !isBlocked()
+      && !blocks.isBlocked(this.props.id)) {
       switch (keyCode) {
         case BACK:
         case ESC:

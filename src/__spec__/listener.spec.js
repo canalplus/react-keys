@@ -10,6 +10,7 @@ import {
   globalStore,
 } from '../listener';
 import { NAME } from '../constants';
+import blocks from '../blocks';
 import * as actions from '../redux/actions';
 
 import sinon from 'sinon';
@@ -150,4 +151,22 @@ describe('listener.js', () => {
     callback.should.have.been.calledTwice;
     cbRelease(); // SET BLOCK TO FALSE
   }));
+
+  it('should block callback when blocks has a key', sinon.test(function() {
+    const callback = sinon.spy();
+    addListener(callback, 'CONTEXT');
+    this.stub(blocks, 'isBlocked').returns(true);
+    cb(31);
+    callback.should.have.callCount(0);
+  }));
+
+  it('should block callback when blocks has a key', sinon.test(function() {
+    const callback = sinon.spy();
+    addListener(callback, 'CONTEXT');
+    this.stub(blocks, 'isBlocked').returns(false);
+    cb(31);
+    callback.should.have.been.calledOnce;
+    cbRelease(); // SET BLOCK TO FALSE
+  }));
+
 });

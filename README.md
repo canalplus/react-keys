@@ -255,8 +255,17 @@ So you can listen the change of theses values for each binder
 
 ### Action launchers
 * `activeBinder(binderId, selectedId(optional))` activate a new binder by giving its id (first id by default)
-* `resetBInder(binderId, selectedId(optional))` reset binder by giving its id (first id by default)
+* `resetBinder(binderId, selectedId(optional))` reset binder by giving its id (first id by default)
 * `updateBinder(binderId, binderState)` when you want to update the state manually (you must know what you do !)
+
+### Keys/Binder blockers
+
+For some reason you want sometime block a specific binder or a specific key, you can perform that with these functions. Don't forget to unblock when you block :-) 
+
+* `bock(values or array of values(optional))` it can be keyCode or binderId. when no argument are passed, it blocks everything.
+* `unbock(values or array of values(optional))` it can be keyCode or binderId. when no argument are passed, it unblocks everything.
+* `blockExcept(values or array of values)` it can be keyCode or binderId. Note  when you want to except a binder, you have to refers its keyCode associated : `blockExcept('binderId', [keys.DOWN, keys.UP, keys.LEFT, keys.RIGHT, keys.ENTER]);`
+* `unblockExcept(values or array of values)` it can be keyCode or binderId.
 
 # Tests
 

@@ -1,5 +1,6 @@
 /* eslint import/no-mutable-exports:0 */
 import { updatePressStatus } from './redux/actions';
+import blocks from './blocks';
 import { LONG_PRESS_TIMEOUT, NAME } from './constants';
 
 export let keysListeners = [];
@@ -15,6 +16,7 @@ export let eventCb = null;
 
 export function cb(e) {
   const keyCode = e.keyCode ? e.keyCode : e;
+  if (blocks.isBlocked(keyCode)) return;
   if (!block) {
     eventCb(keyCode, 'short');
   }

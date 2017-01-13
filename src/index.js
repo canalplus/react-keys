@@ -6,6 +6,7 @@ import { UP, DOWN, LEFT, RIGHT, ENTER, NUMERICS } from './keys';
 import { _keyReducer } from './redux/reducer';
 import { _activeBinder, _updateBinder, _resetBinder, _resetCarousel } from './redux/actions';
 import { _selector } from './selector';
+import blocks from './blocks';
 
 export const keys = { UP, DOWN, LEFT, RIGHT, ENTER, NUMERICS };
 export const keysInit = _init;
@@ -21,3 +22,9 @@ export const activeBinder = _activeBinder;
 export const updateBinder = _updateBinder;
 export const resetBinder = _resetBinder;
 export const resetCarousel = _resetCarousel;
+
+export const block = blocks.block;
+export const unblock = blocks.unblock;
+export const blockExcept = blocks.blockExcept;
+export const unblockExcept = blocks.unblockExcept;
+export const _blocks = blocks;
