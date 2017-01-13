@@ -4,7 +4,7 @@ import { createStore, combineReducers } from 'redux';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 import { keyDown, keyUp } from '../../../test/helpers';
-import { keysInit, keysReducer, keys } from '../../';
+import { keysInit, keysReducer, keys, block, unblock } from '../../';
 
 describe('Binder.jsx', () => {
 
@@ -254,7 +254,7 @@ describe('Binder.jsx', () => {
     spy.should.have.been.calledOnce;
 
     // release keys
-    keyUp(keys.DOWN);
+    keyUp(keys.ENTER);
     this.clock.tick(10);
   }));
 
@@ -284,6 +284,74 @@ describe('Binder.jsx', () => {
 
     binder.update();
 
+  }));
+
+  it('should not call when key is blocked', sinon.test(function() {
+    // Setup
+    const spy = this.spy();
+    const wrapperBCR = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
+    const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
+    this.stub(window.Element.prototype, 'getBoundingClientRect')
+      .onCall(0).returns(fistChild)
+      .onCall(1).returns(wrapperBCR)
+      .onCall(2).returns(fistChild);
+
+    // Given
+    const id = "1";
+    mount(
+      <Binder id={id} onEnter={spy}>
+        <ul id="wrapper">
+          <li id="01"></li>
+        </ul>
+      </Binder>, {
+        attachTo: document.getElementById('container'),
+      });
+
+    // When
+    block(keys.ENTER);
+    keyDown(keys.ENTER);
+
+    // Then
+    spy.should.have.been.callCount(0);
+
+    // release keys
+    keyUp(keys.ENTER);
+    unblock(keys.ENTER);
+    this.clock.tick(10);
+  }));
+
+  it('should not call when binder id is blocked', sinon.test(function() {
+    // Setup
+    const spy = this.spy();
+    const wrapperBCR = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
+    const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
+    this.stub(window.Element.prototype, 'getBoundingClientRect')
+      .onCall(0).returns(fistChild)
+      .onCall(1).returns(wrapperBCR)
+      .onCall(2).returns(fistChild);
+
+    // Given
+    const id = "1";
+    mount(
+      <Binder id={id} onEnter={spy}>
+        <ul id="wrapper">
+          <li id="01"></li>
+        </ul>
+      </Binder>, {
+        attachTo: document.getElementById('container'),
+      });
+
+    // When
+    block(id);
+    keyDown(keys.ENTER);
+
+    // Then
+    spy.should.have.been.callCount(0);
+
+    // release keys
+    keyUp(keys.ENTER);
+    unblock(id);
+    this.clock.tick(10);
   }));
 
 });

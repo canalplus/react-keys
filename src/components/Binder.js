@@ -5,6 +5,7 @@ import { refresh } from '../engines/mosaic';
 import { UP, DOWN, LEFT, RIGHT, ENTER } from '../keys';
 import { NAME, C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE } from '../constants';
 import { isBlocked, block } from '../clock';
+import blocks from '../blocks';
 import { isActive } from '../isActive';
 import { execCb } from '../funcHandler';
 import { globalStore, addListener, removeListener } from '../listener';
@@ -88,7 +89,9 @@ class Binder extends Component {
   }
 
   keysHandler(keyCode) {
-    if (isActive(this.props) && !isBlocked()) {
+    if (isActive(this.props)
+      && !isBlocked()
+      && blocks.getStuff().indexOf(this.props.id) === -1) {
       const {
         id,
         onLeft,
