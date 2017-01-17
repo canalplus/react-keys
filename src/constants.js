@@ -14,6 +14,6 @@ export const CAROUSEL_TYPE = 'carousel';
 export const KEYS_TYPE = 'keys';
 
 export const LONG_PRESS_TIMEOUT = 500;
+export const DEBOUNCE_TIMEOUT = 10;
 
-export const HORIZONTAL = 'horizontal';
 export const VERTICAL = 'vertical';

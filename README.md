@@ -44,6 +44,12 @@ keysInit({store: store}); // add the store there
 const Mosaic = connect(() => keysSelector('OneBinderId'))(PureMosaic); // listen every changes of your mosaic like that
 ```
 
+# keysInit (object)
+This is the entry point you need to define your redux store here. You can also define global behaviors
+* `store` (redux store / **mandatory**) Link the redux store to `react-keys`
+* `eventCb` (function / *optional*) Define a callback triggered when short/long press are done
+* `debounce` (number / *optional*) define a global debounce in ms, it can be overrided by components (default : `10`)
+
 # Keys
 Very basic way to handle keyboard events. Yet is pretty powerfull :-)
 
@@ -70,8 +76,7 @@ const Component = ({ isActive }) => {
 * `id` (string / **mandatory**) component id
 * `on${keyCode}` (function / *optional*) keyCode callback 
 * `active` (boolean / *optional*) determine is `Keys` component is active (default `true`)
-
-
+* `debounce` (number / *optional*) define a debounce for keys press in ms (default global debounce)
 
 # Binder
 Fancy React component to deal with space navigation. It handles communication with multiple `Binder` compoments to create something great !
@@ -120,10 +125,11 @@ renderWithId('mosaic-1-1');
 * `active` (boolean / *optional*) determine if binder is active (default `false`)
 * `selector` (string / *optional*) DOM selector which define each element (default `li`)
 * `wrapper` (string / *optional*) DOM selector which define parent element (default `document`)
-* `filter` (string / *optional*) Class name which exclude element 
+* `filter` (string / *optional*) class name which exclude element 
+* `debounce` (number / *optional*) define a debounce for keys press in ms (default global debounce) 
 * `context` (object / *optional*) context object passed within every callback
 * `enterStrategy` (string / *optional*) define strape strategy on enter: `start` / `mirror` / `memory` / `none` (default `none`)
-* `gap` (number / *optional*) reduce or increase elements margin (default `0`)
+* `gap` (number / *optional*) reduce or increase elements margin (default `0`)`
 * `boundedGap` (number / *optional*) reduce or increase bounded margin (default `0`)
 * `topGap` (number / *optional*) reduce or increase last top margin (default `0`)
 * `rightGap` (number / *optional*) reduce or increase last right margin (default `0`)

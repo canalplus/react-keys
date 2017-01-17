@@ -48,6 +48,7 @@ class Binder extends Component {
       onUp: PropTypes.func,
       onDown: PropTypes.func,
       onEnter: PropTypes.func,
+      debounce: PropTypes.number,
       onLeftExit: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.func,
@@ -132,8 +133,8 @@ class Binder extends Component {
   }
 
   performAction(dir, cb, exitCb) {
-    block();
-    const { id, context } = this.props;
+    const { id, context, debounce } = this.props;
+    block(debounce);
     determineNewState(id, dir, cb, exitCb, this, context);
   }
 

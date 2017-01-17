@@ -40,6 +40,7 @@ class Keys extends Component {
       id: PropTypes.string.isRequired,
       onBack: PropTypes.func,
       context: PropTypes.object,
+      debounce: PropTypes.number,
       onDown: PropTypes.func,
       onEnter: PropTypes.func,
       onUp: PropTypes.func,
@@ -121,9 +122,10 @@ class Keys extends Component {
   }
 
   performAction(callback, keyCode) {
+    const { debounce, context } = this.props;
     if (callback) {
-      block();
-      execCb(callback, keyCode, this, this.props.context);
+      block(debounce);
+      execCb(callback, keyCode, this, context);
     }
   }
 

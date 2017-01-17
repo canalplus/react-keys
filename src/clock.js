@@ -1,6 +1,8 @@
+import { rkDebounce } from './listener';
+
 let keysLock = false;
 
-export function block(timeout = 10) {
+export function block(timeout = rkDebounce) {
   keysLock = true;
   setTimeout(() => (keysLock = false), timeout);
 }
