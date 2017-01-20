@@ -39,11 +39,9 @@ export function addCarouselToStore(props, type) {
     index,
     elements,
   } = props;
-  if (!isUnmountedBinder(id)) {
-    if (!isUnmountedBinder(id)) {
-      _activeBinder(id, index);
-      return;
-    }
+  if (!isUnmountedBinder(id) && props.active) {
+    _activeBinder(id, index);
+    return;
   }
   globalStore.dispatch({
     type: ADD_BINDER_TO_STORE,
@@ -64,7 +62,7 @@ export function addCarouselToStore(props, type) {
 export function addBinderToStore(props, type) {
   ensureDispatch();
   const state = globalStore.getState()[NAME];
-  if (!isUnmountedBinder(props.id)) {
+  if (!isUnmountedBinder(props.id) && props.active) {
     _activeBinder(props.id);
     return;
   }
