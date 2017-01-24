@@ -111,7 +111,7 @@ export function _activeBinder(binderId, nextElId, dir) {
   ensureDispatch();
   ensureMountedBinder(binderId);
   const state = globalStore.getState()[NAME];
-  var toActivate = state[binderId];
+  const toActivate = state[binderId];
   const selectedId = findIdByStrategy(state, binderId, nextElId);
   globalStore.dispatch({
     type: ACTIVATE_BINDER,
@@ -130,6 +130,7 @@ export function _resetCarousel(binderId, wishedId) {
   ensureMountedBinder(binderId);
   const originalState = globalStore.getState()[NAME][binderId];
   const { elements, selectedId } = originalState;
+  if (elements.length === 0) return;
   const newSelectedId = wishedId || elements[0].id;
   const state = {
     selectedId: newSelectedId,
@@ -147,6 +148,7 @@ export function _resetBinder(binderId, wishedId) {
   const originalState = globalStore.getState()[NAME][binderId];
   const { elements, selectedId } = originalState;
   const newSelectedId = wishedId || elements[0].id;
+  if (elements.length === 0) return;
   const margin = boundsMargin(newSelectedId, originalState);
   const state = {
     selectedId: newSelectedId,
