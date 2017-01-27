@@ -12,9 +12,10 @@ class Blocks {
 
   block() {
     this.blockedStuff = [];
-    if (arguments.length > 0) {
+    const args = Array.prototype.slice.call(arguments);
+    if (args.length > 0) {
       this.generalBlock = false;
-      for (const arg of arguments) {
+      for (const arg of args) {
         if (arg instanceof Array) {
           this.blockedStuff = this.blockedStuff.concat(arg);
           this.blockedStuff = [...new Set(this.blockedStuff)];
@@ -30,7 +31,8 @@ class Blocks {
   blockExcept() {
     this.generalBlock = true;
     this.blockedStuff = [];
-    for (const arg of arguments) {
+    const args = Array.prototype.slice.call(arguments);
+    for (const arg of args) {
       if (arg instanceof Array) {
         this.blockedStuff = this.blockedStuff.concat(arg);
         this.blockedStuff = [...new Set(this.blockedStuff)];
@@ -42,8 +44,9 @@ class Blocks {
 
   unblockExcept() {
     this.generalBlock = false;
-    if (arguments.length > 0) {
-      this.block(...arguments);
+    const args = Array.prototype.slice.call(arguments);
+    if (args.length > 0) {
+      this.block(...args);
     } else {
       throw new Error('unblockExcept need at least on arg, maybe you want to just unblock()');
     }
@@ -51,8 +54,9 @@ class Blocks {
 
   unblock() {
     this.generalBlock = false;
-    if (arguments.length > 0) {
-      for (const arg of arguments) {
+    const args = Array.prototype.slice.call(arguments);
+    if (args.length > 0) {
+      for (const arg of args) {
         if (arg instanceof Array) {
           for (const el of arg) {
             if (this.blockedStuff.indexOf(el) !== -1) {
