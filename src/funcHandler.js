@@ -1,8 +1,8 @@
 import { _activeBinder } from './redux/actions';
 
-export function execCb(func, nextEl, _this, context) {
+export function execCb(func, nextEl, _this) {
   if (!func) return;
-  func.call(_this, nextEl || {}, context);
+  func.call(_this, nextEl || {});
 }
 
 export function enterTo(callback) {

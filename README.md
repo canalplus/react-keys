@@ -127,7 +127,6 @@ renderWithId('mosaic-1-1');
 * `wrapper` (string / *optional*) DOM selector which define parent element (default `document`)
 * `filter` (string / *optional*) class name which exclude element 
 * `debounce` (number / *optional*) define a debounce for keys press in ms (default global debounce) 
-* `context` (object / *optional*) context object passed within every callback
 * `enterStrategy` (string / *optional*) define strape strategy on enter: `start` / `mirror` / `memory` / `none` (default `none`)
 * `gap` (number / *optional*) reduce or increase elements margin (default `0`)`
 * `boundedGap` (number / *optional*) reduce or increase bounded margin (default `0`)
@@ -135,11 +134,11 @@ renderWithId('mosaic-1-1');
 * `rightGap` (number / *optional*) reduce or increase last right margin (default `0`)
 * `leftGap` (number / *optional*) reduce or increase last left margin (default `0`)
 * `downGap` (number / *optional*) reduce or increase last down margin (default `0`)
-* `onRight` (function / *optional*) callback for right events `function(nextElement, {context})`
-* `onLeft` (function / *optional*) callback for left events `function(nextElement, {context})`
-* `onUp` (function / *optional*) callback for up events `function(nextElement, {context})`
-* `onDown` (function / *optional*) callback for down events `function(nextElement, {context})`
-* `onEnter` (function / *optional*) callback for enter events `function(nextElement, {context})`
+* `onRight` (function / *optional*) callback for right events `function(nextElement)`
+* `onLeft` (function / *optional*) callback for left events `function(nextElement)`
+* `onUp` (function / *optional*) callback for up events `function(nextElement)`
+* `onDown` (function / *optional*) callback for down events `function(nextElement)`
+* `onEnter` (function / *optional*) callback for enter events `function(nextElement)`
 * `onRightExit` (function/string / *optional*) triggered when right event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onLeftExit` (function/string / *optional*) triggered when left event would go outside the elements block, it can be a function or the binder id we want to reach
 * `onUpExit` (function/string / *optional*) triggered when up event would go outside the elements block, it can be a function or the binder id we want to reach
@@ -156,7 +155,7 @@ const PureMosaic = ({ selectedId, marginTop, marginLeft }) => {
       id="rk-binder"
       wrapper="#myWrapper"
       gap={20}
-      onEnter={ ( element, { context }) => console.log(`ENTER with ${element.id}`) }>
+      onEnter={ element => console.log(`ENTER with ${element.id}`) }>
       <div id="myWrapper">
           <ul style={{ marginTop: marginTop, marginLeft: marginLeft}}>
             <li id="1" className={selectedId === '1' ? 'selected' : ''}>#1</li>

@@ -23,14 +23,6 @@ describe('funcHandler.js', () => {
       spy.should.have.been.calledWith({});
     });
 
-    it('should call with el and context if props.context', () => {
-      const spy = sinon.spy();
-      const el = { id: 1 };
-      const context = { obladi: 'olbada' };
-      execCb(spy, el, this, context);
-      spy.should.have.been.calledOnce;
-      spy.should.have.been.calledWith(el, context);
-    });
   });
   describe('enterTo', () => {
     it('should not throw error if function is null', () => {

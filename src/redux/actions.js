@@ -227,7 +227,7 @@ export function updatePressStatus(press, keyCode = null) {
   }
 }
 
-export function determineNewState(binderId, dir, cb, exitCb, _this, context) {
+export function determineNewState(binderId, dir, cb, exitCb, _this) {
   ensureDispatch();
   ensureMountedBinder(binderId);
   const { nextEl, prevEl, prevDir, elements } = globalStore.getState()[NAME][binderId];
@@ -239,7 +239,7 @@ export function determineNewState(binderId, dir, cb, exitCb, _this, context) {
   });
   if (newState.hasMoved) {
     updateBinderSelectedId(binderId, newState.nextEl.id, dir);
-    execCb(cb, nextEl, _this, context);
+    execCb(cb, nextEl, _this);
   } else {
     resetFlipFlop(binderId);
     enterTo(exitCb);

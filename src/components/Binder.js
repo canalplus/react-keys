@@ -41,7 +41,6 @@ class Binder extends Component {
       leftGap: PropTypes.number,
       downGap: PropTypes.number,
       enterStrategy: PropTypes.string,
-      context: PropTypes.object,
       active: PropTypes.bool,
       onRight: PropTypes.func,
       onLeft: PropTypes.func,
@@ -71,7 +70,6 @@ class Binder extends Component {
   static get defaultProps() {
     return {
       selector: 'li',
-      context: {},
       active: true,
       enterStrategy: 'none',
       filter: null,
@@ -104,7 +102,6 @@ class Binder extends Component {
         onDown,
         onDownExit,
         onEnter,
-        context,
       } = this.props;
       const { nextEl } = globalStore.getState()['@@keys'][id];
       switch (keyCode) {
@@ -123,7 +120,7 @@ class Binder extends Component {
         case ENTER:
           if (onEnter) {
             block();
-            execCb(onEnter, nextEl, this, context);
+            execCb(onEnter, nextEl, this);
           }
           break;
         default:
@@ -133,9 +130,9 @@ class Binder extends Component {
   }
 
   performAction(dir, cb, exitCb) {
-    const { id, context, debounce } = this.props;
+    const { id, debounce } = this.props;
     block(debounce);
-    determineNewState(id, dir, cb, exitCb, this, context);
+    determineNewState(id, dir, cb, exitCb, this);
   }
 
   refreshState() {
