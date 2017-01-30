@@ -138,7 +138,7 @@ class Keys extends Component {
   }
 
   render() {
-    return <div id={this.props.id}>{this.props.children}</div>;
+    return this.props.children || null;
   }
 }
 
