@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import { keyDown, keyUp } from '../../../test/helpers';
 import { keysInit, keysReducer, keys, block, unblock } from '../../';
 
-describe('Binder.jsx', () => {
+describe('Binder', () => {
 
   let store;
 
