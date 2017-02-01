@@ -1,4 +1,5 @@
 # React Keys
+![](https://raw.githubusercontent.com/canalplus/react-keys/v2.0.0/logo.png)
 Simple way to bind keyboard to react with redux.
 
 [![Build Status](https://travis-ci.org/canalplus/react-keys.svg?branch=master)](https://travis-ci.org/canalplus/react-keys)
