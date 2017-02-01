@@ -2,6 +2,6 @@ instrumentation:
   root: src
   include-all-sources: true
   verbose: true
-  excludes: ["**/__spec__/**"]
+  excludes: ["**/__spec__/**", "Carousel.js"]
 reporting:
   dir: "coverage"
