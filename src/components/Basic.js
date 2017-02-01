@@ -1,33 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { isBlocked, block } from '../clock';
-import { addListener, removeListener } from '../listener';
+import { addListener, removeListener, userConfig } from '../listener';
 import blocks from '../blocks';
-import { addKeyToStore } from '../redux/actions';
-import {
-  BACK,
-  ESC,
-  DOWN,
-  ENTER,
-  UP,
-  MENU,
-  INFO,
-  REC,
-  NEXTPROG,
-  PREVPROG,
-  SHUTDOWN,
-  NUM0,
-  NUM1,
-  NUM2,
-  NUM3,
-  NUM4,
-  NUM5,
-  NUM6,
-  NUM7,
-  NUM8,
-  NUM9,
-} from '../keys';
+import config from '../config';
 import { execCb } from '../funcHandler';
-import { KEYS_TYPE } from '../constants';
 
 class Keys extends Component {
 
@@ -38,18 +14,7 @@ class Keys extends Component {
         React.PropTypes.array,
       ]),
       id: PropTypes.string.isRequired,
-      onBack: PropTypes.func,
       debounce: PropTypes.number,
-      onDown: PropTypes.func,
-      onEnter: PropTypes.func,
-      onUp: PropTypes.func,
-      onDigit: PropTypes.func,
-      onMenu: PropTypes.func,
-      onInfo: PropTypes.func,
-      onRec: PropTypes.func,
-      onNextProg: PropTypes.func,
-      onPrevProg: PropTypes.func,
-      onShutDown: PropTypes.func,
       active: PropTypes.bool,
     }
   }
@@ -69,52 +34,16 @@ class Keys extends Component {
     if (this.props.active
       && !isBlocked()
       && !blocks.isBlocked(this.props.id)) {
-      switch (keyCode) {
-        case BACK:
-        case ESC:
-          this.performAction(this.props.onBack, keyCode);
+      const mergeConfig = { ...config, ...userConfig };
+      for (const key in mergeConfig) {
+        const value = mergeConfig[key];
+        const action = key.toLowerCase().replace(/\b[a-z](?=[a-z]{1})/g,
+          letter => letter.toUpperCase());
+        if ((Number.isInteger(value) && value === keyCode)
+          || (Array.isArray(value) && value.indexOf(keyCode) !== -1)) {
+          this.performAction(this.props[`on${action}`], keyCode);
           break;
-        case ENTER:
-          this.performAction(this.props.onEnter, keyCode);
-          break;
-        case UP:
-          this.performAction(this.props.onUp, keyCode);
-          break;
-        case DOWN:
-          this.performAction(this.props.onDown, keyCode);
-          break;
-        case MENU:
-          this.performAction(this.props.onMenu, keyCode);
-          break;
-        case INFO:
-          this.performAction(this.props.onInfo, keyCode);
-          break;
-        case REC:
-          this.performAction(this.props.onRec, keyCode);
-          break;
-        case NEXTPROG:
-          this.performAction(this.props.onNextProg, keyCode);
-          break;
-        case PREVPROG:
-          this.performAction(this.props.onPrevProg, keyCode);
-          break;
-        case SHUTDOWN:
-          this.performAction(this.props.onShutDown, keyCode);
-          break;
-        case NUM0:
-        case NUM1:
-        case NUM2:
-        case NUM3:
-        case NUM4:
-        case NUM5:
-        case NUM6:
-        case NUM7:
-        case NUM8:
-        case NUM9:
-          this.performAction(this.props.onDigit, keyCode);
-          break;
-        default:
-          this.performAction(this.props[`on${keyCode}`], keyCode);
+        }
       }
     }
   }
@@ -125,10 +54,6 @@ class Keys extends Component {
       block(debounce);
       execCb(callback, keyCode, this);
     }
-  }
-
-  componentDidMount() {
-    addKeyToStore(this.props, KEYS_TYPE);
   }
 
   componentWillUnmount() {

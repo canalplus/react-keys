@@ -2,13 +2,13 @@ import _Binder from './components/Binder';
 import _Keys from './components/Basic';
 import _Carousel from './components/Carousel';
 import { _init } from './listener';
-import { UP, DOWN, LEFT, RIGHT, ENTER, NUMERICS, BACK, MENU, INFO } from './keys';
+import { UP, DOWN, LEFT, RIGHT, ENTER } from './keys';
 import { _keyReducer } from './redux/reducer';
 import { _activeBinder, _updateBinder, _resetBinder, _resetCarousel } from './redux/actions';
 import { _selector } from './selector';
 import blocks from './blocks';
 
-export const keys = { UP, DOWN, LEFT, RIGHT, ENTER, NUMERICS, BACK, MENU, INFO };
+export const keys = { UP, DOWN, LEFT, RIGHT, ENTER };
 export const keysInit = _init;
 
 export const Keys = _Keys;

@@ -14,21 +14,6 @@ export const UPDATE_CURRENT = [NAME, '/UPDATE_CURRENT'].join('');
 export const UPDATE_PRESS_STATUS = [NAME, '/UPDATE_PRESS_STATUS'].join('');
 export const RESET_BINDER = [NAME, '/RESET_BINDER'].join('');
 
-export function addKeyToStore(props, type) {
-  const { id } = props;
-  ensureDispatch();
-  if (!isUnmountedBinder(id)) return;
-  globalStore.dispatch({
-    type: ADD_BINDER_TO_STORE,
-    newBinder: {
-      [id]: {
-        id,
-        type,
-      }
-    },
-  });
-}
-
 export function addCarouselToStore(props, type) {
   ensureDispatch();
   const {

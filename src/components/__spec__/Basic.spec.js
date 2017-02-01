@@ -4,6 +4,7 @@ import { createStore, combineReducers } from 'redux';
 import { mount, render } from 'enzyme';
 import sinon from 'sinon';
 import { keysInit, keysReducer, keys } from '../../';
+import config from '../../config';
 import { keyPress } from '../../../test/helpers';
 
 describe('Basic', () => {
@@ -23,7 +24,7 @@ describe('Basic', () => {
   it('should perform onBack callback on back press', sinon.test(function() {
     const onBackSpy = this.spy();
     const basic = mount(<Basic id="2" onBack={onBackSpy}/>);
-    keyPress(keys.BACK);
+    keyPress(config.back);
     this.clock.tick(10); // I need to tick 10 to unlock Basic
     onBackSpy.should.have.been.calledOnce;
     basic.unmount();

@@ -14,6 +14,7 @@ export let block = false;
 export let pressTimeout = null;
 export let eventCb = null;
 export let rkDebounce = DEBOUNCE_TIMEOUT;
+export let userConfig = {};
 
 export function cb(e) {
   const keyCode = e.keyCode ? e.keyCode : e;
@@ -48,6 +49,7 @@ export function _init(ops) {
   globalStore = ops && ops.store ? ops.store : globalStore;
   rkDebounce = ops && ops.debounce ? ops.debounce : DEBOUNCE_TIMEOUT;
   eventCb = ops && ops.eventCb ? ops.eventCb : () => ({});
+  userConfig = ops && ops.config ? ops.config : {};
   if (!ops || (ops && !ops.bindkeys)) {
     document.addEventListener('keydown', cb);
     document.addEventListener('keyup', cbRelease);
