@@ -49,6 +49,30 @@ This is the entry point you need to define your redux store here. You can also d
 * `store` (redux store / **mandatory**) Link the redux store to `react-keys`
 * `eventCb` (function / *optional*) Define a callback triggered when short/long press are done
 * `debounce` (number / *optional*) define a global debounce in ms, it can be overrided by components (default : `10`)
+* `config` (object / *optional*) define keys to work with, this is the core concept for Keys components and it works as below 
+
+The default config of `react-keys` is 
+```json
+{
+  left: 37,
+  up: 38,
+  right: 39,
+  down: 40,
+  enter: 13,
+  esc: 27,
+  back: 8,
+  menu: 120,
+  info: 118,
+  rec: 117,
+  nextprog: 33,
+  prevprog: 34,
+  shutdown: 123,
+  digits: [48, 49, 50, 51, 52, 53, 54, 55, 56, 57],
+}
+```
+
+You can use them by adding a prop to `Keys` component with the keyword `on` before the key with CamelCase (`onBack`, `onUp`, `onEnter`...)
+You can extend this config by adding your own object config that will extend the default config.
 
 # Keys
 Very basic way to handle keyboard events. Yet is pretty powerfull :-)
@@ -64,7 +88,7 @@ const Component = ({ isActive }) => {
   return(
     <div>
       <Keys id="rk-basic" 
-            on65={ () => console.log('Did I just push A ?') } 
+            onBack={ () => console.log('Did I just push A ?') } 
             active={ isActive } />
       <h1>Check that out !</h1>
     </div>
