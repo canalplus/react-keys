@@ -1,6 +1,7 @@
 /* eslint import/no-mutable-exports:0 */
 import { updatePressStatus } from './redux/actions';
 import blocks from './blocks';
+import config from './config';
 import { LONG_PRESS_TIMEOUT, NAME, DEBOUNCE_TIMEOUT } from './constants';
 
 export let keysListeners = [];
@@ -14,7 +15,9 @@ export let block = false;
 export let pressTimeout = null;
 export let eventCb = null;
 export let rkDebounce = DEBOUNCE_TIMEOUT;
-export let userConfig = {};
+export let userConfig = config;
+
+export const getConfig = () => userConfig;
 
 export function cb(e) {
   const keyCode = e.keyCode ? e.keyCode : e;
@@ -49,7 +52,7 @@ export function _init(ops) {
   globalStore = ops && ops.store ? ops.store : globalStore;
   rkDebounce = ops && ops.debounce ? ops.debounce : DEBOUNCE_TIMEOUT;
   eventCb = ops && ops.eventCb ? ops.eventCb : () => ({});
-  userConfig = ops && ops.config ? ops.config : {};
+  userConfig = ops && ops.config ? { ...userConfig, ...ops.config } : userConfig;
   if (!ops || (ops && !ops.bindkeys)) {
     document.addEventListener('keydown', cb);
     document.addEventListener('keyup', cbRelease);

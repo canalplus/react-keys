@@ -2,13 +2,12 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { refresh } from '../engines/mosaic';
-import { UP, DOWN, LEFT, RIGHT, ENTER } from '../keys';
 import { NAME, C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE } from '../constants';
 import { isBlocked, block } from '../clock';
 import blocks from '../blocks';
 import { isActive } from '../isActive';
 import { execCb } from '../funcHandler';
-import { globalStore, addListener, removeListener } from '../listener';
+import { globalStore, addListener, removeListener, userConfig } from '../listener';
 import {
   addBinderToStore,
   _updateBinder,
@@ -105,19 +104,19 @@ class Binder extends Component {
       } = this.props;
       const { nextEl } = globalStore.getState()['@@keys'][id];
       switch (keyCode) {
-        case LEFT:
+        case userConfig.left:
           this.performAction(C_LEFT, onLeft, onLeftExit);
           break;
-        case UP:
+        case userConfig.up:
           this.performAction(C_UP, onUp, onUpExit);
           break;
-        case RIGHT:
+        case userConfig.right:
           this.performAction(C_RIGHT, onRight, onRightExit);
           break;
-        case DOWN:
+        case userConfig.down:
           this.performAction(C_DOWN, onDown, onDownExit);
           break;
-        case ENTER:
+        case userConfig.enter:
           if (onEnter) {
             block();
             execCb(onEnter, nextEl, this);

@@ -4,7 +4,7 @@ import { createStore, combineReducers } from 'redux';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 import { keyDown, keyUp } from '../../../test/helpers';
-import { keysInit, keysReducer, keys, block, unblock } from '../../';
+import { keysInit, keysReducer, block, unblock, config } from '../../';
 
 describe('Binder', () => {
 
@@ -18,6 +18,7 @@ describe('Binder', () => {
   it('should wrap with tagName div', () => {
     const mosaic = mount(<Binder id="1"/>);
     mosaic.should.have.tagName('div');
+    mosaic.unmount();
   });
 
   it('should setup wrapper and children with custom tag', sinon.test(function() {
@@ -32,7 +33,7 @@ describe('Binder', () => {
 
     // Given
     const id = "1";
-    mount(<div id="wrapper">
+    const binder = mount(<div id="wrapper">
       <Binder id={id} wrapper="#wrapper" selector="div">
         <div id="01"></div>
       </Binder>
@@ -50,6 +51,7 @@ describe('Binder', () => {
     current.binderId.should.equal('1');
     current.selectedId.should.equal('01');
 
+    binder.unmount();
   }));
 
   it('should navigate on right', sinon.test(function() {
@@ -73,7 +75,7 @@ describe('Binder', () => {
 
     // Given
     const id = "1";
-    mount(<Binder id={id}>
+    const binder = mount(<Binder id={id}>
       <ul>
         <li id="01"></li>
         <li id="02"></li>
@@ -95,7 +97,7 @@ describe('Binder', () => {
     // When
     stub.onCall(5).returns(firstLiBCR)
       .onCall(6).returns(secondLiBCR);
-    keyDown(keys.RIGHT);
+    keyDown(config().right);
 
     // Then I move to right
     const movedState = store.getState()['@@keys'][id];
@@ -105,11 +107,11 @@ describe('Binder', () => {
     movedCurrent.selectedId.should.equal('02');
 
     // When
-    keyUp(keys.RIGHT); // I need to keyUp to unlock callback
+    keyUp(config().right); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
     stub.onCall(7).returns(secondLiBCR)
       .onCall(8).returns(thirdLiBCR);
-    keyDown(keys.RIGHT);
+    keyDown(config().right);
 
     // Then I move to right
     const movedState2 = store.getState()['@@keys'][id];
@@ -119,11 +121,11 @@ describe('Binder', () => {
     movedCurrent2.selectedId.should.equal('03');
 
     // When
-    keyUp(keys.RIGHT); // I need to keyUp to unlock callback
+    keyUp(config().right); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
     stub.onCall(9).returns(secondLiBCR)
       .onCall(10).returns(thirdLiBCR);
-    keyDown(keys.RIGHT);
+    keyDown(config().right);
 
     // Then stay on last child
     const movedState3 = store.getState()['@@keys'][id];
@@ -133,8 +135,10 @@ describe('Binder', () => {
     movedCurrent3.selectedId.should.equal('03');
 
     // release keys
-    keyUp(keys.RIGHT);
+    keyUp(config().right);
     this.clock.tick(10);
+
+    binder.unmount();
   }));
 
   it('should navigate on bottom', sinon.test(function() {
@@ -160,7 +164,7 @@ describe('Binder', () => {
 
     // Given
     const id = "1";
-    mount(<Binder id={id}>
+    const binder = mount(<Binder id={id}>
       <ul>
         <li id="01"></li>
         <li id="02"></li>
@@ -183,7 +187,7 @@ describe('Binder', () => {
     // When
     stub.onCall(5).returns(firstLiBCR)
       .onCall(6).returns(secondLiBCR);
-    keyDown(keys.DOWN);
+    keyDown(config().down);
 
     // Then I move to bottom
     const movedState = store.getState()['@@keys'][id];
@@ -193,11 +197,11 @@ describe('Binder', () => {
     movedCurrent.selectedId.should.equal('02');
 
     // When
-    keyUp(keys.DOWN); // I need to keyUp to unlock callback
+    keyUp(config().down); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
     stub.onCall(7).returns(secondLiBCR)
       .onCall(8).returns(thirdLiBCR);
-    keyDown(keys.DOWN);
+    keyDown(config().down);
 
     // Then I move to bottom
     const movedState2 = store.getState()['@@keys'][id];
@@ -207,11 +211,11 @@ describe('Binder', () => {
     movedCurrent2.selectedId.should.equal('03');
 
     // When
-    keyUp(keys.DOWN); // I need to keyUp to unlock callback
+    keyUp(config().down); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
     stub.onCall(9).returns(secondLiBCR)
       .onCall(10).returns(thirdLiBCR);
-    keyDown(keys.DOWN);
+    keyDown(config().down);
 
     // Then stay on last child
     const movedState3 = store.getState()['@@keys'][id];
@@ -221,9 +225,10 @@ describe('Binder', () => {
     movedCurrent3.selectedId.should.equal('03');
 
     // release keys
-    keyUp(keys.DOWN);
+    keyUp(config().down);
     this.clock.tick(10);
 
+    binder.unmount();
   }));
 
   it('should exec callback on enter', sinon.test(function() {
@@ -238,7 +243,7 @@ describe('Binder', () => {
 
     // Given
     const id = "1";
-    mount(
+    const binder = mount(
       <Binder id={id} onEnter={spy}>
         <ul id="wrapper">
           <li id="01"></li>
@@ -248,14 +253,16 @@ describe('Binder', () => {
       });
 
     // When
-    keyDown(keys.ENTER);
+    keyDown(config().enter);
 
     // Then
     spy.should.have.been.calledOnce;
 
     // release keys
-    keyUp(keys.ENTER);
+    keyUp(config().enter);
     this.clock.tick(10);
+
+    binder.unmount();
   }));
 
   it('should call refreshState on update', sinon.test(function() {
@@ -283,7 +290,7 @@ describe('Binder', () => {
       .once();
 
     binder.update();
-
+    binder.unmount();
   }));
 
   it('should not call when key is blocked', sinon.test(function() {
@@ -298,7 +305,7 @@ describe('Binder', () => {
 
     // Given
     const id = "1";
-    mount(
+    const binder = mount(
       <Binder id={id} onEnter={spy}>
         <ul id="wrapper">
           <li id="01"></li>
@@ -308,16 +315,18 @@ describe('Binder', () => {
       });
 
     // When
-    block(keys.ENTER);
-    keyDown(keys.ENTER);
+    block(config().enter);
+    keyDown(config().enter);
 
     // Then
     spy.should.have.been.callCount(0);
 
     // release keys
-    keyUp(keys.ENTER);
-    unblock(keys.ENTER);
+    keyUp(config().enter);
+    unblock(config().enter);
     this.clock.tick(10);
+
+    binder.unmount();
   }));
 
   it('should not call when binder id is blocked', sinon.test(function() {
@@ -332,7 +341,7 @@ describe('Binder', () => {
 
     // Given
     const id = "1";
-    mount(
+    const binder = mount(
       <Binder id={id} onEnter={spy}>
         <ul id="wrapper">
           <li id="01"></li>
@@ -343,15 +352,17 @@ describe('Binder', () => {
 
     // When
     block(id);
-    keyDown(keys.ENTER);
+    keyDown(config().enter);
 
     // Then
     spy.should.have.been.callCount(0);
 
     // release keys
-    keyUp(keys.ENTER);
+    keyUp(config().enter);
     unblock(id);
     this.clock.tick(10);
+
+    binder.unmount();
   }));
 
 });

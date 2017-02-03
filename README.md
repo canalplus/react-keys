@@ -52,25 +52,20 @@ This is the entry point you need to define your redux store here. You can also d
 * `config` (object / *optional*) define keys to work with, this is the core concept for Keys components and it works as below 
 
 The default config of `react-keys` is 
-```json
+```javascript
 {
   left: 37,
   up: 38,
   right: 39,
   down: 40,
   enter: 13,
-  esc: 27,
-  back: 8,
-  menu: 120,
-  info: 118,
-  rec: 117,
-  nextprog: 33,
-  prevprog: 34,
-  shutdown: 123,
-  digits: [48, 49, 50, 51, 52, 53, 54, 55, 56, 57],
 }
 ```
-
+You can get your computed config by calling like that
+```javascript
+import { config } from 'react-keys';
+const getConfig = () => config();
+```
 You can use them by adding a prop to `Keys` component with the keyword `on` before the key with CamelCase (`onBack`, `onUp`, `onEnter`...)
 You can extend this config by adding your own object config that will extend the default config.
 
@@ -279,7 +274,8 @@ the keys store will manage the state of each binders (no matter how many they ar
       selectedId: '43'
     }
 }
-```
+````
+
 So you can listen the change of theses values for each binder
 
 ### Action launchers
@@ -293,7 +289,10 @@ For some reason you want sometime block a specific binder or a specific key, you
 
 * `bock(values or array of values(optional))` it can be keyCode or binderId. when no argument are passed, it blocks everything.
 * `unbock(values or array of values(optional))` it can be keyCode or binderId. when no argument are passed, it unblocks everything.
-* `blockExcept(values or array of values)` it can be keyCode or binderId. Note  when you want to except a binder, you have to refers its keyCode associated : `blockExcept('binderId', [keys.DOWN, keys.UP, keys.LEFT, keys.RIGHT, keys.ENTER]);`
+* `blockExcept(values or array of values)` it can be keyCode or binderId. Note  when you want to except a binder, you have to refers its keyCode associated 
+```javascript
+blockExcept('binderId', [config().down, config().up, config().left, config().right, config().enter]);
+```
 * `unblockExcept(values or array of values)` it can be keyCode or binderId.
 
 # Tests

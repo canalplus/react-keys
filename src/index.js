@@ -1,14 +1,13 @@
 import _Binder from './components/Binder';
-import _Keys from './components/Basic';
+import _Keys from './components/Keys';
 import _Carousel from './components/Carousel';
-import { _init } from './listener';
-import { UP, DOWN, LEFT, RIGHT, ENTER } from './keys';
+import { _init, getConfig } from './listener';
 import { _keyReducer } from './redux/reducer';
 import { _activeBinder, _updateBinder, _resetBinder, _resetCarousel } from './redux/actions';
 import { _selector } from './selector';
 import blocks from './blocks';
 
-export const keys = { UP, DOWN, LEFT, RIGHT, ENTER };
+export const config = getConfig;
 export const keysInit = _init;
 
 export const Keys = _Keys;

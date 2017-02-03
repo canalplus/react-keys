@@ -1,12 +1,11 @@
 /* eslint no-unused-vars:0 */
 import React, { Component, PropTypes } from 'react';
 import { build, getNext, getPrev } from '../engines/carousel';
-import { addListener, removeListener } from '../listener';
+import { addListener, removeListener, userConfig } from '../listener';
 import { isBlocked, block } from '../clock';
 import { isActive } from '../isActive';
 import { execCb } from '../funcHandler';
 import { addCarouselToStore, _updateBinder } from '../redux/actions';
-import { LEFT, RIGHT, DOWN, UP, ENTER } from '../keys';
 import { CAROUSEL_TYPE } from '../constants';
 import { hasDiff } from '../engines/helpers';
 
@@ -82,21 +81,21 @@ class Carousel extends Component {
     const { cursor } = this.state;
     if (isActive(this.props) && !isBlocked()) {
       switch (keyCode) {
-        case LEFT:
+        case userConfig.left:
           if (!circular && cursor === 0) return;
           this.performAction(getPrev(children.length, cursor));
           break;
-        case RIGHT:
+        case userConfig.right:
           if (!circular && cursor === children.length - 1) return;
           this.performAction(getNext(children.length, cursor));
           break;
-        case DOWN:
+        case userConfig.down:
           this.performCallback(onDownExit);
           break;
-        case UP:
+        case userConfig.up:
           this.performCallback(onUpExit);
           break;
-        case ENTER:
+        case userConfig.enter:
           this.performCallback(onEnter);
           break;
       }

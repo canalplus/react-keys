@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { isBlocked, block } from '../clock';
 import { addListener, removeListener, userConfig } from '../listener';
 import blocks from '../blocks';
-import config from '../config';
 import { execCb } from '../funcHandler';
 
 class Keys extends Component {
@@ -30,13 +29,16 @@ class Keys extends Component {
     this.listenerId = addListener(this.keysHandler, this);
   }
 
-  keysHandler(keyCode) {
-    if (this.props.active
+  isActive() {
+    return this.props.active
       && !isBlocked()
-      && !blocks.isBlocked(this.props.id)) {
-      const mergeConfig = { ...config, ...userConfig };
-      for (const key in mergeConfig) {
-        const value = mergeConfig[key];
+      && !blocks.isBlocked(this.props.id)
+  }
+
+  keysHandler(keyCode) {
+    if (this.isActive()) {
+      for (const key in userConfig) {
+        const value = userConfig[key];
         const action = key.toLowerCase().replace(/\b[a-z](?=[a-z]{1})/g,
           letter => letter.toUpperCase());
         if ((Number.isInteger(value) && value === keyCode)
