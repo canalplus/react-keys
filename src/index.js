@@ -1,6 +1,7 @@
 import _Binder from './components/Binder';
 import _Keys from './components/Keys';
 import _Carousel from './components/Carousel';
+import _catcher from './catcher';
 import { _init, getConfig } from './listener';
 import { _keyReducer } from './redux/reducer';
 import { _activeBinder, _updateBinder, _resetBinder, _resetCarousel } from './redux/actions';
@@ -16,6 +17,8 @@ export const Carousel = _Carousel;
 
 export const keysReducer = _keyReducer;
 export const keysSelector = _selector;
+
+export const catcher = _catcher;
 
 export const activeBinder = _activeBinder;
 export const updateBinder = _updateBinder;

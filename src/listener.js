@@ -2,6 +2,7 @@
 import { updatePressStatus } from './redux/actions';
 import blocks from './blocks';
 import config from './config';
+import { catcherWatcher } from './catcher';
 import { LONG_PRESS_TIMEOUT, NAME, DEBOUNCE_TIMEOUT } from './constants';
 
 export let keysListeners = [];
@@ -21,6 +22,7 @@ export const getConfig = () => userConfig;
 
 export function cb(e) {
   const keyCode = e.keyCode ? e.keyCode : e;
+  catcherWatcher(keyCode);
   if (blocks.isBlocked(keyCode)) return;
   if (!block) {
     eventCb(keyCode, 'short');

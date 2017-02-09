@@ -289,11 +289,14 @@ For some reason you want sometime block a specific binder or a specific key, you
 
 * `bock(values or array of values(optional))` it can be keyCode or binderId. when no argument are passed, it blocks everything.
 * `unbock(values or array of values(optional))` it can be keyCode or binderId. when no argument are passed, it unblocks everything.
-* `blockExcept(values or array of values)` it can be keyCode or binderId. Note  when you want to except a binder, you have to refers its keyCode associated 
+* `blockExcept(values or array of values)` it can be keyCode or binderId. Note  when you want toi except a binder, you have to refers its keyCode associated 
 ```javascript
 blockExcept('binderId', [config().down, config().up, config().left, config().right, config().enter]);
 ```
 * `unblockExcept(values or array of values)` it can be keyCode or binderId.
+
+### HOC
+* `catcher(sequence, callback)` it trigger the callback when a `string` sequence is catched
 
 # Tests
 
