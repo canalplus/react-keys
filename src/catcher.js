@@ -39,7 +39,7 @@ export default (catcher, cb) => BaseComponent => {
     }
 
     render() {
-      return <BaseComponent/>;
+      return React.createElement(BaseComponent, this.props);
     }
   };
 }
