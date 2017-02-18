@@ -9,12 +9,8 @@ module.exports = {
     libraryTarget: 'umd',
   },
   module: {
-    loaders: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        loader: 'babel',
-      },
+    rules: [
+      { test: /\.(js|jsx)$/, exclude: /node_modules/, use: 'babel-loader' },
     ],
   },
   externals: {
@@ -22,10 +18,6 @@ module.exports = {
     'react-dom': 'ReactDOM',
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
-    }),
+    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
   ],
 };

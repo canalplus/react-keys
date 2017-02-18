@@ -13,16 +13,16 @@ The need a fast way to bind keys to a react-powered UI with awesome redux for st
 ## Installation
 `react-keys` requires **React 0.14 or later**
 
-`npm i react-keys -S`
+`yarn install react-keys`
 
 ## Dependencies
 
 While not having direct dependencies, react-keys have to be used with `react`, `react-dom` and `redux` :
 
 ```javscript
-npm i react -S
-npm i react-dom -S
-npm i redux -S
+yarn install react
+yarn install react-dom
+yarn install redux
 ```
 
 # Link it with Redux (Otherwise it doesn't work !) 

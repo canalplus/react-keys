@@ -10,17 +10,12 @@ module.exports = {
   },
   devtool: 'source-map',
   module: {
-    loaders: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        loaders: ['babel'],
-      },
+    rules: [
+      { test: /\.(js|jsx)$/, exclude: /node_modules/, use: 'babel-loader' },
     ],
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
     new LiveReloadPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
   ],
 };
