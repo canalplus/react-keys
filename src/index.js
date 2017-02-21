@@ -5,7 +5,14 @@ import _catcher from './catcher';
 import { _init, getConfig } from './listener';
 import { _keyReducer } from './redux/reducer';
 import { _activeBinder, _updateBinder, _resetBinder, _resetCarousel } from './redux/actions';
-import { _selector } from './selector';
+import {
+  _selector,
+  _isCurrentBinder,
+  _isBinderActive,
+  _getBinderMarginLeft,
+  _getBinderMarginTop,
+  _getBinderSelectedId
+} from './selector';
 import blocks from './blocks';
 
 export const config = getConfig;
@@ -17,6 +24,11 @@ export const Carousel = _Carousel;
 
 export const keysReducer = _keyReducer;
 export const keysSelector = _selector;
+export const isCurrentBinder = _isCurrentBinder;
+export const isBinderActive = _isBinderActive;
+export const getBinderMarginLeft = _getBinderMarginLeft;
+export const getBinderMarginTop = _getBinderMarginTop;
+export const getBinderSelectedId = _getBinderSelectedId;
 
 export const catcher = _catcher;
 

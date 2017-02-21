@@ -63,6 +63,7 @@ export function addBinderToStore(props, type) {
     leftGap,
     downGap,
     enterStrategy,
+    position,
   } = props;
   globalStore.dispatch({
     type: ADD_BINDER_TO_STORE,
@@ -80,6 +81,7 @@ export function addBinderToStore(props, type) {
         leftGap,
         downGap,
         enterStrategy,
+        position,
         elements: elements || [],
         prevEl: null,
         prevDir: null,

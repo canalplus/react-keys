@@ -31,6 +31,7 @@ class Binder extends Component {
         React.PropTypes.array,
       ]),
       selector: PropTypes.string,
+      position: PropTypes.string,
       wrapper: PropTypes.string,
       filter: PropTypes.string,
       gap: PropTypes.number,

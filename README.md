@@ -13,16 +13,16 @@ The need a fast way to bind keys to a react-powered UI with awesome redux for st
 ## Installation
 `react-keys` requires **React 0.14 or later**
 
-`yarn install react-keys`
+`yarn add react-keys`
 
 ## Dependencies
 
 While not having direct dependencies, react-keys have to be used with `react`, `react-dom` and `redux` :
 
 ```javscript
-yarn install react
-yarn install react-dom
-yarn install redux
+yarn add react
+yarn add react-dom
+yarn add redux
 ```
 
 # Link it with Redux (Otherwise it doesn't work !) 
@@ -147,6 +147,7 @@ renderWithId('mosaic-1-1');
 * `filter` (string / *optional*) class name which exclude element 
 * `debounce` (number / *optional*) define a debounce for keys press in ms (default global debounce) 
 * `enterStrategy` (string / *optional*) define strape strategy on enter: `start` / `mirror` / `memory` / `none` (default `none`)
+* `position` (string / *optional*) to better handle for  enterStrategy (vertial/horizontal) (default `horizontal`)
 * `gap` (number / *optional*) reduce or increase elements margin (default `0`)`
 * `boundedGap` (number / *optional*) reduce or increase bounded margin (default `0`)
 * `topGap` (number / *optional*) reduce or increase last top margin (default `0`)
@@ -277,6 +278,14 @@ the keys store will manage the state of each binders (no matter how many they ar
 ````
 
 So you can listen the change of theses values for each binder
+
+### Selectors
+Selectors give you easy control on your data binder, here few selectors for common use. they return a function
+* `isCurrentBinder(binderId)` determine if your binder is the current binder
+* `isBinderActive(binderId)` determine if your binder is active
+* `getBinderMarginLeft(binderId)` determine marginLeft of a binder
+* `getBinderMarginTop(binderId)` determine marginTop of a binder
+* `getBinderSelectedId(binderId)` determine selectedId of a binder
 
 ### Action launchers
 * `activeBinder(binderId, selectedId(optional))` activate a new binder by giving its id (first id by default)

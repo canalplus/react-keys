@@ -144,7 +144,7 @@ class Carousel extends Component {
   render() {
     const { size, elWidth, childrenClassName, className } = this.props;
     const { elements } = this.state;
-    return <div className={className} style={{ position: 'absolute', overflow: 'hidden' }}>
+    return <div className={className} style={{ overflow: 'hidden' }}>
       {elements.map((element, inc) => {
         if (!element) return;
         const gap = (inc - 2) * elWidth;
