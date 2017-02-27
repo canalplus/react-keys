@@ -16,3 +16,6 @@ export const LONG_PRESS_TIMEOUT = 500;
 export const DEBOUNCE_TIMEOUT = 10;
 
 export const VERTICAL = 'vertical';
+
+export const NAVIGATION_CENTER = 'center';
+export const NAVIGATION_BOUND = 'bound';

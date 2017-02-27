@@ -1,12 +1,14 @@
 /* eslint no-unused-vars:0 */
 import React, { Component, PropTypes } from 'react';
 import { build, getNext, getPrev } from '../engines/carousel';
+import { isInsideLeft, isInsideRight } from '../engines/bounds';
+import { calculateElSpace } from '../engines/helpers';
 import { addListener, removeListener, userConfig } from '../listener';
 import { isBlocked, block } from '../clock';
 import { isActive } from '../isActive';
 import { execCb } from '../funcHandler';
 import { addCarouselToStore, _updateBinder } from '../redux/actions';
-import { CAROUSEL_TYPE } from '../constants';
+import { CAROUSEL_TYPE, NAVIGATION_BOUND, NAVIGATION_CENTER } from '../constants';
 import { hasDiff } from '../engines/helpers';
 
 class Carousel extends Component {
@@ -24,7 +26,9 @@ class Carousel extends Component {
       speed: PropTypes.number,
       debounce: PropTypes.number,
       elWidth: PropTypes.number,
+      navigation: PropTypes.string,
       circular: PropTypes.bool,
+      gap: PropTypes.number,
       className: PropTypes.string,
       childrenClassName: PropTypes.string,
       onChange: PropTypes.func,
@@ -43,6 +47,8 @@ class Carousel extends Component {
       circular: true,
       active: true,
       speed: 100,
+      gap: 0,
+      navigation: NAVIGATION_CENTER,
       debounce: 82,
       className: 'carousel',
       childrenClassName: 'carousel-child',
@@ -65,10 +71,13 @@ class Carousel extends Component {
       returnValue = [children];
     }
     let inc = 1;
-    while (returnValue.length < this.props.size + 4) {
+    while (returnValue.length <= this.props.size + 4) {
       const addedValues = returnValue.map(child => {
-        const props = { ...child.props, id: child.props.id + '_' + inc };
-        return { ...child, props: props };
+        const props = {
+          ...child.props,
+          id: child.props.id + '_' + inc,
+        };
+        return { ...child, props: props, key: child.props.id + '_' + inc };
       });
       returnValue = returnValue.concat(addedValues);
       inc++;
@@ -102,13 +111,18 @@ class Carousel extends Component {
     }
   }
 
+  isLeftMove(currentCursor, nextCursor, children) {
+    return (nextCursor < currentCursor)
+      || (currentCursor === 0 && nextCursor === children.length - 1);
+  }
+
   componentWillMount() {
     addCarouselToStore(this.props, CAROUSEL_TYPE);
     this.updateState(this.state.cursor, this.props.children);
   }
 
   componentWillUpdate({ index, children, updateIndex }) {
-    if (hasDiff(children, this.props.children)) {
+    if (hasDiff(children, this.props.children) || this.props.index !== index) {
       const cursor = updateIndex ? index : this.state.cursor;
       this.updateState(cursor, children);
     }
@@ -126,11 +140,16 @@ class Carousel extends Component {
   updateState(cursor, children) {
     const computedChildren = this.computeChildren(children);
     const { id, size, circular } = this.props;
+    if (!computedChildren[cursor]) {
+      return;
+    }
     this.selectedId = computedChildren[cursor].props.id;
     _updateBinder(id, { selectedId: this.selectedId, cursor, moving: true });
+    const elements = build(computedChildren, size + 4, cursor, circular);
     this.setState({
       cursor,
-      elements: build(computedChildren, size + 4, cursor, circular),
+      elements,
+      gaps: this.determineGap(elements, this.isLeftMove(this.state.cursor, cursor, elements)),
     });
   }
 
@@ -141,13 +160,39 @@ class Carousel extends Component {
     }
   }
 
+  determineGap(elements, leftMove) {
+    const { navigation, id, elWidth, size, gap } = this.props;
+    const { gaps } = this.state;
+    const standardGaps = gaps
+      || elements.map((el, inc) => (inc - (navigation === NAVIGATION_BOUND ? size : 2)) * elWidth + gap);
+
+    if (navigation === NAVIGATION_BOUND) {
+      const selected = calculateElSpace(document.getElementById(this.selectedId));
+      if (!selected) {
+        return standardGaps
+      }
+      const wrapper = calculateElSpace(document.getElementById(id));
+      if ((!leftMove && isInsideRight(wrapper, selected, gap))) {
+        return standardGaps.map(stdGap => stdGap + elWidth);
+      } else if (leftMove && isInsideLeft(wrapper, selected, gap)) {
+        return standardGaps.map(stdGap => stdGap - elWidth);
+      } else {
+        return standardGaps;
+      }
+    }
+
+    return standardGaps;
+  }
+
   render() {
-    const { size, elWidth, childrenClassName, className } = this.props;
-    const { elements } = this.state;
-    return <div className={className} style={{ overflow: 'hidden' }}>
+    const { size, elWidth, childrenClassName, className, id } = this.props;
+    const { elements, gaps } = this.state;
+    return <div id={id}
+                className={className}
+                style={{ overflow: 'hidden', position: 'absolute' }}>
       {elements.map((element, inc) => {
         if (!element) return;
-        const gap = (inc - 2) * elWidth;
+        const gap = gaps[inc];
         return <div key={element.props.id} className={childrenClassName} style={{
           marginLeft: `${gap}px`,
           position: 'absolute',

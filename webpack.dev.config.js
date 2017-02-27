@@ -8,7 +8,7 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: '/',
   },
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   module: {
     rules: [
       { test: /\.(js|jsx)$/, exclude: /node_modules/, use: 'babel-loader' },
