@@ -234,7 +234,7 @@ describe('redux/actions.js', () => {
       this.stub(helpers, 'calculateNewState').returns({ nextEl: { id: 'myId' } });
       this.mock(ensure)
         .expects('ensureMountedBinder')
-        .twice() // because of _updateBinderState
+        .once() // because of _updateBinderState
         .withArgs(binderId);
       determineNewState(binderId, 'dir');
     }));

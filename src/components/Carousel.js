@@ -164,7 +164,7 @@ class Carousel extends Component {
     const { navigation, id, elWidth, size, gap } = this.props;
     const { gaps } = this.state;
     const standardGaps = gaps
-      || elements.map((el, inc) => (inc - (navigation === NAVIGATION_BOUND ? size : 2)) * elWidth + gap);
+      || elements.map((el, inc) => (inc - (navigation === NAVIGATION_BOUND ? size - 1 : 2)) * elWidth + gap);
 
     if (navigation === NAVIGATION_BOUND) {
       const selected = calculateElSpace(document.getElementById(this.selectedId));

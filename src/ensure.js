@@ -1,3 +1,4 @@
+/*eslint no-console: ["error", { allow: ["warn", "error"] }] */
 import { globalStore } from './listener';
 import { NAME } from './constants';
 
@@ -17,8 +18,10 @@ export function ensureDispatch() {
 
 export function ensureMountedBinder(binderId) {
   if (!Object.keys(globalStore.getState()[NAME]).some(key => binderId === key)) {
-    throw new Error(`${prefix}You cannot activate a unmounted binder (${binderId}).`);
+    console.warn(`${prefix}You cannot activate a unmounted binder (${binderId}).`);
+    return false;
   }
+  return true;
 }
 
 export function isUnmountedBinder(binderId) {

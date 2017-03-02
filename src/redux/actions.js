@@ -100,7 +100,7 @@ export function addBinderToStore(props, type) {
 
 export function _activeBinder(binderId, nextElId, dir) {
   ensureDispatch();
-  ensureMountedBinder(binderId);
+  if (!ensureMountedBinder(binderId)) return;
   const state = globalStore.getState()[NAME];
   const toActivate = state[binderId];
   const selectedId = findIdByStrategy(state, binderId, nextElId);
@@ -118,7 +118,7 @@ export function _activeBinder(binderId, nextElId, dir) {
 
 export function _resetCarousel(binderId, wishedId) {
   ensureDispatch();
-  ensureMountedBinder(binderId);
+  if (!ensureMountedBinder(binderId)) return;
   const originalState = globalStore.getState()[NAME][binderId];
   const { elements, selectedId } = originalState;
   if (elements.length === 0) return;
@@ -135,7 +135,7 @@ export function _resetCarousel(binderId, wishedId) {
 
 export function _resetBinder(binderId, wishedId) {
   ensureDispatch();
-  ensureMountedBinder(binderId);
+  if (!ensureMountedBinder(binderId)) return;
   const originalState = globalStore.getState()[NAME][binderId];
   const { elements, selectedId } = originalState;
   const newSelectedId = wishedId || elements[0].id;
@@ -155,7 +155,7 @@ export function _resetBinder(binderId, wishedId) {
 
 export function _updateBinder(binderId, state) {
   ensureDispatch();
-  ensureMountedBinder(binderId);
+  if (!ensureMountedBinder(binderId)) return;
   const { active } = globalStore.getState()[NAME][binderId];
   globalStore.dispatch({
     type: UPDATE_BINDER_STATE,
@@ -173,7 +173,7 @@ export function _updateBinder(binderId, state) {
 
 export function updateBinderSelectedId(binderId, selectedId) {
   ensureDispatch();
-  ensureMountedBinder(binderId);
+  if (!ensureMountedBinder(binderId)) return;
   const margin = boundsMargin(selectedId, globalStore.getState()[NAME][binderId]);
   globalStore.dispatch({
     type: UPDATE_BINDER_SELECTED_KEY,
@@ -186,7 +186,7 @@ export function updateBinderSelectedId(binderId, selectedId) {
 
 export function updatePosition(binderId, selectedId) {
   ensureDispatch();
-  ensureMountedBinder(binderId);
+  if (!ensureMountedBinder(binderId)) return;
   resetFlipFlop(binderId);
   const margin = correctBoundsMargin(selectedId, globalStore.getState()[NAME][binderId]);
   globalStore.dispatch({
@@ -220,7 +220,7 @@ export function updatePressStatus(press, keyCode = null) {
 
 export function determineNewState(binderId, dir, cb, exitCb, _this) {
   ensureDispatch();
-  ensureMountedBinder(binderId);
+  if (!ensureMountedBinder(binderId)) return;
   const { nextEl, prevEl, prevDir, elements } = globalStore.getState()[NAME][binderId];
   const newState = calculateNewState(dir, nextEl, prevEl, prevDir, elements);
   globalStore.dispatch({
@@ -239,7 +239,7 @@ export function determineNewState(binderId, dir, cb, exitCb, _this) {
 
 export function resetFlipFlop(binderId) {
   ensureDispatch();
-  ensureMountedBinder(binderId);
+  if (!ensureMountedBinder(binderId)) return;
   const { enterStrategy } = globalStore.getState()[NAME][binderId];
   if (enterStrategy !== EXIT_STRATEGY_MEMORY) {
     globalStore.dispatch({
