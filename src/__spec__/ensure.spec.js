@@ -50,8 +50,7 @@ describe('ensure', () => {
 
     it('should throw exception when binderId does not exist', () => {
       const binderId = 'myId';
-      const fn = () => ensureMountedBinder(binderId);
-      fn.should.throw(Error);
+      ensureMountedBinder(binderId).should.be.false;
     });
 
   });
