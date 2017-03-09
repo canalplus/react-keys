@@ -70,6 +70,9 @@ class Carousel extends Component {
     if (Object.prototype.toString.call(children) !== '[object Array]') {
       returnValue = [children];
     }
+    if (returnValue.length === 0) {
+      return returnValue;
+    }
     let inc = 1;
     while (returnValue.length <= this.props.size + 4) {
       const addedValues = returnValue.map(child => {
