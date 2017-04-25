@@ -150,6 +150,7 @@ renderWithId('mosaic-1-1');
 * `position` (string / *optional*) to better handle for  enterStrategy (vertial/horizontal) (default `horizontal`)
 * `gap` (number / *optional*) reduce or increase elements margin (default `0`)`
 * `boundedGap` (number / *optional*) reduce or increase bounded margin (default `0`)
+* `triggerClick` (boolean / *optional*) elements will trigger a click event on enter event (default `true`)`
 * `topGap` (number / *optional*) reduce or increase last top margin (default `0`)
 * `rightGap` (number / *optional*) reduce or increase last right margin (default `0`)
 * `leftGap` (number / *optional*) reduce or increase last left margin (default `0`)

@@ -1,5 +1,6 @@
 /* eslint no-unused-vars:0 */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { refresh } from '../engines/mosaic';
 import { NAME, C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE } from '../constants';
@@ -26,9 +27,9 @@ class Binder extends Component {
   static get propTypes() {
     return {
       id: PropTypes.string.isRequired,
-      children: React.PropTypes.oneOfType([
-        React.PropTypes.object,
-        React.PropTypes.array,
+      children: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.array,
       ]),
       selector: PropTypes.string,
       position: PropTypes.string,
@@ -48,6 +49,7 @@ class Binder extends Component {
       onDown: PropTypes.func,
       onEnter: PropTypes.func,
       debounce: PropTypes.number,
+      triggerClick: PropTypes.bool,
       onLeftExit: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.func,
@@ -79,6 +81,7 @@ class Binder extends Component {
       rightGap: 0,
       leftGap: 0,
       downGap: 0,
+      triggerClick: true,
     };
   }
 
@@ -102,6 +105,7 @@ class Binder extends Component {
         onDown,
         onDownExit,
         onEnter,
+        triggerClick,
       } = this.props;
       const { nextEl } = globalStore.getState()['@@keys'][id];
       switch (keyCode) {
@@ -118,6 +122,9 @@ class Binder extends Component {
           this.performAction(C_DOWN, onDown, onDownExit);
           break;
         case userConfig.enter:
+          if (triggerClick) {
+            document.getElementById(nextEl.id).click();
+          }
           if (onEnter) {
             block();
             execCb(onEnter, nextEl, this);

@@ -1,5 +1,6 @@
 /* eslint no-unused-vars:0 */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { build, getNext, getPrev } from '../engines/carousel';
 import { isInsideLeft, isInsideRight } from '../engines/bounds';
 import { calculateElSpace } from '../engines/helpers';
@@ -15,9 +16,9 @@ class Carousel extends Component {
 
   static get propTypes() {
     return {
-      children: React.PropTypes.oneOfType([
-        React.PropTypes.object,
-        React.PropTypes.array,
+      children: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.array,
       ]),
       id: PropTypes.string.isRequired,
       active: PropTypes.bool,
@@ -28,6 +29,7 @@ class Carousel extends Component {
       elWidth: PropTypes.number,
       navigation: PropTypes.string,
       circular: PropTypes.bool,
+      triggerClick: PropTypes.bool,
       gap: PropTypes.number,
       className: PropTypes.string,
       childrenClassName: PropTypes.string,
@@ -45,6 +47,7 @@ class Carousel extends Component {
       size: 3,
       elWidth: 100,
       circular: true,
+      triggerClick: true,
       active: true,
       speed: 100,
       gap: 0,
@@ -89,8 +92,8 @@ class Carousel extends Component {
   }
 
   keysHandler(keyCode) {
-    const { children, circular, onDownExit, onUpExit, onEnter } = this.props;
-    const { cursor } = this.state;
+    const { children, circular, onDownExit, onUpExit, onEnter, triggerClick } = this.props;
+    const { cursor, elements } = this.state;
     if (isActive(this.props) && !isBlocked()) {
       switch (keyCode) {
         case userConfig.left:
@@ -108,6 +111,9 @@ class Carousel extends Component {
           this.performCallback(onUpExit);
           break;
         case userConfig.enter:
+          if (triggerClick) {
+            document.getElementById(elements[cursor].props.id).click();
+          }
           this.performCallback(onEnter);
           break;
       }
@@ -196,7 +202,9 @@ class Carousel extends Component {
       {elements.map((element, inc) => {
         if (!element) return;
         const gap = gaps[inc];
-        return <div key={element.props.id} className={childrenClassName} style={{
+        return <div id={element.props.id}
+                    key={element.props.id}
+                    className={childrenClassName} style={{
           marginLeft: `${gap}px`,
           position: 'absolute',
           width: `${elWidth}px`,

@@ -1,10 +1,11 @@
-import jsdom from 'jsdom';
+import { JSDOM } from 'jsdom';
 
-global.document = jsdom.jsdom('<!doctype html><html><body><div id="container"></div></body></html>');
-global.window = document.defaultView;
-global.navigator = global.window.navigator;
+const window = (new JSDOM('<!doctype html><html><body><div id="container"></div></body></html>')).window;
+global.window = window.document.defaultView;
+global.document = window.document;
+global.navigator = window.navigator;
 
-const blacklist = Object.keys(global);
+const blacklist = Object.keys(window);
 blacklist.push('constructor');
 
 for (const key in window) {

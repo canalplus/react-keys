@@ -14,7 +14,7 @@ import {
   build,
 } from '../mosaic';
 import { expect } from 'chai';
-import jsdom from 'jsdom';
+import { JSDOM } from 'jsdom';
 
 describe('engine/mosaic.js', () => {
   describe('calculDowScore', () => {
@@ -131,13 +131,13 @@ describe('engine/mosaic.js', () => {
     });
   });
   it('createList should return an array', () => {
-    const dom = jsdom.jsdom('<li id="0"></li><li id="1"></li><li id="2"></li>');
-    createList(dom, 'li').should.be.an.array;
-    createList(dom, 'li').should.have.lengthOf(3);
+    const { document } = (new JSDOM('<li id="0"></li><li id="1"></li><li id="2"></li>')).window;
+    createList(document, 'li').should.be.an.array;
+    createList(document, 'li').should.have.lengthOf(3);
   });
   it('build should return an array', () => {
-    const dom = jsdom.jsdom('<li id="0"></li><li id="1"></li><li id="2"></li>');
-    const list = createList(dom, 'li');
+    const { document } = (new JSDOM('<li id="0"></li><li id="1"></li><li id="2"></li>')).window;
+    const list = createList(document, 'li');
     const options = {};
     const builded = build(list, options);
     builded[0].id.should.equal('0');

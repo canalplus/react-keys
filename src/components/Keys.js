@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { isBlocked, block } from '../clock';
 import { addListener, removeListener, userConfig } from '../listener';
 import blocks from '../blocks';
@@ -8,9 +9,9 @@ class Keys extends Component {
 
   static get propTypes() {
     return {
-      children: React.PropTypes.oneOfType([
-        React.PropTypes.object,
-        React.PropTypes.array,
+      children: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.array,
       ]),
       id: PropTypes.string.isRequired,
       debounce: PropTypes.number,

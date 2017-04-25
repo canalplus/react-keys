@@ -38,13 +38,13 @@ function clickHandler() {
 const Card = ({ id, active }) => {
   const style = active ? 'selected' : '';
   return (
-    <li id={id} className={style}>#{id}</li>
+    <li id={id} className={style} onClick={e => console.log(e)}>#{id}</li>
   );
 };
 
 const PureStrape = ({ selectedId, marginLeft, binderId, active, onDownExit, onUpExit }) => {
   const listStyle = {
-    marginLeft: -marginLeft,
+    marginLeft,
   };
   return (
     <Binder
@@ -76,90 +76,11 @@ const PureStrape = ({ selectedId, marginLeft, binderId, active, onDownExit, onUp
 };
 
 const Strape1 = connect(() => keysSelector('strape-1')())(PureStrape);
-const Strape2 = connect(() => keysSelector('strape-2')())(PureStrape);
 
-const PureMosaic = ({ binder1, binder2, lool }) => {
-  const { selectedId, active, marginTop, marginLeft } = binder1;
-  const selectedId2 = binder2.selectedId;
-  const active2 = binder2.active;
+const PureMosaic = () => {
   return (
     <div>
-      <Keys id="rk2" on65={(keyCode) => console.log('OK', keyCode)}/>
-      <Keys id="rk" onEnter={() => console.log('ENTER')}/>
-      <Binder id="binder1"
-              filter="disabled"
-              wrapper="#myWrapper"
-              selector="td"
-              onDownExit="strape-1"
-              enterStrategy="memory">
-        <div id="myWrapper" style={{
-          width: '200px',
-          height: '200px',
-          overflow: 'hidden'
-        }}>
-          <table colSpan="2"
-                 style={{
-                   width: '300px',
-                   marginTop: `-${marginTop}px`,
-                   marginLeft: `-${marginLeft}px`
-                 }}>
-            <tbody>
-            <tr>
-              <td id="15" className={selectedId === '15' && active ? 'selected' : ''}>15</td>
-              <td id="16" className={selectedId === '16' && active ? 'selected' : ''}>16</td>
-              <td id="17" className={selectedId === '17' && active ? 'selected' : ''}>17</td>
-              <td id="18" className={selectedId === '18' && active ? 'selected' : ''}>18</td>
-            </tr>
-
-            <tr>
-              <td id="1" rowSpan="2" className={selectedId === '1' && active ? 'selected' : ''}>1
-              </td>
-              <td id="2" className={selectedId === '2' && active ? 'selected' : ''}>2</td>
-              <td id="5" className={selectedId === '5' && active ? 'selected' : ''}>5</td>
-              <td id="6" rowSpan="2" className={selectedId === '6' && active ? 'selected' : ''}>6
-              </td>
-            </tr>
-            <tr>
-              <td id="3" className={selectedId === '3' && active ? 'selected' : ''}>3</td>
-              <td id="4" className={selectedId === '4' && active ? 'selected' : ''}>4</td>
-            </tr>
-            <tr>
-              <td id="7" className={selectedId === '7' && active ? 'selected' : ''}>7</td>
-              <td id="8" className={selectedId === '8' && active ? 'selected' : ''}>8</td>
-              <td id="9" className={selectedId === '9' && active ? 'selected' : ''}>9</td>
-              <td id="10" className={selectedId === '10' && active ? 'selected' : 'disabled'}>10
-              </td>
-            </tr>
-            <tr>
-              <td id="11" className={selectedId === '11' && active ? 'selected' : ''}>11</td>
-              <td id="12" className={selectedId === '12' && active ? 'selected' : ''}>12</td>
-              <td id="13" className={selectedId === '13' && active ? 'selected' : ''}>13</td>
-              <td id="14" className={selectedId === '14' && active ? 'selected' : ''}>14</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td id="20" className={selectedId === '20' && active ? 'selected' : ''}>20</td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td id="19" colSpan="4" className={selectedId === '19' && active ? 'selected' : ''}>19
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </Binder>
-      <Strape1 binderId="strape-1" onDownExit="strape-2" onUpExit="binder1" active={false}/>
-      <Strape2 binderId="strape-2" onUpExit="strape-1" onDownExit="binder2" active={false}/>
-      {lool ? <Binder id="binder2" onUpExit="strape-2">
-        <ul>
-          <li id="43" className={selectedId2 === '43' && active2 ? 'selected' : ''}>LALA</li>
-          <li id="44" className={selectedId2 === '44' && active2 ? 'selected' : ''}>LILI</li>
-          <li id="45" className={selectedId2 === '45' && active2 ? 'selected' : ''}>LULU</li>
-        </ul>
-      </Binder> : null}
-      <button onClick={clickHandler}>ON CLICK</button>
+      <Strape1 binderId="strape-1" onDownExit="strape-2" onUpExit="binder1" active={true}/>
     </div>
   );
 };
