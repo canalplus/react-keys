@@ -1,6 +1,6 @@
 {
   "name": "react-keys",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "private": false,
   "description": "Simple way to bind keyboard to react thinking with flux",
   "keywords": [
