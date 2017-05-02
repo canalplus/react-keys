@@ -50,6 +50,7 @@ class Binder extends Component {
       onEnter: PropTypes.func,
       debounce: PropTypes.number,
       triggerClick: PropTypes.bool,
+      longPress: PropTypes.bool,
       onLeftExit: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.func,
@@ -81,6 +82,7 @@ class Binder extends Component {
       rightGap: 0,
       leftGap: 0,
       downGap: 0,
+      longPress: true,
       triggerClick: true,
     };
   }
@@ -90,10 +92,11 @@ class Binder extends Component {
     this.listenerId = addListener(this.keysHandler, this);
   }
 
-  keysHandler(keyCode) {
+  keysHandler(keyCode, longPress) {
     if (isActive(this.props)
       && !isBlocked()
-      && !blocks.isBlocked(this.props.id)) {
+      && !blocks.isBlocked(this.props.id)
+      && (!longPress || longPress && this.props.longPress)) {
       const {
         id,
         onLeft,

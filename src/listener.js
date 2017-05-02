@@ -12,7 +12,6 @@ export let globalStore = {
   },
 };
 export let fired = false;
-export let block = false;
 export let pressTimeout = null;
 export let eventCb = null;
 export let rkDebounce = DEBOUNCE_TIMEOUT;
@@ -20,33 +19,35 @@ export let userConfig = config;
 
 export const getConfig = () => userConfig;
 
-export function cb(e) {
-  const keyCode = e.keyCode ? e.keyCode : e;
-  catcherWatcher(keyCode);
-  if (blocks.isBlocked(keyCode)) return;
-  if (!block) {
-    eventCb(keyCode, 'short');
-  }
-  if (!block || globalStore.getState()[NAME]['PRESS'].press) {
-    for (const listener of keysListeners) {
-      listener.callback.call(listener.context, keyCode);
-    }
-    block = true;
-  }
-  if (!fired) {
-    fired = true;
-    pressTimeout = setTimeout(() => {
-      eventCb(keyCode, 'long');
-      updatePressStatus(true, keyCode);
-    }, LONG_PRESS_TIMEOUT);
+export function callListeners(keyCode, longPress) {
+  for (const listener of keysListeners) {
+    listener.callback.call(listener.context, keyCode, longPress);
   }
 }
 
-export function cbRelease() {
+export function cb(e) {
+  const keyCode = e.keyCode ? e.keyCode : e;
+  if (!fired) {
+    pressTimeout = setTimeout(() => {
+      eventCb(keyCode, 'long');
+      updatePressStatus(true, keyCode);
+      fired = true;
+    }, LONG_PRESS_TIMEOUT);
+  }
+  if (globalStore.getState()[NAME]['PRESS'].press) {
+    callListeners(keyCode, true);
+  }
+}
+
+export function cbRelease(e) {
+  const keyCode = e.keyCode ? e.keyCode : e;
+  catcherWatcher(keyCode);
+  if (blocks.isBlocked(keyCode)) return;
+  eventCb(keyCode, 'short');
+  callListeners(keyCode, false);
   clearTimeout(pressTimeout);
-  block = false;
+  updatePressStatus(false);
   fired = false;
-  updatePressStatus(fired);
 }
 
 

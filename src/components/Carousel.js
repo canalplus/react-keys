@@ -205,7 +205,7 @@ class Carousel extends Component {
         return <div id={element.props.id}
                     key={element.props.id}
                     className={childrenClassName} style={{
-          transform: `translateX(${gap}px)`,
+          marginLeft: `${gap}px`,
           position: 'absolute',
           width: `${elWidth}px`,
           display: 'block',

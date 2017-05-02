@@ -27,9 +27,9 @@ describe('Binder', () => {
     const wrapperBCR = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     this.stub(window.Element.prototype, 'getBoundingClientRect')
-      .onCall(0).returns(fistChild)
-      .onCall(1).returns(wrapperBCR)
-      .onCall(2).returns(fistChild);
+        .onCall(0).returns(fistChild)
+        .onCall(1).returns(wrapperBCR)
+        .onCall(2).returns(fistChild);
 
     // Given
     const id = "1";
@@ -68,10 +68,10 @@ describe('Binder', () => {
 
     const stub = this.stub(window.Element.prototype, 'getBoundingClientRect');
     stub.onCall(0).returns(firstLiBCR)
-      .onCall(1).returns(secondLiBCR)
-      .onCall(2).returns(thirdLiBCR)
-      .onCall(3).returns(wrapperBCR)
-      .onCall(4).returns(firstLiBCR);
+        .onCall(1).returns(secondLiBCR)
+        .onCall(2).returns(thirdLiBCR)
+        .onCall(3).returns(wrapperBCR)
+        .onCall(4).returns(firstLiBCR);
 
     // Given
     const id = "1";
@@ -96,8 +96,9 @@ describe('Binder', () => {
 
     // When
     stub.onCall(5).returns(firstLiBCR)
-      .onCall(6).returns(secondLiBCR);
+        .onCall(6).returns(secondLiBCR);
     keyDown(config().right);
+    keyUp(config().right); // I need to keyUp to unlock callback
 
     // Then I move to right
     const movedState = store.getState()['@@keys'][id];
@@ -107,11 +108,11 @@ describe('Binder', () => {
     movedCurrent.selectedId.should.equal('02');
 
     // When
-    keyUp(config().right); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
     stub.onCall(7).returns(secondLiBCR)
-      .onCall(8).returns(thirdLiBCR);
+        .onCall(8).returns(thirdLiBCR);
     keyDown(config().right);
+    keyUp(config().right); // I need to keyUp to unlock callback
 
     // Then I move to right
     const movedState2 = store.getState()['@@keys'][id];
@@ -121,11 +122,11 @@ describe('Binder', () => {
     movedCurrent2.selectedId.should.equal('03');
 
     // When
-    keyUp(config().right); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
     stub.onCall(9).returns(secondLiBCR)
-      .onCall(10).returns(thirdLiBCR);
+        .onCall(10).returns(thirdLiBCR);
     keyDown(config().right);
+    keyUp(config().right);
 
     // Then stay on last child
     const movedState3 = store.getState()['@@keys'][id];
@@ -135,7 +136,6 @@ describe('Binder', () => {
     movedCurrent3.selectedId.should.equal('03');
 
     // release keys
-    keyUp(config().right);
     this.clock.tick(10);
 
     binder.unmount();
@@ -157,10 +157,10 @@ describe('Binder', () => {
 
     const stub = this.stub(window.Element.prototype, 'getBoundingClientRect');
     stub.onCall(0).returns(firstLiBCR)
-      .onCall(1).returns(secondLiBCR)
-      .onCall(2).returns(thirdLiBCR)
-      .onCall(3).returns(wrapperBCR)
-      .onCall(4).returns(firstLiBCR);
+        .onCall(1).returns(secondLiBCR)
+        .onCall(2).returns(thirdLiBCR)
+        .onCall(3).returns(wrapperBCR)
+        .onCall(4).returns(firstLiBCR);
 
     // Given
     const id = "1";
@@ -186,8 +186,9 @@ describe('Binder', () => {
 
     // When
     stub.onCall(5).returns(firstLiBCR)
-      .onCall(6).returns(secondLiBCR);
+        .onCall(6).returns(secondLiBCR);
     keyDown(config().down);
+    keyUp(config().down); // I need to keyUp to unlock callback
 
     // Then I move to bottom
     const movedState = store.getState()['@@keys'][id];
@@ -197,11 +198,11 @@ describe('Binder', () => {
     movedCurrent.selectedId.should.equal('02');
 
     // When
-    keyUp(config().down); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
     stub.onCall(7).returns(secondLiBCR)
-      .onCall(8).returns(thirdLiBCR);
+        .onCall(8).returns(thirdLiBCR);
     keyDown(config().down);
+    keyUp(config().down); // I need to keyUp to unlock callback
 
     // Then I move to bottom
     const movedState2 = store.getState()['@@keys'][id];
@@ -211,11 +212,11 @@ describe('Binder', () => {
     movedCurrent2.selectedId.should.equal('03');
 
     // When
-    keyUp(config().down); // I need to keyUp to unlock callback
     this.clock.tick(10); // I need to tick 10 to unlock Binder
     stub.onCall(9).returns(secondLiBCR)
-      .onCall(10).returns(thirdLiBCR);
+        .onCall(10).returns(thirdLiBCR);
     keyDown(config().down);
+    keyUp(config().down);
 
     // Then stay on last child
     const movedState3 = store.getState()['@@keys'][id];
@@ -224,8 +225,6 @@ describe('Binder', () => {
     movedCurrent3.binderId.should.equal('1');
     movedCurrent3.selectedId.should.equal('03');
 
-    // release keys
-    keyUp(config().down);
     this.clock.tick(10);
 
     binder.unmount();
@@ -237,9 +236,9 @@ describe('Binder', () => {
     const wrapperBCR = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     this.stub(window.Element.prototype, 'getBoundingClientRect')
-      .onCall(0).returns(fistChild)
-      .onCall(1).returns(wrapperBCR)
-      .onCall(2).returns(fistChild);
+        .onCall(0).returns(fistChild)
+        .onCall(1).returns(wrapperBCR)
+        .onCall(2).returns(fistChild);
 
     // Given
     const id = "1";
@@ -254,12 +253,11 @@ describe('Binder', () => {
 
     // When
     keyDown(config().enter);
+    keyUp(config().enter);
 
     // Then
     spy.should.have.been.calledOnce;
 
-    // release keys
-    keyUp(config().enter);
     this.clock.tick(10);
 
     binder.unmount();
@@ -270,9 +268,9 @@ describe('Binder', () => {
     const wrapperBCR = { top: 0, left: 0, right: 20, bottom: 10, width: 20, height: 10 };
     const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     this.stub(window.Element.prototype, 'getBoundingClientRect')
-      .onCall(0).returns(fistChild)
-      .onCall(1).returns(wrapperBCR)
-      .onCall(2).returns(fistChild);
+        .onCall(0).returns(fistChild)
+        .onCall(1).returns(wrapperBCR)
+        .onCall(2).returns(fistChild);
 
     // Given
     let children = <li id="01"></li>;
@@ -286,8 +284,8 @@ describe('Binder', () => {
       });
 
     this.mock(Binder.prototype)
-      .expects('refreshState')
-      .once();
+        .expects('refreshState')
+        .once();
 
     binder.update();
     binder.unmount();
@@ -299,9 +297,9 @@ describe('Binder', () => {
     const wrapperBCR = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     this.stub(window.Element.prototype, 'getBoundingClientRect')
-      .onCall(0).returns(fistChild)
-      .onCall(1).returns(wrapperBCR)
-      .onCall(2).returns(fistChild);
+        .onCall(0).returns(fistChild)
+        .onCall(1).returns(wrapperBCR)
+        .onCall(2).returns(fistChild);
 
     // Given
     const id = "1";
@@ -335,9 +333,9 @@ describe('Binder', () => {
     const wrapperBCR = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     const fistChild = { top: 0, left: 0, right: 10, bottom: 10, width: 10, height: 10 };
     this.stub(window.Element.prototype, 'getBoundingClientRect')
-      .onCall(0).returns(fistChild)
-      .onCall(1).returns(wrapperBCR)
-      .onCall(2).returns(fistChild);
+        .onCall(0).returns(fistChild)
+        .onCall(1).returns(wrapperBCR)
+        .onCall(2).returns(fistChild);
 
     // Given
     const id = "1";
