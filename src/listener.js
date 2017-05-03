@@ -12,6 +12,7 @@ export let globalStore = {
   },
 };
 export let fired = false;
+export let clicked = false;
 export let pressTimeout = null;
 export let eventCb = null;
 export let rkDebounce = DEBOUNCE_TIMEOUT;
@@ -19,14 +20,23 @@ export let userConfig = config;
 
 export const getConfig = () => userConfig;
 
-export function callListeners(keyCode, longPress) {
+export function callListeners(keyCode, longPress, click = false) {
   for (const listener of keysListeners) {
-    listener.callback.call(listener.context, keyCode, longPress);
+    listener.callback.call(listener.context, keyCode, longPress, click);
+  }
+}
+
+export function callTriggerClick(keyCode) {
+  if (keyCode === userConfig.enter && !clicked) {
+    callListeners(keyCode, false, true);
+    clicked = true;
   }
 }
 
 export function cb(e) {
   const keyCode = e.keyCode ? e.keyCode : e;
+  if (blocks.isBlocked(keyCode)) return;
+  callTriggerClick(keyCode);
   if (!fired) {
     pressTimeout = setTimeout(() => {
       eventCb(keyCode, 'long');
@@ -41,13 +51,14 @@ export function cb(e) {
 
 export function cbRelease(e) {
   const keyCode = e.keyCode ? e.keyCode : e;
-  catcherWatcher(keyCode);
   if (blocks.isBlocked(keyCode)) return;
+  catcherWatcher(keyCode);
   eventCb(keyCode, 'short');
   callListeners(keyCode, false);
   clearTimeout(pressTimeout);
   updatePressStatus(false);
   fired = false;
+  clicked = false;
 }
 
 

@@ -92,25 +92,32 @@ class Binder extends Component {
     this.listenerId = addListener(this.keysHandler, this);
   }
 
-  keysHandler(keyCode, longPress) {
+  keysHandler(keyCode, longPress, click) {
+    const {
+      id,
+      onLeft,
+      onLeftExit,
+      onUp,
+      onUpExit,
+      onRight,
+      onRightExit,
+      onDown,
+      onDownExit,
+      onEnter,
+      triggerClick,
+    } = this.props;
+    const { nextEl } = globalStore.getState()['@@keys'][id];
+    if (click
+      && triggerClick
+      && isActive(this.props)
+      && !isBlocked()
+      && !blocks.isBlocked(this.props.id)) {
+      document.getElementById(nextEl.id).click();
+    }
     if (isActive(this.props)
       && !isBlocked()
       && !blocks.isBlocked(this.props.id)
       && (!longPress || longPress && this.props.longPress)) {
-      const {
-        id,
-        onLeft,
-        onLeftExit,
-        onUp,
-        onUpExit,
-        onRight,
-        onRightExit,
-        onDown,
-        onDownExit,
-        onEnter,
-        triggerClick,
-      } = this.props;
-      const { nextEl } = globalStore.getState()['@@keys'][id];
       switch (keyCode) {
         case userConfig.left:
           this.performAction(C_LEFT, onLeft, onLeftExit);
@@ -125,9 +132,6 @@ class Binder extends Component {
           this.performAction(C_DOWN, onDown, onDownExit);
           break;
         case userConfig.enter:
-          if (triggerClick) {
-            document.getElementById(nextEl.id).click();
-          }
           if (onEnter) {
             block();
             execCb(onEnter, nextEl, this);

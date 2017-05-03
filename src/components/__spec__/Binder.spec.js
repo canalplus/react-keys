@@ -315,12 +315,12 @@ describe('Binder', () => {
     // When
     block(config().enter);
     keyDown(config().enter);
+    keyUp(config().enter);
 
     // Then
     spy.should.have.been.callCount(0);
 
     // release keys
-    keyUp(config().enter);
     unblock(config().enter);
     this.clock.tick(10);
 
