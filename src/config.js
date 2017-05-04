@@ -5,3 +5,5 @@ export default {
   down: 40,
   enter: 13,
 };
+
+export const AVAILABLE_FOR_LONG_PRESS = [37, 38, 39, 40];

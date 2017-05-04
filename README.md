@@ -50,6 +50,7 @@ This is the entry point you need to define your redux store here. You can also d
 * `eventCb` (function / *optional*) Define a callback triggered when short/long press are done
 * `debounce` (number / *optional*) define a global debounce in ms, it can be overrided by components (default : `10`)
 * `config` (object / *optional*) define keys to work with, this is the core concept for Keys components and it works as below 
+* `longPressTouch` (array / *optional*) define list of keycode active for long press handling ( default : `[37, 38, 39, 40]`) 
 
 The default config of `react-keys` is 
 ```javascript

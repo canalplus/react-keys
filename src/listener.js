@@ -1,7 +1,7 @@
 /* eslint import/no-mutable-exports:0 */
 import { updatePressStatus } from './redux/actions';
 import blocks from './blocks';
-import config from './config';
+import config, { AVAILABLE_FOR_LONG_PRESS } from './config';
 import { catcherWatcher } from './catcher';
 import { LONG_PRESS_TIMEOUT, NAME, DEBOUNCE_TIMEOUT } from './constants';
 
@@ -17,6 +17,7 @@ export let pressTimeout = null;
 export let eventCb = null;
 export let rkDebounce = DEBOUNCE_TIMEOUT;
 export let userConfig = config;
+export let availableForLongPress = AVAILABLE_FOR_LONG_PRESS;
 
 export const getConfig = () => userConfig;
 
@@ -37,7 +38,7 @@ export function cb(e) {
   const keyCode = e.keyCode ? e.keyCode : e;
   if (blocks.isBlocked(keyCode)) return;
   callTriggerClick(keyCode);
-  if (!fired) {
+  if (!fired && availableForLongPress.indexOf(keyCode) !== -1) {
     pressTimeout = setTimeout(() => {
       eventCb(keyCode, 'long');
       updatePressStatus(true, keyCode);
@@ -67,6 +68,7 @@ export function _init(ops) {
   rkDebounce = ops && ops.debounce ? ops.debounce : DEBOUNCE_TIMEOUT;
   eventCb = ops && ops.eventCb ? ops.eventCb : () => ({});
   userConfig = ops && ops.config ? { ...userConfig, ...ops.config } : userConfig;
+  availableForLongPress = ops && ops.longPressTouch ? ops.longPressTouch : availableForLongPress;
   if (!ops || (ops && !ops.bindkeys)) {
     document.addEventListener('keydown', cb);
     document.addEventListener('keyup', cbRelease);
