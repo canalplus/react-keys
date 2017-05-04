@@ -1,6 +1,7 @@
 import _Binder from './components/Binder';
 import _Keys from './components/Keys';
 import _Carousel from './components/Carousel';
+import _Catcher from './components/Catcher';
 import _catcher from './catcher';
 import { _init, getConfig } from './listener';
 import { _keyReducer } from './redux/reducer';
@@ -21,6 +22,7 @@ export const keysInit = _init;
 export const Keys = _Keys;
 export const Binder = _Binder;
 export const Carousel = _Carousel;
+export const Catcher = _Catcher;
 
 export const keysReducer = _keyReducer;
 export const keysSelector = _selector;
