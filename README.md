@@ -98,6 +98,27 @@ const Component = ({ isActive }) => {
 * `active` (boolean / *optional*) determine is `Keys` component is active (default `true`)
 * `debounce` (number / *optional*) define a debounce for keys press in ms (default global debounce)
 
+# Catcher
+A basic component that can execute a *callback* when observing a *sequence*. This component has two props:
+* `sequence` (string / **mandatory**) the sequence to observe.
+* `cb` (function / **mandatory**) the callback to execute.
+
+```javascript
+import { Catcher } from 'react-keys';
+
+const ComponentWithCatcher = () => {
+  return(
+    <div>
+      <Catcher sequence="424242"
+            cb={ () => console.log('Yeah ! Cheat code activated') }/>
+    </div>
+  );
+}
+
+// When 42 is enter 3 times
+// It will print on console 'Yeah ! Cheat code activated'
+```
+
 # Binder
 Fancy React component to deal with space navigation. It handles communication with multiple `Binder` compoments to create something great !
 
