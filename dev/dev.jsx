@@ -57,6 +57,7 @@ const PureStrape = ({ selectedId, marginLeft, binderId, active, onDownExit, onUp
       gap={100}
       boundedGap={10}
       onDownExit={onDownExit}
+      onEnter={() => console.log('ENTER LOG')}
       onUpExit={onUpExit}>
       <div id="wrapper">
         <ul style={listStyle}>

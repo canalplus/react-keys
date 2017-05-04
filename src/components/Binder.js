@@ -113,6 +113,7 @@ class Binder extends Component {
       && !isBlocked()
       && !blocks.isBlocked(this.props.id)) {
       document.getElementById(nextEl.id).click();
+      return;
     }
     if (isActive(this.props)
       && !isBlocked()
