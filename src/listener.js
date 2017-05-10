@@ -89,4 +89,5 @@ export function addListener(callback, context) {
 
 export function removeListener(id) {
   keysListeners = keysListeners.filter(listener => listener.id !== id);
+  return null;
 }

@@ -3,6 +3,7 @@ import Binder from '../Binder';
 import { createStore, combineReducers } from 'redux';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
+import { expect } from 'chai';
 import { keyDown, keyUp } from '../../../test/helpers';
 import { keysInit, keysReducer, block, unblock, config } from '../../';
 
@@ -362,5 +363,27 @@ describe('Binder', () => {
 
     binder.unmount();
   }));
+
+  it('should remove binder state when component is unmounted', () => {
+    // Given
+    const binder = mount(<Binder id="batman"/>);
+
+    // When
+    binder.unmount();
+
+    // Then
+    expect(store.getState()['@@keys'].batman).to.equal(undefined);
+  });
+
+  it('should not remove component when enterStrategy is "memory"', () => {
+    // Given
+    const binder = mount(<Binder id="robin" enterStrategy="memory"/>);
+
+    // When
+    binder.unmount();
+
+    // Then
+    expect(store.getState()['@@keys'].robin.id).to.equal('robin');
+  });
 
 });

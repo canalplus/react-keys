@@ -13,6 +13,7 @@ export const UPDATE_BINDER_STATE = [NAME, '/UPDATE_BINDER_STATE'].join('');
 export const UPDATE_CURRENT = [NAME, '/UPDATE_CURRENT'].join('');
 export const UPDATE_PRESS_STATUS = [NAME, '/UPDATE_PRESS_STATUS'].join('');
 export const RESET_BINDER = [NAME, '/RESET_BINDER'].join('');
+export const REMOVE_BINDER = [NAME, '/REMOVE_BINDER'].join('');
 
 export function addCarouselToStore(props, type) {
   ensureDispatch();
@@ -248,4 +249,12 @@ export function resetFlipFlop(binderId) {
       state: { prevDir: null },
     });
   }
+}
+
+export function removeBinderFromStore(binderId) {
+  ensureDispatch();
+  globalStore.dispatch({
+    type: REMOVE_BINDER,
+    binderId,
+  });
 }
