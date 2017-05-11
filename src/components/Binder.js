@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { refresh } from '../engines/mosaic';
-import { BINDER_TYPE, C_DOWN, C_LEFT, C_RIGHT, C_UP, NAME } from '../constants';
+import { BINDER_TYPE, C_DOWN, C_LEFT, C_RIGHT, C_UP, NAME, EXIT_STRATEGY_MEMORY, } from '../constants';
 import { block, isBlocked } from '../clock';
 import blocks from '../blocks';
 import { isActive } from '../isActive';
@@ -13,7 +13,8 @@ import {
   _updateBinder,
   addBinderToStore,
   determineNewState,
-  updatePosition
+  updatePosition,
+  removeBinderFromStore,
 } from '../redux/actions';
 import { calculateElSpace, downLimit, hasDiff, rightLimit } from '../engines/helpers';
 
@@ -101,6 +102,11 @@ class Binder extends Component {
       onEnter,
       triggerClick,
     } = this.props;
+
+    if (!this.listenerId) {
+      return;
+    }
+
     const { nextEl } = globalStore.getState()['@@keys'][id];
     if (click
       && triggerClick
@@ -179,7 +185,12 @@ class Binder extends Component {
   }
 
   componentWillUnmount() {
-    removeListener(this.listenerId);
+    this.listenerId = removeListener(this.listenerId);
+
+    const { enterStrategy, id } = this.props;
+    if (enterStrategy !== EXIT_STRATEGY_MEMORY) {
+      removeBinderFromStore(id)
+    }
   }
 
   render() {

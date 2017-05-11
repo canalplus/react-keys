@@ -6,6 +6,7 @@ import {
   UPDATE_BINDER_SELECTED_KEY,
   UPDATE_CURRENT,
   RESET_BINDER,
+  REMOVE_BINDER
 } from './actions';
 
 const initialKeysSate = {
@@ -47,6 +48,8 @@ export function _keyReducer(state = initialKeysSate, action) {
           nextEl: state[action.binderId].elements.find(e => e.id === action.selectedId),
         },
       };
+    case REMOVE_BINDER:
+      return copyStateWithout(state, action.binderId);
     case UPDATE_BINDER_SELECTED_KEY:
       return {
         ...state,
@@ -78,4 +81,10 @@ export function _keyReducer(state = initialKeysSate, action) {
     default:
       return state;
   }
+}
+
+function copyStateWithout(state, without) {
+  const copy = { ...state };
+  delete copy[without];
+  return copy;
 }
