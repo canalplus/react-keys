@@ -3,24 +3,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { refresh } from '../engines/mosaic';
-import { NAME, C_UP, C_DOWN, C_LEFT, C_RIGHT, BINDER_TYPE } from '../constants';
-import { isBlocked, block } from '../clock';
+import { BINDER_TYPE, C_DOWN, C_LEFT, C_RIGHT, C_UP, NAME } from '../constants';
+import { block, isBlocked } from '../clock';
 import blocks from '../blocks';
 import { isActive } from '../isActive';
 import { execCb } from '../funcHandler';
-import { globalStore, addListener, removeListener, userConfig } from '../listener';
+import { addListener, globalStore, removeListener, userConfig } from '../listener';
 import {
-  addBinderToStore,
   _updateBinder,
+  addBinderToStore,
   determineNewState,
-  updatePosition,
+  updatePosition
 } from '../redux/actions';
-import {
-  calculateElSpace,
-  downLimit,
-  rightLimit,
-  hasDiff,
-} from '../engines/helpers';
+import { calculateElSpace, downLimit, hasDiff, rightLimit } from '../engines/helpers';
 
 class Binder extends Component {
 

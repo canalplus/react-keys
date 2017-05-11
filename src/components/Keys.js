@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { isBlocked, block } from '../clock';
+import { block, isBlocked } from '../clock';
 import { addListener, removeListener, userConfig } from '../listener';
 import blocks from '../blocks';
 import { execCb } from '../funcHandler';
@@ -16,13 +16,13 @@ class Keys extends Component {
       id: PropTypes.string.isRequired,
       debounce: PropTypes.number,
       active: PropTypes.bool,
-    }
+    };
   }
 
   static get defaultProps() {
     return {
       active: true,
-    }
+    };
   }
 
   constructor(props) {
@@ -33,10 +33,13 @@ class Keys extends Component {
   isActive() {
     return this.props.active
       && !isBlocked()
-      && !blocks.isBlocked(this.props.id)
+      && !blocks.isBlocked(this.props.id);
   }
 
-  keysHandler(keyCode) {
+  keysHandler(keyCode, longPress, click) {
+    if (click) {
+      return;
+    }
     if (this.isActive()) {
       for (const key in userConfig) {
         const value = userConfig[key];

@@ -3,14 +3,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { build, getNext, getPrev } from '../engines/carousel';
 import { isInsideLeft, isInsideRight } from '../engines/bounds';
-import { calculateElSpace } from '../engines/helpers';
+import { calculateElSpace, hasDiff } from '../engines/helpers';
 import { addListener, removeListener, userConfig } from '../listener';
-import { isBlocked, block } from '../clock';
+import { block, isBlocked } from '../clock';
 import { isActive } from '../isActive';
 import { execCb } from '../funcHandler';
-import { addCarouselToStore, _updateBinder } from '../redux/actions';
+import { _updateBinder, addCarouselToStore } from '../redux/actions';
 import { CAROUSEL_TYPE, NAVIGATION_BOUND, NAVIGATION_CENTER } from '../constants';
-import { hasDiff } from '../engines/helpers';
 
 class Carousel extends Component {
 
@@ -37,7 +36,7 @@ class Carousel extends Component {
       onDownExit: PropTypes.func,
       onUpExit: PropTypes.func,
       onEnter: PropTypes.func,
-      updateIndex: PropTypes.bool
+      updateIndex: PropTypes.bool,
     };
   }
 
@@ -55,7 +54,7 @@ class Carousel extends Component {
       debounce: 82,
       className: 'carousel',
       childrenClassName: 'carousel-child',
-      updateIndex: false
+      updateIndex: false,
     };
   }
 
@@ -91,9 +90,12 @@ class Carousel extends Component {
     return returnValue;
   }
 
-  keysHandler(keyCode) {
+  keysHandler(keyCode, longPress, click) {
     const { children, circular, onDownExit, onUpExit, onEnter, triggerClick } = this.props;
     const { cursor, elements } = this.state;
+    if (click && triggerClick && isActive(this.props) && !isBlocked()) {
+      document.getElementById(elements[cursor].props.id).click();
+    }
     if (isActive(this.props) && !isBlocked()) {
       switch (keyCode) {
         case userConfig.left:
@@ -111,9 +113,6 @@ class Carousel extends Component {
           this.performCallback(onUpExit);
           break;
         case userConfig.enter:
-          if (triggerClick) {
-            document.getElementById(elements[cursor].props.id).click();
-          }
           this.performCallback(onEnter);
           break;
       }
@@ -178,7 +177,7 @@ class Carousel extends Component {
     if (navigation === NAVIGATION_BOUND) {
       const selected = calculateElSpace(document.getElementById(this.selectedId));
       if (!selected) {
-        return standardGaps
+        return standardGaps;
       }
       const wrapper = calculateElSpace(document.getElementById(id));
       if ((!leftMove && isInsideRight(wrapper, selected, gap))) {
