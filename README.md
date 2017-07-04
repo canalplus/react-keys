@@ -169,6 +169,7 @@ renderWithId('mosaic-1-1');
 * `filter` (string / *optional*) class name which exclude element 
 * `debounce` (number / *optional*) define a debounce for keys press in ms (default global debounce) 
 * `enterStrategy` (string / *optional*) define strape strategy on enter: `start` / `mirror` / `memory` / `none` (default `none`)
+* `refreshStrategy` (string / *optional*) define how the focus behave on binder elements update (which element will be focused): `first` / `previous` (default `first`)
 * `position` (string / *optional*) to better handle for  enterStrategy (vertial/horizontal) (default `horizontal`)
 * `gap` (number / *optional*) reduce or increase elements margin (default `0`)`
 * `boundedGap` (number / *optional*) reduce or increase bounded margin (default `0`)
