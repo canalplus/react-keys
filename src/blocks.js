@@ -1,5 +1,4 @@
 class Blocks {
-
   constructor() {
     this.blockedStuff = [];
     this.generalBlock = false;
@@ -48,7 +47,9 @@ class Blocks {
     if (args.length > 0) {
       this.block(...args);
     } else {
-      throw new Error('unblockExcept need at least on arg, maybe you want to just unblock()');
+      throw new Error(
+        'unblockExcept need at least on arg, maybe you want to just unblock()'
+      );
     }
   }
 
@@ -73,8 +74,10 @@ class Blocks {
   }
 
   isBlocked(id) {
-    return (!this.generalBlock && this.blockedStuff.indexOf(id) !== -1)
-      || (this.generalBlock && this.blockedStuff.indexOf(id) === -1);
+    return (
+      (!this.generalBlock && this.blockedStuff.indexOf(id) !== -1) ||
+      (this.generalBlock && this.blockedStuff.indexOf(id) === -1)
+    );
   }
 
   getStuff() {

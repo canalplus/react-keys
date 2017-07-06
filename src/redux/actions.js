@@ -69,6 +69,9 @@ export function addBinderToStore(props, type) {
     downGap,
     enterStrategy,
     position,
+    prevEl = null,
+    prevDir = null,
+    nextEl = null,
   } = props;
   globalStore.dispatch({
     type: ADD_BINDER_TO_STORE,
@@ -88,9 +91,9 @@ export function addBinderToStore(props, type) {
         enterStrategy,
         position,
         elements: elements || [],
-        prevEl: null,
-        prevDir: null,
-        nextEl: null,
+        prevEl,
+        prevDir,
+        nextEl,
         hasMoved: false,
         marginLeft: 0,
         marginTop: 0,
@@ -139,8 +142,8 @@ export function _resetBinder(binderId, wishedId) {
   if (!ensureMountedBinder(binderId)) return;
   const originalState = globalStore.getState()[NAME][binderId];
   const { elements, selectedId } = originalState;
-  const newSelectedId = wishedId || elements[0].id;
   if (elements.length === 0) return;
+  const newSelectedId = wishedId || elements[0].id;
   const margin = boundsMargin(newSelectedId, originalState);
   const state = {
     selectedId: newSelectedId,
@@ -236,6 +239,7 @@ export function determineNewState(binderId, dir, cb, exitCb, _this) {
   const { nextEl, prevEl, prevDir, elements } = globalStore.getState()[NAME][
     binderId
   ];
+  if (!nextEl) return;
   const newState = calculateNewState(dir, nextEl, prevEl, prevDir, elements);
   globalStore.dispatch({
     type: UPDATE_BINDER_STATE,
