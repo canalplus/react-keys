@@ -94,7 +94,7 @@ class Carousel extends Component {
     const { children, circular, onDownExit, onUpExit, onEnter, triggerClick } = this.props;
     const { cursor, elements } = this.state;
     if (click && triggerClick && isActive(this.props) && !isBlocked()) {
-      document.getElementById(elements[cursor].props.id).click();
+      document.getElementById(children[cursor].props.id).click();
     }
     if (isActive(this.props) && !isBlocked()) {
       switch (keyCode) {
