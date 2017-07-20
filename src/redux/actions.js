@@ -16,6 +16,8 @@ export const UPDATE_BINDER_SELECTED_KEY = [
   NAME,
   '/UPDATE_BINDER_SELECTED_KEY',
 ].join('');
+export const UPDATE_BINDER_POSITION = `${NAME}/UPDATE_BINDER_POSITION`;
+export const UPDATE_BINDER_SELECTED_ID = `${NAME}/UPDATE_BINDER_SELECTED_ID`;
 export const UPDATE_BINDER_STATE = [NAME, '/UPDATE_BINDER_STATE'].join('');
 export const UPDATE_CURRENT = [NAME, '/UPDATE_CURRENT'].join('');
 export const UPDATE_PRESS_STATUS = [NAME, '/UPDATE_PRESS_STATUS'].join('');
@@ -111,6 +113,7 @@ export function _activeBinder(binderId, nextElId, dir) {
   globalStore.dispatch({
     type: ACTIVATE_BINDER,
     binderId,
+    selectedId,
     inactiveBinders: desactivateBinders(state, binderId),
   });
   if (toActivate && toActivate.type === CAROUSEL_TYPE) {
@@ -178,16 +181,10 @@ export function _updateBinder(binderId, state) {
 export function updateBinderSelectedId(binderId, selectedId) {
   ensureDispatch();
   if (!ensureMountedBinder(binderId)) return;
-  const margin = boundsMargin(
-    selectedId,
-    globalStore.getState()[NAME][binderId]
-  );
   globalStore.dispatch({
-    type: UPDATE_BINDER_SELECTED_KEY,
+    type: UPDATE_BINDER_SELECTED_ID,
     binderId,
     selectedId,
-    marginLeft: margin.marginLeft,
-    marginTop: margin.marginTop,
   });
 }
 
@@ -200,9 +197,7 @@ export function updatePosition(binderId, selectedId) {
     globalStore.getState()[NAME][binderId]
   );
   globalStore.dispatch({
-    type: UPDATE_BINDER_SELECTED_KEY,
-    binderId,
-    selectedId,
+    type: UPDATE_BINDER_POSITION,
     marginLeft: margin.marginLeft,
     marginTop: margin.marginTop,
   });
