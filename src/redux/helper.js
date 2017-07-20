@@ -7,8 +7,15 @@ export const findBinder = (state, binderId) => {
 export const addOrUpdateBinder = (standards, binderId, values) => {
   const index = standards.findIndex(standard => standard.id === binderId);
   if (index !== -1) {
-    return Object.assign([], standards, { [index]: values });
+    const _standards = [...standards]
+    const standard = _standards[index];
+    _standards.splice(index, 1, {
+      ...standard,
+      ...values,
+    });
+    return _standards;
   } else {
-    return [...state[NAME].standards, values];
+    standards.push(values);
+    return standards;
   }
 };

@@ -8,7 +8,7 @@ import {
   RESET_BINDER,
   REMOVE_BINDER,
 } from './actions';
-import { addOrUpdateBinder } from './helper';
+import { addOrUpdateBinder, findBinder } from './helper';
 
 const initialKeysSate = {
   current: {
@@ -27,47 +27,39 @@ export function _keyReducer(state = initialKeysSate, action) {
     case ADD_BINDER_TO_STORE:
       return {
         ...state,
-        standards: addOrUpdateBinder(state.standards, action.newBinder),
+        standards: addOrUpdateBinder(state.standards, action.newBinder.binderId, action.newBinder),
       };
     case ACTIVATE_BINDER:
       return {
         ...state,
         ...action.inactiveBinders,
-        [action.binderId]: {
-          ...state[action.binderId],
-          active: true,
-        },
+        standards: addOrUpdateBinder(state.standards, action.binderId, {active: true}),
       };
     case UPDATE_BINDER_STATE:
       return {
         ...state,
-        [action.binderId]: {
-          ...state[action.binderId],
-          ...action.state,
-        },
+        standards: addOrUpdateBinder(state.standards, action.binderId, action.state),
       };
     case RESET_BINDER:
       return {
         ...state,
-        [action.binderId]: {
-          ...state[action.binderId],
-          selectedId: action.selectedId,
-          nextEl: state[action.binderId].elements.find(
+        standards: addOrUpdateBinder(state.standards, action.binderId, {
+          selectedId:  action.selectedId,
+          nextEl: findBinder(state, action.binderId).elements.find(
             e => e.id === action.selectedId
           ),
-        },
+        }),
       };
     case REMOVE_BINDER:
       return copyStateWithout(state, action.binderId);
     case UPDATE_BINDER_SELECTED_KEY:
       return {
         ...state,
-        [action.binderId]: {
-          ...state[action.binderId],
+        standards: addOrUpdateBinder(state.standards, action.binderId, {
           selectedId: action.selectedId,
           marginLeft: action.marginLeft,
           marginTop: action.marginTop,
-        },
+        }),
         current: {
           ...state['current'],
           binderId: action.binderId,
