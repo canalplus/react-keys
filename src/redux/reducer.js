@@ -6,23 +6,29 @@ import {
   UPDATE_BINDER_SELECTED_KEY,
   UPDATE_CURRENT,
   RESET_BINDER,
-  REMOVE_BINDER
+  REMOVE_BINDER,
 } from './actions';
+import { addOrUpdateBinder } from './helper';
 
 const initialKeysSate = {
   current: {
     selectedId: null,
     binderId: null,
   },
-  'PRESS': {
+  standards: [],
+  priority: [],
+  PRESS: {
     press: false,
-  }
+  },
 };
 
 export function _keyReducer(state = initialKeysSate, action) {
   switch (action.type) {
     case ADD_BINDER_TO_STORE:
-      return { ...state, ...action.inactiveBinders, ...action.newBinder };
+      return {
+        ...state,
+        standards: addOrUpdateBinder(state.standards, action.newBinder),
+      };
     case ACTIVATE_BINDER:
       return {
         ...state,
@@ -36,7 +42,8 @@ export function _keyReducer(state = initialKeysSate, action) {
       return {
         ...state,
         [action.binderId]: {
-          ...state[action.binderId], ...action.state,
+          ...state[action.binderId],
+          ...action.state,
         },
       };
     case RESET_BINDER:
@@ -45,7 +52,9 @@ export function _keyReducer(state = initialKeysSate, action) {
         [action.binderId]: {
           ...state[action.binderId],
           selectedId: action.selectedId,
-          nextEl: state[action.binderId].elements.find(e => e.id === action.selectedId),
+          nextEl: state[action.binderId].elements.find(
+            e => e.id === action.selectedId
+          ),
         },
       };
     case REMOVE_BINDER:
@@ -71,11 +80,14 @@ export function _keyReducer(state = initialKeysSate, action) {
         current: {
           ...state['current'],
           binderId: action.binderId,
-          selectedId: action.selectedId
-        }
+          selectedId: action.selectedId,
+        },
       };
     case UPDATE_PRESS_STATUS:
-      return { ...state, 'PRESS': { press: action.press, keyCode: action.keyCode } };
+      return {
+        ...state,
+        PRESS: { press: action.press, keyCode: action.keyCode },
+      };
     case 'RESET_STATE':
       return initialKeysSate;
     default:

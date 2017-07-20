@@ -1,4 +1,4 @@
-import { _selector } from '../selector';
+import { _selector } from '../redux/selector';
 import { globalStore } from '../listener';
 import { NAME } from '../constants';
 import sinon from 'sinon';

@@ -35,6 +35,7 @@ import {
   hasDiff,
   rightLimit,
 } from '../engines/helpers';
+import { findBinder } from '../redux/helper';
 
 class Binder extends Component {
   static get propTypes() {
@@ -62,6 +63,7 @@ class Binder extends Component {
       debounce: PropTypes.number,
       triggerClick: PropTypes.bool,
       longPress: PropTypes.bool,
+      isPriority: PropTypes.bool,
       onLeftExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       onRightExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       onUpExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
@@ -84,12 +86,31 @@ class Binder extends Component {
       downGap: 0,
       longPress: true,
       triggerClick: true,
+      isPriority: false,
     };
   }
 
   constructor(props) {
     super(props);
     this.listenerId = addListener(this.keysHandler, this);
+  }
+
+  componentDidMount() {
+    addBinderToStore(this.props, BINDER_TYPE);
+    this.refreshState();
+  }
+
+  componentDidUpdate() {
+    this.refreshState();
+  }
+
+  componentWillUnmount() {
+    this.listenerId = removeListener(this.listenerId);
+
+    const { enterStrategy, id } = this.props;
+    if (enterStrategy !== EXIT_STRATEGY_MEMORY) {
+      removeBinderFromStore(id);
+    }
   }
 
   keysHandler(keyCode, longPress, click) {
@@ -111,7 +132,7 @@ class Binder extends Component {
       return;
     }
 
-    const { nextEl } = globalStore.getState()['@@keys'][id];
+    const { nextEl } = findBinder(globalStore.getState(), id);
     if (
       click &&
       triggerClick &&
@@ -183,7 +204,7 @@ class Binder extends Component {
   refreshState() {
     const dom = ReactDOM.findDOMNode(this);
     const { id, filter, wrapper, refreshStrategy } = this.props;
-    const state = globalStore.getState()[NAME][id];
+    const state = findBinder(globalStore.getState(), id);
     let {
       elements,
       selectedElement,
@@ -216,24 +237,6 @@ class Binder extends Component {
         selectedId: selectedElement.id,
       });
       updatePosition(id, selectedElement.id);
-    }
-  }
-
-  componentDidMount() {
-    addBinderToStore(this.props, BINDER_TYPE);
-    this.refreshState();
-  }
-
-  componentDidUpdate() {
-    this.refreshState();
-  }
-
-  componentWillUnmount() {
-    this.listenerId = removeListener(this.listenerId);
-
-    const { enterStrategy, id } = this.props;
-    if (enterStrategy !== EXIT_STRATEGY_MEMORY) {
-      removeBinderFromStore(id);
     }
   }
 

@@ -13,7 +13,7 @@ import {
   _getBinderMarginLeft,
   _getBinderMarginTop,
   _getBinderSelectedId
-} from './selector';
+} from './redux/selector';
 import blocks from './blocks';
 
 export const config = getConfig;

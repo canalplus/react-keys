@@ -17,13 +17,21 @@ export function ensureDispatch() {
 }
 
 export function ensureMountedBinder(binderId) {
-  if (!Object.keys(globalStore.getState()[NAME]).some(key => binderId === key)) {
-    console.warn(`${prefix}You cannot activate a unmounted binder (${binderId}).`);
+  if (
+    !globalStore
+      .getState()
+      [NAME].standards.some(standard => binderId === standard.id)
+  ) {
+    console.warn(
+      `${prefix}You cannot activate a unmounted binder (${binderId}).`
+    );
     return false;
   }
   return true;
 }
 
 export function isUnmountedBinder(binderId) {
-  return !Object.keys(globalStore.getState()[NAME]).some(key => binderId === key);
+  return !globalStore
+    .getState()
+    [NAME].standards.some(standard => binderId === standard.id);
 }
