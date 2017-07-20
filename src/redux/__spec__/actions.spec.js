@@ -3,13 +3,13 @@ import {
   _updateBinder,
   UPDATE_BINDER_STATE,
   updateBinderSelectedId,
-  UPDATE_BINDER_SELECTED_KEY,
   desactivateBinders,
   _activeBinder,
   updatePressStatus,
   UPDATE_PRESS_STATUS,
   determineNewState,
   resetFlipFlop,
+  UPDATE_BINDER_SELECTED_ID,
 } from '../actions';
 import { EXIT_STRATEGY_MEMORY } from '../../constants';
 import * as ensure from '../../ensure';
@@ -136,11 +136,9 @@ describe('redux/actions.js', () => {
         const binderId = 'myId';
         const selectedId = '1';
         this.mock(listener.globalStore).expects('dispatch').once().withArgs({
-          type: UPDATE_BINDER_SELECTED_KEY,
+          type: UPDATE_BINDER_SELECTED_ID,
           binderId,
           selectedId,
-          marginLeft: 0,
-          marginTop: 0,
         });
         updateBinderSelectedId(binderId, selectedId);
       })

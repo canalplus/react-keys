@@ -1,12 +1,14 @@
 import {
   ACTIVATE_BINDER,
   ADD_BINDER_TO_STORE,
-  UPDATE_BINDER_STATE,
-  UPDATE_PRESS_STATUS,
-  UPDATE_BINDER_SELECTED_KEY,
-  UPDATE_CURRENT,
+  REMOVE_BINDER,
   RESET_BINDER,
-  REMOVE_BINDER
+  UPDATE_BINDER_POSITION,
+  UPDATE_BINDER_SELECTED_ID,
+  UPDATE_BINDER_SELECTED_KEY,
+  UPDATE_BINDER_STATE,
+  UPDATE_CURRENT,
+  UPDATE_PRESS_STATUS
 } from './actions';
 
 const initialKeysSate = {
@@ -31,6 +33,11 @@ export function _keyReducer(state = initialKeysSate, action) {
           ...state[action.binderId],
           active: true,
         },
+        current: {
+          ...state['current'],
+          binderId: action.binderId,
+          selectedId: action.selectedId,
+        },
       };
     case UPDATE_BINDER_STATE:
       return {
@@ -50,6 +57,28 @@ export function _keyReducer(state = initialKeysSate, action) {
       };
     case REMOVE_BINDER:
       return copyStateWithout(state, action.binderId);
+    case UPDATE_BINDER_SELECTED_ID:
+      return {
+        ...state,
+        [action.binderId]: {
+          ...state[action.binderId],
+          selectedId: action.selectedId,
+        },
+        current: {
+          ...state['current'],
+          binderId: action.binderId,
+          selectedId: action.selectedId,
+        },
+      };
+    case UPDATE_BINDER_POSITION:
+      return {
+        ...state,
+        [action.binderId]: {
+          ...state[action.binderId],
+          marginLeft: action.marginLeft,
+          marginTop: action.marginTop,
+        }
+      };
     case UPDATE_BINDER_SELECTED_KEY:
       return {
         ...state,
