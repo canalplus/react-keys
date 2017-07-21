@@ -50,4 +50,3 @@ export function findStartExitId(selector, moved, binderId) {
     .sort((a, b) => a[moved] - b[moved]);
   return nextFocusedId[0].id;
 }
-

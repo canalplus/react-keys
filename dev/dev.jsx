@@ -76,20 +76,68 @@ const PureStrape = ({ selectedId, marginLeft, binderId, active, onDownExit, onUp
   );
 };
 
-const Strape1 = connect(() => keysSelector('strape-1')())(PureStrape);
-
-const PureMosaic = () => {
+const PureStrape2 = ({ selectedId, marginLeft, binderId, active, onDownExit, onUpExit }) => {
+  const listStyle = {
+    marginLeft,
+  };
   return (
-    <div>
-      <Strape1 binderId="strape-1" onDownExit="strape-2" onUpExit="binder1" active={true}/>
-    </div>
+    <Binder
+      id={binderId}
+      active={active}
+      isPriority={true}
+      wrapper="#wrapper"
+      selector="li"
+      strategy="progressive"
+      enterStrategy="mirror"
+      gap={100}
+      boundedGap={10}
+      onDownExit={onDownExit}
+      onEnter={() => console.log('ENTER LOG')}
+      onUpExit={onUpExit}>
+      <div id="wrapper">
+        <ul style={listStyle}>
+          <Card id={binderId + '-1'} active={active && selectedId === binderId + '-1'}/>
+          <Card id={binderId + '-2'} active={active && selectedId === binderId + '-2'}/>
+          <Card id={binderId + '-3'} active={active && selectedId === binderId + '-3'}/>
+          <Card id={binderId + '-4'} active={active && selectedId === binderId + '-4'}/>
+          <Card id={binderId + '-5'} active={active && selectedId === binderId + '-5'}/>
+          <Card id={binderId + '-6'} active={active && selectedId === binderId + '-6'}/>
+          <Card id={binderId + '-7'} active={active && selectedId === binderId + '-7'}/>
+          <Card id={binderId + '-8'} active={active && selectedId === binderId + '-8'}/>
+          <Card id={binderId + '-9'} active={active && selectedId === binderId + '-9'}/>
+        </ul>
+      </div>
+    </Binder>
   );
 };
 
+const Strape1 = connect(() => keysSelector('strape-1')())(PureStrape);
+const Strape2 = connect(() => keysSelector('strape-2')())(PureStrape2);
+
+class PureMosaic extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { show : false, show2: true }
+  }
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({show: true, show2: true});
+    }, 3000)
+    setTimeout(() => {
+      this.setState({show: true, show2: false });
+    }, 8000)
+  }
+  render() {
+    return (
+      <div>
+        { this.state.show && <Strape2 binderId="strape-2" onDownExit="strape-22" onUpExit="binder1" active={true}/>}
+        { this.state.show2 && <Strape1 binderId="strape-1" onDownExit="strape-2" onUpExit="binder1" active={true}/>}
+      </div>);
+  }
+}
+
 const Mosaic = connect((state) => {
   return {
-    binder1: keysSelector('binder1')(),
-    binder2: keysSelector('binder2')(),
     lool: state['LOL'].active,
   };
 })(PureMosaic);

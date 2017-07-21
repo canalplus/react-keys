@@ -60,6 +60,7 @@ export function addBinderToStore(props, type) {
   const {
     id,
     active,
+    isPriority,
     selector,
     gap,
     boundedGap,
@@ -90,6 +91,7 @@ export function addBinderToStore(props, type) {
       downGap,
       enterStrategy,
       position,
+      isPriority,
       elements: elements || [],
       prevEl,
       prevDir,
@@ -105,7 +107,7 @@ export function _activeBinder(binderId, nextElId, dir) {
   ensureDispatch();
   if (!ensureMountedBinder(binderId)) return;
   const state = globalStore.getState()[NAME];
-  const toActivate = state[binderId];
+  const toActivate  = findBinder(state, binderId)
   const selectedId = findIdByStrategy(state, binderId, nextElId);
   globalStore.dispatch({
     type: ACTIVATE_BINDER,

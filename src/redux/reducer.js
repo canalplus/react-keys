@@ -27,23 +27,23 @@ export function _keyReducer(state = initialKeysSate, action) {
     case ADD_BINDER_TO_STORE:
       return {
         ...state,
-        standards: addOrUpdateBinder(state.standards, action.newBinder.binderId, action.newBinder),
-      };
+        ...addOrUpdateBinder(state, action.newBinder.binderId, action.newBinder),
+      }
     case ACTIVATE_BINDER:
       return {
         ...state,
         ...action.inactiveBinders,
-        standards: addOrUpdateBinder(state.standards, action.binderId, {active: true}),
+        ...addOrUpdateBinder(state, action.binderId, {active: true}),
       };
     case UPDATE_BINDER_STATE:
       return {
         ...state,
-        standards: addOrUpdateBinder(state.standards, action.binderId, action.state),
+        ...addOrUpdateBinder(state, action.binderId, action.state),
       };
     case RESET_BINDER:
       return {
         ...state,
-        standards: addOrUpdateBinder(state.standards, action.binderId, {
+        ...addOrUpdateBinder(state, action.binderId, {
           selectedId:  action.selectedId,
           nextEl: findBinder(state, action.binderId).elements.find(
             e => e.id === action.selectedId
@@ -55,7 +55,7 @@ export function _keyReducer(state = initialKeysSate, action) {
     case UPDATE_BINDER_SELECTED_KEY:
       return {
         ...state,
-        standards: addOrUpdateBinder(state.standards, action.binderId, {
+        ...addOrUpdateBinder(state, action.binderId, {
           selectedId: action.selectedId,
           marginLeft: action.marginLeft,
           marginTop: action.marginTop,
@@ -89,6 +89,16 @@ export function _keyReducer(state = initialKeysSate, action) {
 
 function copyStateWithout(state, without) {
   const copy = { ...state };
-  delete copy[without];
-  return copy;
+  const binder = findBinder(state, without);
+  if (binder.isPriority) {
+    return {
+      ...state,
+      priority: copy.priority.filter(b => b.id !== without)
+    };
+  } else {
+    return {
+      ...state,
+      standards: copy.standards.filter(b => b.id !== without)
+    };
+  }
 }

@@ -17,10 +17,11 @@ export function ensureDispatch() {
 }
 
 export function ensureMountedBinder(binderId) {
+  const state = globalStore.getState()[NAME];
   if (
-    !globalStore
-      .getState()
-      [NAME].standards.some(standard => binderId === standard.id)
+    !state.priority
+      .concat(state.standards)
+      .some(standard => binderId === standard.id)
   ) {
     console.warn(
       `${prefix}You cannot activate a unmounted binder (${binderId}).`
