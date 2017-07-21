@@ -74,6 +74,7 @@ export function addBinderToStore(props, type) {
     prevEl = null,
     prevDir = null,
     nextEl = null,
+    priority,
   } = props;
   globalStore.dispatch({
     type: ADD_BINDER_TO_STORE,
@@ -95,6 +96,7 @@ export function addBinderToStore(props, type) {
       elements: elements || [],
       prevEl,
       prevDir,
+      priority,
       nextEl,
       hasMoved: false,
       marginLeft: 0,

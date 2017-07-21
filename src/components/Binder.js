@@ -68,6 +68,7 @@ class Binder extends Component {
       onRightExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       onUpExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       onDownExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+      priority: PropTypes.number,
     };
   }
 
@@ -87,6 +88,7 @@ class Binder extends Component {
       longPress: true,
       triggerClick: true,
       isPriority: false,
+      priority: 0,
     };
   }
 

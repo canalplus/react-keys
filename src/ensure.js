@@ -19,8 +19,7 @@ export function ensureDispatch() {
 export function ensureMountedBinder(binderId) {
   const state = globalStore.getState()[NAME];
   if (
-    !state.priority
-      .concat(state.standards)
+    !state.standards
       .some(standard => binderId === standard.id)
   ) {
     console.warn(

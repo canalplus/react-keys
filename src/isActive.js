@@ -1,16 +1,14 @@
-import { NAME } from './constants';
 import { globalStore } from './listener';
 import { findBinder } from './redux/helper';
+import { NAME } from './constants';
 
 export function isActive({ id, active }) {
   const state = globalStore.getState();
   const binder = findBinder(state, id);
-  if (binder) {
-    if (binder.isPriority){
-      return !!binder.active;
-    } else if (state[NAME].priority.length > 0) {
-      return false;
-    }
+  const firstBinder = state[NAME].standards[0];
+  if (binder && firstBinder && firstBinder.id !== id){
+    return false;
+  } else if (binder){
     return !!binder.active;
   }
   return !!active;

@@ -56,6 +56,7 @@ const PureStrape = ({ selectedId, marginLeft, binderId, active, onDownExit, onUp
       enterStrategy="mirror"
       gap={100}
       boundedGap={10}
+      priority = {1}
       onDownExit={onDownExit}
       onEnter={() => console.log('ENTER LOG')}
       onUpExit={onUpExit}>
@@ -84,7 +85,6 @@ const PureStrape2 = ({ selectedId, marginLeft, binderId, active, onDownExit, onU
     <Binder
       id={binderId}
       active={active}
-      isPriority={true}
       wrapper="#wrapper"
       selector="li"
       strategy="progressive"
@@ -92,6 +92,7 @@ const PureStrape2 = ({ selectedId, marginLeft, binderId, active, onDownExit, onU
       gap={100}
       boundedGap={10}
       onDownExit={onDownExit}
+      priority = {0}
       onEnter={() => console.log('ENTER LOG')}
       onUpExit={onUpExit}>
       <div id="wrapper">
@@ -130,8 +131,8 @@ class PureMosaic extends React.Component {
   render() {
     return (
       <div>
-        { this.state.show && <Strape2 binderId="strape-2" onDownExit="strape-22" onUpExit="binder1" active={true}/>}
-        { this.state.show2 && <Strape1 binderId="strape-1" onDownExit="strape-2" onUpExit="binder1" active={true}/>}
+        { this.state.show2 && <Strape1 binderId="strape-1" onDownExit="strape-2" onUpExit="binder1" active={true}/> }
+        { this.state.show && <Strape2 binderId="strape-2" onDownExit="strape-22" onUpExit="binder1" active={true}/> }
       </div>);
   }
 }

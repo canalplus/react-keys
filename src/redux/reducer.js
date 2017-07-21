@@ -89,16 +89,8 @@ export function _keyReducer(state = initialKeysSate, action) {
 
 function copyStateWithout(state, without) {
   const copy = { ...state };
-  const binder = findBinder(state, without);
-  if (binder.isPriority) {
-    return {
-      ...state,
-      priority: copy.priority.filter(b => b.id !== without)
-    };
-  } else {
-    return {
-      ...state,
-      standards: copy.standards.filter(b => b.id !== without)
-    };
-  }
+  return {
+    ...state,
+    standards: copy.standards.filter(b => b.id !== without)
+  };
 }
