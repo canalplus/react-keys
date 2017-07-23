@@ -24,7 +24,7 @@
     "build": "BABEL_ENV=build babel src/ -d build",
     "lint": "eslint src/** test/**",
     "dist": "webpack --progress --colors --optimize-minimize",
-    "test": "BABEL_ENV=test npm run lint && mocha --compilers js:babel-core/register --require test/dom-config.js test/config.js --ui bdd 'src/**/*.spec.js'",
+    "test": "BABEL_ENV=test mocha --compilers js:babel-core/register --require test/dom-config.js test/config.js --ui bdd 'src/**/*.spec.js'",
     "coverage": "istanbul cover _mocha -- -r babel-register test/dom-config.js test/config.js src/**/*.spec.js src/**/**/*.spec.js",
     "deploy-local": "sed -i.bak s/$npm_package_version/$npm_package_version-SNAPSHOT/g package.json && rm package.json.bak && npm pack && git checkout package.json dist/reactKeys.js && echo \"\n\n\nNow run:\n\nnpm install $(pwd)/react-keys-$npm_package_version-SNAPSHOT.tgz\n\nIf you want to install previous version just run 'npm install'.\""
   },

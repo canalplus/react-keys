@@ -8,17 +8,17 @@ import { addListener, removeListener, userConfig } from '../listener';
 import { block, isBlocked } from '../clock';
 import { isActive } from '../isActive';
 import { execCb } from '../funcHandler';
-import { _updateBinder, addCarouselToStore } from '../redux/actions';
-import { CAROUSEL_TYPE, NAVIGATION_BOUND, NAVIGATION_CENTER } from '../constants';
+import { _updateBinder, addBinder, removeBinder } from '../redux/actions';
+import {
+  CAROUSEL_TYPE,
+  NAVIGATION_BOUND,
+  NAVIGATION_CENTER,
+} from '../constants';
 
 class Carousel extends Component {
-
   static get propTypes() {
     return {
-      children: PropTypes.oneOfType([
-        PropTypes.object,
-        PropTypes.array,
-      ]),
+      children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
       id: PropTypes.string.isRequired,
       active: PropTypes.bool,
       index: PropTypes.number,
@@ -60,11 +60,36 @@ class Carousel extends Component {
 
   constructor(props) {
     super(props);
-    this.listenerId = addListener(this.keysHandler, this);
     this.timeout = null;
-    this.movingCountDown = () => this.timeout = setTimeout(() =>
-      _updateBinder(props.id, { moving: false, selectedId: this.selectedId }), props.speed);
+    this.movingCountDown = () =>
+      (this.timeout = setTimeout(
+        () =>
+          _updateBinder({
+            id: props.id,
+            moving: false,
+            selectedId: this.selectedId,
+          }),
+        props.speed
+      ));
     this.state = { cursor: props.index, elements: [] };
+  }
+
+  componentWillMount() {
+    this.listenerId = addListener(this.keysHandler, this);
+    addBinder(this.props, CAROUSEL_TYPE);
+    this.updateState(this.state.cursor, this.props.children);
+  }
+
+  componentWillUpdate({ index, children, updateIndex }) {
+    if (hasDiff(children, this.props.children) || this.props.index !== index) {
+      const cursor = updateIndex ? index : this.state.cursor;
+      this.updateState(cursor, children);
+    }
+  }
+
+  componentWillUnmount() {
+    removeListener(this.listenerId);
+    removeBinder(this.props.id);
   }
 
   computeChildren(children) {
@@ -91,7 +116,14 @@ class Carousel extends Component {
   }
 
   keysHandler(keyCode, longPress, click) {
-    const { children, circular, onDownExit, onUpExit, onEnter, triggerClick } = this.props;
+    const {
+      children,
+      circular,
+      onDownExit,
+      onUpExit,
+      onEnter,
+      triggerClick,
+    } = this.props;
     const { cursor, elements } = this.state;
     if (click && triggerClick && isActive(this.props) && !isBlocked()) {
       document.getElementById(elements[cursor].props.id).click();
@@ -120,20 +152,10 @@ class Carousel extends Component {
   }
 
   isLeftMove(currentCursor, nextCursor, children) {
-    return (nextCursor < currentCursor)
-      || (currentCursor === 0 && nextCursor === children.length - 1);
-  }
-
-  componentWillMount() {
-    addCarouselToStore(this.props, CAROUSEL_TYPE);
-    this.updateState(this.state.cursor, this.props.children);
-  }
-
-  componentWillUpdate({ index, children, updateIndex }) {
-    if (hasDiff(children, this.props.children) || this.props.index !== index) {
-      const cursor = updateIndex ? index : this.state.cursor;
-      this.updateState(cursor, children);
-    }
+    return (
+      nextCursor < currentCursor ||
+      (currentCursor === 0 && nextCursor === children.length - 1)
+    );
   }
 
   performAction(cursor) {
@@ -152,12 +174,15 @@ class Carousel extends Component {
       return;
     }
     this.selectedId = computedChildren[cursor].props.id;
-    _updateBinder(id, { selectedId: this.selectedId, cursor, moving: true });
+    _updateBinder({ id, selectedId: this.selectedId, cursor, moving: true });
     const elements = build(computedChildren, size + 4, cursor, circular);
     this.setState({
       cursor,
       elements,
-      gaps: this.determineGap(elements, this.isLeftMove(this.state.cursor, cursor, elements)),
+      gaps: this.determineGap(
+        elements,
+        this.isLeftMove(this.state.cursor, cursor, elements)
+      ),
     });
   }
 
@@ -171,16 +196,23 @@ class Carousel extends Component {
   determineGap(elements, leftMove) {
     const { navigation, id, elWidth, size, gap } = this.props;
     const { gaps } = this.state;
-    const standardGaps = gaps
-      || elements.map((el, inc) => (inc - (navigation === NAVIGATION_BOUND ? size - 1 : 2)) * elWidth + gap);
+    const standardGaps =
+      gaps ||
+      elements.map(
+        (el, inc) =>
+          (inc - (navigation === NAVIGATION_BOUND ? size - 1 : 2)) * elWidth +
+          gap
+      );
 
     if (navigation === NAVIGATION_BOUND) {
-      const selected = calculateElSpace(document.getElementById(this.selectedId));
+      const selected = calculateElSpace(
+        document.getElementById(this.selectedId)
+      );
       if (!selected) {
         return standardGaps;
       }
       const wrapper = calculateElSpace(document.getElementById(id));
-      if ((!leftMove && isInsideRight(wrapper, selected, gap))) {
+      if (!leftMove && isInsideRight(wrapper, selected, gap)) {
         return standardGaps.map(stdGap => stdGap + elWidth);
       } else if (leftMove && isInsideLeft(wrapper, selected, gap)) {
         return standardGaps.map(stdGap => stdGap - elWidth);
@@ -195,29 +227,38 @@ class Carousel extends Component {
   render() {
     const { size, elWidth, childrenClassName, className, id } = this.props;
     const { elements, gaps } = this.state;
-    return <div id={id}
-                className={className}
-                style={{ overflow: 'hidden', position: 'absolute' }}>
-      {elements.map((element, inc) => {
-        if (!element) return;
-        const gap = gaps[inc];
-        return <div id={element.props.id}
-                    key={element.props.id}
-                    className={childrenClassName} style={{
-          marginLeft: `${gap}px`,
-          position: 'absolute',
-          width: `${elWidth}px`,
-          display: 'block',
-          opacity: (gap === -(2 * elWidth) || gap === (size + 1) * elWidth) ? 0 : 1,
-        }}>{element}</div>;
-      })}
-    </div>;
+    return (
+      <div
+        id={id}
+        className={className}
+        style={{ overflow: 'hidden', position: 'absolute' }}
+      >
+        {elements.map((element, inc) => {
+          if (!element) return;
+          const gap = gaps[inc];
+          return (
+            <div
+              id={element.props.id}
+              key={element.props.id}
+              className={childrenClassName}
+              style={{
+                marginLeft: `${gap}px`,
+                position: 'absolute',
+                width: `${elWidth}px`,
+                display: 'block',
+                opacity:
+                  gap === -(2 * elWidth) || gap === (size + 1) * elWidth
+                    ? 0
+                    : 1,
+              }}
+            >
+              {element}
+            </div>
+          );
+        })}
+      </div>
+    );
   }
-
-  componentWillUnmount() {
-    removeListener(this.listenerId);
-  }
-
 }
 
 export default Carousel;
