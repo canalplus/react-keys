@@ -8,6 +8,7 @@ import {
   UPDATE_PRESS_STATUS,
 } from './actions';
 import {
+  buildCurrent,
   computeAddingBinder,
   computeMountBinder,
   computeRemoveBinder,
@@ -17,6 +18,10 @@ import {
 } from './helper';
 
 const initialKeysSate = {
+  current: {
+    binderId: null,
+    selectedId: null,
+  },
   binders: [],
   PRESS: {
     press: false,
@@ -25,39 +30,42 @@ const initialKeysSate = {
 
 export function _keyReducer(state = initialKeysSate, action) {
   switch (action.type) {
-    case ADD_BINDER:
-      return {
-        ...state,
-        binders: computeAddingBinder(state.binders, action.binder),
-      };
-    case MOUNT_BINDER:
-      const binder = findBinder(state.binders, action.binderId);
-      return { ...state, binders: computeMountBinder(state.binders, binder) };
-    case UPDATE_BINDER:
-      return {
-        ...state,
-        binders: updateBinder(state.binders, action.binder),
-      };
-    case REMOVE_BINDER:
-      return {
-        ...state,
-        binders: computeRemoveBinder(state.binders, action.binderId),
-      };
-    case ACTIVE_BINDER:
-      return {
-        ...state,
-        binders: mountBinder(state.binders, action.binderId),
-      };
-    case UPDATE_BINDER_SELECTED_KEY:
-      return {
-        ...state,
-        binders: updateBinder(state.binders, {
-          id: action.binderId,
-          selectedId: action.selectedId,
-          marginLeft: action.marginLeft,
-          marginTop: action.marginTop,
-        }),
-      };
+    case ADD_BINDER: {
+      let binders = computeAddingBinder(state.binders, action.binder);
+      let current = buildCurrent(binders);
+      return { ...state, binders, current };
+    }
+    case MOUNT_BINDER: {
+      let binder = findBinder(state.binders, action.binderId);
+      let binders = computeMountBinder(state.binders, binder);
+      let current = buildCurrent(binders);
+      return { ...state, binders, current };
+    }
+    case UPDATE_BINDER: {
+      let binders = updateBinder(state.binders, action.binder);
+      let current = buildCurrent(binders);
+      return { ...state, binders, current };
+    }
+    case REMOVE_BINDER: {
+      let binders = computeRemoveBinder(state.binders, action.binderId);
+      let current = buildCurrent(binders);
+      return { ...state, binders, current };
+    }
+    case ACTIVE_BINDER: {
+      let binders = mountBinder(state.binders, action.binderId);
+      let current = buildCurrent(binders);
+      return { ...state, binders, current };
+    }
+    case UPDATE_BINDER_SELECTED_KEY: {
+      let binders = updateBinder(state.binders, {
+        id: action.binderId,
+        selectedId: action.selectedId,
+        marginLeft: action.marginLeft,
+        marginTop: action.marginTop,
+      });
+      let current = buildCurrent(binders);
+      return { ...state, binders, current };
+    }
     case UPDATE_PRESS_STATUS:
       return {
         ...state,

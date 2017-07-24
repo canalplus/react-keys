@@ -10,7 +10,7 @@ import { findBinder } from '../redux/helper';
 
 export function findIdByStrategy(state, binderId, nextElId = null) {
   if (nextElId) return nextElId;
-  const binder = findBinder(state, binderId);
+  const binder = findBinder(state.binders, binderId);
   if (binder.type === CAROUSEL_TYPE) return binder.selectedId;
   const { position, enterStrategy, selectedId, selector, elements } = binder;
   const moved = position === VERTICAL ? 'top' : 'left';

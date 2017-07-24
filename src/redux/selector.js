@@ -12,8 +12,8 @@ export const _selector = id => () => {
 export const _isCurrentBinder = id => () => {
   ensureState();
   const currentBinderId =
-    globalStore.getState()['current'] &&
-    globalStore.getState()['current'].binderId;
+    globalStore.getState()[NAME]['current'] &&
+    globalStore.getState()[NAME]['current'].binderId;
   return currentBinderId === id;
 };
 
@@ -38,5 +38,5 @@ export const _getBinderMarginTop = id => () => {
 export const _isBinderActive = id => () => {
   ensureState();
   const binder = findBinder(globalStore.getState()[NAME].binders, id);
-  return binder && binder.active;
+  return binder && binder.mounted;
 };

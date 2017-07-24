@@ -69,10 +69,20 @@ export const hasMountedBinder = binders =>
 
 export const mountfreshestBinder = binders => {
   const freshestBinder = binders.reduce(
-    (prev, current) => (prev.mountedTime > current.mountedTime ? prev : current)
+    (prev, current) =>
+      prev.mountedTime > current.mountedTime ? prev : current,
+    binders[0]
   );
   freshestBinder.mounted = true;
   return mountBinder(binders, freshestBinder.id);
+};
+
+export const buildCurrent = binders => {
+  const mountedbinder = findMounted(binders);
+  return {
+    binderId: mountedbinder.id,
+    selectedId: mountedbinder.selectedId,
+  };
 };
 
 export const buildBinderFromProps = (props, type) => ({
@@ -102,5 +112,6 @@ export const buildCarsouelFromProps = (props, type) => ({
   circular: props.circular,
   size: props.size,
   index: props.index,
+  priority: props.priority,
   elements: [],
 });

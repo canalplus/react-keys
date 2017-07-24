@@ -15,7 +15,7 @@ export const ADD_BINDER = `${NAME}/ADD_BINDER`;
 export const MOUNT_BINDER = `${NAME}/MOUNT_BINDER`;
 export const UPDATE_BINDER = `${NAME}/UPDATE_BINDER`;
 export const REMOVE_BINDER = `${NAME}/REMOVE_BINDER`;
-export const ACTIVE_BINDER = `${NAME}ACTIVE_BINDER`;
+export const ACTIVE_BINDER = `${NAME}/ACTIVE_BINDER`;
 
 export const UPDATE_BINDER_SELECTED_KEY = `${NAME}/UPDATE_BINDER_SELECTED_KEY`;
 export const UPDATE_PRESS_STATUS = `${NAME}/UPDATE_PRESS_STATUS`;
@@ -58,12 +58,12 @@ export function removeBinder(binderId) {
 export function _activeBinder(binderId, nextElId, dir) {
   ensureDispatch();
   if (!ensureKnownBinder(binderId)) return;
-  const state = globalStore.getState()[NAME];
-  const toActivate = findBinder(state.binders, binderId);
   globalStore.dispatch({
     type: ACTIVE_BINDER,
     binderId,
   });
+  const state = globalStore.getState()[NAME];
+  const toActivate = findBinder(state.binders, binderId);
   const selectedId = findIdByStrategy(state, binderId, nextElId);
   if (toActivate && toActivate.type === CAROUSEL_TYPE) {
     _resetCarousel(binderId, selectedId, dir);
