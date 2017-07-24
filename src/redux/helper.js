@@ -19,7 +19,9 @@ export const updateBinder = (binders, binder) => {
 
 export const computeAddingBinder = (binders, binder) => {
   const freshBinders = addBinder(binders, binder);
-  return computeMountBinder(freshBinders, binder);
+  return binder.active
+    ? computeMountBinder(freshBinders, binder)
+    : freshBinders;
 };
 
 export const addBinder = (binders, binder) => [...binders, binder];
