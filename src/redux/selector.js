@@ -3,40 +3,40 @@ import { globalStore } from '../listener';
 import { ensureState } from '../ensure';
 import { findBinder } from './helper';
 
-export function _selector(id) {
+export const _selector = id => () => {
   ensureState();
   const binder = findBinder(globalStore.getState()[NAME].binders, id);
-  return () => binder || { marginLeft: 0, marginTop: 0 };
-}
+  return binder || { marginLeft: 0, marginTop: 0 };
+};
 
-export function _isCurrentBinder(id) {
+export const _isCurrentBinder = id => () => {
   ensureState();
   const currentBinderId =
     globalStore.getState()['current'] &&
     globalStore.getState()['current'].binderId;
-  return () => currentBinderId === id;
-}
+  return currentBinderId === id;
+};
 
-export function _getBinderSelectedId(id) {
+export const _getBinderSelectedId = id => () => {
   ensureState();
   const binder = findBinder(globalStore.getState()[NAME].binders, id);
-  return () => (binder ? binder.selectedId : '');
-}
+  return binder ? binder.selectedId : '';
+};
 
-export function _getBinderMarginLeft(id) {
+export const _getBinderMarginLeft = id => () => {
   ensureState();
   const binder = findBinder(globalStore.getState()[NAME].binders, id);
-  return () => (binder ? binder.marginLeft : 0);
-}
+  return binder ? binder.marginLeft : 0;
+};
 
-export function _getBinderMarginTop(id) {
+export const _getBinderMarginTop = id => () => {
   ensureState();
   const binder = findBinder(globalStore.getState()[NAME].binders, id);
-  return () => (binder ? binder.marginTop : 0);
-}
+  return binder ? binder.marginTop : 0;
+};
 
-export function _isBinderActive(id) {
+export const _isBinderActive = id => () => {
   ensureState();
   const binder = findBinder(globalStore.getState()[NAME].binders, id);
-  return () => binder && binder.active;
-}
+  return binder && binder.active;
+};
