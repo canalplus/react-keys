@@ -32,28 +32,28 @@ export function _keyReducer(state = initialKeysSate, action) {
   switch (action.type) {
     case ADD_BINDER: {
       let binders = computeAddingBinder(state.binders, action.binder);
-      let current = buildCurrent(binders);
+      let current = buildCurrent(binders, state.current);
       return { ...state, binders, current };
     }
     case MOUNT_BINDER: {
       let binder = findBinder(state.binders, action.binderId);
       let binders = computeMountBinder(state.binders, binder);
-      let current = buildCurrent(binders);
+      let current = buildCurrent(binders, state.current);
       return { ...state, binders, current };
     }
     case UPDATE_BINDER: {
       let binders = updateBinder(state.binders, action.binder);
-      let current = buildCurrent(binders);
+      let current = buildCurrent(binders, state.current);
       return { ...state, binders, current };
     }
     case REMOVE_BINDER: {
       let binders = computeRemoveBinder(state.binders, action.binderId);
-      let current = buildCurrent(binders);
+      let current = buildCurrent(binders, state.current);
       return { ...state, binders, current };
     }
     case ACTIVE_BINDER: {
       let binders = mountBinder(state.binders, action.binderId);
-      let current = buildCurrent(binders);
+      let current = buildCurrent(binders, state.current);
       return { ...state, binders, current };
     }
     case UPDATE_BINDER_SELECTED_KEY: {
@@ -63,7 +63,7 @@ export function _keyReducer(state = initialKeysSate, action) {
         marginLeft: action.marginLeft,
         marginTop: action.marginTop,
       });
-      let current = buildCurrent(binders);
+      let current = buildCurrent(binders, state.current);
       return { ...state, binders, current };
     }
     case UPDATE_PRESS_STATUS:

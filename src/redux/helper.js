@@ -24,7 +24,10 @@ export const computeAddingBinder = (binders, binder) => {
     : freshBinders;
 };
 
-export const addBinder = (binders, binder) => [...binders, binder];
+export const addBinder = (binders, binder) => [
+  ...binders,
+  { ...binder, sleep: false },
+];
 
 export const computeMountBinder = (binders, binder) =>
   isBinderShouldMount(binders, binder)
@@ -44,6 +47,7 @@ export const mountBinder = (binders, binderId) =>
     };
     if (binder.id === binderId) {
       formatedBinder.mountedTime = Date.now();
+      formatedBinder.sleep = false;
     }
     return formatedBinder;
   });
@@ -61,6 +65,7 @@ export const removeBinder = (binders, binderId) => {
     return binders.map(binder => ({
       ...binder,
       mounted: binder.id === binderId ? false : binder.mounted,
+      sleep: binder.id === binderId ? true : binder.sleep,
     }));
   }
   return binders.filter(binder => binder.id !== binderId);
@@ -70,20 +75,22 @@ export const hasMountedBinder = binders =>
   binders.some(binder => binder.mounted);
 
 export const mountfreshestBinder = binders => {
-  const freshestBinder = binders.reduce(
+  const awakenBinders = binders.filter(binder => !binder.sleep);
+  if (awakenBinders.length === 0) return binders;
+  const freshestBinder = awakenBinders.reduce(
     (prev, current) =>
       prev.mountedTime > current.mountedTime ? prev : current,
-    binders[0]
+    awakenBinders[0]
   );
   freshestBinder.mounted = true;
   return mountBinder(binders, freshestBinder.id);
 };
 
-export const buildCurrent = binders => {
+export const buildCurrent = (binders, current) => {
   const mountedbinder = findMounted(binders);
   return {
-    binderId: mountedbinder.id,
-    selectedId: mountedbinder.selectedId,
+    binderId: mountedbinder ? mountedbinder.id : current.id,
+    selectedId: mountedbinder ? mountedbinder.selectedId : current.selectedId,
   };
 };
 
