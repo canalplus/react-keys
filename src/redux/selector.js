@@ -17,6 +17,27 @@ export const _isCurrentBinder = id => () => {
   return currentBinderId === id;
 };
 
+export const _getCurrentSelectedId = () => () => {
+  ensureState();
+  return globalStore.getState()[NAME].current.selectedId;
+};
+
+export const _getCurrentBinder = () => () => {
+  ensureState();
+  const { binders, current } = globalStore.getState()[NAME];
+  return findBinder(binders, current.selectedId);
+};
+
+export const _getKeyCode = () => () => {
+  ensureState();
+  return globalStore.getState()[NAME].PRESS.keyCode;
+};
+
+export const _isLongPress = () => () => {
+  ensureState();
+  return globalStore.getState()[NAME].PRESS.press;
+};
+
 export const _getBinderSelectedId = id => () => {
   ensureState();
   const binder = findBinder(globalStore.getState()[NAME].binders, id);

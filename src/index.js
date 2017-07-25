@@ -5,14 +5,23 @@ import _Catcher from './components/Catcher';
 import _catcher from './catcher';
 import { _init, getConfig } from './listener';
 import { _keyReducer } from './redux/reducer';
-import { _activeBinder, _updateBinder, _resetBinder, _resetCarousel } from './redux/actions';
+import {
+  _activeBinder,
+  _updateBinder,
+  _resetBinder,
+  _resetCarousel,
+} from './redux/actions';
 import {
   _selector,
   _isCurrentBinder,
   _isBinderActive,
   _getBinderMarginLeft,
   _getBinderMarginTop,
-  _getBinderSelectedId
+  _getBinderSelectedId,
+  _getCurrentSelectedId,
+  _getCurrentBinder,
+  _getKeyCode,
+  _isLongPress,
 } from './redux/selector';
 import blocks from './blocks';
 
@@ -31,6 +40,10 @@ export const isBinderActive = _isBinderActive;
 export const getBinderMarginLeft = _getBinderMarginLeft;
 export const getBinderMarginTop = _getBinderMarginTop;
 export const getBinderSelectedId = _getBinderSelectedId;
+export const getCurrentSelectedId = _getCurrentSelectedId;
+export const getCurrentBinder = _getCurrentBinder;
+export const getKeyCode = _getKeyCode;
+export const isLongPress = _isLongPress;
 
 export const catcher = _catcher;
 
