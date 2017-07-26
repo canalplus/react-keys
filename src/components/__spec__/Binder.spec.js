@@ -69,7 +69,6 @@ describe('Binder', () => {
 
       const current = store.getState()['@@keys']['current'];
       state.active.should.be.true;
-      state.wrapper.should.have.not.be.empty;
       state.elements.should.have.lengthOf(1);
       state.selectedId.should.equal('01');
       current.binderId.should.equal('1');
@@ -148,11 +147,9 @@ describe('Binder', () => {
         }
       );
 
-      const binders = store.getState()['@@keys'].binders;
-      const state = findBinder(binders, id);
+      const state = findBinder(store.getState()['@@keys'].binders, id);
       const current = store.getState()['@@keys']['current'];
       state.active.should.be.true;
-      state.wrapper.should.have.not.be.empty;
       state.elements.should.have.lengthOf(3);
       state.selectedId.should.equal('01');
       current.binderId.should.equal('1');
@@ -164,7 +161,7 @@ describe('Binder', () => {
       keyUp(config().right); // I need to keyUp to unlock callback
 
       // Then I move to right
-      const movedState = store.getState()['@@keys'][id];
+      const movedState = findBinder(store.getState()['@@keys'].binders, id);
       const movedCurrent = store.getState()['@@keys']['current'];
       movedState.selectedId.should.equal('02');
       movedCurrent.binderId.should.equal('1');
@@ -177,7 +174,7 @@ describe('Binder', () => {
       keyUp(config().right); // I need to keyUp to unlock callback
 
       // Then I move to right
-      const movedState2 = store.getState()['@@keys'][id];
+      const movedState2 = findBinder(store.getState()['@@keys'].binders, id);
       const movedCurrent2 = store.getState()['@@keys']['current'];
       movedState2.selectedId.should.equal('03');
       movedCurrent2.binderId.should.equal('1');
@@ -190,7 +187,7 @@ describe('Binder', () => {
       keyUp(config().right);
 
       // Then stay on last child
-      const movedState3 = store.getState()['@@keys'][id];
+      const movedState3 = findBinder(store.getState()['@@keys'].binders, id);
       const movedCurrent3 = store.getState()['@@keys']['current'];
       movedState3.selectedId.should.equal('03');
       movedCurrent3.binderId.should.equal('1');
@@ -275,11 +272,9 @@ describe('Binder', () => {
       );
 
       // Then
-      const binders = store.getState()['@@keys'].binders;
-      const state = findBinder(binders, id);
+      const state = findBinder(store.getState()['@@keys'].binders, id);
       const current = store.getState()['@@keys']['current'];
       state.active.should.be.true;
-      state.wrapper.should.have.not.be.empty;
       state.elements.should.have.lengthOf(3);
       state.selectedId.should.equal('01');
       current.binderId.should.equal('1');
@@ -291,7 +286,7 @@ describe('Binder', () => {
       keyUp(config().down); // I need to keyUp to unlock callback
 
       // Then I move to bottom
-      const movedState = store.getState()['@@keys'][id];
+      const movedState = findBinder(store.getState()['@@keys'].binders, id);
       const movedCurrent = store.getState()['@@keys']['current'];
       movedState.selectedId.should.equal('02');
       movedCurrent.binderId.should.equal('1');
@@ -304,7 +299,7 @@ describe('Binder', () => {
       keyUp(config().down); // I need to keyUp to unlock callback
 
       // Then I move to bottom
-      const movedState2 = store.getState()['@@keys'][id];
+      const movedState2 = findBinder(store.getState()['@@keys'].binders, id);
       const movedCurrent2 = store.getState()['@@keys']['current'];
       movedState2.selectedId.should.equal('03');
       movedCurrent2.binderId.should.equal('1');
@@ -317,7 +312,7 @@ describe('Binder', () => {
       keyUp(config().down);
 
       // Then stay on last child
-      const movedState3 = store.getState()['@@keys'][id];
+      const movedState3 = findBinder(store.getState()['@@keys'].binders, id);
       const movedCurrent3 = store.getState()['@@keys']['current'];
       movedState3.selectedId.should.equal('03');
       movedCurrent3.binderId.should.equal('1');
@@ -566,6 +561,8 @@ describe('Binder', () => {
     binder.unmount();
 
     // Then
-    expect(store.getState()['@@keys'].robin.id).to.equal('robin');
+    expect(findBinder(store.getState()['@@keys'].binders, 'robin').id).to.equal(
+      'robin'
+    );
   });
 });
