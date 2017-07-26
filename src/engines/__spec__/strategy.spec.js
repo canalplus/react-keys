@@ -18,16 +18,14 @@ describe('strategy', () => {
       'should return first elements id when no strategy',
       sinon.test(function() {
         const state = {
-          [NAME]: {
-            binders: [
-              {
-                id: 'myId',
-                selectedId: 'xoxo',
-                enterStrategy: 'none',
-                elements: [{ id: 'xixi' }],
-              },
-            ],
-          },
+          binders: [
+            {
+              id: 'myId',
+              selectedId: 'xoxo',
+              enterStrategy: 'none',
+              elements: [{ id: 'xixi' }],
+            },
+          ],
         };
         findIdByStrategy(state, 'myId', null).should.equal('xixi');
       })
@@ -38,16 +36,14 @@ describe('strategy', () => {
       sinon.test(function() {
         const id = 'xoxo';
         const state = {
-          [NAME]: {
-            binders: [
-              {
-                id: 'myId',
-                selectedId: id,
-                enterStrategy: EXIT_STRATEGY_MEMORY,
-                elements: [{ id: 'xixi' }],
-              },
-            ],
-          },
+          binders: [
+            {
+              id: 'myId',
+              selectedId: id,
+              enterStrategy: EXIT_STRATEGY_MEMORY,
+              elements: [{ id: 'xixi' }],
+            },
+          ],
         };
         findIdByStrategy(state, 'myId', null).should.equal(id);
       })
@@ -70,16 +66,14 @@ describe('strategy', () => {
 
         const state = {
           current: { selectedId: 1 },
-          [NAME]: {
-            binders: [
-              {
-                id: 'myId',
-                selectedId: 'xoxo',
-                enterStrategy: EXIT_STRATEGY_MIRROR,
-                selector: 'li',
-              },
-            ],
-          },
+          binders: [
+            {
+              id: 'myId',
+              selectedId: 'xoxo',
+              enterStrategy: EXIT_STRATEGY_MIRROR,
+              selector: 'li',
+            },
+          ],
         };
         findIdByStrategy(state, 'myId', null).should.equal('elTwo');
       })
@@ -100,16 +94,14 @@ describe('strategy', () => {
 
         this.stub(document, 'getElementById').returns(canvas);
         const state = {
-          [NAME]: {
-            binders: [
-              {
-                id: 'myId',
-                selectedId: 'xoxo',
-                enterStrategy: EXIT_STRATEGY_START,
-                selector: 'li',
-              },
-            ],
-          },
+          binders: [
+            {
+              id: 'myId',
+              selectedId: 'xoxo',
+              enterStrategy: EXIT_STRATEGY_START,
+              selector: 'li',
+            },
+          ],
         };
         findIdByStrategy(state, 'myId', null).should.equal('elTwo');
       })

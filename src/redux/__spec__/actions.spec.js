@@ -4,12 +4,13 @@ import {
   UPDATE_BINDER,
   updateBinderSelectedId,
   UPDATE_BINDER_SELECTED_KEY,
-  desactivateBinders,
   _activeBinder,
   updatePressStatus,
   UPDATE_PRESS_STATUS,
   determineNewState,
   resetFlipFlop,
+  MOUNT_BINDER,
+  ADD_BINDER,
 } from '../actions';
 import { EXIT_STRATEGY_MEMORY, NAME } from '../../constants';
 import * as ensure from '../../ensure';
@@ -39,43 +40,28 @@ const props = {
 const type = 'BINDER';
 
 describe('redux/actions.js', () => {
-  describe('addBinderToStore', () => {
+  describe('addBinder', () => {
     afterEach(reset);
 
     it(
       'should call ensureDispatch',
       sinon.test(function() {
         this.mock(ensure).expects('ensureDispatch').once();
+        this.stub(listener.globalStore, 'dispatch').returns(null);
         addBinder(props, type);
       })
     );
 
     it(
-      'should call isUnmountedBinder',
+      'should call isUnknownBinder',
       sinon.test(function() {
-        addBinder(props, type);
-        this.mock(ensure).expects('isUnmountedBinder').once();
-        this.stub(helpers, 'calculateElSpace').returns({});
-        this.stub(bounds, 'boundsMargin').returns({});
-        addBinder(props, type);
-      })
-    );
-
-    it(
-      'should dispatch newBinder',
-      sinon.test(function() {
-        const props = {};
-        this.mock(listener.globalStore).expects('dispatch').once();
-        // .withArgs({
-        //   type: ADD_BINDER_TO_STORE,
-        //   inactiveBinders: sinon.match.object,
-        //   newBinder: sinon.match.object,
-        // });
+        this.mock(ensure).expects('isUnknownBinder').once();
+        this.stub(listener.globalStore, 'dispatch').returns(null);
         addBinder(props, type);
       })
     );
   });
-  describe('_updateBinderState', () => {
+  describe('_updateBinder', () => {
     afterEach(reset);
 
     it(
@@ -88,23 +74,11 @@ describe('redux/actions.js', () => {
     );
 
     it(
-      'should call ensureUnmountedBinder',
+      'should call ensureKnownBinder',
       sinon.test(function() {
-        addBinder(props, type);
         const id = 'myId';
-        this.mock(ensure).expects('ensureMountedBinder').once().withArgs(id);
-        _updateBinder(id, {});
-      })
-    );
-
-    it(
-      'should update current when binder is active',
-      sinon.test(function() {
-        const binderId = 'myId';
-        addBinder({ ...props, active: true }, type);
-        const binderState = { active: false };
-        this.mock(listener.globalStore).expects('dispatch').twice();
-        _updateBinder(binderId, binderState);
+        this.mock(ensure).expects('ensureKnownBinder').once().withArgs(id);
+        _updateBinder({ id });
       })
     );
   });
@@ -147,20 +121,6 @@ describe('redux/actions.js', () => {
     );
   });
 
-  describe('desactivateBinders', () => {
-    it('should desactive binder except current and PRESS', () => {
-      const binders = {
-        current: ' OK',
-        PRESS: 'OK',
-        binder1: { active: true },
-        binder2: { active: true },
-      };
-      desactivateBinders(binders, 'binder2').should.eql({
-        binder1: { active: false },
-      });
-    });
-  });
-
   describe('activateBinder', () => {
     afterEach(reset);
 
@@ -180,7 +140,7 @@ describe('redux/actions.js', () => {
     );
 
     it(
-      'should call ensureUnmountedBinder',
+      'should call ensureKnownBinder',
       sinon.test(function() {
         const binderId = 'myId';
         addBinder(props, type);
@@ -188,7 +148,7 @@ describe('redux/actions.js', () => {
         this.stub(helpers, 'calculateElSpace').returns({});
         this.stub(bounds, 'boundsMargin').returns({});
         this.mock(ensure)
-          .expects('ensureMountedBinder')
+          .expects('ensureKnownBinder')
           .atLeast(1)
           .withArgs(binderId);
         _activeBinder(binderId, {});
@@ -242,7 +202,7 @@ describe('redux/actions.js', () => {
       'should call ensureDispatch',
       sinon.test(function() {
         addBinder(props, type);
-        this.mock(ensure).expects('ensureDispatch').twice(); // because of _updateBinderState
+        this.mock(ensure).expects('ensureDispatch').once();
         this.stub(helpers, 'calculateNewState').returns({
           nextEl: { id: 'myId' },
         });
@@ -259,7 +219,7 @@ describe('redux/actions.js', () => {
           nextEl: { id: 'myId' },
         });
         this.mock(ensure)
-          .expects('ensureMountedBinder')
+          .expects('ensureKnownBinder')
           .once() // because of _updateBinderState
           .withArgs(binderId);
         determineNewState(binderId, 'dir');
@@ -282,25 +242,19 @@ describe('redux/actions.js', () => {
     it(
       'should call ensureDispatch',
       sinon.test(function() {
-        addBinder(
-          { ...props, enterStrategy: EXIT_STRATEGY_MEMORY },
-          type
-        );
+        addBinder({ ...props, enterStrategy: EXIT_STRATEGY_MEMORY }, type);
         this.mock(ensure).expects('ensureDispatch').once();
         resetFlipFlop('myId');
       })
     );
 
     it(
-      'should call ensureUnmountedBinder',
+      'should call ensureKnownBinder',
       sinon.test(function() {
         const binderId = 'myId';
-        addBinder(
-          { ...props, enterStrategy: EXIT_STRATEGY_MEMORY },
-          type
-        );
+        addBinder({ ...props, enterStrategy: EXIT_STRATEGY_MEMORY }, type);
         this.mock(ensure)
-          .expects('ensureMountedBinder')
+          .expects('ensureKnownBinder')
           .once() // because of _updateBinderState
           .withArgs(binderId);
         resetFlipFlop('myId');
@@ -313,8 +267,7 @@ describe('redux/actions.js', () => {
         addBinder(props, type);
         this.mock(listener.globalStore).expects('dispatch').once().withArgs({
           type: UPDATE_BINDER,
-          binderId: 'myId',
-          state: { prevDir: null },
+          binder: { id: 'myId', prevDir: null },
         });
         resetFlipFlop('myId');
       })

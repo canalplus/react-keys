@@ -89,7 +89,7 @@ export const mountfreshestBinder = binders => {
 export const buildCurrent = (binders, current) => {
   const mountedbinder = findMounted(binders);
   return {
-    binderId: mountedbinder ? mountedbinder.id : current.id,
+    binderId: mountedbinder ? mountedbinder.id : current.binderId,
     selectedId: mountedbinder ? mountedbinder.selectedId : current.selectedId,
   };
 };
