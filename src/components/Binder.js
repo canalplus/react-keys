@@ -9,8 +9,8 @@ import {
   C_LEFT,
   C_RIGHT,
   C_UP,
-  NAME,
   EXIT_STRATEGY_MEMORY,
+  NAME,
 } from '../constants';
 import { block, isBlocked } from '../clock';
 import blocks from '../blocks';
@@ -24,10 +24,10 @@ import {
 } from '../listener';
 import {
   _updateBinder,
-  addBinderToStore,
+  addBinder,
   determineNewState,
+  removeBinder,
   updatePosition,
-  removeBinderFromStore,
 } from '../redux/actions';
 import {
   calculateElSpace,
@@ -35,6 +35,7 @@ import {
   hasDiff,
   rightLimit,
 } from '../engines/helpers';
+import { findBinder } from '../redux/helper';
 
 class Binder extends Component {
   static get propTypes() {
@@ -66,6 +67,7 @@ class Binder extends Component {
       onRightExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       onUpExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       onDownExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+      priority: PropTypes.number,
     };
   }
 
@@ -84,12 +86,26 @@ class Binder extends Component {
       downGap: 0,
       longPress: true,
       triggerClick: true,
+      priority: 0,
     };
   }
 
-  constructor(props) {
-    super(props);
+  componentWillMount() {
     this.listenerId = addListener(this.keysHandler, this);
+    addBinder(this.props, BINDER_TYPE);
+  }
+
+  componentDidMount() {
+    this.refreshState();
+  }
+
+  componentDidUpdate() {
+    this.refreshState();
+  }
+
+  componentWillUnmount() {
+    this.listenerId = removeListener(this.listenerId);
+    removeBinder(this.props.id);
   }
 
   keysHandler(keyCode, longPress, click) {
@@ -111,7 +127,7 @@ class Binder extends Component {
       return;
     }
 
-    const { nextEl } = globalStore.getState()['@@keys'][id];
+    const { nextEl } = findBinder(globalStore.getState()[NAME].binders, id);
     if (
       click &&
       triggerClick &&
@@ -182,8 +198,8 @@ class Binder extends Component {
 
   refreshState() {
     const dom = ReactDOM.findDOMNode(this);
-    const { id, filter, wrapper, refreshStrategy } = this.props;
-    const state = globalStore.getState()[NAME][id];
+    const { id, filter, wrapper, refreshStrategy, enterStrategy } = this.props;
+    const state = findBinder(globalStore.getState()[NAME].binders, id);
     let {
       elements,
       selectedElement,
@@ -192,6 +208,7 @@ class Binder extends Component {
       marginLeft: state.marginLeft,
       marginTop: state.marginTop,
     });
+
     if (hasDiff(elements, state.elements)) {
       if (
         refreshStrategy === 'previous' &&
@@ -205,35 +222,20 @@ class Binder extends Component {
         );
         selectedElement = previousElement;
       }
-      _updateBinder(id, {
+
+      _updateBinder({
+        id: id,
         wrapper: calculateElSpace(
           wrapper ? document.querySelector(wrapper) : document.body
         ),
         downLimit: downLimit(elements),
         rightLimit: rightLimit(elements),
         elements: elements,
-        nextEl: selectedElement || {},
+        nextEl: selectedElement,
         selectedId: selectedElement.id,
+        prevDir: enterStrategy !== EXIT_STRATEGY_MEMORY ? null : state.prevDir,
       });
       updatePosition(id, selectedElement.id);
-    }
-  }
-
-  componentDidMount() {
-    addBinderToStore(this.props, BINDER_TYPE);
-    this.refreshState();
-  }
-
-  componentDidUpdate() {
-    this.refreshState();
-  }
-
-  componentWillUnmount() {
-    this.listenerId = removeListener(this.listenerId);
-
-    const { enterStrategy, id } = this.props;
-    if (enterStrategy !== EXIT_STRATEGY_MEMORY) {
-      removeBinderFromStore(id);
     }
   }
 

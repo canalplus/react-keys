@@ -132,7 +132,7 @@ describe('engine/mosaic.js', () => {
   });
   it('createList should return an array', () => {
     const { document } = (new JSDOM('<li id="0"></li><li id="1"></li><li id="2"></li>')).window;
-    createList(document, 'li').should.be.an.array;
+    createList(document, 'li').should.be.an.instanceOf(Array);
     createList(document, 'li').should.have.lengthOf(3);
   });
   it('build should return an array', () => {

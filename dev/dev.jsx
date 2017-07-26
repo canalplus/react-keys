@@ -10,7 +10,7 @@ import {
   resetBinder,
   keysSelector,
   Keys,
-  Carousel
+  Carousel,
 } from '../src';
 
 function reducer(state = { active: false }, action) {
@@ -24,10 +24,13 @@ function reducer(state = { active: false }, action) {
 
 setTimeout(() => store.dispatch({ type: 'LOOL' }), 2000);
 
-const store = createStore(combineReducers({
-  '@@keys': keysReducer,
-  'LOL': reducer,
-}), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = createStore(
+  combineReducers({
+    '@@keys': keysReducer,
+    LOL: reducer,
+  }),
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 keysInit({ store: store });
 
@@ -38,11 +41,90 @@ function clickHandler() {
 const Card = ({ id, active }) => {
   const style = active ? 'selected' : '';
   return (
-    <li id={id} className={style} onClick={e => console.log(e)}>#{id}</li>
+    <li id={id} className={style} onClick={e => console.log(e)}>
+      #{id}
+    </li>
   );
 };
 
-const PureStrape = ({ selectedId, marginLeft, binderId, active, onDownExit, onUpExit }) => {
+const PureStrape = ({
+  selectedId,
+  marginLeft,
+  binderId,
+  active,
+  onDownExit,
+  onUpExit,
+}) => {
+  const listStyle = {
+    marginLeft,
+  };
+  return (
+    <Binder
+      id={binderId}
+      active={active}
+      wrapper="#wrapper"
+      selector="li"
+      strategy="progressive"
+      enterStrategy="mirror"
+      gap={100}
+      boundedGap={10}
+      priority={0}
+      onDownExit={onDownExit}
+      onEnter={() => console.log('ENTER LOG')}
+      onUpExit={onUpExit}
+    >
+      <div id="wrapper">
+        <ul style={listStyle}>
+          <Card
+            id={binderId + '-1'}
+            active={active && selectedId === binderId + '-1'}
+          />
+          <Card
+            id={binderId + '-2'}
+            active={active && selectedId === binderId + '-2'}
+          />
+          <Card
+            id={binderId + '-3'}
+            active={active && selectedId === binderId + '-3'}
+          />
+          <Card
+            id={binderId + '-4'}
+            active={active && selectedId === binderId + '-4'}
+          />
+          <Card
+            id={binderId + '-5'}
+            active={active && selectedId === binderId + '-5'}
+          />
+          <Card
+            id={binderId + '-6'}
+            active={active && selectedId === binderId + '-6'}
+          />
+          <Card
+            id={binderId + '-7'}
+            active={active && selectedId === binderId + '-7'}
+          />
+          <Card
+            id={binderId + '-8'}
+            active={active && selectedId === binderId + '-8'}
+          />
+          <Card
+            id={binderId + '-9'}
+            active={active && selectedId === binderId + '-9'}
+          />
+        </ul>
+      </div>
+    </Binder>
+  );
+};
+
+const PureStrape2 = ({
+  selectedId,
+  marginLeft,
+  binderId,
+  active,
+  onDownExit,
+  onUpExit,
+}) => {
   const listStyle = {
     marginLeft,
   };
@@ -57,19 +139,48 @@ const PureStrape = ({ selectedId, marginLeft, binderId, active, onDownExit, onUp
       gap={100}
       boundedGap={10}
       onDownExit={onDownExit}
+      priority={1}
       onEnter={() => console.log('ENTER LOG')}
-      onUpExit={onUpExit}>
+      onUpExit={onUpExit}
+    >
       <div id="wrapper">
         <ul style={listStyle}>
-          <Card id={binderId + '-1'} active={active && selectedId === binderId + '-1'}/>
-          <Card id={binderId + '-2'} active={active && selectedId === binderId + '-2'}/>
-          <Card id={binderId + '-3'} active={active && selectedId === binderId + '-3'}/>
-          <Card id={binderId + '-4'} active={active && selectedId === binderId + '-4'}/>
-          <Card id={binderId + '-5'} active={active && selectedId === binderId + '-5'}/>
-          <Card id={binderId + '-6'} active={active && selectedId === binderId + '-6'}/>
-          <Card id={binderId + '-7'} active={active && selectedId === binderId + '-7'}/>
-          <Card id={binderId + '-8'} active={active && selectedId === binderId + '-8'}/>
-          <Card id={binderId + '-9'} active={active && selectedId === binderId + '-9'}/>
+          <Card
+            id={binderId + '-1'}
+            active={active && selectedId === binderId + '-1'}
+          />
+          <Card
+            id={binderId + '-2'}
+            active={active && selectedId === binderId + '-2'}
+          />
+          <Card
+            id={binderId + '-3'}
+            active={active && selectedId === binderId + '-3'}
+          />
+          <Card
+            id={binderId + '-4'}
+            active={active && selectedId === binderId + '-4'}
+          />
+          <Card
+            id={binderId + '-5'}
+            active={active && selectedId === binderId + '-5'}
+          />
+          <Card
+            id={binderId + '-6'}
+            active={active && selectedId === binderId + '-6'}
+          />
+          <Card
+            id={binderId + '-7'}
+            active={active && selectedId === binderId + '-7'}
+          />
+          <Card
+            id={binderId + '-8'}
+            active={active && selectedId === binderId + '-8'}
+          />
+          <Card
+            id={binderId + '-9'}
+            active={active && selectedId === binderId + '-9'}
+          />
         </ul>
       </div>
     </Binder>
@@ -77,27 +188,54 @@ const PureStrape = ({ selectedId, marginLeft, binderId, active, onDownExit, onUp
 };
 
 const Strape1 = connect(() => keysSelector('strape-1')())(PureStrape);
+const Strape2 = connect(() => keysSelector('strape-2')())(PureStrape2);
 
-const PureMosaic = () => {
-  return (
-    <div>
-      <Strape1 binderId="strape-1" onDownExit="strape-2" onUpExit="binder1" active={true}/>
-    </div>
-  );
-};
+class PureMosaic extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { show: true, show2: false };
+  }
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ show: true, show2: true });
+    }, 2000);
+    setTimeout(() => {
+      this.setState({ show: true, show2: false });
+    }, 4000);
+  }
+  render() {
+    return (
+      <div>
+        {this.state.show &&
+          <Strape1
+            binderId="strape-1"
+            onDownExit="strape-2"
+            onUpExit="binder1"
+            active={true}
+          />}
+        {this.state.show2 &&
+          <Strape2
+            binderId="strape-2"
+            onDownExit="strape-22"
+            onUpExit="binder1"
+            active={true}
+          />}
+      </div>
+    );
+  }
+}
 
-const Mosaic = connect((state) => {
+const Mosaic = connect(state => {
   return {
-    binder1: keysSelector('binder1')(),
-    binder2: keysSelector('binder2')(),
     lool: state['LOL'].active,
   };
 })(PureMosaic);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Mosaic/>
-  </Provider>
-  , document.getElementById('body'));
+    <Mosaic />
+  </Provider>,
+  document.getElementById('body')
+);
 
 // activeBinder('rk-carousel');

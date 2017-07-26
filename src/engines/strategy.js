@@ -6,11 +6,13 @@ import {
   CAROUSEL_TYPE,
 } from '../constants';
 import { getDomElement, getCurrentChildren } from './helpers';
+import { findBinder } from '../redux/helper';
 
 export function findIdByStrategy(state, binderId, nextElId = null) {
   if (nextElId) return nextElId;
-  if (state[binderId].type === CAROUSEL_TYPE) return state[binderId].selectedId;
-  const { position, enterStrategy, selectedId, selector, elements } = state[binderId];
+  const binder = findBinder(state.binders, binderId);
+  if (binder.type === CAROUSEL_TYPE) return binder.selectedId;
+  const { position, enterStrategy, selectedId, selector, elements } = binder;
   const moved = position === VERTICAL ? 'top' : 'left';
   switch (enterStrategy) {
     case EXIT_STRATEGY_MEMORY:
@@ -48,4 +50,3 @@ export function findStartExitId(selector, moved, binderId) {
     .sort((a, b) => a[moved] - b[moved]);
   return nextFocusedId[0].id;
 }
-

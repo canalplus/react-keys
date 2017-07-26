@@ -1,10 +1,8 @@
-import { NAME } from './constants';
 import { globalStore } from './listener';
+import { NAME } from './constants';
+import { findMountedId } from './redux/helper';
 
 export function isActive({ id, active }) {
-  const state = globalStore.getState();
-  if ((state[NAME] && state[NAME][id])) {
-    return !!state[NAME][id].active;
-  }
-  return !!active
+  if (!active) return false;
+  return findMountedId(globalStore.getState()[NAME].binders) === id;
 }

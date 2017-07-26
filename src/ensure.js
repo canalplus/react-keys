@@ -16,14 +16,19 @@ export function ensureDispatch() {
   }
 }
 
-export function ensureMountedBinder(binderId) {
-  if (!Object.keys(globalStore.getState()[NAME]).some(key => binderId === key)) {
-    console.warn(`${prefix}You cannot activate a unmounted binder (${binderId}).`);
+export function ensureKnownBinder(binderId) {
+  const state = globalStore.getState()[NAME];
+  if (!state.binders.some(binder => binderId === binder.id)) {
+    console.warn(
+      `${prefix}You cannot activate a unknown binder (${binderId}).`
+    );
     return false;
   }
   return true;
 }
 
-export function isUnmountedBinder(binderId) {
-  return !Object.keys(globalStore.getState()[NAME]).some(key => binderId === key);
+export function isUnknownBinder(binderId) {
+  return !globalStore
+    .getState()
+    [NAME].binders.some(binder => binderId === binder.id);
 }
