@@ -25,7 +25,7 @@ export const _getCurrentSelectedId = () => () => {
 export const _getCurrentBinder = () => () => {
   ensureState();
   const { binders, current } = globalStore.getState()[NAME];
-  return findBinder(binders, current.selectedId);
+  return findBinder(binders, current.binderId);
 };
 
 export const _getKeyCode = () => () => {
