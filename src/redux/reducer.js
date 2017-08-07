@@ -17,7 +17,7 @@ import {
   updateBinder,
 } from './helper';
 
-const initialKeysSate = {
+export const initialKeysSate = {
   current: {
     binderId: null,
     selectedId: null,
@@ -28,7 +28,7 @@ const initialKeysSate = {
   },
 };
 
-export function _keyReducer(state = initialKeysSate, action) {
+export function reducer(state = initialKeysSate, action) {
   switch (action.type) {
     case ADD_BINDER: {
       let binders = computeAddingBinder(state.binders, action.binder);
@@ -37,7 +37,11 @@ export function _keyReducer(state = initialKeysSate, action) {
     }
     case MOUNT_BINDER: {
       let binder = findBinder(state.binders, action.binderId);
-      let binders = computeMountBinder(state.binders, binder);
+      let mount = computeMountBinder(state.binders, binder);
+      let binders = updateBinder(mount, {
+        ...binder,
+        priority: action.priority,
+      });
       let current = buildCurrent(binders, state.current);
       return { ...state, binders, current };
     }

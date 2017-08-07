@@ -60,6 +60,31 @@ describe('redux/actions.js', () => {
         addBinder(props, type);
       })
     );
+
+    it(
+      'should mount binder with priority if binder is already known',
+      sinon.test(function() {
+        this.mock(listener.globalStore).expects('dispatch').once().withArgs({
+          binderId: 'myId',
+          priority: 2,
+          type: '@@keys/MOUNT_BINDER',
+        });
+        this.stub(ensure, 'isUnknownBinder').returns(false);
+        addBinder({ ...props, priority: 2 }, type);
+      })
+    );
+
+    it(
+      'should add binder if binder is new',
+      sinon.test(function() {
+        this.mock(listener.globalStore)
+          .expects('dispatch')
+          .once()
+          .withArgs(sinon.match.has('type', '@@keys/ADD_BINDER'));
+        this.stub(ensure, 'isUnknownBinder').returns(true);
+        addBinder(props, type);
+      })
+    );
   });
   describe('_updateBinder', () => {
     afterEach(reset);

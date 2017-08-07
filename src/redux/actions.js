@@ -26,6 +26,7 @@ export function addBinder(props, type) {
     globalStore.dispatch({
       type: MOUNT_BINDER,
       binderId: props.id,
+      priority: props.priority,
     });
     return;
   }
