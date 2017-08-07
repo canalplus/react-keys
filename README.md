@@ -165,6 +165,7 @@ renderWithId('mosaic-1-1');
 * `id` (string / **mandatory**) Define the binder id
 * `active` (boolean / *optional*) determine if binder is active (default `false`)
 * `selector` (string / *optional*) DOM selector which define each element (default `li`)
+* `priority` (number / *optional*) define priority among others binders when mouting (default `0`)
 * `wrapper` (string / *optional*) DOM selector which define parent element (default `document`)
 * `filter` (string / *optional*) class name which exclude element 
 * `debounce` (number / *optional*) define a debounce for keys press in ms (default global debounce) 
@@ -218,91 +219,7 @@ const PureMosaic = ({ selectedId, marginTop, marginLeft }) => {
 const Mosaic = connect(() => keysSelector('rk-binder'))(PureMosaic); // listen every changes of your mosaic like that
 ```
 
-the keys store will manage the state of each binders (no matter how many they are). Each state is structured as following
-```javascipt
-{
-    binder2: {
-      id: 'binder2',
-      active: false,
-      type: 'binder',
-      selector: 'li',
-      gap: 20,
-      boundedGap: 0,
-      topGap: 0,
-      rightGap: 0,
-      leftGap: 0,
-      downGap: 0,
-      enterStrategy: 'none',
-      elements: [
-        {
-          id: '43',
-          coords: {
-            id: '43',
-            width: 1049,
-            height: 37,
-            left: 48,
-            top: 500,
-            down: 537,
-            right: 1097
-          },
-          down: '44',
-          marginTop: 0,
-          marginLeft: 0
-        },
-        ...
-      ],
-      prevEl: {
-        id: '44',
-        coords: {
-          id: '44',
-          width: 1049,
-          height: 37,
-          left: 48,
-          top: 537,
-          down: 574,
-          right: 1097
-        },
-        up: '43',
-        down: '45',
-        marginTop: 0,
-        marginLeft: 0
-      },
-      prevDir: {...},
-      nextEl: {
-        id: '43',
-        coords: {
-          id: '43',
-          width: 1049,
-          height: 37,
-          left: 48,
-          top: 500,
-          down: 537,
-          right: 1097
-        },
-        down: '44',
-        marginTop: 0,
-        marginLeft: 0
-      },
-      hasMoved: false,
-      marginLeft: 0,
-      marginTop: 0,
-      wrapper: {
-        id: '',
-        width: 1089,
-        height: 672,
-        left: 8,
-        top: 8,
-        down: 680,
-        right: 1097
-      },
-      downLimit: 611,
-      rightLimit: 1097,
-      selectedId: '43'
-    }
-}
-````
-
-So you can listen the change of theses values for each binder
+the keys store will manage the state of each binders (no matter how many they are).
 
 ### Selectors
 Selectors give you easy control on your data binder, here few selectors for common use. they return a function
@@ -311,6 +228,10 @@ Selectors give you easy control on your data binder, here few selectors for comm
 * `getBinderMarginLeft(binderId)` determine marginLeft of a binder
 * `getBinderMarginTop(binderId)` determine marginTop of a binder
 * `getBinderSelectedId(binderId)` determine selectedId of a binder
+* `getCurrentSelectedId()` get selected id of current active binder
+* `getCurrentBinder()` get id of current active binder
+* `getKeyCode()` get key code currently pressed
+* `isLongPress()` determine if it is a long press
 
 ### Action launchers
 * `activeBinder(binderId, selectedId(optional))` activate a new binder by giving its id (first id by default)
