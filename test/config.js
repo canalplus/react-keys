@@ -6,7 +6,7 @@ import chaiEnzyme from 'chai-enzyme';
 import { _init } from '../src/listener';
 import { ops } from './mocks';
 
-sinon.test = sinonTest.configureTest(sinon);
+sinon.test = sinonTest(sinon);
 
 chai.should();
 chai.use(sinonChai);
