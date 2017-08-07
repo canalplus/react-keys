@@ -2,12 +2,15 @@ import { createStore } from 'redux';
 import { _init } from '../listener';
 import { ops, reset } from '../../test/mocks';
 import { addBinder } from '../redux/actions';
-import { ensureState, ensureDispatch, ensureKnownBinder, isUnknownBinder } from '../ensure';
+import {
+  ensureState,
+  ensureDispatch,
+  ensureKnownBinder,
+  isUnknownBinder,
+} from '../ensure';
 
 describe('ensure', () => {
-
   describe('ensureState', () => {
-
     it('should not throw exception when state is ok', () => {
       const fn = () => ensureState();
       fn.should.not.throw(Error);
@@ -19,11 +22,9 @@ describe('ensure', () => {
       fn.should.throw(Error);
       _init(ops);
     });
-
   });
 
   describe('ensureDispatch', () => {
-
     it('should not throw exception when state is ok', () => {
       const fn = () => ensureDispatch();
       fn.should.not.throw(Error);
@@ -35,28 +36,23 @@ describe('ensure', () => {
       fn.should.throw(Error);
       _init(ops);
     });
-
   });
 
   describe('ensureMountedBinder', () => {
-
-    it('should not throw exception when binderId exists', () => {
+    it('should return true when binderId exists', () => {
       const binderId = 'myId';
       addBinder({ id: binderId }, '');
-      const fn = () => ensureKnownBinder(binderId);
-      fn.should.not.throw(Error);
+      ensureKnownBinder(binderId).should.be.true;
       reset();
     });
 
-    it('should throw exception when binderId does not exist', () => {
+    it('should return false when binderId does not exist', () => {
       const binderId = 'myId';
       ensureKnownBinder(binderId).should.be.false;
     });
-
   });
 
   describe('isUnmountedBinder', () => {
-
     it('return false when binder already exists', () => {
       const binderId = 'myId';
       addBinder({ id: binderId }, '');
@@ -69,8 +65,5 @@ describe('ensure', () => {
       const binderId = 'myId';
       isUnknownBinder(binderId).should.be.true;
     });
-
   });
-
 });
-
