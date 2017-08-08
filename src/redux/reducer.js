@@ -37,11 +37,8 @@ export function reducer(state = initialKeysSate, action) {
     }
     case MOUNT_BINDER: {
       let binder = findBinder(state.binders, action.binderId);
-      let mount = computeMountBinder(state.binders, binder);
-      let binders = updateBinder(mount, {
-        ...binder,
-        priority: action.priority,
-      });
+      binder.priority = action.priority;
+      let binders = computeMountBinder(state.binders, binder);
       let current = buildCurrent(binders, state.current);
       return { ...state, binders, current };
     }
