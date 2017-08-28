@@ -139,6 +139,7 @@ class Binder extends Component {
       return;
     }
     if (
+      !click &&
       isActive(this.props) &&
       !isBlocked() &&
       !blocks.isBlocked(this.props.id) &&

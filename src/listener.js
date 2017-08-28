@@ -6,6 +6,7 @@ import { catcherWatcher } from './catcher';
 import { LONG_PRESS_TIMEOUT, NAME, DEBOUNCE_TIMEOUT } from './constants';
 
 export let keysListeners = [];
+export let keysCopy = [];
 export let globalStore = {
   getState: () => {
     return { [NAME]: {} };
@@ -22,7 +23,7 @@ export let availableForLongPress = AVAILABLE_FOR_LONG_PRESS;
 export const getConfig = () => userConfig;
 
 export function callListeners(keyCode, longPress, click = false) {
-  for (const listener of keysListeners) {
+  for (const listener of keysCopy) {
     listener.callback.call(listener.context, keyCode, longPress, click);
   }
 }
@@ -35,6 +36,7 @@ export function callTriggerClick(keyCode) {
 }
 
 export function cb(e) {
+  keysCopy = [...keysListeners];
   const keyCode = e.keyCode ? e.keyCode : e;
   if (blocks.isBlocked(keyCode)) return;
   callTriggerClick(keyCode);
@@ -62,13 +64,14 @@ export function cbRelease(e) {
   clicked = false;
 }
 
-
 export function _init(ops) {
   globalStore = ops && ops.store ? ops.store : globalStore;
   rkDebounce = ops && ops.debounce ? ops.debounce : DEBOUNCE_TIMEOUT;
   eventCb = ops && ops.eventCb ? ops.eventCb : () => ({});
-  userConfig = ops && ops.config ? { ...userConfig, ...ops.config } : userConfig;
-  availableForLongPress = ops && ops.longPressTouch ? ops.longPressTouch : availableForLongPress;
+  userConfig =
+    ops && ops.config ? { ...userConfig, ...ops.config } : userConfig;
+  availableForLongPress =
+    ops && ops.longPressTouch ? ops.longPressTouch : availableForLongPress;
   if (!ops || (ops && !ops.bindkeys)) {
     document.addEventListener('keydown', cb);
     document.addEventListener('keyup', cbRelease);

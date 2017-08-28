@@ -125,6 +125,7 @@ class Carousel extends Component {
       onUpExit,
       onEnter,
       triggerClick,
+      debounce,
     } = this.props;
     const { cursor } = this.state;
     if (click && triggerClick && isActive(this.props) && !isBlocked()) {
@@ -147,6 +148,7 @@ class Carousel extends Component {
           this.performCallback(onUpExit);
           break;
         case userConfig.enter:
+          block(debounce);
           this.performCallback(onEnter);
           break;
       }
