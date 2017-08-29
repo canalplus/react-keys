@@ -234,7 +234,7 @@ class Binder extends Component {
         elements: elements,
         nextEl: selectedElement,
         selectedId: selectedElement.id,
-        prevDir: enterStrategy !== EXIT_STRATEGY_MEMORY ? null : state.prevDir,
+        prevDir: null,
       });
       updatePosition(id, selectedElement.id);
     }
