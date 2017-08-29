@@ -29,9 +29,19 @@ export function callListeners(keyCode, longPress, click = false) {
 }
 
 export function callTriggerClick(keyCode) {
-  if (keyCode === userConfig.enter && !clicked) {
-    callListeners(keyCode, false, true);
+  if (!clicked) {
+    if (keyCode === userConfig.enter) {
+      callListeners(keyCode, false, true);
+    } else {
+      callListeners(keyCode, false);
+    }
     clicked = true;
+  }
+}
+
+export function releaseClickTouch(keyCode) {
+  if (keyCode === userConfig.enter) {
+    callListeners(keyCode, false);
   }
 }
 
@@ -57,7 +67,7 @@ export function cbRelease(e) {
   if (blocks.isBlocked(keyCode)) return;
   catcherWatcher(keyCode);
   eventCb(keyCode, 'short');
-  callListeners(keyCode, false);
+  releaseClickTouch(keyCode);
   clearTimeout(pressTimeout);
   updatePressStatus(false);
   fired = false;
