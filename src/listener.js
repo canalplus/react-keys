@@ -23,9 +23,9 @@ export let availableForLongPress = AVAILABLE_FOR_LONG_PRESS;
 export const getConfig = () => userConfig;
 
 export function callListeners(keyCode, longPress, click = false) {
-  for (const listener of keysCopy) {
-    listener.callback.call(listener.context, keyCode, longPress, click);
-  }
+  keysCopy.forEach(listener =>
+    listener.callback.call(listener.context, keyCode, longPress, click)
+  );
 }
 
 export function callTriggerClick(keyCode) {
