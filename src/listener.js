@@ -31,9 +31,9 @@ export function callListeners(keyCode, longPress, click = false) {
 export function callTriggerClick(keyCode) {
   if (!clicked) {
     if (keyCode === userConfig.enter) {
-      callListeners(keyCode, false, true);
+      setTimeout(() => callListeners(keyCode, false, true), 0);
     } else {
-      callListeners(keyCode, false);
+      setTimeout(() => callListeners(keyCode, false), 0);
     }
     clicked = true;
   }
@@ -41,7 +41,7 @@ export function callTriggerClick(keyCode) {
 
 export function releaseClickTouch(keyCode) {
   if (keyCode === userConfig.enter) {
-    callListeners(keyCode, false);
+    setTimeout(() => callListeners(keyCode, false), 0);
   }
 }
 
@@ -91,7 +91,9 @@ export function _init(ops) {
 }
 
 export function addListener(callback, context) {
-  const id = Math.random().toString(36).substring(2, 10);
+  const id = Math.random()
+    .toString(36)
+    .substring(2, 10);
   keysListeners.push({
     id: id,
     callback: callback,

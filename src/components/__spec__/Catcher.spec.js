@@ -14,13 +14,13 @@ describe('Catcher', () => {
     keysInit({ store: store, config: { back: 8 } });
   });
 
-  it('should execute cb when keycode', () => {
+  it('should execute cb when keycode', done => {
     // Given
     let works = false;
     let workingMessage = 'it works !';
-    let cb = () => works = workingMessage;
+    let cb = () => (works = workingMessage);
 
-    let catcher = mount(<Catcher sequence='8888' cb={cb}/>);
+    let catcher = mount(<Catcher sequence="8888" cb={cb} />);
 
     // When
     keyPress(56);
@@ -28,9 +28,11 @@ describe('Catcher', () => {
     keyPress(56);
     keyPress(56);
 
-    // Then
-    expect(works).to.equal(workingMessage);
-    catcher.unmount();
+    setTimeout(() => {
+      // Then
+      expect(works).to.equal(workingMessage);
+      catcher.unmount();
+      done();
+    }, 0);
   });
-
 });
