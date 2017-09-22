@@ -17,7 +17,7 @@
   "repository": "https://github.com/canalplus/react-keys.git",
   "scripts": {
     "prepublish": "npm run clean && npm run build && npm run dist",
-    "clean": "rimraf build && rimraf dist",
+    "clean": "npm i rimraf && rimraf build && rimraf dist",
     "preversion": "npm run test",
     "postversion": "git push && git push --tags",
     "version": "npm run build",
