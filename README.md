@@ -236,7 +236,7 @@ Selectors give you easy control on your data binder, here few selectors for comm
 ### Action launchers
 * `activeBinder(binderId, selectedId(optional))` activate a new binder by giving its id (first id by default)
 * `resetBinder(binderId, selectedId(optional))` reset binder by giving its id (first id by default)
-* `updateBinder(binderId, binderState)` when you want to update the state manually (you must know what you do !)
+* `updateBinder(binderState)` when you want to update the state manually (you must know what you do !)
 
 ### Keys/Binder blockers
 
