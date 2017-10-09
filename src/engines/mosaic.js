@@ -1,4 +1,4 @@
-import { calculateElSpace, hasDiff } from './helpers';
+import { calculateElSpace, hasElementsDiff } from './helpers';
 
 export const rightArray = (elCoords, coords) =>
   coords
@@ -69,12 +69,9 @@ export function selectedElement(elements, selectedId) {
   return focusedEl || elements[0];
 }
 
-export function refresh(dom, prevElement, selector, selectedId, options) {
-  const elements = createList(dom, selector);
-  let returnedElements = prevElement;
-  if (hasDiff(elements, prevElement)) {
-    returnedElements = build(elements, options);
-  }
+export function refresh(nextElements, selector, selectedId, options) {
+  const returnedElements = build(nextElements, options);
+
   return {
     elements: returnedElements,
     selectedElement: selectedElement(returnedElements, selectedId),

@@ -30,7 +30,7 @@ export function getDomElement(binderId) {
   return document.getElementById(binderId);
 }
 
-export function hasDiff(nextEls, prevEls) {
+export function hasElementsDiff(nextEls, prevEls) {
   if (nextEls.length === 0) {
     return false;
   }
@@ -50,6 +50,10 @@ export function hasDiff(nextEls, prevEls) {
   }
 
   return diff;
+}
+
+export function hasWrapperDiff(nextWrapper, prevWrapper) {
+  return !(nextWrapper.width === prevWrapper.width && nextWrapper.height === prevWrapper.height && nextWrapper.top === prevWrapper.top && nextWrapper.left === prevWrapper.left);
 }
 
 export function flipflop(direction, nextEl, prevEl, prevDir) {
