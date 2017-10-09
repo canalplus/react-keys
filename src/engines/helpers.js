@@ -53,7 +53,7 @@ export function hasElementsDiff(nextEls, prevEls) {
 }
 
 export function hasWrapperDiff(nextWrapper, prevWrapper, direction) {
-  if(!nextWrapper || !prevWrapper) return true;
+  if(!nextWrapper || !prevWrapper) return false;
   switch (direction){
     case 'horizontal':
       return !(nextWrapper.width === prevWrapper.width && nextWrapper.height === prevWrapper.height && nextWrapper.left === prevWrapper.left);
