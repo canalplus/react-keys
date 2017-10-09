@@ -208,7 +208,7 @@ class Binder extends Component {
     );
     const nextElements = createList(dom, selector);
 
-    const hasDiff = hasElementsDiff(nextElements, state.elements) || hasWrapperDiff(nextWrapper, state.wrapper, direction);
+    const hasDiff = hasElementsDiff(nextElements, state.elements) || (hasWrapperDiff(nextWrapper, state.wrapper, direction) && nextElements.length > 0);
     if(hasDiff){
       let {
         elements,
