@@ -52,8 +52,17 @@ export function hasElementsDiff(nextEls, prevEls) {
   return diff;
 }
 
-export function hasWrapperDiff(nextWrapper, prevWrapper) {
-  return !(nextWrapper.width === prevWrapper.width && nextWrapper.height === prevWrapper.height && nextWrapper.top === prevWrapper.top && nextWrapper.left === prevWrapper.left);
+export function hasWrapperDiff(nextWrapper, prevWrapper, direction) {
+  if(!nextWrapper || !prevWrapper) return true;
+  switch (direction){
+    case 'horizontal':
+      return !(nextWrapper.width === prevWrapper.width && nextWrapper.height === prevWrapper.height && nextWrapper.left === prevWrapper.left);
+    case 'vertical':
+      return !(nextWrapper.width === prevWrapper.width && nextWrapper.height === prevWrapper.height && nextWrapper.top === prevWrapper.top);
+    default:
+      return !(nextWrapper.width === prevWrapper.width && nextWrapper.height === prevWrapper.height && nextWrapper.top === prevWrapper.top && nextWrapper.left === prevWrapper.left);
+  }
+  
 }
 
 export function flipflop(direction, nextEl, prevEl, prevDir) {

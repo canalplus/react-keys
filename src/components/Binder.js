@@ -69,6 +69,7 @@ class Binder extends Component {
       onUpExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       onDownExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       priority: PropTypes.number,
+      direction: PropTypes.string
     };
   }
 
@@ -200,15 +201,14 @@ class Binder extends Component {
 
   refreshState() {
     const dom = ReactDOM.findDOMNode(this);
-    const { id, filter, wrapper, selector, refreshStrategy, enterStrategy } = this.props;
+    const { id, filter, wrapper, selector, refreshStrategy, enterStrategy, direction } = this.props;
     const state = findBinder(globalStore.getState()[NAME].binders, id);
     const nextWrapper = calculateElSpace(
       wrapper ? document.querySelector(wrapper) : document.body
     );
     const nextElements = createList(dom, selector);
 
-    const hasDiff = hasElementsDiff(nextElements, state.elements) || hasWrapperDiff(nextWrapper, state.wrapper);
-
+    const hasDiff = hasElementsDiff(nextElements, state.elements) || hasWrapperDiff(nextWrapper, state.wrapper, direction);
     if(hasDiff){
       let {
         elements,
