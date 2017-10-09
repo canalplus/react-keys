@@ -94,7 +94,7 @@ export function addListener(callback, context) {
   const id = Math.random()
     .toString(36)
     .substring(2, 10);
-  keysListeners.push({
+  keysListeners.unshift({
     id: id,
     callback: callback,
     context: context,
