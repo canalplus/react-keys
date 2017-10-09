@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { build, getNext, getPrev } from '../engines/carousel';
 import { isInsideLeft, isInsideRight } from '../engines/bounds';
-import { calculateElSpace, hasDiff } from '../engines/helpers';
+import { calculateElSpace, hasElementsDiff } from '../engines/helpers';
 import { addListener, removeListener, userConfig } from '../listener';
 import { block, isBlocked } from '../clock';
 import { isActive } from '../isActive';
@@ -83,7 +83,7 @@ class Carousel extends Component {
   }
 
   componentWillUpdate({ index, children, updateIndex }) {
-    if (hasDiff(children, this.props.children) || this.props.index !== index) {
+    if (hasElementsDiff(children, this.props.children) || this.props.index !== index) {
       const cursor = updateIndex ? index : this.state.cursor;
       this.updateState(cursor, children);
     }

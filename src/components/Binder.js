@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import { refresh } from '../engines/mosaic';
+import { createList, refresh } from '../engines/mosaic';
 import {
   BINDER_TYPE,
   C_DOWN,
@@ -32,7 +32,8 @@ import {
 import {
   calculateElSpace,
   downLimit,
-  hasDiff,
+  hasElementsDiff,
+  hasWrapperDiff,
   rightLimit,
 } from '../engines/helpers';
 import { findBinder } from '../redux/helper';
@@ -68,6 +69,7 @@ class Binder extends Component {
       onUpExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       onDownExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       priority: PropTypes.number,
+      direction: PropTypes.string
     };
   }
 
@@ -199,18 +201,24 @@ class Binder extends Component {
 
   refreshState() {
     const dom = ReactDOM.findDOMNode(this);
-    const { id, filter, wrapper, refreshStrategy, enterStrategy } = this.props;
+    const { id, filter, wrapper, selector, refreshStrategy, enterStrategy, direction } = this.props;
     const state = findBinder(globalStore.getState()[NAME].binders, id);
-    let {
-      elements,
-      selectedElement,
-    } = refresh(dom, state.elements, state.selector, state.selectedId, {
-      filter: filter,
-      marginLeft: state.marginLeft,
-      marginTop: state.marginTop,
-    });
+    const nextWrapper = calculateElSpace(
+      wrapper ? document.querySelector(wrapper) : document.body
+    );
+    const nextElements = createList(dom, selector);
 
-    if (hasDiff(elements, state.elements)) {
+    const hasDiff = hasElementsDiff(nextElements, state.elements) || (hasWrapperDiff(nextWrapper, state.wrapper, direction) && nextElements.length > 0);
+    if(hasDiff){
+      let {
+        elements,
+        selectedElement,
+      } = refresh(nextElements, selector, state.selectedId, {
+        filter: filter,
+        marginLeft: state.marginLeft,
+        marginTop: state.marginTop,
+      });
+
       if (
         refreshStrategy === 'previous' &&
         state.selectedId &&
@@ -234,10 +242,11 @@ class Binder extends Component {
         elements: elements,
         nextEl: selectedElement,
         selectedId: selectedElement.id,
-        prevDir: null,
+        prevDir: null
       });
       updatePosition(id, selectedElement.id);
-    }
+
+    } 
   }
 
   render() {
