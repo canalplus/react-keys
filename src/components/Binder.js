@@ -3,15 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { createList, refresh } from '../engines/mosaic';
-import {
-  BINDER_TYPE,
-  C_DOWN,
-  C_LEFT,
-  C_RIGHT,
-  C_UP,
-  EXIT_STRATEGY_MEMORY,
-  NAME,
-} from '../constants';
+import { BINDER_TYPE, C_DOWN, C_LEFT, C_RIGHT, C_UP, NAME } from '../constants';
 import { block, isBlocked } from '../clock';
 import blocks from '../blocks';
 import { isActive } from '../isActive';
@@ -69,7 +61,7 @@ class Binder extends Component {
       onUpExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       onDownExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       priority: PropTypes.number,
-      direction: PropTypes.string
+      direction: PropTypes.string,
     };
   }
 
@@ -189,7 +181,7 @@ class Binder extends Component {
     const index = oldElements.map(e => e.id).indexOf(selectedId);
     const newIndex = index === 0 ? 0 : index - 1;
     return !this.isPresent(newElements, oldElements[newIndex].id) &&
-    inc < newElements.length
+      inc < newElements.length
       ? this.findPreviousElement(
           oldElements[newIndex].id,
           oldElements,
@@ -201,23 +193,34 @@ class Binder extends Component {
 
   refreshState() {
     const dom = ReactDOM.findDOMNode(this);
-    const { id, filter, wrapper, selector, refreshStrategy, enterStrategy, direction } = this.props;
+    const {
+      id,
+      filter,
+      wrapper,
+      selector,
+      refreshStrategy,
+      direction,
+    } = this.props;
     const state = findBinder(globalStore.getState()[NAME].binders, id);
     const nextWrapper = calculateElSpace(
       wrapper ? document.querySelector(wrapper) : document.body
     );
-    const nextElements = createList(dom, selector);
+    const nextElements = createList(dom, selector, filter);
 
-    const hasDiff = hasElementsDiff(nextElements, state.elements) || (hasWrapperDiff(nextWrapper, state.wrapper, direction) && nextElements.length > 0);
-    if(hasDiff){
-      let {
-        elements,
-        selectedElement,
-      } = refresh(nextElements, selector, state.selectedId, {
-        filter: filter,
+    const hasDiff =
+      hasElementsDiff(nextElements, state.elements) ||
+      (hasWrapperDiff(nextWrapper, state.wrapper, direction) &&
+        nextElements.length > 0);
+    if (hasDiff) {
+      const options = {
         marginLeft: state.marginLeft,
         marginTop: state.marginTop,
-      });
+      };
+      let { elements, selectedElement } = refresh(
+        nextElements,
+        state.selectedId,
+        options
+      );
 
       if (
         refreshStrategy === 'previous' &&
@@ -242,19 +245,15 @@ class Binder extends Component {
         elements: elements,
         nextEl: selectedElement,
         selectedId: selectedElement.id,
-        prevDir: null
+        prevDir: null,
       });
       updatePosition(id, selectedElement.id);
-
-    } 
+    }
   }
 
   render() {
-    return (
-      <div id={this.props.id}>
-        {this.props.children}
-      </div>
-    );
+    const { id, children } = this.props;
+    return <div id={id}>{children}</div>;
   }
 }
 

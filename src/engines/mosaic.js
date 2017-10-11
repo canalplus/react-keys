@@ -1,4 +1,4 @@
-import { calculateElSpace, hasElementsDiff } from './helpers';
+import { calculateElSpace } from './helpers';
 
 export const rightArray = (elCoords, coords) =>
   coords
@@ -38,10 +38,7 @@ export const calculDowScore = (el, elCoords) =>
   Math.abs(el.top - elCoords.down) + Math.abs(el.left - elCoords.left);
 
 export function build(elements, options) {
-  const elementsCoords = elements
-    .filter(el => el.id !== '')
-    .filter(el => [].slice.call(el.classList).indexOf(options.filter) === -1)
-    .map(calculateElSpace);
+  const elementsCoords = elements.map(calculateElSpace);
 
   return elementsCoords.map(el => ({
     id: el.id,
@@ -59,9 +56,12 @@ export function build(elements, options) {
   }));
 }
 
-export function createList(dom, selector) {
-  const elements = dom.querySelectorAll(selector);
-  return [].slice.call(elements);
+export function createList(dom, selector, filter) {
+  return [].slice
+    .call(dom.querySelectorAll(selector))
+    .filter(
+      el => el.id !== '' && [].slice.call(el.classList).indexOf(filter) === -1
+    );
 }
 
 export function selectedElement(elements, selectedId) {
@@ -69,7 +69,7 @@ export function selectedElement(elements, selectedId) {
   return focusedEl || elements[0];
 }
 
-export function refresh(nextElements, selector, selectedId, options) {
+export function refresh(nextElements, selectedId, options) {
   const returnedElements = build(nextElements, options);
 
   return {
