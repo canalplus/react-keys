@@ -13,6 +13,7 @@ import {
   hasMountedBinder,
   mountfreshestBinder,
   buildCurrent,
+  unsleepBinder,
 } from '../helper';
 import { expect } from 'chai';
 import { EXIT_STRATEGY_MEMORY } from '../../constants';
@@ -182,6 +183,20 @@ describe('redux/helper.js', () => {
           sleep: false,
           mountedTime: result[1].mountedTime,
         },
+      ]);
+    });
+  });
+  describe('unsleepBinder', () => {
+    it('should unsleep binder if enterStrategy is memory', () => {
+      const binders = [
+        { id: '1', mounted: false },
+        { id: '2', enterStrategy: EXIT_STRATEGY_MEMORY, sleep: true },
+        { id: '3', enterStrategy: EXIT_STRATEGY_MEMORY, sleep: true },
+      ];
+      unsleepBinder(binders, '2').should.eql([
+        { id: '1', mounted: false },
+        { id: '2', enterStrategy: EXIT_STRATEGY_MEMORY, sleep: false },
+        { id: '3', enterStrategy: EXIT_STRATEGY_MEMORY, sleep: true },
       ]);
     });
   });

@@ -32,7 +32,7 @@ export const addBinder = (binders, binder) => [
 export const computeMountBinder = (binders, binder) =>
   isBinderShouldMount(binders, binder)
     ? mountBinder(binders, binder.id)
-    : binders;
+    : unsleepBinder(binders, binder.id);
 
 export const isBinderShouldMount = (binders, binder) => {
   const mountedBinder = findMounted(binders);
@@ -51,6 +51,17 @@ export const mountBinder = (binders, binderId) =>
     }
     return formatedBinder;
   });
+
+export const unsleepBinder = (binders, binderId) =>
+  binders.map(
+    binder =>
+      binder.enterStrategy !== EXIT_STRATEGY_MEMORY
+        ? binder
+        : {
+            ...binder,
+            sleep: binder.id === binderId ? false : binder.sleep,
+          }
+  );
 
 export const computeRemoveBinder = (binders, binderId) => {
   const freshBinders = removeBinder(binders, binderId);
