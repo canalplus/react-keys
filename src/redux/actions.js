@@ -48,7 +48,7 @@ export function _updateBinder(binder) {
   });
 }
 
-export function removeBinder(binderId) {
+export function _removeBinder(binderId) {
   ensureDispatch();
   globalStore.dispatch({
     type: REMOVE_BINDER,

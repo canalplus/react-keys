@@ -8,7 +8,7 @@ import { addListener, removeListener, userConfig } from '../listener';
 import { block, isBlocked } from '../clock';
 import { isActive } from '../isActive';
 import { execCb } from '../funcHandler';
-import { _updateBinder, addBinder, removeBinder } from '../redux/actions';
+import { _updateBinder, addBinder, _removeBinder } from '../redux/actions';
 import {
   CAROUSEL_TYPE,
   NAVIGATION_BOUND,
@@ -91,7 +91,7 @@ class Carousel extends Component {
 
   componentWillUnmount() {
     removeListener(this.listenerId);
-    removeBinder(this.props.id);
+    _removeBinder(this.props.id);
   }
 
   computeChildren(children) {

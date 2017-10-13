@@ -10,6 +10,7 @@ import {
   _updateBinder,
   _resetBinder,
   _resetCarousel,
+  _removeBinder,
 } from './redux/actions';
 import {
   _selector,
@@ -50,6 +51,7 @@ export const catcher = _catcher;
 export const activeBinder = _activeBinder;
 export const updateBinder = _updateBinder;
 export const resetBinder = _resetBinder;
+export const removeBinder = _removeBinder;
 export const resetCarousel = _resetCarousel;
 
 export const block = blocks.block;

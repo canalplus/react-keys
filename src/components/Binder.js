@@ -18,7 +18,7 @@ import {
   _updateBinder,
   addBinder,
   determineNewState,
-  removeBinder,
+  _removeBinder,
   updatePosition,
 } from '../redux/actions';
 import {
@@ -99,7 +99,7 @@ class Binder extends Component {
 
   componentWillUnmount() {
     this.listenerId = removeListener(this.listenerId);
-    removeBinder(this.props.id);
+    _removeBinder(this.props.id);
   }
 
   keysHandler(keyCode, longPress, click) {
