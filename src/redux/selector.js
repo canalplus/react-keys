@@ -28,6 +28,10 @@ export const _getCurrentBinder = () => () => {
   return findBinder(binders, current.binderId);
 };
 
+export const _getCurrentBinderId = () => () => {
+  return globalStore.getState()[NAME].current.binderId;
+};
+
 export const _getKeyCode = () => () => {
   ensureState();
   return globalStore.getState()[NAME].PRESS.keyCode;

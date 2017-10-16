@@ -23,6 +23,7 @@ import {
   _getCurrentBinder,
   _getKeyCode,
   _isLongPress,
+  _getCurrentBinderId,
 } from './redux/selector';
 import blocks from './blocks';
 
@@ -43,6 +44,7 @@ export const getBinderMarginTop = _getBinderMarginTop;
 export const getBinderSelectedId = _getBinderSelectedId;
 export const getCurrentSelectedId = _getCurrentSelectedId;
 export const getCurrentBinder = _getCurrentBinder;
+export const getCurrentBinderId = _getCurrentBinderId;
 export const getKeyCode = _getKeyCode;
 export const isLongPress = _isLongPress;
 

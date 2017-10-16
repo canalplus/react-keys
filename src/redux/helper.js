@@ -72,7 +72,7 @@ export const computeRemoveBinder = (binders, binderId) => {
 
 export const removeBinder = (binders, binderId) => {
   const binder = binders.find(binder => binder.id === binderId);
-  if (binder.enterStrategy === EXIT_STRATEGY_MEMORY) {
+  if (binder && binder.enterStrategy === EXIT_STRATEGY_MEMORY) {
     return binders.map(binder => ({
       ...binder,
       mounted: binder.id === binderId ? false : binder.mounted,
