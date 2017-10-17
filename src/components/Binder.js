@@ -201,35 +201,38 @@ class Binder extends Component {
       refreshStrategy,
       direction,
     } = this.props;
-    const state = findBinder(globalStore.getState()[NAME].binders, id);
+    const binder = findBinder(globalStore.getState()[NAME].binders, id);
+    if (!binder) {
+      return;
+    }
     const nextWrapper = calculateElSpace(
       wrapper ? document.querySelector(wrapper) : document.body
     );
     const nextElements = createList(dom, selector, filter);
 
     const hasDiff =
-      hasElementsDiff(nextElements, state.elements) ||
-      (hasWrapperDiff(nextWrapper, state.wrapper, direction) &&
+      hasElementsDiff(nextElements, binder.elements) ||
+      (hasWrapperDiff(nextWrapper, binder.wrapper, direction) &&
         nextElements.length > 0);
     if (hasDiff) {
       const options = {
-        marginLeft: state.marginLeft,
-        marginTop: state.marginTop,
+        marginLeft: binder.marginLeft,
+        marginTop: binder.marginTop,
       };
       let { elements, selectedElement } = refresh(
         nextElements,
-        state.selectedId,
+        binder.selectedId,
         options
       );
 
       if (
         refreshStrategy === 'previous' &&
-        state.selectedId &&
-        !this.isPresent(elements, state.selectedId)
+        binder.selectedId &&
+        !this.isPresent(elements, binder.selectedId)
       ) {
         const previousElement = this.findPreviousElement(
-          state.selectedId,
-          state.elements,
+          binder.selectedId,
+          binder.elements,
           elements
         );
         selectedElement = previousElement;
