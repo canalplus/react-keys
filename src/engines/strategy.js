@@ -28,7 +28,9 @@ export function findIdByStrategy(state, binderId, nextElId = null) {
 
 export function findMirrorExitId(binderId, selector, moved, state) {
   const currentElement = getDomElement(state['current'].selectedId);
-  const currentGap = currentElement ? currentElement.getBoundingClientRect()[moved] : 0;
+  const currentGap = currentElement
+    ? currentElement.getBoundingClientRect()[moved]
+    : 0;
   const nextFocusedId = getCurrentChildren(getDomElement(binderId), selector)
     .map(el => ({
       id: el.id,

@@ -59,13 +59,17 @@ export function _removeBinder(binderId) {
 export function _activeBinder(binderId, nextElId, dir) {
   ensureDispatch();
   if (!ensureKnownBinder(binderId)) return;
+  const selectedId = findIdByStrategy(
+    globalStore.getState()[NAME],
+    binderId,
+    nextElId
+  );
   globalStore.dispatch({
     type: ACTIVE_BINDER,
     binderId,
   });
   const state = globalStore.getState()[NAME];
   const toActivate = findBinder(state.binders, binderId);
-  const selectedId = findIdByStrategy(state, binderId, nextElId);
   if (toActivate && toActivate.type === CAROUSEL_TYPE) {
     _resetCarousel(binderId, selectedId, dir);
   } else {
