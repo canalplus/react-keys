@@ -294,6 +294,63 @@ describe('redux/helper.js', () => {
         },
       ]);
     });
+    it('should priorize once mounted binder', () => {
+      const binders = [
+        { id: '3', mounted: false, sleep: false, mountedTime: 2 },
+        { id: '2', mounted: false, sleep: false, mountedTime: 4 },
+        { id: '1', mounted: false, sleep: false },
+      ];
+      const result = mountfreshestBinder(binders);
+      result.should.eql([
+        {
+          id: '3',
+          mounted: false,
+          sleep: false,
+          mountedTime: 2,
+        },
+        {
+          id: '2',
+          mounted: true,
+          mountedTime: result[1].mountedTime,
+          sleep: false,
+        },
+        {
+          id: '1',
+          mounted: false,
+          sleep: false,
+        },
+      ]);
+    });
+
+    it('should priorize by priority if no binder has been mounted already', () => {
+      const binders = [
+        { id: '3', mounted: false, sleep: false, priority: 1 },
+        { id: '2', mounted: false, sleep: false, priority: 3 },
+        { id: '1', mounted: false, sleep: false, priority: 2 },
+      ];
+      const result = mountfreshestBinder(binders);
+      result.should.eql([
+        {
+          id: '3',
+          mounted: false,
+          sleep: false,
+          priority: 1,
+        },
+        {
+          id: '2',
+          mounted: true,
+          priority: 3,
+          mountedTime: result[1].mountedTime,
+          sleep: false,
+        },
+        {
+          id: '1',
+          mounted: false,
+          priority: 2,
+          sleep: false,
+        },
+      ]);
+    });
   });
   describe('buildCurrent', () => {
     it('should return mounted values', () => {

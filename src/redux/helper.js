@@ -86,11 +86,19 @@ export const hasMountedBinder = binders =>
 export const mountfreshestBinder = binders => {
   const awakenBinders = binders.filter(binder => !binder.sleep);
   if (awakenBinders.length === 0) return binders;
-  const freshestBinder = awakenBinders.reduce(
-    (prev, current) =>
-      prev.mountedTime > current.mountedTime ? prev : current,
-    awakenBinders[0]
-  );
+  const onceMountedBinders = awakenBinders.filter(binder => binder.mountedTime);
+  const freshestBinder =
+    onceMountedBinders.length === 0
+      ? awakenBinders.reduce(
+          (prev, current) =>
+            prev.priority > current.priority ? prev : current,
+          awakenBinders[0]
+        )
+      : onceMountedBinders.reduce(
+          (prev, current) =>
+            prev.mountedTime > current.mountedTime ? prev : current,
+          onceMountedBinders[0]
+        );
   freshestBinder.mounted = true;
   return mountBinder(binders, freshestBinder.id);
 };
