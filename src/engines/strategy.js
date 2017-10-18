@@ -1,7 +1,7 @@
 import {
   VERTICAL,
-  EXIT_STRATEGY_MIRROR,
-  EXIT_STRATEGY_START,
+  STRATEGY_MIRROR,
+  STRATEGY_START,
   CAROUSEL_TYPE,
 } from '../constants';
 import { getDomElement, getCurrentChildren } from './helpers';
@@ -14,9 +14,9 @@ export function findIdByStrategy(state, binderId, nextElId = null) {
   const { position, strategy, selectedId, selector, elements, memory } = binder;
   const moved = position === VERTICAL ? 'top' : 'left';
   switch (strategy) {
-    case EXIT_STRATEGY_MIRROR:
+    case STRATEGY_MIRROR:
       return findMirrorExitId(binderId, selector, moved, state);
-    case EXIT_STRATEGY_START:
+    case STRATEGY_START:
       return findStartExitId(selector, moved, binderId);
   }
   return memory ? selectedId : elements[0].id;

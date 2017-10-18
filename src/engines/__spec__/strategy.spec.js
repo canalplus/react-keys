@@ -1,5 +1,5 @@
 import sinon from 'sinon';
-import { EXIT_STRATEGY_MIRROR, EXIT_STRATEGY_START } from '../../constants';
+import { STRATEGY_MIRROR, STRATEGY_START } from '../../constants';
 import {
   findMirrorExitId,
   findStartExitId,
@@ -65,7 +65,7 @@ describe('strategy', () => {
             {
               id: 'myId',
               selectedId: 'xoxo',
-              strategy: EXIT_STRATEGY_MIRROR,
+              strategy: STRATEGY_MIRROR,
               selector: 'li',
             },
           ],
@@ -93,7 +93,7 @@ describe('strategy', () => {
             {
               id: 'myId',
               selectedId: 'xoxo',
-              strategy: EXIT_STRATEGY_START,
+              strategy: STRATEGY_START,
               selector: 'li',
             },
           ],

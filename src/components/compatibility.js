@@ -1,10 +1,10 @@
-import { EXIT_STRATEGY_MEMORY } from '../constants';
+import { STRATEGY_MEMORY } from '../constants';
 
 export default props => {
   // WILL BE REMOVED ON 4.x release
   let innerProps = { ...props };
   if (innerProps.enterStrategy) {
-    if (innerProps.enterStrategy === EXIT_STRATEGY_MEMORY) {
+    if (innerProps.enterStrategy === STRATEGY_MEMORY) {
       console.warn(
         '[react-keys] - memory strategy is deprecated and will be removed in next major release, use memory={true} insread'
       );
