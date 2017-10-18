@@ -48,7 +48,11 @@ export function reducer(state = initialKeysSate, action) {
       return { ...state, binders, current };
     }
     case REMOVE_BINDER: {
-      let binders = computeRemoveBinder(state.binders, action.binderId);
+      let binders = computeRemoveBinder(
+        state.binders,
+        action.binderId,
+        action.force
+      );
       let current = buildCurrent(binders, state.current);
       return { ...state, binders, current };
     }

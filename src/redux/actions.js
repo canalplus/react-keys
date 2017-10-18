@@ -2,7 +2,7 @@ import { globalStore } from '../listener';
 import { findIdByStrategy } from '../engines/strategy';
 import { boundsMargin, correctBoundsMargin } from '../engines/bounds';
 import { calculateNewState } from '../engines/helpers';
-import { CAROUSEL_TYPE, EXIT_STRATEGY_MEMORY, NAME } from '../constants';
+import { CAROUSEL_TYPE, NAME } from '../constants';
 import { ensureDispatch, ensureKnownBinder, isUnknownBinder } from '../ensure';
 import { enterTo, execCb } from '../funcHandler';
 import {
@@ -48,11 +48,12 @@ export function _updateBinder(binder) {
   });
 }
 
-export function _removeBinder(binderId) {
+export function _removeBinder(binderId, force = false) {
   ensureDispatch();
   globalStore.dispatch({
     type: REMOVE_BINDER,
     binderId,
+    force,
   });
 }
 
@@ -187,11 +188,8 @@ export function determineNewState(binderId, dir, cb, exitCb, _this) {
 export function resetFlipFlop(binderId) {
   ensureDispatch();
   if (!ensureKnownBinder(binderId)) return;
-  const { enterStrategy } = findBinder(
-    globalStore.getState()[NAME].binders,
-    binderId
-  );
-  if (enterStrategy !== EXIT_STRATEGY_MEMORY) {
+  const { memory } = findBinder(globalStore.getState()[NAME].binders, binderId);
+  if (!memory) {
     _updateBinder({ id: binderId, prevDir: null });
   }
 }

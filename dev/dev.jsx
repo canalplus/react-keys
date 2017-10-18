@@ -6,11 +6,8 @@ import {
   Binder,
   keysInit,
   keysReducer,
-  activeBinder,
-  resetBinder,
   keysSelector,
-  Keys,
-  Carousel,
+  removeBinder,
 } from '../src';
 
 function reducer(state = { active: false }, action) {
@@ -33,10 +30,6 @@ const store = createStore(
 );
 
 keysInit({ store: store });
-
-function clickHandler() {
-  activeBinder('binder1', '15', 'left');
-}
 
 const Card = ({ id, active }) => {
   const style = active ? 'selected' : '';
@@ -135,7 +128,7 @@ const PureStrape2 = ({
       wrapper="#wrapper"
       selector="li"
       strategy="progressive"
-      enterStrategy="mirror"
+      enterStrategy="memory"
       gap={100}
       boundedGap={10}
       onDownExit={onDownExit}
@@ -188,38 +181,23 @@ const PureStrape2 = ({
 };
 
 const Strape1 = connect(() => keysSelector('strape-1')())(PureStrape);
-const Strape2 = connect(() => keysSelector('strape-2')())(PureStrape2);
 
 class PureMosaic extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { show: true, show2: false };
   }
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ show: true, show2: true });
-    }, 2000);
-    setTimeout(() => {
-      this.setState({ show: true, show2: false });
-    }, 4000);
-  }
+  componentDidMount() {}
   render() {
     return (
       <div>
-        {this.state.show &&
-          <Strape1
-            binderId="strape-1"
-            onDownExit="strape-2"
-            onUpExit="binder1"
-            active={true}
-          />}
-        {this.state.show2 &&
-          <Strape2
-            binderId="strape-2"
-            onDownExit="strape-22"
-            onUpExit="binder1"
-            active={true}
-          />}
+        <Strape1
+          binderId="strape-1"
+          onDownExit="strape-2"
+          onUpExit="binder1"
+          active={true}
+        />
+        <br />
+        <button onClick={() => removeBinder('strape-1')}>BOUTON</button>
       </div>
     );
   }

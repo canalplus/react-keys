@@ -16,7 +16,6 @@ import {
   unsleepBinder,
 } from '../helper';
 import { expect } from 'chai';
-import { EXIT_STRATEGY_MEMORY } from '../../constants';
 
 describe('redux/helper.js', () => {
   describe('findMountedId', () => {
@@ -187,16 +186,16 @@ describe('redux/helper.js', () => {
     });
   });
   describe('unsleepBinder', () => {
-    it('should unsleep binder if enterStrategy is memory', () => {
+    it('should unsleep binder if strategy is memory', () => {
       const binders = [
         { id: '1', mounted: false },
-        { id: '2', enterStrategy: EXIT_STRATEGY_MEMORY, sleep: true },
-        { id: '3', enterStrategy: EXIT_STRATEGY_MEMORY, sleep: true },
+        { id: '2', memory: true, sleep: true },
+        { id: '3', memory: true, sleep: true },
       ];
       unsleepBinder(binders, '2').should.eql([
         { id: '1', mounted: false },
-        { id: '2', enterStrategy: EXIT_STRATEGY_MEMORY, sleep: false },
-        { id: '3', enterStrategy: EXIT_STRATEGY_MEMORY, sleep: true },
+        { id: '2', memory: true, sleep: false },
+        { id: '3', memory: true, sleep: true },
       ]);
     });
   });
@@ -231,17 +230,19 @@ describe('redux/helper.js', () => {
     });
 
     it('should unmount binder if strategy is memory', () => {
-      const binders = [
-        { id: '1', mounted: true, enterStrategy: EXIT_STRATEGY_MEMORY },
-      ];
+      const binders = [{ id: '1', mounted: true, memory: true }];
       removeBinder(binders, '1').should.eql([
         {
           id: '1',
-          enterStrategy: EXIT_STRATEGY_MEMORY,
+          memory: true,
           mounted: false,
           sleep: true,
         },
       ]);
+    });
+    it('should force remove binder even if strategy is memory', () => {
+      const binders = [{ id: '1', mounted: true, memory: true }];
+      removeBinder(binders, '1', true).should.be.empty;
     });
   });
   describe('hasMountedBinder', () => {

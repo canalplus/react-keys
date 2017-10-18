@@ -53,7 +53,7 @@ export const catcher = _catcher;
 export const activeBinder = _activeBinder;
 export const updateBinder = _updateBinder;
 export const resetBinder = _resetBinder;
-export const removeBinder = _removeBinder;
+export const removeBinder = binderId => _removeBinder(binderId, true);
 export const resetCarousel = _resetCarousel;
 
 export const block = blocks.block;

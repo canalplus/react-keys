@@ -29,6 +29,7 @@ import {
   rightLimit,
 } from '../engines/helpers';
 import { findBinder } from '../redux/helper';
+import compatibility from './compatibility';
 
 class Binder extends Component {
   static get propTypes() {
@@ -45,8 +46,9 @@ class Binder extends Component {
       rightGap: PropTypes.number,
       leftGap: PropTypes.number,
       downGap: PropTypes.number,
-      enterStrategy: PropTypes.string,
+      strategy: PropTypes.string,
       refreshStrategy: PropTypes.string,
+      memory: PropTypes.bool,
       active: PropTypes.bool,
       onRight: PropTypes.func,
       onLeft: PropTypes.func,
@@ -69,8 +71,9 @@ class Binder extends Component {
     return {
       selector: 'li',
       active: true,
-      enterStrategy: 'none',
+      strategy: 'none',
       refreshStrategy: 'first',
+      memory: false,
       filter: null,
       gap: 20,
       boundedGap: 0,
@@ -84,13 +87,22 @@ class Binder extends Component {
     };
   }
 
+  constructor(props) {
+    super(props);
+    this.innerProps = compatibility(props);
+  }
+
   componentWillMount() {
     this.listenerId = addListener(this.keysHandler, this);
-    addBinder(this.props, BINDER_TYPE);
+    addBinder(this.innerProps, BINDER_TYPE);
   }
 
   componentDidMount() {
     this.refreshState();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.innerProps = compatibility(nextProps);
   }
 
   componentDidUpdate() {
@@ -99,7 +111,7 @@ class Binder extends Component {
 
   componentWillUnmount() {
     this.listenerId = removeListener(this.listenerId);
-    _removeBinder(this.props.id);
+    _removeBinder(this.innerProps.id);
   }
 
   keysHandler(keyCode, longPress, click) {
@@ -115,7 +127,7 @@ class Binder extends Component {
       onDownExit,
       onEnter,
       triggerClick,
-    } = this.props;
+    } = this.innerProps;
 
     if (!this.listenerId) {
       return;
@@ -125,19 +137,19 @@ class Binder extends Component {
     if (
       click &&
       triggerClick &&
-      isActive(this.props) &&
+      isActive(this.innerProps) &&
       !isBlocked() &&
-      !blocks.isBlocked(this.props.id)
+      !blocks.isBlocked(this.innerProps.id)
     ) {
       document.getElementById(nextEl.id).click();
       return;
     }
     if (
       !click &&
-      isActive(this.props) &&
+      isActive(this.innerProps) &&
       !isBlocked() &&
-      !blocks.isBlocked(this.props.id) &&
-      (!longPress || (longPress && this.props.longPress))
+      !blocks.isBlocked(this.innerProps.id) &&
+      (!longPress || (longPress && this.innerProps.longPress))
     ) {
       switch (keyCode) {
         case userConfig.left:
@@ -165,7 +177,7 @@ class Binder extends Component {
   }
 
   performAction(dir, cb, exitCb) {
-    const { id, debounce } = this.props;
+    const { id, debounce } = this.innerProps;
     block(debounce);
     determineNewState(id, dir, cb, exitCb, this);
   }
@@ -200,7 +212,7 @@ class Binder extends Component {
       selector,
       refreshStrategy,
       direction,
-    } = this.props;
+    } = this.innerProps;
     const binder = findBinder(globalStore.getState()[NAME].binders, id);
     if (!binder) {
       return;
@@ -255,7 +267,7 @@ class Binder extends Component {
   }
 
   render() {
-    const { id, children } = this.props;
+    const { id, children } = this.innerProps;
     return <div id={id}>{children}</div>;
   }
 }

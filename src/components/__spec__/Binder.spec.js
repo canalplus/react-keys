@@ -577,9 +577,9 @@ describe.skip('Binder', () => {
     expect(store.getState()['@@keys'].batman).to.equal(undefined);
   });
 
-  it('should not remove component when enterStrategy is "memory"', () => {
+  it('should not remove component when strategy is "memory"', () => {
     // Given
-    const binder = mount(<Binder id="robin" enterStrategy="memory" />);
+    const binder = mount(<Binder id="robin" strategy="memory" />);
 
     // When
     binder.unmount();

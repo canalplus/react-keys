@@ -1,10 +1,5 @@
 import sinon from 'sinon';
-import {
-  EXIT_STRATEGY_MEMORY,
-  EXIT_STRATEGY_MIRROR,
-  EXIT_STRATEGY_START,
-  NAME,
-} from '../../constants';
+import { EXIT_STRATEGY_MIRROR, EXIT_STRATEGY_START } from '../../constants';
 import {
   findMirrorExitId,
   findStartExitId,
@@ -22,7 +17,7 @@ describe('strategy', () => {
             {
               id: 'myId',
               selectedId: 'xoxo',
-              enterStrategy: 'none',
+              strategy: 'none',
               elements: [{ id: 'xixi' }],
             },
           ],
@@ -32,7 +27,7 @@ describe('strategy', () => {
     );
 
     it(
-      'should return selectedId when strategy is memory',
+      'should return selectedId when memory is true',
       sinon.test(function() {
         const id = 'xoxo';
         const state = {
@@ -40,7 +35,7 @@ describe('strategy', () => {
             {
               id: 'myId',
               selectedId: id,
-              enterStrategy: EXIT_STRATEGY_MEMORY,
+              memory: true,
               elements: [{ id: 'xixi' }],
             },
           ],
@@ -70,7 +65,7 @@ describe('strategy', () => {
             {
               id: 'myId',
               selectedId: 'xoxo',
-              enterStrategy: EXIT_STRATEGY_MIRROR,
+              strategy: EXIT_STRATEGY_MIRROR,
               selector: 'li',
             },
           ],
@@ -98,7 +93,7 @@ describe('strategy', () => {
             {
               id: 'myId',
               selectedId: 'xoxo',
-              enterStrategy: EXIT_STRATEGY_START,
+              strategy: EXIT_STRATEGY_START,
               selector: 'li',
             },
           ],

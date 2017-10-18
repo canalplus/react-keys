@@ -1,5 +1,3 @@
-import { EXIT_STRATEGY_MEMORY } from '../constants';
-
 export const findMountedId = binders => {
   const firstMounted = findMounted(binders);
   return firstMounted ? firstMounted.id : undefined;
@@ -43,7 +41,7 @@ export const mountBinder = (binders, binderId) =>
   binders.map(binder => {
     const formatedBinder = {
       ...binder,
-      mounted: binder.id !== binderId ? false : true,
+      mounted: binder.id === binderId,
     };
     if (binder.id === binderId) {
       formatedBinder.mountedTime = Date.now();
@@ -55,7 +53,7 @@ export const mountBinder = (binders, binderId) =>
 export const unsleepBinder = (binders, binderId) =>
   binders.map(
     binder =>
-      binder.enterStrategy !== EXIT_STRATEGY_MEMORY
+      !binder.memory
         ? binder
         : {
             ...binder,
@@ -63,23 +61,23 @@ export const unsleepBinder = (binders, binderId) =>
           }
   );
 
-export const computeRemoveBinder = (binders, binderId) => {
-  const freshBinders = removeBinder(binders, binderId);
+export const computeRemoveBinder = (binders, binderId, force) => {
+  const freshBinders = removeBinder(binders, binderId, force);
   return !hasMountedBinder(freshBinders)
     ? mountfreshestBinder(freshBinders)
     : freshBinders;
 };
 
-export const removeBinder = (binders, binderId) => {
+export const removeBinder = (binders, binderId, force = false) => {
   const binder = binders.find(binder => binder.id === binderId);
-  if (binder && binder.enterStrategy === EXIT_STRATEGY_MEMORY) {
-    return binders.map(binder => ({
-      ...binder,
-      mounted: binder.id === binderId ? false : binder.mounted,
-      sleep: binder.id === binderId ? true : binder.sleep,
-    }));
+  if (force || (binder && !binder.memory)) {
+    return binders.filter(binder => binder.id !== binderId);
   }
-  return binders.filter(binder => binder.id !== binderId);
+  return binders.map(binder => ({
+    ...binder,
+    mounted: binder.id === binderId ? false : binder.mounted,
+    sleep: binder.id === binderId ? true : binder.sleep,
+  }));
 };
 
 export const hasMountedBinder = binders =>
@@ -116,7 +114,8 @@ export const buildBinderFromProps = (props, type) => ({
   rightGap: props.rightGap,
   leftGap: props.leftGap,
   downGap: props.downGap,
-  enterStrategy: props.enterStrategy,
+  strategy: props.strategy,
+  memory: props.memory,
   position: props.position,
   priority: props.priority,
   elements: [],
