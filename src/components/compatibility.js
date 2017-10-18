@@ -6,12 +6,12 @@ export default props => {
   if (innerProps.enterStrategy) {
     if (innerProps.enterStrategy === EXIT_STRATEGY_MEMORY) {
       console.warn(
-        'memory strategy is deprecated and will be removed in next major release, use memory={true} insread'
+        '[react-keys] - memory strategy is deprecated and will be removed in next major release, use memory={true} insread'
       );
       innerProps.memory = true;
     } else {
       console.warn(
-        'enterStrategy prop is deprecated and will be removed in next major release, use strategy instsead'
+        '[react-keys] - enterStrategy prop is deprecated and will be removed in next major release, use strategy instsead'
       );
       innerProps.strategy = innerProps.enterStrategy;
     }

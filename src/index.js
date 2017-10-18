@@ -1,4 +1,4 @@
-import _Binder from './components/Binder';
+import _Binder from './components/binder/Binder';
 import _Keys from './components/Keys';
 import _Carousel from './components/Carousel';
 import _Catcher from './components/Catcher';

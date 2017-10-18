@@ -21,7 +21,7 @@ describe('compatibility', () => {
         .expects('warn')
         .once()
         .withArgs(
-          'enterStrategy prop is deprecated and will be removed in next major release, use strategy instsead'
+          '[react-keys] - enterStrategy prop is deprecated and will be removed in next major release, use strategy instsead'
         );
       const props = { enterStrategy: EXIT_STRATEGY_MIRROR };
       const result = compatibility(props);
@@ -35,7 +35,7 @@ describe('compatibility', () => {
         .expects('warn')
         .once()
         .withArgs(
-          'memory strategy is deprecated and will be removed in next major release, use memory={true} insread'
+          '[react-keys] - memory strategy is deprecated and will be removed in next major release, use memory={true} insread'
         );
       const props = { enterStrategy: EXIT_STRATEGY_MEMORY };
       const result = compatibility(props);

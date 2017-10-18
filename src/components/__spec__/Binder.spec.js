@@ -1,5 +1,5 @@
 import React from 'react';
-import Binder from '../Binder';
+import Binder from '../binder/Binder';
 import { createStore, combineReducers } from 'redux';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
