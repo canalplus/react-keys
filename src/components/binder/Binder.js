@@ -23,7 +23,7 @@ class Binder extends Component {
   }
 
   componentDidMount() {
-    refreshState.apply(this);
+    setTimeout(() => refreshState.apply(this), 0);
   }
 
   componentDidUpdate() {

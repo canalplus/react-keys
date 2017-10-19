@@ -126,6 +126,7 @@ export const buildBinderFromProps = (props, type) => ({
   memory: props.memory,
   position: props.position,
   priority: props.priority,
+  prevDir: props.prevDir,
   elements: [],
   hasMoved: false,
   marginLeft: 0,

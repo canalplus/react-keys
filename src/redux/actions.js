@@ -123,22 +123,6 @@ export function _resetBinder(binderId, wishedId) {
   _updateBinder(binder);
 }
 
-export function updateBinderSelectedId(binderId, selectedId) {
-  ensureDispatch();
-  if (!ensureKnownBinder(binderId)) return;
-  const margin = boundsMargin(
-    selectedId,
-    findBinder(globalStore.getState()[NAME].binders, binderId)
-  );
-  globalStore.dispatch({
-    type: UPDATE_BINDER_SELECTED_KEY,
-    binderId,
-    selectedId,
-    marginLeft: margin.marginLeft,
-    marginTop: margin.marginTop,
-  });
-}
-
 export function updatePosition(binderId, selectedId) {
   ensureDispatch();
   if (!ensureKnownBinder(binderId)) return;
@@ -175,9 +159,19 @@ export function determineNewState(binderId, dir, cb, exitCb, _this) {
   );
   if (!nextEl) return;
   const binder = calculateNewState(dir, nextEl, prevEl, prevDir, elements);
-  _updateBinder({ ...binder, id: binderId });
   if (binder.hasMoved) {
-    updateBinderSelectedId(binderId, binder.nextEl.id, dir);
+    const margin = boundsMargin(
+      binder.nextEl.id,
+      findBinder(globalStore.getState()[NAME].binders, binderId)
+    );
+
+    _updateBinder({
+      ...binder,
+      id: binderId,
+      selectedId: binder.nextEl.id,
+      marginLeft: margin.marginLeft,
+      marginTop: margin.marginTop,
+    });
     execCb(cb, nextEl, _this);
   } else {
     resetFlipFlop(binderId);
@@ -188,8 +182,11 @@ export function determineNewState(binderId, dir, cb, exitCb, _this) {
 export function resetFlipFlop(binderId) {
   ensureDispatch();
   if (!ensureKnownBinder(binderId)) return;
-  const { memory } = findBinder(globalStore.getState()[NAME].binders, binderId);
-  if (!memory) {
+  const { memory, prevDir } = findBinder(
+    globalStore.getState()[NAME].binders,
+    binderId
+  );
+  if (!memory && prevDir) {
     _updateBinder({ id: binderId, prevDir: null });
   }
 }

@@ -51,7 +51,7 @@ export function refreshState() {
       binder.selectedId &&
       !isPresent(elements, binder.selectedId)
     ) {
-      const previousElement = this.findPreviousElement(
+      const previousElement = findPreviousElement(
         binder.selectedId,
         binder.elements,
         elements
@@ -71,7 +71,9 @@ export function refreshState() {
       selectedId: selectedElement.id,
       prevDir: null,
     });
-    updatePosition(id, selectedElement.id);
+    if (binder.elements.length > 0) {
+      updatePosition(id, selectedElement.id);
+    }
   }
 }
 

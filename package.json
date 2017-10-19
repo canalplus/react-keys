@@ -29,6 +29,7 @@
     "deploy-local": "sed -i.bak s/$npm_package_version/$npm_package_version-SNAPSHOT/g package.json && rm package.json.bak && npm pack && git checkout package.json dist/reactKeys.js && echo \"\n\n\nNow run:\n\nnpm install $(pwd)/react-keys-$npm_package_version-SNAPSHOT.tgz\n\nIf you want to install previous version just run 'npm install'.\""
   },
   "devDependencies": {
+    "aphrodite": "1.2.5",
     "babel-cli": "6.24.1",
     "babel-core": "6.25.0",
     "babel-eslint": "7.2.3",
@@ -59,6 +60,7 @@
     "react-test-renderer": "15.6.1",
     "recompose": "0.24.0",
     "redux": "3.7.2",
+    "reselect": "3.0.1",
     "rimraf": "2.6.1",
     "sinon": "2.4.0",
     "sinon-chai": "2.12.0",
@@ -73,6 +75,6 @@
     "react-dom": "0.14.x || 15.x.x"
   },
   "dependencies": {
-    "npm": "^5.3.0"
+    "npm": "^5.3.0",
   }
 }

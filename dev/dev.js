@@ -57,8 +57,7 @@ const PureStrape = ({
       active={active}
       wrapper="#wrapper"
       selector="li"
-      strategy="progressive"
-      enterStrategy="mirror"
+      strategy="mirror"
       gap={100}
       boundedGap={10}
       priority={0}
@@ -127,8 +126,7 @@ const PureStrape2 = ({
       active={active}
       wrapper="#wrapper"
       selector="li"
-      strategy="progressive"
-      enterStrategy="memory"
+      strategy="mirror"
       gap={100}
       boundedGap={10}
       onDownExit={onDownExit}
@@ -181,6 +179,7 @@ const PureStrape2 = ({
 };
 
 const Strape1 = connect(() => keysSelector('strape-1')())(PureStrape);
+const Strape2 = connect(() => keysSelector('strape-2')())(PureStrape);
 
 class PureMosaic extends React.Component {
   constructor(props) {
@@ -190,12 +189,8 @@ class PureMosaic extends React.Component {
   render() {
     return (
       <div>
-        <Strape1
-          binderId="strape-1"
-          onDownExit="strape-2"
-          onUpExit="binder1"
-          active={true}
-        />
+        <Strape1 binderId="strape-1" onDownExit="strape-2" />
+        <Strape2 binderId="strape-2" onUpExit="strape-1" />
         <br />
         <button onClick={() => removeBinder('strape-1')}>BOUTON</button>
       </div>

@@ -17,6 +17,7 @@ import * as helpers from '../../engines/helpers';
 import * as bounds from '../../engines/bounds';
 import sinon from 'sinon';
 import { reset } from '../../../test/mocks';
+import { NAME } from '../../constants';
 
 const props = {
   id: 'myId',
@@ -113,49 +114,6 @@ describe('redux/actions.js', () => {
           .once()
           .withArgs(id);
         _updateBinder({ id });
-      })
-    );
-  });
-
-  describe('updateBinderSelectedId', () => {
-    afterEach(reset);
-
-    it(
-      'should call ensureDispatch',
-      sinon.test(function() {
-        addBinder(props, type);
-        this.stub(bounds, 'boundsMargin').returns({
-          marginTop: 0,
-          marginLeft: 0,
-        });
-        this.mock(ensure)
-          .expects('ensureDispatch')
-          .once();
-        updateBinderSelectedId('myId', '1', 0, 0);
-      })
-    );
-
-    it(
-      'should dispatch to update binder selected id',
-      sinon.test(function() {
-        addBinder(props, type);
-        this.stub(bounds, 'boundsMargin').returns({
-          marginTop: 0,
-          marginLeft: 0,
-        });
-        const binderId = 'myId';
-        const selectedId = '1';
-        this.mock(listener.globalStore)
-          .expects('dispatch')
-          .once()
-          .withArgs({
-            type: UPDATE_BINDER_SELECTED_KEY,
-            binderId,
-            selectedId,
-            marginLeft: 0,
-            marginTop: 0,
-          });
-        updateBinderSelectedId(binderId, selectedId);
       })
     );
   });
@@ -318,7 +276,7 @@ describe('redux/actions.js', () => {
     it(
       'should set prevDir at null when exit strategy !== memory',
       sinon.test(function() {
-        addBinder(props, type);
+        addBinder({ ...props, prevDir: 'left' }, type);
         this.mock(listener.globalStore)
           .expects('dispatch')
           .once()
@@ -326,6 +284,16 @@ describe('redux/actions.js', () => {
             type: UPDATE_BINDER,
             binder: { id: 'myId', prevDir: null },
           });
+        resetFlipFlop('myId');
+      })
+    );
+    it(
+      'should not dispatch if prevDir is already null',
+      sinon.test(function() {
+        addBinder({ ...props }, type);
+        this.mock(listener.globalStore)
+          .expects('dispatch')
+          .never();
         resetFlipFlop('myId');
       })
     );
