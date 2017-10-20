@@ -5,12 +5,12 @@ export function execCb(func, nextEl, _this) {
   func.call(_this, nextEl || {});
 }
 
-export function enterTo(callback) {
+export function enterTo(callback, selectedId) {
   if (callback) {
     if (typeof callback === 'string') {
       _activeBinder(callback);
     } else {
-      callback();
+      callback(selectedId);
     }
   }
 }

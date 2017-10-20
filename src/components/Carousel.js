@@ -196,7 +196,7 @@ class Carousel extends Component {
   performCallback(callback) {
     if (callback) {
       block();
-      enterTo(callback, this.selectedId, this);
+      enterTo(callback, this.selectedId);
     }
   }
 
