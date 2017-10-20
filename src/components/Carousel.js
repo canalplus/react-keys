@@ -34,8 +34,8 @@ class Carousel extends Component {
       className: PropTypes.string,
       childrenClassName: PropTypes.string,
       onChange: PropTypes.func,
-      onDownExit: PropTypes.func,
-      onUpExit: PropTypes.func,
+      onDownExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+      onUpExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       onEnter: PropTypes.func,
       updateIndex: PropTypes.bool,
     };
