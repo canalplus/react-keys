@@ -7,7 +7,7 @@ import { calculateElSpace, hasElementsDiff } from '../engines/helpers';
 import { addListener, removeListener, userConfig } from '../listener';
 import { block, isBlocked } from '../clock';
 import { isActive } from '../isActive';
-import { execCb } from '../funcHandler';
+import { enterTo, execCb } from '../funcHandler';
 import { _updateBinder, addBinder, _removeBinder } from '../redux/actions';
 import {
   CAROUSEL_TYPE,
@@ -83,7 +83,10 @@ class Carousel extends Component {
   }
 
   componentWillUpdate({ index, children, updateIndex }) {
-    if (hasElementsDiff(children, this.props.children) || this.props.index !== index) {
+    if (
+      hasElementsDiff(children, this.props.children) ||
+      this.props.index !== index
+    ) {
       const cursor = updateIndex ? index : this.state.cursor;
       this.updateState(cursor, children);
     }
@@ -193,7 +196,7 @@ class Carousel extends Component {
   performCallback(callback) {
     if (callback) {
       block();
-      execCb(callback, this.selectedId, this);
+      enterTo(callback, this.selectedId, this);
     }
   }
 
