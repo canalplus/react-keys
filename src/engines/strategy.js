@@ -19,7 +19,7 @@ export function findIdByStrategy(state, binderId, nextElId = null) {
     case STRATEGY_START:
       return findStartExitId(selector, moved, binderId);
   }
-  return memory ? selectedId : elements[0].id;
+  return memory ? selectedId : elements[0] && elements[0].id;
 }
 
 export function findMirrorExitId(binderId, selector, moved, state) {
