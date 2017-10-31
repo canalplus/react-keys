@@ -5,7 +5,7 @@ import { BINDER_TYPE } from '../../constants';
 import { addListener, removeListener } from '../../listener';
 import { addBinder, _removeBinder } from '../../redux/actions';
 import compatibility from '../compatibility';
-import { refreshState } from './refresh';
+import { refreshState, mountState } from './refresh';
 
 class Binder extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class Binder extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => refreshState.apply(this), 0);
+    setTimeout(() => mountState.apply(this), 0);
   }
 
   componentDidUpdate() {

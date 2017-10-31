@@ -47,7 +47,7 @@ export function boundsMargin(nextId, state, props) {
   let newMarginTop = marginTop;
   let newElements = elements;
 
-  if (selectedId === nextId) {
+  if (!props || selectedId === nextId) {
     return {
       marginLeft: newMarginLeft,
       marginTop: newMarginTop,

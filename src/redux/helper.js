@@ -70,7 +70,7 @@ export const computeRemoveBinder = (binders, binderId, force) => {
 
 export const removeBinder = (binders, binderId, force = false) => {
   const binder = binders.find(binder => binder.id === binderId);
-  if (force || (binder && !binder.memory)) {
+  if (binder && (force || !binder.memory)) {
     return binders.filter(binder => binder.id !== binderId);
   }
   return binders.map(binder => ({
