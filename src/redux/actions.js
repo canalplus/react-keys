@@ -109,7 +109,7 @@ export function _resetBinder(binderId, wishedId) {
   const { elements, selectedId } = originalState;
   if (elements.length === 0) return;
   const newSelectedId = wishedId || elements[0].id;
-  const margin = boundsMargin(newSelectedId, originalState);
+  const bounds = boundsMargin(newSelectedId, originalState);
   const binder = {
     id: binderId,
     selectedId: newSelectedId,
@@ -117,8 +117,9 @@ export function _resetBinder(binderId, wishedId) {
     prevEl: elements.find(e => e.id === selectedId),
     nextEl: elements.find(e => e.id === newSelectedId),
     prevDir: null,
-    marginLeft: margin.marginLeft,
-    marginTop: margin.marginTop,
+    elements: bounds.elements,
+    marginLeft: bounds.marginLeft,
+    marginTop: bounds.marginTop,
   };
   _updateBinder(binder);
 }
@@ -150,7 +151,7 @@ export function updatePressStatus(press, keyCode = null) {
   }
 }
 
-export function determineNewState(binderId, dir, cb, exitCb, _this) {
+export function determineNewState(binderId, props, dir, cb, exitCb, _this) {
   ensureDispatch();
   if (!ensureKnownBinder(binderId)) return;
   const { nextEl, prevEl, prevDir, elements } = findBinder(
@@ -160,17 +161,19 @@ export function determineNewState(binderId, dir, cb, exitCb, _this) {
   if (!nextEl) return;
   const binder = calculateNewState(dir, nextEl, prevEl, prevDir, elements);
   if (binder.hasMoved) {
-    const margin = boundsMargin(
+    const bounds = boundsMargin(
       binder.nextEl.id,
-      findBinder(globalStore.getState()[NAME].binders, binderId)
+      findBinder(globalStore.getState()[NAME].binders, binderId),
+      props
     );
 
     _updateBinder({
       ...binder,
       id: binderId,
       selectedId: binder.nextEl.id,
-      marginLeft: margin.marginLeft,
-      marginTop: margin.marginTop,
+      elements: bounds.elements,
+      marginLeft: bounds.marginLeft,
+      marginTop: bounds.marginTop,
     });
     execCb(cb, nextEl, _this);
   } else {

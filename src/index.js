@@ -24,6 +24,7 @@ import {
   _getKeyCode,
   _isLongPress,
   _getCurrentBinderId,
+  _isVisibleInBinder,
 } from './redux/selector';
 import blocks from './blocks';
 
@@ -47,6 +48,7 @@ export const getCurrentBinder = _getCurrentBinder;
 export const getCurrentBinderId = _getCurrentBinderId;
 export const getKeyCode = _getKeyCode;
 export const isLongPress = _isLongPress;
+export const isVisibleInBinder = _isVisibleInBinder;
 
 export const catcher = _catcher;
 

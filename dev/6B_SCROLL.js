@@ -11,6 +11,7 @@ import {
   getBinderMarginLeft,
   getCurrentSelectedId,
   getCurrentBinder,
+  isVisibleInBinder,
 } from '../src';
 
 const styles = StyleSheet.create({
@@ -55,33 +56,36 @@ const store = createStore(
 
 keysInit({ store });
 
-const PureCard = ({ id, current }) => (
+const PureCard = ({ id, current, isVisible }) => (
   <li id={id} className={css(styles.card, current === id && styles.focused)}>
     #{id}
+    COUCOU = {`${isVisible}`}
   </li>
 );
 
-const Card = connect(() => ({
+const Card = connect((state, props) => ({
   current: getCurrentSelectedId()(),
+  isVisible: isVisibleInBinder(props.binderId, props.id)(),
 }))(PureCard);
 
 const GenericBinder = ({ id, priority, downExit, upExit, marginLeft }) => {
   return (
     <Binder
       id={id}
-      wrapper=".wrapper"
+      wrapper={`#wrapper-${id}`}
       priority={priority || 0}
       onDownExit={downExit}
       onUpExit={upExit}
+      visibilityOffset={200}
     >
-      <div className={`${css(styles.container)} wrapper`}>
+      <div id={`wrapper-${id}`} className={css(styles.container)}>
         <ul className={css(styles.ulStyle)} style={{ marginLeft }}>
-          <Card id={`${id}-1`} />
-          <Card id={`${id}-2`} />
-          <Card id={`${id}-3`} />
-          <Card id={`${id}-4`} />
-          <Card id={`${id}-5`} />
-          <Card id={`${id}-6`} />
+          <Card id={`${id}-1`} binderId={id} />
+          <Card id={`${id}-2`} binderId={id} />
+          <Card id={`${id}-3`} binderId={id} />
+          <Card id={`${id}-4`} binderId={id} />
+          <Card id={`${id}-5`} binderId={id} />
+          <Card id={`${id}-6`} binderId={id} />
         </ul>
       </div>
     </Binder>

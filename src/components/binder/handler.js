@@ -72,7 +72,7 @@ export function keysHandler(keyCode, longPress, click) {
   }
 }
 
-export const performAction = ({ id, debounce }, dir, cb, exitCb) => {
-  block(debounce);
-  determineNewState(id, dir, cb, exitCb, this);
+export const performAction = (props, dir, cb, exitCb) => {
+  block(props.debounce);
+  determineNewState(props.id, props, dir, cb, exitCb, this);
 };

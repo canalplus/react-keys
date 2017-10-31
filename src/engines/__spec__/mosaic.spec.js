@@ -105,40 +105,72 @@ describe('engine/mosaic.js', () => {
   describe('upArray', () => {
     it('should filter and sort array', () => {
       const elCoords = { top: 30, left: 10 };
-      const coords = [{ down: 40, left: 10 }, { down: 10, left: 10 }, { down: 20, left: 10 }];
-      upArray(elCoords, coords).should.eql([{ down: 20, left: 10 }, { down: 10, left: 10 }]);
+      const coords = [
+        { down: 40, left: 10 },
+        { down: 10, left: 10 },
+        { down: 20, left: 10 },
+      ];
+      upArray(elCoords, coords).should.eql([
+        { down: 20, left: 10 },
+        { down: 10, left: 10 },
+      ]);
     });
   });
   describe('downArray', () => {
     it('should filter and sort array', () => {
       const elCoords = { down: 30, left: 10 };
-      const coords = [{ top: 40, left: 10 }, { top: 10, left: 10 }, { top: 30, left: 10 }];
-      downArray(elCoords, coords).should.eql([{ top: 30, left: 10 }, { top: 40, left: 10 }]);
+      const coords = [
+        { top: 40, left: 10 },
+        { top: 10, left: 10 },
+        { top: 30, left: 10 },
+      ];
+      downArray(elCoords, coords).should.eql([
+        { top: 30, left: 10 },
+        { top: 40, left: 10 },
+      ]);
     });
   });
   describe('leftArray', () => {
     it('should filter and sort array', () => {
       const elCoords = { top: 30, left: 10 };
-      const coords = [{ top: 40, right: 20 }, { top: 10, right: 5 }, { top: 30, right: 10 }];
-      leftArray(elCoords, coords).should.eql([{ top: 30, right: 10 }, { top: 10, right: 5 }]);
+      const coords = [
+        { top: 40, right: 20 },
+        { top: 10, right: 5 },
+        { top: 30, right: 10 },
+      ];
+      leftArray(elCoords, coords).should.eql([
+        { top: 30, right: 10 },
+        { top: 10, right: 5 },
+      ]);
     });
   });
   describe('rightArray', () => {
     it('should filter and sort array', () => {
       const elCoords = { top: 30, right: 10 };
-      const coords = [{ top: 40, left: 20 }, { top: 10, left: 5 }, { top: 30, left: 10 }];
-      rightArray(elCoords, coords).should.eql([{ top: 30, left: 10 }, { top: 40, left: 20 }]);
+      const coords = [
+        { top: 40, left: 20 },
+        { top: 10, left: 5 },
+        { top: 30, left: 10 },
+      ];
+      rightArray(elCoords, coords).should.eql([
+        { top: 30, left: 10 },
+        { top: 40, left: 20 },
+      ]);
     });
   });
   it('createList should return an array', () => {
-    const { document } = (new JSDOM('<li id="0"></li><li id="1"></li><li id="2"></li>')).window;
+    const { document } = new JSDOM(
+      '<li id="0"></li><li id="1"></li><li id="2"></li>'
+    ).window;
     createList(document, 'li').should.be.an.instanceOf(Array);
     createList(document, 'li').should.have.lengthOf(3);
   });
   it('build should return an array', () => {
-    const { document } = (new JSDOM('<li id="0"></li><li id="1"></li><li id="2"></li>')).window;
+    const { document } = new JSDOM(
+      '<li id="0"></li><li id="1"></li><li id="2"></li>'
+    ).window;
     const list = createList(document, 'li');
-    const options = {};
+    const options = { wrapper: { top: 0, down: 0, left: 0, right: 0 } };
     const builded = build(list, options);
     builded[0].id.should.equal('0');
     builded[1].id.should.equal('1');

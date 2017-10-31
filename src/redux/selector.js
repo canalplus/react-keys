@@ -65,3 +65,12 @@ export const _isBinderActive = id => () => {
   const binder = findBinder(globalStore.getState()[NAME].binders, id);
   return binder && binder.mounted;
 };
+
+export const _isVisibleInBinder = (binderId, elementId) => () => {
+  ensureState();
+  const binder = findBinder(globalStore.getState()[NAME].binders, binderId);
+  if (!binder) return false;
+  const element = binder.elements.find(el => el.id === elementId);
+  if (!element) return false;
+  return element.isVisible;
+};

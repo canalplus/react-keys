@@ -21,6 +21,7 @@ export function refreshState() {
     selector,
     refreshStrategy,
     direction,
+    visibilityOffset,
   } = this.innerProps;
   const binder = findBinder(globalStore.getState()[NAME].binders, id);
   if (!binder) {
@@ -39,6 +40,8 @@ export function refreshState() {
     const options = {
       marginLeft: binder.marginLeft,
       marginTop: binder.marginTop,
+      offset: visibilityOffset,
+      wrapper: nextWrapper,
     };
     let { elements, selectedElement } = refresh(
       nextElements,
@@ -61,9 +64,7 @@ export function refreshState() {
 
     _updateBinder({
       id: id,
-      wrapper: calculateElSpace(
-        wrapper ? document.querySelector(wrapper) : document.body
-      ),
+      wrapper: nextWrapper,
       downLimit: downLimit(elements),
       rightLimit: rightLimit(elements),
       elements: elements,

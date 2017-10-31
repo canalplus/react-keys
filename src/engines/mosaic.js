@@ -1,4 +1,5 @@
 import { calculateElSpace } from './helpers';
+import { isVisible } from './visibility';
 
 export const rightArray = (elCoords, coords) =>
   coords
@@ -38,22 +39,27 @@ export const calculDowScore = (el, elCoords) =>
   Math.abs(el.top - elCoords.down) + Math.abs(el.left - elCoords.left);
 
 export function build(elements, options) {
+  const { wrapper, marginLeft, offset, marginTop } = options;
   const elementsCoords = elements.map(calculateElSpace);
 
-  return elementsCoords.map(el => ({
-    id: el.id,
-    coords: {
+  return elementsCoords.map(el => {
+    const coords = {
       ...el,
-      right: el.right - options.marginLeft,
-      left: el.left - options.marginLeft,
-      top: el.top - options.marginTop,
-      down: el.down - options.marginTop,
-    },
-    left: findElement(leftArray(el, elementsCoords)),
-    right: findElement(rightArray(el, elementsCoords)),
-    up: findElement(upArray(el, elementsCoords)),
-    down: findElement(downArray(el, elementsCoords)),
-  }));
+      right: el.right - marginLeft,
+      left: el.left - marginLeft,
+      top: el.top - marginTop,
+      down: el.down - marginTop,
+    };
+    return {
+      id: el.id,
+      coords,
+      left: findElement(leftArray(el, elementsCoords)),
+      right: findElement(rightArray(el, elementsCoords)),
+      up: findElement(upArray(el, elementsCoords)),
+      down: findElement(downArray(el, elementsCoords)),
+      isVisible: isVisible(wrapper, coords, marginLeft, marginTop, offset),
+    };
+  });
 }
 
 export function createList(dom, selector, filter) {
