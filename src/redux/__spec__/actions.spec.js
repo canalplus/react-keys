@@ -2,8 +2,6 @@ import {
   addBinder,
   _updateBinder,
   UPDATE_BINDER,
-  updateBinderSelectedId,
-  UPDATE_BINDER_SELECTED_KEY,
   _activeBinder,
   updatePressStatus,
   UPDATE_PRESS_STATUS,

@@ -4,7 +4,6 @@ import {
   MOUNT_BINDER,
   REMOVE_BINDER,
   UPDATE_BINDER,
-  UPDATE_BINDER_SELECTED_KEY,
   UPDATE_PRESS_STATUS,
 } from './actions';
 import {
@@ -58,16 +57,6 @@ export function reducer(state = initialKeysSate, action) {
     }
     case ACTIVE_BINDER: {
       let binders = mountBinder(state.binders, action.binderId);
-      let current = buildCurrent(binders, state.current);
-      return { ...state, binders, current };
-    }
-    case UPDATE_BINDER_SELECTED_KEY: {
-      let binders = updateBinder(state.binders, {
-        id: action.binderId,
-        selectedId: action.selectedId,
-        marginLeft: action.marginLeft,
-        marginTop: action.marginTop,
-      });
       let current = buildCurrent(binders, state.current);
       return { ...state, binders, current };
     }

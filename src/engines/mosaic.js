@@ -69,17 +69,3 @@ export function createList(dom, selector, filter) {
       el => el.id !== '' && [].slice.call(el.classList).indexOf(filter) === -1
     );
 }
-
-export function selectedElement(elements, selectedId) {
-  const focusedEl = selectedId ? elements.find(e => e.id === selectedId) : null;
-  return focusedEl || elements[0];
-}
-
-export function refresh(nextElements, selectedId, options) {
-  const returnedElements = build(nextElements, options);
-
-  return {
-    elements: returnedElements,
-    selectedElement: selectedElement(returnedElements, selectedId),
-  };
-}

@@ -6,7 +6,6 @@ import {
   calculRightScore,
   elementSort,
   findElement,
-  selectedElement,
   upArray,
   downArray,
   leftArray,
@@ -175,16 +174,5 @@ describe('engine/mosaic.js', () => {
     builded[0].id.should.equal('0');
     builded[1].id.should.equal('1');
     builded[2].id.should.equal('2');
-  });
-  describe('selectedElement', () => {
-    it('should return element from id when it exists in array', () => {
-      const array = [{ id: '1' }, { id: '2' }];
-      selectedElement(array, '2').id.should.equal('2');
-    });
-    it('should should return first element when id is not found', () => {
-      const array = [{ id: '1' }, { id: '2' }];
-      selectedElement(array, '3').id.should.equal('1');
-      selectedElement(array, null).id.should.equal('1');
-    });
   });
 });

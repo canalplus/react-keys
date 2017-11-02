@@ -1,6 +1,6 @@
 import { globalStore } from '../listener';
 import { findIdByStrategy } from '../engines/strategy';
-import { boundsMargin, correctBoundsMargin } from '../engines/bounds';
+import { boundsMargin } from '../engines/bounds';
 import { calculateNewState } from '../engines/helpers';
 import { CAROUSEL_TYPE, NAME } from '../constants';
 import { ensureDispatch, ensureKnownBinder, isUnknownBinder } from '../ensure';
@@ -17,7 +17,6 @@ export const UPDATE_BINDER = `${NAME}/UPDATE_BINDER`;
 export const REMOVE_BINDER = `${NAME}/REMOVE_BINDER`;
 export const ACTIVE_BINDER = `${NAME}/ACTIVE_BINDER`;
 
-export const UPDATE_BINDER_SELECTED_KEY = `${NAME}/UPDATE_BINDER_SELECTED_KEY`;
 export const UPDATE_PRESS_STATUS = `${NAME}/UPDATE_PRESS_STATUS`;
 
 export function addBinder(props, type) {
@@ -109,7 +108,9 @@ export function _resetBinder(binderId, wishedId) {
   const { elements, selectedId } = originalState;
   if (elements.length === 0) return;
   const newSelectedId = wishedId || elements[0].id;
-  const bounds = boundsMargin(newSelectedId, originalState);
+  const bounds = boundsMargin(newSelectedId, originalState, {
+    visibilityOffset: 0,
+  });
   const binder = {
     id: binderId,
     selectedId: newSelectedId,
@@ -122,22 +123,6 @@ export function _resetBinder(binderId, wishedId) {
     marginTop: bounds.marginTop,
   };
   _updateBinder(binder);
-}
-
-export function updatePosition(binderId, selectedId) {
-  ensureDispatch();
-  if (!ensureKnownBinder(binderId)) return;
-  const margin = correctBoundsMargin(
-    selectedId,
-    findBinder(globalStore.getState()[NAME].binders, binderId)
-  );
-  globalStore.dispatch({
-    type: UPDATE_BINDER_SELECTED_KEY,
-    binderId,
-    selectedId,
-    marginLeft: margin.marginLeft,
-    marginTop: margin.marginTop,
-  });
 }
 
 export function updatePressStatus(press, keyCode = null) {

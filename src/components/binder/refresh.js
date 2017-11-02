@@ -9,8 +9,9 @@ import {
   hasWrapperDiff,
   rightLimit,
 } from '../../engines/helpers';
-import { createList, refresh } from '../../engines/mosaic';
-import { _updateBinder, updatePosition } from '../../redux/actions';
+import { build, createList } from '../../engines/mosaic';
+import { _updateBinder } from '../../redux/actions';
+import { next } from '../../engines/next';
 
 export function refreshState() {
   const dom = ReactDOM.findDOMNode(this);
@@ -50,60 +51,29 @@ export function mountState() {
 
 export const updateState = (binder, nextWrapper, nextElements, props) => {
   const { id, visibilityOffset, refreshStrategy } = props;
+  const nextSelection = next(nextElements, binder, refreshStrategy);
   const options = {
-    marginLeft: binder.marginLeft,
-    marginTop: binder.marginTop,
+    marginLeft: nextSelection.marginLeft,
+    marginTop: nextSelection.marginTop,
     offset: visibilityOffset,
     wrapper: nextWrapper,
   };
-  let { elements, selectedElement } = refresh(
-    nextElements,
-    binder.selectedId,
-    options
-  );
 
-  if (
-    refreshStrategy === 'previous' &&
-    binder.selectedId &&
-    !isPresent(elements, binder.selectedId)
-  ) {
-    const previousElement = findPreviousElement(
-      binder.selectedId,
-      binder.elements,
-      elements
-    );
-    selectedElement = previousElement;
-  }
+  const elements = build(nextElements, options);
+  const nextEl = elements.find(el => el.id === nextSelection.selectedId);
 
-  _updateBinder({
+  const nextState = {
     id,
     wrapper: nextWrapper,
     downLimit: downLimit(elements),
     rightLimit: rightLimit(elements),
     elements: elements,
-    nextEl: selectedElement,
-    selectedId: selectedElement.id,
     prevDir: null,
+  };
+
+  _updateBinder({
+    ...nextState,
+    ...nextSelection,
+    nextEl,
   });
-  if (binder.elements.length > 0) {
-    updatePosition(id, selectedElement.id);
-  }
 };
-
-const findPreviousElement = (selectedId, oldElements, newElements, inc = 0) => {
-  const index = oldElements.map(e => e.id).indexOf(selectedId);
-  const newIndex = index === 0 ? 0 : index - 1;
-  return !isPresent(newElements, oldElements[newIndex].id) &&
-    inc < newElements.length
-    ? findPreviousElement(
-        oldElements[newIndex].id,
-        oldElements,
-        newElements,
-        inc + 1
-      )
-    : newElements[newIndex];
-};
-
-const isPresent = (elements, selectedId) =>
-  selectedId !== undefined &&
-  elements.map(e => e.id).some(id => id === selectedId);
