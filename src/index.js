@@ -1,6 +1,6 @@
 import _Binder from './components/binder/Binder';
 import _Keys from './components/Keys';
-import _Carousel from './components/Carousel';
+import _Carousel from './components/carousel/Carousel';
 import _Catcher from './components/Catcher';
 import _catcher from './catcher';
 import { _init, getConfig } from './listener';

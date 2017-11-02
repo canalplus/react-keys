@@ -140,6 +140,7 @@ export const buildCarsouelFromProps = (props, type) => ({
   circular: props.circular,
   size: props.size,
   index: props.index,
+  memory: props.memory,
   priority: props.priority,
   elements: [],
 });

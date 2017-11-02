@@ -1,65 +1,17 @@
 /* eslint no-unused-vars:0 */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { build, getNext, getPrev } from '../engines/carousel';
-import { isInsideLeft, isInsideRight } from '../engines/bounds';
-import { calculateElSpace, hasElementsDiff } from '../engines/helpers';
-import { addListener, removeListener, userConfig } from '../listener';
-import { block, isBlocked } from '../clock';
-import { isActive } from '../isActive';
-import { enterTo, execCb } from '../funcHandler';
-import { _updateBinder, addBinder, _removeBinder } from '../redux/actions';
-import {
-  CAROUSEL_TYPE,
-  NAVIGATION_BOUND,
-  NAVIGATION_CENTER,
-} from '../constants';
+import { build, getNext, getPrev } from '../../engines/carousel';
+import { isInsideLeft, isInsideRight } from '../../engines/bounds';
+import { calculateElSpace, hasElementsDiff } from '../../engines/helpers';
+import { addListener, removeListener, userConfig } from '../../listener';
+import { block, isBlocked } from '../../clock';
+import { isActive } from '../../isActive';
+import { enterTo, execCb } from '../../funcHandler';
+import { _updateBinder, addBinder, _removeBinder } from '../../redux/actions';
+import { CAROUSEL_TYPE, NAVIGATION_BOUND } from '../../constants';
+import { defaultProps, propTypes } from './props';
 
 class Carousel extends Component {
-  static get propTypes() {
-    return {
-      children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-      id: PropTypes.string.isRequired,
-      active: PropTypes.bool,
-      index: PropTypes.number,
-      size: PropTypes.number,
-      speed: PropTypes.number,
-      priority: PropTypes.number,
-      debounce: PropTypes.number,
-      elWidth: PropTypes.number,
-      navigation: PropTypes.string,
-      circular: PropTypes.bool,
-      triggerClick: PropTypes.bool,
-      gap: PropTypes.number,
-      className: PropTypes.string,
-      childrenClassName: PropTypes.string,
-      onChange: PropTypes.func,
-      onDownExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-      onUpExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-      onEnter: PropTypes.func,
-      updateIndex: PropTypes.bool,
-    };
-  }
-
-  static get defaultProps() {
-    return {
-      index: 0,
-      size: 3,
-      elWidth: 100,
-      circular: true,
-      triggerClick: true,
-      active: true,
-      speed: 100,
-      priority: 0,
-      gap: 0,
-      navigation: NAVIGATION_CENTER,
-      debounce: 82,
-      className: 'carousel',
-      childrenClassName: 'carousel-child',
-      updateIndex: false,
-    };
-  }
-
   constructor(props) {
     super(props);
     this.timeout = null;
@@ -267,5 +219,8 @@ class Carousel extends Component {
     );
   }
 }
+
+Carousel.propTypes = propTypes;
+Carousel.defaultProps = defaultProps;
 
 export default Carousel;
