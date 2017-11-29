@@ -25,6 +25,7 @@ import {
   _isLongPress,
   _getCurrentBinderId,
   _isVisibleInBinder,
+  _getBinders,
 } from './redux/selector';
 import blocks from './blocks';
 
@@ -40,6 +41,7 @@ export const keysReducer = reducer;
 export const keysSelector = _selector;
 export const isCurrentBinder = _isCurrentBinder;
 export const isBinderActive = _isBinderActive;
+export const getBinders = _getBinders;
 export const getBinderMarginLeft = _getBinderMarginLeft;
 export const getBinderMarginTop = _getBinderMarginTop;
 export const getBinderSelectedId = _getBinderSelectedId;

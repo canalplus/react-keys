@@ -22,6 +22,11 @@ export const _getCurrentSelectedId = () => () => {
   return globalStore.getState()[NAME].current.selectedId;
 };
 
+export const _getBinders = () => () => {
+  ensureState();
+  return globalStore.getState()[NAME].binders;
+};
+
 export const _getCurrentBinder = () => () => {
   ensureState();
   const { binders, current } = globalStore.getState()[NAME];
