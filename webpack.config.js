@@ -1,4 +1,4 @@
-const webpack = require('webpack');
+const MinifyPlugin = require('babel-minify-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -19,6 +19,9 @@ module.exports = {
     'react-dom': 'ReactDOM',
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
+    new MinifyPlugin({
+      removeConsole: true,
+      removeDebugger: true,
+    }),
   ],
 };

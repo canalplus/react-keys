@@ -19,7 +19,7 @@
     "version": "npm run build",
     "build": "BABEL_ENV=build babel src/ -d build",
     "lint": "eslint src/** test/**",
-    "dist": "webpack --progress --colors --optimize-minimize",
+    "dist": "BABEL_ENV=production webpack --progress --colors",
     "test": "jest --config tests/jest.config.json",
     "coverage": "jest --config tests/jest.config.json --coverage",
     "deploy-local":
@@ -36,6 +36,7 @@
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
     "babel-loader": "7.1.2",
+    "babel-minify-webpack-plugin": "0.2.0",
     "babel-plugin-transform-class-properties": "6.24.1",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
     "babel-plugin-transform-react-jsx": "6.24.1",
