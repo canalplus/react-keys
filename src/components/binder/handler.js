@@ -1,12 +1,11 @@
 import { findBinder } from '../../redux/helper';
-import { globalStore } from '../../listener';
-import { C_DOWN, C_LEFT, C_RIGHT, C_UP, NAME } from '../../constants';
+import { getBinders } from '../../store';
+import { C_DOWN, C_LEFT, C_RIGHT, C_UP } from '../../constants';
 import { block, isBlocked } from '../../clock';
 import blocks from '../../blocks';
 import { isActive } from '../../isActive';
 import userConfig from '../../config';
-import { determineNewState } from '../../redux/actions';
-import { execCb } from '../../funcHandler';
+import { determineNewState, execCb } from '../../redux/actions';
 
 export function keysHandler(keyCode, longPress, click) {
   const {
@@ -27,7 +26,7 @@ export function keysHandler(keyCode, longPress, click) {
     return;
   }
 
-  const binder = findBinder(globalStore.getState()[NAME].binders, id);
+  const binder = findBinder(getBinders(), id);
   if (!binder) return;
 
   if (

@@ -1,30 +1,29 @@
 import { NAME } from '../constants';
-import { globalStore } from '../listener';
+import { getBinders, getStore, globalStore } from '../store';
 import { ensureState } from '../ensure';
 import { findBinder } from './helper';
 
 export const _selector = id => () => {
   ensureState();
-  const binder = findBinder(globalStore.getState()[NAME].binders, id);
+  const binder = findBinder(getBinders(), id);
   return binder || { marginLeft: 0, marginTop: 0 };
 };
 
 export const _isCurrentBinder = id => () => {
   ensureState();
   const currentBinderId =
-    globalStore.getState()[NAME]['current'] &&
-    globalStore.getState()[NAME]['current'].binderId;
+    getStore()['current'] && getStore()['current'].binderId;
   return currentBinderId === id;
 };
 
 export const _getCurrentSelectedId = () => () => {
   ensureState();
-  return globalStore.getState()[NAME].current.selectedId;
+  return getStore().current.selectedId;
 };
 
 export const _getBinders = () => () => {
   ensureState();
-  return globalStore.getState()[NAME].binders;
+  return getBinders();
 };
 
 export const _getCurrentBinder = () => () => {
@@ -34,46 +33,46 @@ export const _getCurrentBinder = () => () => {
 };
 
 export const _getCurrentBinderId = () => () => {
-  return globalStore.getState()[NAME].current.binderId;
+  return getStore().current.binderId;
 };
 
 export const _getKeyCode = () => () => {
   ensureState();
-  return globalStore.getState()[NAME].PRESS.keyCode;
+  return getStore().PRESS.keyCode;
 };
 
 export const _isLongPress = () => () => {
   ensureState();
-  return globalStore.getState()[NAME].PRESS.press;
+  return getStore().PRESS.press;
 };
 
 export const _getBinderSelectedId = id => () => {
   ensureState();
-  const binder = findBinder(globalStore.getState()[NAME].binders, id);
+  const binder = findBinder(getBinders(), id);
   return binder ? binder.selectedId : '';
 };
 
 export const _getBinderMarginLeft = id => () => {
   ensureState();
-  const binder = findBinder(globalStore.getState()[NAME].binders, id);
+  const binder = findBinder(getBinders(), id);
   return binder ? binder.marginLeft : 0;
 };
 
 export const _getBinderMarginTop = id => () => {
   ensureState();
-  const binder = findBinder(globalStore.getState()[NAME].binders, id);
+  const binder = findBinder(getBinders(), id);
   return binder ? binder.marginTop : 0;
 };
 
 export const _isBinderActive = id => () => {
   ensureState();
-  const binder = findBinder(globalStore.getState()[NAME].binders, id);
+  const binder = findBinder(getBinders(), id);
   return binder && binder.mounted;
 };
 
 export const _isVisibleInBinder = (binderId, elementId) => () => {
   ensureState();
-  const binder = findBinder(globalStore.getState()[NAME].binders, binderId);
+  const binder = findBinder(getBinders(), binderId);
   if (!binder) return false;
   const element = binder.elements.find(el => el.id === elementId);
   if (!element) return false;

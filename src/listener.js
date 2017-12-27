@@ -3,15 +3,12 @@ import { updatePressStatus } from './redux/actions';
 import blocks from './blocks';
 import config, { AVAILABLE_FOR_LONG_PRESS } from './config';
 import { catcherWatcher } from './catcher';
-import { LONG_PRESS_TIMEOUT, NAME, DEBOUNCE_TIMEOUT } from './constants';
+import { DEBOUNCE_TIMEOUT, LONG_PRESS_TIMEOUT } from './constants';
+import { getPress, getStore, updateStore } from './store';
 
 export let keysListeners = [];
 export let keysCopy = [];
-export let globalStore = {
-  getState: () => {
-    return { [NAME]: {} };
-  },
-};
+
 export let fired = false;
 export let clicked = false;
 export let pressTimeout = null;
@@ -23,9 +20,16 @@ export let availableForLongPress = AVAILABLE_FOR_LONG_PRESS;
 export const getConfig = () => userConfig;
 
 export function callListeners(keyCode, longPress, click = false) {
-  keysCopy.forEach(listener =>
-    listener.callback.call(listener.context, keyCode, longPress, click)
-  );
+  const currentBinderId = getStore().current.binderId;
+  keysCopy.forEach(listener => {
+    if (
+      listener.context.uniqElement &&
+      listener.context.props.id !== currentBinderId
+    ) {
+      return;
+    }
+    listener.callback.call(listener.context, keyCode, longPress, click);
+  });
 }
 
 export function callTriggerClick(keyCode) {
@@ -57,7 +61,7 @@ export function cb(e) {
       fired = true;
     }, LONG_PRESS_TIMEOUT);
   }
-  if (globalStore.getState()[NAME]['PRESS'].press) {
+  if (getPress().press) {
     callListeners(keyCode, true);
   }
 }
@@ -75,7 +79,7 @@ export function cbRelease(e) {
 }
 
 export function _init(ops) {
-  globalStore = ops && ops.store ? ops.store : globalStore;
+  ops && ops.store && updateStore(ops.store);
   rkDebounce = ops && ops.debounce ? ops.debounce : DEBOUNCE_TIMEOUT;
   eventCb = ops && ops.eventCb ? ops.eventCb : () => ({});
   userConfig =

@@ -17,7 +17,8 @@ import {
 const styles = StyleSheet.create({
   screen: {
     display: 'block',
-    width: 1280,
+    width: 400,
+    backgroundColor: 'grey',
     height: 720,
     overflow: 'hidden',
     padding: 0,
@@ -74,6 +75,7 @@ const GenericBinder = ({ id, priority, downExit, upExit, marginLeft }) => {
       id={id}
       wrapper={`#wrapper-${id}`}
       priority={priority || 0}
+      strategy="mirror"
       onDownExit={downExit}
       onUpExit={upExit}
       visibilityOffset={200}

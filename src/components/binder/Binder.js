@@ -8,6 +8,8 @@ import compatibility from '../compatibility';
 import { refreshState, mountState } from './refresh';
 
 class Binder extends Component {
+  uniqElement = true;
+
   constructor(props) {
     super(props);
     this.innerProps = compatibility(props);

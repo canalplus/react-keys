@@ -4,11 +4,11 @@ import sinon from 'sinon';
 describe('clock.js', () => {
   let clock;
 
-  before(() => {
+  beforeAll(() => {
     clock = sinon.useFakeTimers();
   });
 
-  after(() => {
+  afterAll(() => {
     clock.restore();
   });
 

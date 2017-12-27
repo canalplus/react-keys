@@ -1,7 +1,6 @@
 import ReactDOM from 'react-dom';
 import { findBinder } from '../../redux/helper';
-import { globalStore } from '../../listener';
-import { NAME } from '../../constants';
+import { getBinders, getStore } from '../../store';
 import {
   calculateElSpace,
   downLimit,
@@ -16,7 +15,7 @@ import { next } from '../../engines/next';
 export function refreshState() {
   const dom = ReactDOM.findDOMNode(this);
   const { id, filter, wrapper, selector, direction } = this.innerProps;
-  const binder = findBinder(globalStore.getState()[NAME].binders, id);
+  const binder = findBinder(getBinders(), id);
   if (!binder) {
     return;
   }
@@ -37,7 +36,7 @@ export function refreshState() {
 export function mountState() {
   const dom = ReactDOM.findDOMNode(this);
   const { id, filter, wrapper, selector } = this.innerProps;
-  const binder = findBinder(globalStore.getState()[NAME].binders, id);
+  const binder = findBinder(getBinders(), id);
   if (!binder) {
     return;
   }

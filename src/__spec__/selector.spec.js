@@ -1,8 +1,7 @@
 import { _selector } from '../redux/selector';
-import { globalStore } from '../listener';
+import { globalStore } from '../store';
 import { NAME } from '../constants';
 import sinon from 'sinon';
-import { expect } from 'chai';
 
 describe('selector', () => {
   it('should return a function', () => {

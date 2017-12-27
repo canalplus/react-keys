@@ -1,9 +1,7 @@
-import {
-  keysListeners,
-  globalStore,
-} from '../listener';
+import { keysListeners } from '../listener';
 
 import sinon from 'sinon';
+import { globalStore } from '../store';
 
 describe('listener.js', () => {
   let clock;
@@ -21,6 +19,4 @@ describe('listener.js', () => {
   it('globalStore should be an object', () => {
     globalStore.should.be.instanceOf(Object);
   });
-
-
 });

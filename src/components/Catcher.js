@@ -22,7 +22,7 @@ class Catcher extends Component {
     this.history += String.fromCharCode(keyCode);
 
     if (this.history.length > this.props.sequence.length) {
-      this.history = this.history.slice(1)
+      this.history = this.history.slice(1);
     }
 
     if (this.history.toUpperCase() === this.props.sequence.toUpperCase()) {
@@ -35,10 +35,7 @@ class Catcher extends Component {
 Catcher.propTypes = {
   sequence: PropTypes.string.isRequired,
   cb: PropTypes.func.isRequired,
-  children: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.array,
-  ]),
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
 
 export default Catcher;

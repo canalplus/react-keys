@@ -1,8 +1,4 @@
-import {
-  build,
-  getPrev,
-  getNext,
-} from '../carousel';
+import { build, getPrev, getNext } from '../carousel';
 import { expect } from 'chai';
 
 describe('engine/carousel.js', () => {

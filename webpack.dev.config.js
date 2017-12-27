@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 module.exports = {
-  entry: ['./dev/1B.js'],
+  entry: ['./dev/6B_SCROLL.js'],
   output: {
     path: __dirname,
     filename: 'bundle.js',

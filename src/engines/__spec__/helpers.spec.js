@@ -1,5 +1,10 @@
 import { C_UP, C_DOWN, C_LEFT, C_RIGHT } from '../../constants';
-import { hasElementsDiff, calculateNewState, flipflop, calculateElSpace } from '../helpers';
+import {
+  hasElementsDiff,
+  calculateNewState,
+  flipflop,
+  calculateElSpace,
+} from '../helpers';
 
 describe('helpers.js', () => {
   describe('calculateElSpace', () => {
@@ -11,9 +16,9 @@ describe('helpers.js', () => {
             left: 10,
             top: 20,
             width: 30,
-            height: 40
-          }
-        }
+            height: 40,
+          };
+        },
       };
       calculateElSpace(el).id.should.equal('C+');
       calculateElSpace(el).down.should.equal(60);
@@ -156,4 +161,3 @@ describe('helpers.js', () => {
     });
   });
 });
-

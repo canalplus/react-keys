@@ -6,12 +6,19 @@ import { calculateElSpace, hasElementsDiff } from '../../engines/helpers';
 import { addListener, removeListener, userConfig } from '../../listener';
 import { block, isBlocked } from '../../clock';
 import { isActive } from '../../isActive';
-import { enterTo, execCb } from '../../funcHandler';
-import { _updateBinder, addBinder, _removeBinder } from '../../redux/actions';
+import { enterTo } from '../../redux/actions';
+import {
+  _updateBinder,
+  addBinder,
+  _removeBinder,
+  execCb,
+} from '../../redux/actions';
 import { CAROUSEL_TYPE, NAVIGATION_BOUND } from '../../constants';
 import { defaultProps, propTypes } from './props';
 
 class Carousel extends Component {
+  uniqElement = true;
+
   constructor(props) {
     super(props);
     this.timeout = null;

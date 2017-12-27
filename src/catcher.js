@@ -17,7 +17,9 @@ export function catcherWatcher(keyCode) {
 }
 
 export function addCatcher(sequence, cb) {
-  const id = Math.random().toString(36).substring(2, 10);
+  const id = Math.random()
+    .toString(36)
+    .substring(2, 10);
   catchers.push({ id, sequence, cb, history: [] });
   return id;
 }

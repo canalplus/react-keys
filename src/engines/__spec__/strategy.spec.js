@@ -1,9 +1,8 @@
 import sinon from 'sinon';
-import { STRATEGY_MIRROR, STRATEGY_START } from '../../constants';
 import {
+  findIdByStrategy,
   findMirrorExitId,
   findStartExitId,
-  findIdByStrategy,
 } from '../strategy';
 import * as helpers from '../helpers';
 
@@ -41,64 +40,6 @@ describe('strategy', () => {
           ],
         };
         findIdByStrategy(state, 'myId', null).should.equal(id);
-      })
-    );
-
-    it(
-      'should return mirrorId on strategy mirror',
-      sinon.test(function() {
-        const canvas = document.createElement('canvas');
-        const firstElement = document.createElement('li');
-        firstElement.setAttribute('id', 'elOne');
-        this.stub(firstElement, 'getBoundingClientRect').returns({ left: 10 });
-        const secondElement = document.createElement('li');
-        secondElement.setAttribute('id', 'elTwo');
-        this.stub(secondElement, 'getBoundingClientRect').returns({ left: 0 });
-        canvas.appendChild(firstElement);
-        canvas.appendChild(secondElement);
-
-        this.stub(document, 'getElementById').returns(canvas);
-
-        const state = {
-          current: { selectedId: 1 },
-          binders: [
-            {
-              id: 'myId',
-              selectedId: 'xoxo',
-              strategy: STRATEGY_MIRROR,
-              selector: 'li',
-            },
-          ],
-        };
-        findIdByStrategy(state, 'myId', null).should.equal('elTwo');
-      })
-    );
-
-    it(
-      'should return startId on start id',
-      sinon.test(function() {
-        const canvas = document.createElement('canvas');
-        const firstElement = document.createElement('li');
-        firstElement.setAttribute('id', 'elOne');
-        this.stub(firstElement, 'getBoundingClientRect').returns({ left: 10 });
-        const secondElement = document.createElement('li');
-        secondElement.setAttribute('id', 'elTwo');
-        this.stub(secondElement, 'getBoundingClientRect').returns({ left: 0 });
-        canvas.appendChild(firstElement);
-        canvas.appendChild(secondElement);
-
-        this.stub(document, 'getElementById').returns(canvas);
-        const state = {
-          binders: [
-            {
-              id: 'myId',
-              selectedId: 'xoxo',
-              strategy: STRATEGY_START,
-              selector: 'li',
-            },
-          ],
-        };
-        findIdByStrategy(state, 'myId', null).should.equal('elTwo');
       })
     );
   });
