@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import { findBinder } from '../../redux/helper';
-import { getBinders, getStore } from '../../store';
+import { getBinders } from '../../store';
 import {
   calculateElSpace,
   downLimit,
