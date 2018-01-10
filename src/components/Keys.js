@@ -6,21 +6,6 @@ import blocks from '../blocks';
 import { execCb } from '../redux/actions';
 
 class Keys extends Component {
-  static get propTypes() {
-    return {
-      children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-      id: PropTypes.string.isRequired,
-      debounce: PropTypes.number,
-      active: PropTypes.bool,
-    };
-  }
-
-  static get defaultProps() {
-    return {
-      active: true,
-    };
-  }
-
   constructor(props) {
     super(props);
     this.listenerId = addListener(this.keysHandler, this);
@@ -69,5 +54,18 @@ class Keys extends Component {
     return this.props.children || null;
   }
 }
+
+Keys.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  id: PropTypes.string.isRequired,
+  debounce: PropTypes.number,
+  active: PropTypes.bool,
+  priority: PropTypes.number,
+};
+
+Keys.defaultProps = {
+  active: true,
+  priority: 0,
+};
 
 export default Keys;

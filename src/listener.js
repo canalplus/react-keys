@@ -103,6 +103,9 @@ export function addListener(callback, context) {
     callback: callback,
     context: context,
   });
+  keysListeners.sort(
+    (a, b) => b.context.props.priority - a.context.props.priority
+  );
   return id;
 }
 
