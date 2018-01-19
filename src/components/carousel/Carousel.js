@@ -147,7 +147,8 @@ class Carousel extends Component {
       elements,
       gaps: this.determineGap(
         elements,
-        this.isLeftMove(this.state.cursor, cursor, elements)
+        this.isLeftMove(this.state.cursor, cursor, elements),
+        cursor
       ),
     });
   }
@@ -159,8 +160,15 @@ class Carousel extends Component {
     }
   }
 
-  determineGap(elements, leftMove) {
-    const { navigation, id, elWidth, size, gap } = this.props;
+  determineGap(elements, leftMove, cursor) {
+    const {
+      navigation,
+      id,
+      elWidth,
+      size,
+      gap,
+      index: currentIndex,
+    } = this.props;
     const { gaps } = this.state;
     const standardGaps =
       gaps ||
@@ -174,20 +182,47 @@ class Carousel extends Component {
       const selected = calculateElSpace(
         document.getElementById(this.selectedId)
       );
-      if (!selected) {
-        return standardGaps;
-      }
+
+      if (gaps === undefined) return standardGaps;
+
       const wrapper = calculateElSpace(document.getElementById(id));
-      if (!leftMove && isInsideRight(wrapper, selected, gap)) {
-        return standardGaps.map(stdGap => stdGap + elWidth);
-      } else if (leftMove && isInsideLeft(wrapper, selected, gap)) {
-        return standardGaps.map(stdGap => stdGap - elWidth);
-      } else {
-        return standardGaps;
-      }
+
+      if (!selected)
+        return this.determineJumpGap(wrapper.width, elements, cursor, leftMove);
+
+      const jump = elWidth * Math.abs(cursor - currentIndex);
+
+      if (!leftMove && isInsideRight(wrapper, selected, gap))
+        return standardGaps.map(stdGap => stdGap + jump);
+
+      if (leftMove && isInsideLeft(wrapper, selected, gap))
+        return standardGaps.map(stdGap => stdGap - jump);
+
+      return this.determineJumpGap(wrapper.width, elements, cursor, leftMove);
     }
 
     return standardGaps;
+  }
+
+  determineJumpGap(wrapperWidth, elements, targetIndex, leftMove) {
+    const { elWidth } = this.props;
+
+    const itemsInsideWrapper = Math.floor(wrapperWidth / elWidth);
+    const focusPosition = elements.findIndex(
+      el => el && el.props.id === this.selectedId
+    );
+
+    const targetIndexScrollPosition = leftMove ||
+      targetIndex < itemsInsideWrapper
+      ? focusPosition
+      : focusPosition - (itemsInsideWrapper - 1);
+
+    const jumpGaps = [];
+
+    for (let i = 0; i < elements.length; i++)
+      jumpGaps[i] = (i - targetIndexScrollPosition) * elWidth;
+
+    return jumpGaps;
   }
 
   render() {
@@ -212,10 +247,9 @@ class Carousel extends Component {
                 position: 'absolute',
                 width: `${elWidth}px`,
                 display: 'block',
-                opacity:
-                  gap === -(2 * elWidth) || gap === (size + 1) * elWidth
-                    ? 0
-                    : 1,
+                opacity: gap === -(2 * elWidth) || gap === (size + 1) * elWidth
+                  ? 0
+                  : 1,
               }}
             >
               {element}
