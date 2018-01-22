@@ -10,9 +10,8 @@ export const findBinder = (binders, binderId) =>
 
 export const updateBinder = (binders, binder) => {
   const index = binders.findIndex(s => s.id === binder.id);
-  return Object.assign([], binders, {
-    [index]: { ...binders[index], ...binder },
-  });
+  Object.assign(binders[index], binder);
+  return binders;
 };
 
 export const computeAddingBinder = (binders, binder) => {
