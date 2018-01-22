@@ -56,7 +56,15 @@ export function reducer(state = initialKeysSate, action) {
       return { ...state, binders, current };
     }
     case ACTIVE_BINDER: {
-      let binders = mountBinder(state.binders, action.binderId);
+      let binders = state.binders;
+      const activeBinderIndex = binders.findIndex(
+        b => b.id === action.binder.id
+      );
+      binders[activeBinderIndex] = {
+        ...binders[activeBinderIndex],
+        ...action.binder,
+      };
+      binders = mountBinder(binders, action.binder.id);
       let current = buildCurrent(binders, state.current);
       return { ...state, binders, current };
     }
