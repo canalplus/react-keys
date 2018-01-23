@@ -89,6 +89,7 @@ export function _resetBinder(binderId, wishedId) {
   if (!ensureKnownBinder(binderId)) return;
   const originalState = findBinder(getBinders(), binderId);
   const binder = computeResetBinder(originalState, binderId, wishedId);
+  if (!binder) return;
   _updateBinder(binder);
 }
 
