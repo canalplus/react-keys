@@ -57,7 +57,9 @@ export function _activeBinder(binderId, nextElId, dir) {
   if (!ensureKnownBinder(binderId)) return;
   const selectedId = findIdByStrategy(getStore(), binderId, nextElId);
   const originalState = findBinder(getBinders(), binderId);
-  const binder = computeResetBinder(originalState, binderId, selectedId);
+  const binder = computeResetBinder(originalState, binderId, selectedId) || {
+    id: binderId,
+  };
   dispatch({
     type: ACTIVE_BINDER,
     binder,
