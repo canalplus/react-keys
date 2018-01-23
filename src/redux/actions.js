@@ -7,6 +7,7 @@ import { ensureKnownBinder, isUnknownBinder } from '../ensure';
 import {
   buildBinderFromProps,
   buildCarsouelFromProps,
+  computeResetBinder,
   findBinder,
 } from './helper';
 
@@ -55,15 +56,15 @@ export function _removeBinder(binderId, force = false) {
 export function _activeBinder(binderId, nextElId, dir) {
   if (!ensureKnownBinder(binderId)) return;
   const selectedId = findIdByStrategy(getStore(), binderId, nextElId);
+  const originalState = findBinder(getBinders(), binderId);
+  const binder = computeResetBinder(originalState, binderId, selectedId);
   dispatch({
     type: ACTIVE_BINDER,
-    binderId,
+    binder,
   });
   const toActivate = findBinder(getBinders(), binderId);
   if (toActivate && toActivate.type === CAROUSEL_TYPE) {
     _resetCarousel(binderId, selectedId, dir);
-  } else {
-    _resetBinder(binderId, selectedId, dir);
   }
 }
 
@@ -87,23 +88,8 @@ export function _resetCarousel(binderId, wishedId) {
 export function _resetBinder(binderId, wishedId) {
   if (!ensureKnownBinder(binderId)) return;
   const originalState = findBinder(getBinders(), binderId);
-  const { elements, selectedId } = originalState;
-  if (elements.length === 0) return;
-  const newSelectedId = wishedId || elements[0].id;
-  const bounds = boundsMargin(newSelectedId, originalState, {
-    visibilityOffset: 0,
-  });
-  const binder = {
-    id: binderId,
-    selectedId: newSelectedId,
-    hasMoved: true,
-    prevEl: elements.find(e => e.id === selectedId),
-    nextEl: elements.find(e => e.id === newSelectedId),
-    prevDir: null,
-    elements: bounds.elements,
-    marginLeft: bounds.marginLeft,
-    marginTop: bounds.marginTop,
-  };
+  const binder = computeResetBinder(originalState, binderId, wishedId);
+  if (!binder) return;
   _updateBinder(binder);
 }
 

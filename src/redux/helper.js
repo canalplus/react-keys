@@ -1,3 +1,5 @@
+import { boundsMargin } from '../engines/bounds';
+
 export const findMountedId = binders => {
   const firstMounted = findMounted(binders);
   return firstMounted ? firstMounted.id : undefined;
@@ -10,9 +12,8 @@ export const findBinder = (binders, binderId) =>
 
 export const updateBinder = (binders, binder) => {
   const index = binders.findIndex(s => s.id === binder.id);
-  return Object.assign([], binders, {
-    [index]: { ...binders[index], ...binder },
-  });
+  Object.assign(binders[index], binder);
+  return binders;
 };
 
 export const computeAddingBinder = (binders, binder) => {
@@ -60,6 +61,26 @@ export const unsleepBinder = (binders, binderId) =>
             sleep: binder.id === binderId ? false : binder.sleep,
           }
   );
+
+export const computeResetBinder = (originalState, binderId, wishedId) => {
+  const { elements, selectedId } = originalState;
+  if (elements.length === 0) return;
+  const newSelectedId = wishedId || elements[0].id;
+  const bounds = boundsMargin(newSelectedId, originalState, {
+    visibilityOffset: 0,
+  });
+  return {
+    id: binderId,
+    selectedId: newSelectedId,
+    hasMoved: true,
+    prevEl: elements.find(e => e.id === selectedId),
+    nextEl: elements.find(e => e.id === newSelectedId),
+    prevDir: null,
+    elements: bounds.elements,
+    marginLeft: bounds.marginLeft,
+    marginTop: bounds.marginTop,
+  };
+};
 
 export const computeRemoveBinder = (binders, binderId, force) => {
   const freshBinders = removeBinder(binders, binderId, force);
