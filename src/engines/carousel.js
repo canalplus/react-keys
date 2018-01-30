@@ -16,7 +16,7 @@ export function build(children, size, index, circular = true) {
   for (let i = 0; i < bounds; i++) {
     next = getNext(children.length, next, circular);
     prev = getPrev(children.length, prev, circular);
-    carousel.push(next !== null ? children[next] : null);
+    carousel[carousel.length] = next !== null ? children[next] : null;
     carousel.unshift(prev !== null ? children[prev] : null);
   }
   return carousel;

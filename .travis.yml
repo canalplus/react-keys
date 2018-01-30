@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - '6'
+  - 'lts/*'
 before_install:
   - npm i react react-dom
 after_success:

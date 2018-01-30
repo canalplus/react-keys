@@ -1,16 +1,22 @@
 {
   "presets": [
-    "es2015",
-    "es2016",
-    "es2017",
-    "stage-1",
-    "react"
+    [
+      "env",
+      {
+        "targets": {
+          "chrome": 52
+        }
+      }
+    ]
   ],
-  "env":{
-    "build":{
-      "ignore": [
-        "*.spec.js"
-      ]
+  "plugins": [
+    "transform-react-jsx",
+    "transform-object-rest-spread",
+    "transform-class-properties"
+  ],
+  "env": {
+    "build": {
+      "ignore": ["*.spec.js"]
     }
   }
 }

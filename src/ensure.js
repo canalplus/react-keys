@@ -1,29 +1,24 @@
 /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
-import { globalStore } from './listener';
-import { NAME } from './constants';
+import { getBinders, getStore } from './store';
 
 const prefix = '[react-keys] - ';
 
 export function ensureState() {
-  if (!globalStore.getState()[NAME]) {
+  if (!getStore()) {
     throw new Error(`${prefix}keys state not present un global state`);
   }
 }
 
-export function ensureDispatch() {
-  if (!globalStore.dispatch) {
-    throw new Error(`${prefix}You better have Redux to use this feature`);
-  }
-}
-
-export function ensureMountedBinder(binderId) {
-  if (!Object.keys(globalStore.getState()[NAME]).some(key => binderId === key)) {
-    console.warn(`${prefix}You cannot activate a unmounted binder (${binderId}).`);
+export function ensureKnownBinder(binderId) {
+  if (!getBinders().some(binder => binderId === binder.id)) {
+    console.warn(
+      `${prefix}You cannot activate a unknown binder (${binderId}).`
+    );
     return false;
   }
   return true;
 }
 
-export function isUnmountedBinder(binderId) {
-  return !Object.keys(globalStore.getState()[NAME]).some(key => binderId === key);
+export function isUnknownBinder(binderId) {
+  return !getBinders().some(binder => binderId === binder.id);
 }

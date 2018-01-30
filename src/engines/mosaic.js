@@ -1,4 +1,5 @@
-import { calculateElSpace, hasDiff } from './helpers';
+import { calculateElSpace } from './helpers';
+import { isVisible } from './visibility';
 
 export const rightArray = (elCoords, coords) =>
   coords
@@ -38,45 +39,33 @@ export const calculDowScore = (el, elCoords) =>
   Math.abs(el.top - elCoords.down) + Math.abs(el.left - elCoords.left);
 
 export function build(elements, options) {
-  const elementsCoords = elements
-    .filter(el => el.id !== '')
-    .filter(el => [].slice.call(el.classList).indexOf(options.filter) === -1)
-    .map(calculateElSpace);
+  const { wrapper, marginLeft, offset, marginTop } = options;
+  const elementsCoords = elements.map(calculateElSpace);
 
-  return elementsCoords.map(el => ({
-    id: el.id,
-    coords: {
+  return elementsCoords.map(el => {
+    const coords = {
       ...el,
-      right: el.right - options.marginLeft,
-      left: el.left - options.marginLeft,
-      top: el.top - options.marginTop,
-      down: el.down - options.marginTop,
-    },
-    left: findElement(leftArray(el, elementsCoords)),
-    right: findElement(rightArray(el, elementsCoords)),
-    up: findElement(upArray(el, elementsCoords)),
-    down: findElement(downArray(el, elementsCoords)),
-  }));
+      right: el.right - marginLeft,
+      left: el.left - marginLeft,
+      top: el.top - marginTop,
+      down: el.down - marginTop,
+    };
+    return {
+      id: el.id,
+      coords,
+      left: findElement(leftArray(el, elementsCoords)),
+      right: findElement(rightArray(el, elementsCoords)),
+      up: findElement(upArray(el, elementsCoords)),
+      down: findElement(downArray(el, elementsCoords)),
+      isVisible: isVisible(wrapper, coords, marginLeft, marginTop, offset),
+    };
+  });
 }
 
-export function createList(dom, selector) {
-  const elements = dom.querySelectorAll(selector);
-  return [].slice.call(elements);
-}
-
-export function selectedElement(elements, selectedId) {
-  const focusedEl = selectedId ? elements.find(e => e.id === selectedId) : null;
-  return focusedEl || elements[0];
-}
-
-export function refresh(dom, prevElement, selector, selectedId, options) {
-  const elements = createList(dom, selector);
-  let returnedElements = prevElement;
-  if (hasDiff(elements, prevElement)) {
-    returnedElements = build(elements, options);
-  }
-  return {
-    elements: returnedElements,
-    selectedElement: selectedElement(returnedElements, selectedId),
-  };
+export function createList(dom, selector, filter) {
+  return [].slice
+    .call(dom.querySelectorAll(selector))
+    .filter(
+      el => el.id !== '' && [].slice.call(el.classList).indexOf(filter) === -1
+    );
 }

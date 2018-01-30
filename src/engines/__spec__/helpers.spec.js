@@ -1,5 +1,10 @@
 import { C_UP, C_DOWN, C_LEFT, C_RIGHT } from '../../constants';
-import { hasDiff, calculateNewState, flipflop, calculateElSpace } from '../helpers';
+import {
+  hasElementsDiff,
+  calculateNewState,
+  flipflop,
+  calculateElSpace,
+} from '../helpers';
 
 describe('helpers.js', () => {
   describe('calculateElSpace', () => {
@@ -11,50 +16,50 @@ describe('helpers.js', () => {
             left: 10,
             top: 20,
             width: 30,
-            height: 40
-          }
-        }
+            height: 40,
+          };
+        },
       };
       calculateElSpace(el).id.should.equal('C+');
       calculateElSpace(el).down.should.equal(60);
       calculateElSpace(el).right.should.equal(40);
     });
   });
-  describe('hasDiff', () => {
+  describe('hasElementsDiff', () => {
     it('should return false if nextEls is empty', () => {
       const nextEls = [];
       const prevEls = [{ id: '1' }];
-      hasDiff(nextEls, prevEls).should.be.false;
+      hasElementsDiff(nextEls, prevEls).should.be.false;
     });
 
     it('should return true if prevEls is empty', () => {
       const nextEls = [{ id: '1' }];
       const prevEls = [];
-      hasDiff(nextEls, prevEls).should.be.true;
+      hasElementsDiff(nextEls, prevEls).should.be.true;
     });
 
     it('should return true if first id is different', () => {
       const nextEls = [{ id: '1' }, { id: '2' }];
       const prevEls = [{ id: '2' }, { id: '4' }];
-      hasDiff(nextEls, prevEls).should.be.true;
+      hasElementsDiff(nextEls, prevEls).should.be.true;
     });
 
     it('should return true if length is different', () => {
       const nextEls = [{ id: '2' }, { id: '4' }, { id: '5' }];
       const prevEls = [{ id: '2' }, { id: '4' }];
-      hasDiff(nextEls, prevEls).should.be.true;
+      hasElementsDiff(nextEls, prevEls).should.be.true;
     });
 
     it('should return false is elements are identicals', () => {
       const nextEls = [{ id: '2' }, { id: '4' }];
       const prevEls = [{ id: '2' }, { id: '4' }];
-      hasDiff(nextEls, prevEls).should.be.false;
+      hasElementsDiff(nextEls, prevEls).should.be.false;
     });
 
     it('should return false when ids are differents', () => {
       const nextEls = [{ id: '2' }, { id: '3' }, { id: '5' }];
       const prevEls = [{ id: '2' }, { id: '4' }, { id: '5' }];
-      hasDiff(nextEls, prevEls).should.be.true;
+      hasElementsDiff(nextEls, prevEls).should.be.true;
     });
   });
   describe('flipflop', () => {
@@ -156,4 +161,3 @@ describe('helpers.js', () => {
     });
   });
 });
-

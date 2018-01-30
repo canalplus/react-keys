@@ -1,9 +1,7 @@
 import blocks from '../blocks';
 
 describe('blocks', () => {
-
   describe('block', () => {
-
     it('should add keys by list args to blockedKeys', () => {
       blocks.block(1, 2, 3);
       blocks.getStuff().should.eql([1, 2, 3]);
@@ -33,11 +31,9 @@ describe('blocks', () => {
       blocks.getStuff().should.eql([1, 2, 3]);
       blocks.isGeneralBlocked().should.be.false;
     });
-
   });
 
   describe('unblock', () => {
-
     it('should unlock selected keys', () => {
       blocks.block([1, 2, 3]);
       blocks.getStuff().should.eql([1, 2, 3]);
@@ -61,11 +57,9 @@ describe('blocks', () => {
       blocks.unblock();
       blocks.getStuff().should.be.empty;
     });
-
   });
 
   describe('blockExcept', () => {
-
     it('should global block and save keys when value', () => {
       blocks.blockExcept(2);
       blocks.getStuff().should.eql([2]);
@@ -77,11 +71,9 @@ describe('blocks', () => {
       blocks.getStuff().should.eql([2, 3]);
       blocks.isGeneralBlocked().should.be.true;
     });
-
   });
 
   describe('unblockExcept', () => {
-
     it('should keep blocked selected element in array', () => {
       blocks.block([1, 2, 3]);
       blocks.getStuff().should.eql([1, 2, 3]);
@@ -101,11 +93,9 @@ describe('blocks', () => {
     it('should throw error when no args', () => {
       blocks.unblockExcept.should.throw(Error);
     });
-
   });
 
   describe('isBlocked', () => {
-
     it('should work with block/unblock', () => {
       const id = 'X';
       blocks.isBlocked(id).should.be.false;
@@ -132,7 +122,5 @@ describe('blocks', () => {
       blocks.isBlocked(id).should.be.false;
       blocks.unblock();
     });
-
   });
-
 });

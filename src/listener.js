@@ -3,14 +3,12 @@ import { updatePressStatus } from './redux/actions';
 import blocks from './blocks';
 import config, { AVAILABLE_FOR_LONG_PRESS } from './config';
 import { catcherWatcher } from './catcher';
-import { LONG_PRESS_TIMEOUT, NAME, DEBOUNCE_TIMEOUT } from './constants';
+import { DEBOUNCE_TIMEOUT, LONG_PRESS_TIMEOUT } from './constants';
+import { getPress, getStore, updateStore } from './store';
 
 export let keysListeners = [];
-export let globalStore = {
-  getState: () => {
-    return { [NAME]: {} };
-  },
-};
+export let keysCopy = [];
+
 export let fired = false;
 export let clicked = false;
 export let pressTimeout = null;
@@ -22,19 +20,37 @@ export let availableForLongPress = AVAILABLE_FOR_LONG_PRESS;
 export const getConfig = () => userConfig;
 
 export function callListeners(keyCode, longPress, click = false) {
-  for (const listener of keysListeners) {
+  const currentBinderId = getStore().current.binderId;
+  keysCopy.forEach(listener => {
+    if (
+      listener.context.uniqElement &&
+      listener.context.props.id !== currentBinderId
+    ) {
+      return;
+    }
     listener.callback.call(listener.context, keyCode, longPress, click);
-  }
+  });
 }
 
 export function callTriggerClick(keyCode) {
-  if (keyCode === userConfig.enter && !clicked) {
-    callListeners(keyCode, false, true);
+  if (!clicked) {
+    if (keyCode === userConfig.enter) {
+      setTimeout(() => callListeners(keyCode, false, true), 0);
+    } else {
+      setTimeout(() => callListeners(keyCode, false), 0);
+    }
     clicked = true;
   }
 }
 
+export function releaseClickTouch(keyCode) {
+  if (keyCode === userConfig.enter) {
+    setTimeout(() => callListeners(keyCode, false), 0);
+  }
+}
+
 export function cb(e) {
+  keysCopy = [...keysListeners];
   const keyCode = e.keyCode ? e.keyCode : e;
   if (blocks.isBlocked(keyCode)) return;
   callTriggerClick(keyCode);
@@ -45,7 +61,7 @@ export function cb(e) {
       fired = true;
     }, LONG_PRESS_TIMEOUT);
   }
-  if (globalStore.getState()[NAME]['PRESS'].press) {
+  if (getPress().press) {
     callListeners(keyCode, true);
   }
 }
@@ -55,20 +71,21 @@ export function cbRelease(e) {
   if (blocks.isBlocked(keyCode)) return;
   catcherWatcher(keyCode);
   eventCb(keyCode, 'short');
-  callListeners(keyCode, false);
+  releaseClickTouch(keyCode);
   clearTimeout(pressTimeout);
   updatePressStatus(false);
   fired = false;
   clicked = false;
 }
 
-
 export function _init(ops) {
-  globalStore = ops && ops.store ? ops.store : globalStore;
+  ops && ops.store && updateStore(ops.store);
   rkDebounce = ops && ops.debounce ? ops.debounce : DEBOUNCE_TIMEOUT;
   eventCb = ops && ops.eventCb ? ops.eventCb : () => ({});
-  userConfig = ops && ops.config ? { ...userConfig, ...ops.config } : userConfig;
-  availableForLongPress = ops && ops.longPressTouch ? ops.longPressTouch : availableForLongPress;
+  userConfig =
+    ops && ops.config ? { ...userConfig, ...ops.config } : userConfig;
+  availableForLongPress =
+    ops && ops.longPressTouch ? ops.longPressTouch : availableForLongPress;
   if (!ops || (ops && !ops.bindkeys)) {
     document.addEventListener('keydown', cb);
     document.addEventListener('keyup', cbRelease);
@@ -78,12 +95,17 @@ export function _init(ops) {
 }
 
 export function addListener(callback, context) {
-  const id = Math.random().toString(36).substring(2, 10);
-  keysListeners.push({
+  const id = Math.random()
+    .toString(36)
+    .substring(2, 10);
+  keysListeners.unshift({
     id: id,
     callback: callback,
     context: context,
   });
+  keysListeners.sort(
+    (a, b) => b.context.props.priority - a.context.props.priority
+  );
   return id;
 }
 

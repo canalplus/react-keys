@@ -14,14 +14,14 @@ class Blocks {
     const args = Array.prototype.slice.call(arguments);
     if (args.length > 0) {
       this.generalBlock = false;
-      for (const arg of args) {
+      args.forEach(arg => {
         if (arg instanceof Array) {
           this.blockedStuff = this.blockedStuff.concat(arg);
           this.blockedStuff = [...new Set(this.blockedStuff)];
         } else if (this.blockedStuff.indexOf(arg) === -1) {
           this.blockedStuff.push(arg);
         }
-      }
+      });
     } else {
       this.generalBlock = true;
     }
@@ -31,14 +31,14 @@ class Blocks {
     this.generalBlock = true;
     this.blockedStuff = [];
     const args = Array.prototype.slice.call(arguments);
-    for (const arg of args) {
+    args.forEach(arg => {
       if (arg instanceof Array) {
         this.blockedStuff = this.blockedStuff.concat(arg);
         this.blockedStuff = [...new Set(this.blockedStuff)];
       } else if (this.blockedStuff.indexOf(arg) === -1) {
         this.blockedStuff.push(arg);
       }
-    }
+    });
   }
 
   unblockExcept() {
@@ -57,17 +57,17 @@ class Blocks {
     this.generalBlock = false;
     const args = Array.prototype.slice.call(arguments);
     if (args.length > 0) {
-      for (const arg of args) {
+      args.forEach(arg => {
         if (arg instanceof Array) {
-          for (const el of arg) {
+          arg.forEach(el => {
             if (this.blockedStuff.indexOf(el) !== -1) {
               this.blockedStuff.splice(this.blockedStuff.indexOf(el), 1);
             }
-          }
+          });
         } else if (this.blockedStuff.indexOf(arg) !== -1) {
           this.blockedStuff.splice(this.blockedStuff.indexOf(arg), 1);
         }
-      }
+      });
     } else {
       this.blockedStuff = [];
     }

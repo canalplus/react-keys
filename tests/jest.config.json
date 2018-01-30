@@ -1,0 +1,11 @@
+{
+  "rootDir": "../",
+  "setupFiles": ["<rootDir>/tests/shim.js", "<rootDir>/tests/jest.setup.js"],
+  "collectCoverageFrom": [
+    "**/src/**/*.{js}",
+    "!**/node_modules/**",
+    "!**/{Binder|Carousel|props}.js"
+  ],
+  "coverageDirectory": "coverage",
+  "verbose": true
+}
