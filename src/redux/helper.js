@@ -62,13 +62,23 @@ export const unsleepBinder = (binders, binderId) =>
           }
   );
 
-export const computeResetBinder = (originalState, binderId, wishedId) => {
+export const computeResetBinder = (
+  originalState,
+  binderId,
+  wishedId,
+  forced
+) => {
   const { elements, selectedId } = originalState;
   if (elements.length === 0) return;
   const newSelectedId = wishedId || elements[0].id;
-  const bounds = boundsMargin(newSelectedId, originalState, {
-    visibilityOffset: 0,
-  });
+  const bounds = boundsMargin(
+    newSelectedId,
+    originalState,
+    {
+      visibilityOffset: 0,
+    },
+    forced
+  );
   return {
     id: binderId,
     selectedId: newSelectedId,

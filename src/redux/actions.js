@@ -90,7 +90,7 @@ export function _resetCarousel(binderId, wishedId) {
 export function _resetBinder(binderId, wishedId) {
   if (!ensureKnownBinder(binderId)) return;
   const originalState = findBinder(getBinders(), binderId);
-  const binder = computeResetBinder(originalState, binderId, wishedId);
+  const binder = computeResetBinder(originalState, binderId, wishedId, true);
   if (!binder) return;
   _updateBinder(binder);
 }

@@ -26,7 +26,7 @@ export function correctBoundsMargin(focusedId, state) {
   };
 }
 
-export function boundsMargin(nextId, state, props) {
+export function boundsMargin(nextId, state, props, forced = false) {
   const {
     wrapper,
     elements,
@@ -47,7 +47,7 @@ export function boundsMargin(nextId, state, props) {
   let newMarginTop = marginTop;
   let newElements = elements;
 
-  if (!props || selectedId === nextId) {
+  if ((!props || selectedId === nextId) && !forced) {
     return {
       marginLeft: newMarginLeft,
       marginTop: newMarginTop,
