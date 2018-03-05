@@ -18,7 +18,6 @@ class Binder extends Component {
 
   componentWillMount() {
     this.listenerId = addListener(keysHandler, this);
-    addBinder(this.innerProps, BINDER_TYPE);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -27,7 +26,10 @@ class Binder extends Component {
 
   componentDidMount() {
     this.setState({ mounted: true });
-    setTimeout(() => this.state.mounted && mountState.apply(this), 0);
+    setTimeout(() => {
+      addBinder(this.innerProps, BINDER_TYPE);
+      this.state.mounted && mountState.apply(this);
+    }, 0);
   }
 
   componentDidUpdate() {

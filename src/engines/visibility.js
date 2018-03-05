@@ -1,13 +1,15 @@
-export const insideHorizontal = (wrapper, card, marginLeft, offset) =>
-  wrapper.left - offset - marginLeft <= card.left &&
-  wrapper.right + offset - marginLeft >= card.right;
+export const insideHorizontal = (wrapper, card, marginLeft, offset) => {
+  const isInsideLeft = insideLeft(wrapper, card, marginLeft, offset);
+  const isInsideRight = insideRight(wrapper, card, marginLeft, offset);
+
+  return isInsideLeft && isInsideRight;
+};
 
 export const insideRight = (wrapper, card, marginLeft, offset) =>
-  wrapper.width >= card.left + card.width - marginLeft;
+  card.right < wrapper.width - marginLeft;
 
 export const insideLeft = (wrapper, card, marginLeft, offset) => {
-  const elemPos = card.left + marginLeft;
-  return elemPos <= wrapper.width && elemPos > 0;
+  return card.left > -marginLeft;
 };
 
 export const isHorizontalVisible = (
@@ -15,10 +17,7 @@ export const isHorizontalVisible = (
   card,
   marginLeft = 0,
   offset = 0
-) =>
-  insideHorizontal(wrapper, card, marginLeft, offset) ||
-  insideRight(wrapper, card, marginLeft, offset) ||
-  insideLeft(wrapper, card, marginLeft, offset);
+) => insideHorizontal(wrapper, card, marginLeft, offset);
 
 export const insideVertical = (wrapper, card, marginTop, offset) =>
   wrapper.top - offset - marginTop <= card.top &&

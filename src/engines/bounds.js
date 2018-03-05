@@ -226,9 +226,13 @@ export function calculMarginOnRight(
   const lastGap = boundedGap || rightGap;
   const isLastGap = right + lastGap >= rightLimit;
   const computedRight = right + (isLastGap ? lastGap : gap);
-  return computedRight > rightLimit && !isLastGap
-    ? -(rightLimit - wrapper.width)
-    : -(computedRight - wrapper.width);
+
+  const result =
+    computedRight > rightLimit && !isLastGap
+      ? -(rightLimit - wrapper.width)
+      : -(computedRight - wrapper.width);
+
+  return result;
 }
 
 export function calculMarginOnLeft(
