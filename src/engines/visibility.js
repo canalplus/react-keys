@@ -3,12 +3,12 @@ export const insideHorizontal = (wrapper, card, marginLeft, offset) =>
   wrapper.right + offset - marginLeft >= card.right;
 
 export const insideRight = (wrapper, card, marginLeft, offset) =>
-  wrapper.left - offset - marginLeft >= card.left &&
-  wrapper.left - offset - marginLeft <= card.right;
+  wrapper.width >= card.left + card.width - marginLeft;
 
-export const insideLeft = (wrapper, card, marginLeft, offset) =>
-  wrapper.right + offset - marginLeft >= card.left &&
-  wrapper.right + offset - marginLeft <= card.right;
+export const insideLeft = (wrapper, card, marginLeft, offset) => {
+  const elemPos = card.left + marginLeft;
+  return elemPos <= wrapper.width && elemPos > 0;
+};
 
 export const isHorizontalVisible = (
   wrapper,
@@ -24,18 +24,22 @@ export const insideVertical = (wrapper, card, marginTop, offset) =>
   wrapper.top - offset - marginTop <= card.top &&
   wrapper.down + offset - marginTop >= card.down;
 
-export const insideTop = (wrapper, card, marginTop, offset) =>
-  wrapper.top - offset - marginTop >= card.top &&
-  wrapper.top - offset - marginTop <= card.down;
+export const insideTop = (wrapper, card, marginTop, offset) => {
+  const elemPos = card.top + marginTop;
+  return elemPos <= wrapper.height && elemPos > 0;
+};
 
-export const insideDown = (wrapper, card, marginTop, offset) =>
-  wrapper.down + offset - marginTop >= card.top &&
-  wrapper.down + offset - marginTop <= card.down;
+export const insideDown = (wrapper, card, marginTop, offset) => {
+  return wrapper.height >= card.top + card.height + marginTop;
+};
 
-export const isVerticalVisible = (wrapper, card, marginTop = 0, offset = 0) =>
-  insideVertical(wrapper, card, marginTop, offset) ||
-  insideTop(wrapper, card, marginTop, offset) ||
-  insideDown(wrapper, card, marginTop, offset);
+export const isVerticalVisible = (wrapper, card, marginTop = 0, offset = 0) => {
+  return (
+    insideVertical(wrapper, card, marginTop, offset) ||
+    insideTop(wrapper, card, marginTop, offset) ||
+    insideDown(wrapper, card, marginTop, offset)
+  );
+};
 
 export const isVisible = (wrapper, card, marginLeft, marginTop, offset) => {
   return (

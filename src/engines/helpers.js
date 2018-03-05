@@ -2,7 +2,10 @@ import { C_UP, C_DOWN, C_LEFT, C_RIGHT } from '../constants';
 
 export function calculateElSpace(el) {
   if (!el) return;
-  const { left, top, width, height } = el.getBoundingClientRect();
+  const { width, height } = el.getBoundingClientRect();
+  const top = el.offsetTop;
+  const left = el.offsetLeft;
+
   return {
     id: el.id,
     width,

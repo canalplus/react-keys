@@ -15,18 +15,17 @@ export function correctBoundsMargin(focusedId, state) {
 
   const focusedEl = elements.find(el => el.id === focusedId);
   const focusedElSpace = calculateElSpace(document.getElementById(focusedId));
-
   return {
-    marginLeft: isHorizontalInside(wrapper, focusedElSpace)
+    marginLeft: isHorizontalInside(wrapper, focusedElSpace, marginLeft)
       ? marginLeft
       : calculMarginOnLeft(wrapper, focusedEl, gap, boundedGap, leftGap),
-    marginTop: isVerticalInside(wrapper, focusedElSpace)
+    marginTop: isVerticalInside(wrapper, focusedElSpace, marginTop)
       ? marginTop
       : calculMarginOnTop(wrapper, focusedEl, gap, boundedGap, topGap),
   };
 }
 
-export function boundsMargin(nextId, state, props, forced = false) {
+export function boundsMargin(nextId, state, props) {
   const {
     wrapper,
     elements,
@@ -47,7 +46,7 @@ export function boundsMargin(nextId, state, props, forced = false) {
   let newMarginTop = marginTop;
   let newElements = elements;
 
-  if ((!props || selectedId === nextId) && !forced) {
+  if (!props || selectedId === nextId) {
     return {
       marginLeft: newMarginLeft,
       marginTop: newMarginTop,
@@ -69,8 +68,10 @@ export function boundsMargin(nextId, state, props, forced = false) {
   const currentElSpace = calculateElSpace(current);
   const nextElSpace = calculateElSpace(next);
   const geo = determineGeo(currentElSpace, nextElSpace);
-
-  if (geo.horizontal === 'left' && !isInsideLeft(wrapper, nextElSpace, gap)) {
+  if (
+    geo.horizontal === 'left' &&
+    !isInsideLeft(wrapper, nextElSpace, gap, marginLeft)
+  ) {
     newMarginLeft = calculMarginOnLeft(
       wrapper,
       nextEl,
@@ -80,7 +81,7 @@ export function boundsMargin(nextId, state, props, forced = false) {
     );
   } else if (
     (geo.horizontal === 'right' || geo.horizontal === 'equal') &&
-    !isInsideRight(wrapper, nextElSpace, gap)
+    !isInsideRight(wrapper, nextElSpace, gap, marginLeft)
   ) {
     newMarginLeft = calculMarginOnRight(
       wrapper,
@@ -92,11 +93,14 @@ export function boundsMargin(nextId, state, props, forced = false) {
     );
   }
 
-  if (geo.vertical === 'top' && !isInsideTop(wrapper, nextElSpace, gap)) {
+  if (
+    geo.vertical === 'top' &&
+    !isInsideTop(wrapper, nextElSpace, gap, newMarginTop)
+  ) {
     newMarginTop = calculMarginOnTop(wrapper, nextEl, gap, boundedGap, topGap);
   } else if (
-    (geo.vertical === 'down' || geo.horizontal === 'equal') &&
-    !isInsideDown(wrapper, nextElSpace, gap)
+    geo.vertical === 'down' &&
+    !isInsideDown(wrapper, nextElSpace, gap, marginTop)
   ) {
     newMarginTop = calculMarginOnDown(
       wrapper,
@@ -145,33 +149,35 @@ export function determineGeo(current, next) {
   return { vertical, horizontal };
 }
 
-export function isInsideTop(wrapper, selectedEl, gap) {
-  return selectedEl.top >= wrapper.top + gap;
+export function isInsideTop(wrapper, selectedEl, gap, marginTop) {
+  const elemPos = selectedEl.top + marginTop;
+  return elemPos <= wrapper.height + gap && elemPos > 0;
 }
 
-export function isInsideDown(wrapper, selectedEl, gap) {
-  return wrapper.down >= selectedEl.down + gap;
+export function isInsideDown(wrapper, selectedEl, gap, marginTop) {
+  return wrapper.height >= selectedEl.top + selectedEl.height + marginTop + gap;
 }
 
-export function isInsideLeft(wrapper, selectedEl, gap) {
-  return selectedEl.left >= wrapper.left + gap;
+export function isInsideLeft(wrapper, selectedEl, gap, marginLeft) {
+  const elemPos = selectedEl.left + marginLeft;
+  return elemPos <= wrapper.width + gap && elemPos > 0;
 }
 
-export function isInsideRight(wrapper, selectedEl, gap) {
-  return wrapper.right >= selectedEl.right + gap;
+export function isInsideRight(wrapper, selectedEl, gap, marginLeft) {
+  return wrapper.width >= selectedEl.left + selectedEl.width + marginLeft + gap;
 }
 
-export function isVerticalInside(wrapper, nextElSpace) {
+export function isVerticalInside(wrapper, nextElSpace, marginTop) {
   return (
-    isInsideTop(wrapper, nextElSpace, 0) &&
-    isInsideDown(wrapper, nextElSpace, 0)
+    isInsideTop(wrapper, nextElSpace, 0, marginTop) &&
+    isInsideDown(wrapper, nextElSpace, 0, marginTop)
   );
 }
 
-export function isHorizontalInside(wrapper, nextElSpace) {
+export function isHorizontalInside(wrapper, nextElSpace, marginLeft) {
   return (
-    isInsideLeft(wrapper, nextElSpace, 0) &&
-    isInsideRight(wrapper, nextElSpace, 0)
+    isInsideLeft(wrapper, nextElSpace, 0, marginLeft) &&
+    isInsideRight(wrapper, nextElSpace, 0, marginLeft)
   );
 }
 
@@ -184,7 +190,7 @@ export function calculMarginOnTop(
 ) {
   const { top } = selectedEl.coords;
   const lastGap = boundedGap || topGap;
-  const isLastGap = top - (wrapper.top + lastGap) < 0;
+  const isLastGap = top + (wrapper.height + lastGap) < 0;
   const computedTop = top - (isLastGap ? lastGap : gap);
   const finalTop = computedTop - wrapper.top;
   return finalTop < 0 && !isLastGap ? 0 : -finalTop;
@@ -202,9 +208,10 @@ export function calculMarginOnDown(
   const lastGap = boundedGap || downGap;
   const isLastGap = down + lastGap > downLimit;
   const computedDown = down + (isLastGap ? lastGap : gap);
+  console.log('=> On down', computedDown);
   return computedDown > downLimit && !isLastGap
-    ? -(downLimit - wrapper.down)
-    : -(computedDown - wrapper.down);
+    ? -(downLimit - wrapper.height)
+    : -(computedDown - wrapper.height);
 }
 
 export function calculMarginOnRight(
@@ -217,11 +224,11 @@ export function calculMarginOnRight(
 ) {
   const { right } = selectedEl.coords;
   const lastGap = boundedGap || rightGap;
-  const isLastGap = right + lastGap > rightLimit;
+  const isLastGap = right + lastGap >= rightLimit;
   const computedRight = right + (isLastGap ? lastGap : gap);
   return computedRight > rightLimit && !isLastGap
-    ? -(rightLimit - wrapper.right)
-    : -(computedRight - wrapper.right);
+    ? -(rightLimit - wrapper.width)
+    : -(computedRight - wrapper.width);
 }
 
 export function calculMarginOnLeft(
@@ -233,8 +240,8 @@ export function calculMarginOnLeft(
 ) {
   const { left } = selectedEl.coords;
   const lastGap = boundedGap || leftGap;
-  const isLastGap = left - (wrapper.left + lastGap) < 0;
+  const isLastGap = left + (wrapper.width + lastGap) > wrapper.width;
   const computedLeft = left - (isLastGap ? lastGap : gap);
-  const finalLeft = computedLeft - wrapper.left;
+  const finalLeft = computedLeft;
   return finalLeft < 0 && !isLastGap ? 0 : -finalLeft;
 }
