@@ -4,10 +4,10 @@ import {
   calculMarginOnRight,
   calculMarginOnDown,
   calculMarginOnTop,
-  isInsideRight,
-  isInsideLeft,
-  isInsideDown,
-  isInsideTop,
+  isReachableRight,
+  isReachableLeft,
+  isReachableDown,
+  isReachableTop,
   boundsMargin,
 } from '../bounds';
 import * as helpers from '../helpers';
@@ -224,95 +224,104 @@ describe('bounds', () => {
     );
   });
 
-  describe('isInsideTop', () => {
-    it('should return false if selected top < wrapper top + gap', () => {
-      const wrapper = { top: 10 };
-      const selectedId = { top: 5 };
+  describe('isReachableTop', () => {
+    it('should return false if selected top + marginTop > wrapper height + gap', () => {
+      const wrapper = { height: 100 };
+      const selectedId = { top: 115 };
       const gap = 10;
-      isInsideTop(wrapper, selectedId, gap).should.be.false;
+      const marginTop = 0;
+      isReachableTop(wrapper, selectedId, gap, marginTop).should.be.false;
     });
 
-    it('should return true if selected top > wrapper top + gap', () => {
-      const wrapper = { top: 10 };
+    it('should return true if selected top + marginTop <= wrapper height + gap', () => {
+      const wrapper = { height: 100 };
       const selectedId = { top: 15 };
       const gap = 2;
-      isInsideTop(wrapper, selectedId, gap).should.be.true;
+      const marginTop = 50;
+      isReachableTop(wrapper, selectedId, gap, marginTop).should.be.true;
     });
 
-    it('should return true if selected top = wrapper top + gap', () => {
-      const wrapper = { top: 10 };
-      const selectedId = { top: 15 };
+    it('should return true if selected top = 0', () => {
+      const wrapper = { height: 100 };
+      const selectedId = { top: 0 };
       const gap = 5;
-      isInsideTop(wrapper, selectedId, gap).should.be.true;
+      const marginTop = 0;
+      isReachableTop(wrapper, selectedId, gap, marginTop).should.be.true;
     });
   });
 
-  describe('isInsideDown', () => {
-    it('should return false if wrapper down < selectedEl down + gap', () => {
-      const wrapper = { down: 10 };
-      const selectedId = { down: 5 };
+  describe('isReachableDown', () => {
+    it('should return false if wrapper height < selected down + marginTop + gap', () => {
+      const wrapper = { height: 200 };
+      const selectedId = { down: 220 };
       const gap = 10;
-      isInsideDown(wrapper, selectedId, gap).should.be.false;
+      const marginTop = -15;
+      isReachableDown(wrapper, selectedId, gap, marginTop).should.be.false;
     });
 
-    it('should return true if wrapper down > selectedEl down + gap', () => {
-      const wrapper = { down: 20 };
+    it('should return true if wrapper height >= selected down + marginTop + gap', () => {
+      const wrapper = { height: 20 };
       const selectedId = { down: 5 };
       const gap = 10;
-      isInsideDown(wrapper, selectedId, gap).should.be.true;
+      const marginTop = 0;
+      isReachableDown(wrapper, selectedId, gap, marginTop).should.be.true;
     });
 
-    it('should return true if wrapper down = selectedEl down + gap', () => {
-      const wrapper = { down: 15 };
+    it('should return true if wrapper height = selected down + marginTop + gap', () => {
+      const wrapper = { height: 15 };
       const selectedId = { down: 5 };
       const gap = 10;
-      isInsideDown(wrapper, selectedId, gap).should.be.true;
+      const marginTop = 0;
+      isReachableDown(wrapper, selectedId, gap, marginTop).should.be.true;
     });
   });
 
-  describe('isInsideLeft', () => {
-    it('should return false if selectedEl left < wrapper left + gap', () => {
-      const wrapper = { left: 10 };
-      const selectedId = { left: 5 };
+  describe('isReachableLeft', () => {
+    it('should return true if selected left + marginLeft > gap', () => {
+      const selectedId = { left: 35 };
       const gap = 10;
-      isInsideLeft(wrapper, selectedId, gap).should.be.false;
+      const marginLeft = -15;
+      isReachableLeft(selectedId, gap, marginLeft).should.be.true;
     });
 
-    it('should return true if selectedEl left > wrapper left + gap', () => {
-      const wrapper = { left: 10 };
+    it('should return false if selected left + marginLeft < gap', () => {
       const selectedId = { left: 25 };
       const gap = 10;
-      isInsideLeft(wrapper, selectedId, gap).should.be.true;
+      const marginLeft = -20;
+      isReachableLeft(selectedId, gap, marginLeft).should.be.false;
     });
 
-    it('should return true if selectedEl left > wrapper left + gap', () => {
-      const wrapper = { left: 10 };
+    it('should return true if selected left + marginLeft = gap', () => {
       const selectedId = { left: 20 };
       const gap = 10;
-      isInsideLeft(wrapper, selectedId, gap).should.be.true;
+      const marginLeft = -10;
+      isReachableLeft(selectedId, gap, marginLeft).should.be.true;
     });
   });
 
-  describe('isInsideRight', () => {
-    it('should return false if wrapper right < selectedEl + gap', () => {
-      const wrapper = { right: 10 };
-      const selectedId = { right: 5 };
+  describe('isReachableRight', () => {
+    it('should return false if wrapper width < selected right - marginLeft + gap', () => {
+      const wrapper = { width: 10 };
+      const selectedId = { right: 25 };
       const gap = 10;
-      isInsideRight(wrapper, selectedId, gap).should.be.false;
+      const marginLeft = -10;
+      isReachableRight(wrapper, selectedId, gap, marginLeft).should.be.false;
     });
 
-    it('should retrun true if wrapper right > selectedEl + gap', () => {
-      const wrapper = { right: 10 };
+    it('should return true if wrapper width > selected right - marginLeft + gap', () => {
+      const wrapper = { width: 20 };
       const selectedId = { right: 5 };
       const gap = 3;
-      isInsideRight(wrapper, selectedId, gap).should.be.true;
+      const marginLeft = -10;
+      isReachableRight(wrapper, selectedId, gap, marginLeft).should.be.true;
     });
 
-    it('should retrun true if wrapper right = selectedEl + gap', () => {
-      const wrapper = { right: 10 };
+    it('should return true if wrapper width = selected right - marginLeft + gap', () => {
+      const wrapper = { width: 20 };
       const selectedId = { right: 5 };
       const gap = 5;
-      isInsideRight(wrapper, selectedId, gap).should.be.true;
+      const marginLeft = -10;
+      isReachableRight(wrapper, selectedId, gap, marginLeft).should.be.true;
     });
   });
 
@@ -395,7 +404,7 @@ describe('bounds', () => {
 
   describe('calculMarginOnDown', () => {
     it('should return down selectedEl coords by default', () => {
-      const wrapper = { down: 0 };
+      const wrapper = { height: 0 };
       const selectedEl = { coords: { down: 10 } };
       const gap = 0;
       const boundedGap = 0;
@@ -412,7 +421,7 @@ describe('bounds', () => {
     });
 
     it('should minor wrapper from selectedEl coords down', () => {
-      const wrapper = { down: 5 };
+      const wrapper = { height: 5 };
       const selectedEl = { coords: { down: 10 } };
       const gap = 0;
       const boundedGap = 0;
@@ -429,7 +438,7 @@ describe('bounds', () => {
     });
 
     it('should add gap from that', () => {
-      const wrapper = { down: 5 };
+      const wrapper = { height: 5 };
       const selectedEl = { coords: { down: 10 } };
       const gap = 3;
       const boundedGap = 0;
@@ -446,7 +455,7 @@ describe('bounds', () => {
     });
 
     it('should use boundedGap if gap > downLimit', () => {
-      const wrapper = { down: 5 };
+      const wrapper = { height: 5 };
       const selectedEl = { coords: { down: 10 } };
       const gap = 45;
       const boundedGap = 10;
@@ -463,7 +472,7 @@ describe('bounds', () => {
     });
 
     it('should use downGap if downLimit does not exist', () => {
-      const wrapper = { down: 5 };
+      const wrapper = { height: 5 };
       const selectedEl = { coords: { down: 10 } };
       const gap = 45;
       const boundedGap = 0;
@@ -482,7 +491,7 @@ describe('bounds', () => {
 
   describe('calculMarginOnRight', () => {
     it('should return right selectedEl coords by default', () => {
-      const wrapper = { right: 0 };
+      const wrapper = { width: 0 };
       const selectedEl = { coords: { right: 10 } };
       const gap = 0;
       const boundedGap = 0;
@@ -499,7 +508,7 @@ describe('bounds', () => {
     });
 
     it('should minor wrapper right from selectedEl coords right', () => {
-      const wrapper = { right: 5 };
+      const wrapper = { width: 5 };
       const selectedEl = { coords: { right: 10 } };
       const gap = 0;
       const boundedGap = 0;
@@ -516,7 +525,7 @@ describe('bounds', () => {
     });
 
     it('should add gap from that', () => {
-      const wrapper = { right: 5 };
+      const wrapper = { width: 5 };
       const selectedEl = { coords: { right: 10 } };
       const gap = 2;
       const boundedGap = 0;
@@ -533,7 +542,7 @@ describe('bounds', () => {
     });
 
     it('should use boundedGap if gap > rightLimit', () => {
-      const wrapper = { right: 5 };
+      const wrapper = { width: 5 };
       const selectedEl = { coords: { right: 10 } };
       const gap = 45;
       const boundedGap = 5;
@@ -550,7 +559,7 @@ describe('bounds', () => {
     });
 
     it('should use right gap if boundedGap does not exist', () => {
-      const wrapper = { right: 5 };
+      const wrapper = { width: 5 };
       const selectedEl = { coords: { right: 10 } };
       const gap = 45;
       const boundedGap = 0;
@@ -569,78 +578,49 @@ describe('bounds', () => {
 
   describe('calculMarginOnLeft', () => {
     it('should return left selectedEl coords by default', () => {
-      const wrapper = { left: 0 };
       const selectedEl = { coords: { left: 10 } };
       const gap = 0;
       const boundedGap = 0;
       const leftGap = 0;
-      calculMarginOnLeft(
-        wrapper,
-        selectedEl,
-        gap,
-        boundedGap,
-        leftGap
-      ).should.equal(-10);
+      calculMarginOnLeft(selectedEl, gap, boundedGap, leftGap).should.equal(
+        -10
+      );
     });
 
     it('should minor wrapper left from selectedEl coords left', () => {
-      const wrapper = { left: 5 };
       const selectedEl = { coords: { left: 10 } };
       const gap = 0;
       const boundedGap = 0;
       const leftGap = 0;
-      calculMarginOnLeft(
-        wrapper,
-        selectedEl,
-        gap,
-        boundedGap,
-        leftGap
-      ).should.equal(-5);
+      calculMarginOnLeft(selectedEl, gap, boundedGap, leftGap).should.equal(
+        -10
+      );
     });
 
     it('should minor gap from that', () => {
-      const wrapper = { left: 5 };
       const selectedEl = { coords: { left: 10 } };
       const gap = 2;
       const boundedGap = 0;
       const leftGap = 0;
-      calculMarginOnLeft(
-        wrapper,
-        selectedEl,
-        gap,
-        boundedGap,
-        leftGap
-      ).should.equal(-3);
+      calculMarginOnLeft(selectedEl, gap, boundedGap, leftGap).should.equal(
+        -10
+      );
     });
 
     it('should take bounded gap when gap is > to marginLeft', () => {
-      const wrapper = { left: 5 };
       const selectedEl = { coords: { left: 10 } };
       const gap = 20;
       const boundedGap = 2;
       const leftGap = 1;
-      calculMarginOnLeft(
-        wrapper,
-        selectedEl,
-        gap,
-        boundedGap,
-        leftGap
-      ).should.equal(0);
+      calculMarginOnLeft(selectedEl, gap, boundedGap, leftGap).should.equal(-8);
     });
 
     it('should take left gap when there is no bounded gap', () => {
-      const wrapper = { left: 5 };
       const selectedEl = { coords: { left: 10 } };
       const gap = 20;
       const boundedGap = 0;
       const leftGap = 1;
-      calculMarginOnLeft(
-        wrapper,
-        selectedEl,
-        gap,
-        boundedGap,
-        leftGap
-      ).should.equal(0);
+      calculMarginOnLeft(selectedEl, gap, boundedGap, leftGap).should.equal(-9);
     });
   });
 });
