@@ -3,10 +3,10 @@ export const insideHorizontal = (wrapper, card, marginLeft, offset) =>
   insideRight(wrapper, card, marginLeft, offset);
 
 export const insideRight = (wrapper, card, marginLeft, offset) =>
-  card.right + marginLeft < wrapper.width + offset;
+  card.right + marginLeft <= wrapper.width + offset;
 
 export const insideLeft = (wrapper, card, marginLeft, offset) =>
-  card.left + marginLeft > 0 - offset;
+  card.left + marginLeft >= 0 - offset;
 
 export const isHorizontalVisible = (
   wrapper,

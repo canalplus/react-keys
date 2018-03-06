@@ -41,7 +41,7 @@ export const defaultProps = {
   refreshStrategy: 'first',
   memory: false,
   filter: null,
-  gap: 20,
+  gap: 0,
   boundedGap: 0,
   topGap: 0,
   rightGap: 0,

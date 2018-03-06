@@ -1,7 +1,7 @@
 /* eslint no-unused-vars:0 */
 import React, { Component } from 'react';
 import { build, getNext, getPrev } from '../../engines/carousel';
-import { isInsideLeft, isInsideRight } from '../../engines/bounds';
+import { isReachableLeft, isReachableRight } from '../../engines/bounds';
 import { calculateElSpace, hasElementsDiff } from '../../engines/helpers';
 import { addListener, removeListener, userConfig } from '../../listener';
 import { block, isBlocked } from '../../clock';
@@ -192,10 +192,10 @@ class Carousel extends Component {
 
       const jump = elWidth * Math.abs(cursor - currentIndex);
 
-      if (!leftMove && isInsideRight(wrapper, selected, gap))
+      if (!leftMove && isReachableRight(wrapper, selected, gap))
         return standardGaps.map(stdGap => stdGap + jump);
 
-      if (leftMove && isInsideLeft(wrapper, selected, gap))
+      if (leftMove && isReachableLeft(wrapper, selected, gap))
         return standardGaps.map(stdGap => stdGap - jump);
 
       return this.determineJumpGap(wrapper.width, elements, cursor, leftMove);
@@ -212,10 +212,10 @@ class Carousel extends Component {
       el => el && el.props.id === this.selectedId
     );
 
-    const targetIndexScrollPosition = leftMove ||
-      targetIndex < itemsInsideWrapper
-      ? focusPosition
-      : focusPosition - (itemsInsideWrapper - 1);
+    const targetIndexScrollPosition =
+      leftMove || targetIndex < itemsInsideWrapper
+        ? focusPosition
+        : focusPosition - (itemsInsideWrapper - 1);
 
     const jumpGaps = [];
 
@@ -247,9 +247,10 @@ class Carousel extends Component {
                 position: 'absolute',
                 width: `${elWidth}px`,
                 display: 'block',
-                opacity: gap === -(2 * elWidth) || gap === (size + 1) * elWidth
-                  ? 0
-                  : 1,
+                opacity:
+                  gap === -(2 * elWidth) || gap === (size + 1) * elWidth
+                    ? 0
+                    : 1,
               }}
             >
               {element}

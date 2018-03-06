@@ -16,10 +16,10 @@ export function correctBoundsMargin(focusedId, state) {
   const focusedEl = elements.find(el => el.id === focusedId);
   const focusedElSpace = calculateElSpace(document.getElementById(focusedId));
   return {
-    marginLeft: isHorizontalInside(wrapper, focusedElSpace, marginLeft)
+    marginLeft: isReachableHorizontal(wrapper, focusedElSpace, marginLeft)
       ? marginLeft
       : calculMarginOnLeft(wrapper, focusedEl, gap, boundedGap, leftGap),
-    marginTop: isVerticalInside(wrapper, focusedElSpace, marginTop)
+    marginTop: isReachableVertical(wrapper, focusedElSpace, marginTop)
       ? marginTop
       : calculMarginOnTop(wrapper, focusedEl, gap, boundedGap, topGap),
   };
@@ -70,7 +70,7 @@ export function boundsMargin(nextId, state, props) {
   const geo = determineGeo(currentElSpace, nextElSpace);
   if (
     geo.horizontal === 'left' &&
-    !isInsideLeft(wrapper, nextElSpace, gap, marginLeft)
+    !isReachableLeft(wrapper, nextElSpace, gap, marginLeft)
   ) {
     newMarginLeft = calculMarginOnLeft(
       wrapper,
@@ -81,7 +81,7 @@ export function boundsMargin(nextId, state, props) {
     );
   } else if (
     (geo.horizontal === 'right' || geo.horizontal === 'equal') &&
-    !isInsideRight(wrapper, nextElSpace, gap, marginLeft)
+    !isReachableRight(wrapper, nextElSpace, gap, marginLeft)
   ) {
     newMarginLeft = calculMarginOnRight(
       wrapper,
@@ -95,12 +95,12 @@ export function boundsMargin(nextId, state, props) {
 
   if (
     geo.vertical === 'top' &&
-    !isInsideTop(wrapper, nextElSpace, gap, newMarginTop)
+    !isReachableTop(wrapper, nextElSpace, gap, newMarginTop)
   ) {
     newMarginTop = calculMarginOnTop(wrapper, nextEl, gap, boundedGap, topGap);
   } else if (
     geo.vertical === 'down' &&
-    !isInsideDown(wrapper, nextElSpace, gap, marginTop)
+    !isReachableDown(wrapper, nextElSpace, gap, marginTop)
   ) {
     newMarginTop = calculMarginOnDown(
       wrapper,
@@ -149,35 +149,36 @@ export function determineGeo(current, next) {
   return { vertical, horizontal };
 }
 
-export function isInsideTop(wrapper, selectedEl, gap, marginTop) {
+export function isReachableTop(wrapper, selectedEl, gap, marginTop) {
   const elemPos = selectedEl.top + marginTop;
   return elemPos <= wrapper.height + gap && elemPos > 0;
 }
 
-export function isInsideDown(wrapper, selectedEl, gap, marginTop) {
+export function isReachableDown(wrapper, selectedEl, gap, marginTop) {
   return wrapper.height >= selectedEl.top + selectedEl.height + marginTop + gap;
 }
 
-export function isInsideLeft(wrapper, selectedEl, gap, marginLeft) {
+export function isReachableLeft(wrapper, selectedEl, gap, marginLeft) {
   const elemPos = selectedEl.left + marginLeft;
   return elemPos <= wrapper.width + gap && elemPos > 0;
 }
 
-export function isInsideRight(wrapper, selectedEl, gap, marginLeft) {
-  return wrapper.width >= selectedEl.left + selectedEl.width + marginLeft + gap;
-}
+export const isReachableRight = (wrapper, selectedEl, gap, marginLeft) =>
+  wrapper.width >= selectedEl.right - marginLeft + gap;
 
-export function isVerticalInside(wrapper, nextElSpace, marginTop) {
+export function isReachableVertical(wrapper, nextElSpace, marginTop) {
   return (
-    isInsideTop(wrapper, nextElSpace, 0, marginTop) &&
-    isInsideDown(wrapper, nextElSpace, 0, marginTop)
+    isReachableTop(wrapper, nextElSpace, 0, marginTop) &&
+    isReachableDown(wrapper, nextElSpace, 0, marginTop)
   );
 }
 
-export function isHorizontalInside(wrapper, nextElSpace, marginLeft) {
+export function isReachableHorizontal(wrapper, nextElSpace, marginLeft) {
+  const rl = isReachableLeft(wrapper, nextElSpace, 0, marginLeft);
+  const rr = isReachableRight(wrapper, nextElSpace, 0, marginLeft);
   return (
-    isInsideLeft(wrapper, nextElSpace, 0, marginLeft) &&
-    isInsideRight(wrapper, nextElSpace, 0, marginLeft)
+    isReachableLeft(wrapper, nextElSpace, 0, marginLeft) &&
+    isReachableRight(wrapper, nextElSpace, 0, marginLeft)
   );
 }
 
@@ -208,7 +209,6 @@ export function calculMarginOnDown(
   const lastGap = boundedGap || downGap;
   const isLastGap = down + lastGap > downLimit;
   const computedDown = down + (isLastGap ? lastGap : gap);
-  console.log('=> On down', computedDown);
   return computedDown > downLimit && !isLastGap
     ? -(downLimit - wrapper.height)
     : -(computedDown - wrapper.height);
@@ -226,13 +226,9 @@ export function calculMarginOnRight(
   const lastGap = boundedGap || rightGap;
   const isLastGap = right + lastGap >= rightLimit;
   const computedRight = right + (isLastGap ? lastGap : gap);
-
-  const result =
-    computedRight > rightLimit && !isLastGap
-      ? -(rightLimit - wrapper.width)
-      : -(computedRight - wrapper.width);
-
-  return result;
+  return computedRight > rightLimit && !isLastGap
+    ? -(rightLimit - wrapper.width)
+    : -(computedRight - wrapper.width);
 }
 
 export function calculMarginOnLeft(
