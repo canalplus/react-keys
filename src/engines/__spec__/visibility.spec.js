@@ -51,47 +51,36 @@ describe('engine/visibility', () => {
 
   describe('isVerticalVisible', () => {
     it('should return true if both side is into wrapper', () => {
-      const wrapper = { top: 0, down: 10 };
-      isVerticalVisible(wrapper, { top: 4, down: 6 }).should.be.true;
-      isVerticalVisible(wrapper, { top: 0, down: 6 }).should.be.true;
-      isVerticalVisible(wrapper, { top: 4, down: 10 }).should.be.true;
+      const wrapper = { top: 0, height: 10 };
+      isVerticalVisible(wrapper, { top: 4, height: 6 }).should.be.true;
+      isVerticalVisible(wrapper, { top: 0, height: 6 }).should.be.true;
+      isVerticalVisible(wrapper, { top: 4, height: 10 }).should.be.true;
     });
     it('should return true if at least top side is into wrapper', () => {
       const wrapper = { height: 5 };
-      isVerticalVisible(wrapper, { top: 4, down: 6 }).should.be.true;
+      isVerticalVisible(wrapper, { top: 4, height: 6 }).should.be.true;
     });
     it('should return true if at least down side is into wrapper', () => {
       const wrapper = { height: 5 };
-      isVerticalVisible(wrapper, { top: 0, down: 4 }).should.be.true;
+      isVerticalVisible(wrapper, { top: -1, height: 4 }).should.be.true;
     });
     it('should return false if both sides are outside the wrapper', () => {
       const wrapper = { height: 5 };
-      isVerticalVisible(wrapper, { top: 2, down: 4 }).should.be.false;
-      isVerticalVisible(wrapper, { top: 11, down: 15 }).should.be.false;
-    });
-    it('should add an offset for the visibility', () => {
-      const wrapper = { height: 5 };
-      const offset = 2;
-      isVerticalVisible(wrapper, { top: 0, down: 3 }, 0, offset).should.be.true;
-      isVerticalVisible(wrapper, { top: 12, down: 15 }, 0, offset).should.be
-        .true;
-      isVerticalVisible(wrapper, { top: 0, down: 2 }, 0, offset).should.be
-        .false;
-      isVerticalVisible(wrapper, { top: 13, down: 15 }, 0, offset).should.be
-        .false;
+      isVerticalVisible(wrapper, { top: -4, height: 3 }, 0, 0).should.be.false;
+      isVerticalVisible(wrapper, { top: 11, height: 15 }, 0, 0).should.be.false;
     });
     it('should handle marginTop to determine the visiblity', () => {
-      const wrapper = { top: 15, down: 20 };
+      const wrapper = { height: 20 };
       const marginTop = -10;
-      isVerticalVisible(wrapper, { top: 28, down: 33 }, marginTop).should.be
+      isVerticalVisible(wrapper, { top: 28, height: 5 }, marginTop).should.be
         .true;
-      isVerticalVisible(wrapper, { top: 26, down: 37 }, marginTop).should.be
+      isVerticalVisible(wrapper, { top: 26, height: 5 }, marginTop).should.be
         .true;
-      isVerticalVisible(wrapper, { top: 22, down: 25 }, marginTop).should.be
+      isVerticalVisible(wrapper, { top: 22, height: 5 }, marginTop).should.be
         .true;
-      isVerticalVisible(wrapper, { top: 31, down: 34 }, marginTop).should.be
+      isVerticalVisible(wrapper, { top: 31, height: 5 }, marginTop).should.be
         .false;
-      isVerticalVisible(wrapper, { top: 10, down: 14 }, marginTop).should.be
+      isVerticalVisible(wrapper, { top: 35, height: 5 }, marginTop).should.be
         .false;
     });
   });

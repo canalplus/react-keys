@@ -155,7 +155,7 @@ export const isReachableLeft = (selectedEl, gap, marginLeft) =>
   selectedEl.left + marginLeft >= gap;
 
 export const isReachableRight = (wrapper, selectedEl, gap, marginLeft) =>
-  wrapper.width >= selectedEl.right - marginLeft + gap;
+  wrapper.width >= selectedEl.right + marginLeft + gap;
 
 export const isReachableVertical = (wrapper, nextElSpace, marginTop) => {
   return (
@@ -165,8 +165,6 @@ export const isReachableVertical = (wrapper, nextElSpace, marginTop) => {
 };
 
 export const isReachableHorizontal = (wrapper, nextElSpace, marginLeft) => {
-  const rl = isReachableLeft(nextElSpace, 0, marginLeft);
-  const rr = isReachableRight(wrapper, nextElSpace, 0, marginLeft);
   return (
     isReachableLeft(nextElSpace, 0, marginLeft) &&
     isReachableRight(wrapper, nextElSpace, 0, marginLeft)

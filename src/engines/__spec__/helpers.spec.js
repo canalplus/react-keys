@@ -11,14 +11,10 @@ describe('helpers.js', () => {
     it('should return right and bottom values', () => {
       const el = {
         id: 'C+',
-        getBoundingClientRect: () => {
-          return {
-            left: 10,
-            top: 20,
-            width: 30,
-            height: 40,
-          };
-        },
+        offsetLeft: 10,
+        offsetTop: 20,
+        offsetWidth: 30,
+        offsetHeight: 40,
       };
       calculateElSpace(el).id.should.equal('C+');
       calculateElSpace(el).down.should.equal(60);
