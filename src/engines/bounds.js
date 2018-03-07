@@ -70,7 +70,7 @@ export const boundsMargin = (nextId, state, props) => {
   const geo = determineGeo(currentElSpace, nextElSpace);
   if (
     geo.horizontal === 'left' &&
-    !isReachableLeft(wrapper, nextElSpace, gap, marginLeft)
+    !isReachableLeft(nextElSpace, gap, marginLeft)
   ) {
     newMarginLeft = calculMarginOnLeft(nextEl, gap, boundedGap, leftGap);
   } else if (
@@ -165,10 +165,10 @@ export const isReachableVertical = (wrapper, nextElSpace, marginTop) => {
 };
 
 export const isReachableHorizontal = (wrapper, nextElSpace, marginLeft) => {
-  const rl = isReachableLeft(wrapper, nextElSpace, 0, marginLeft);
+  const rl = isReachableLeft(nextElSpace, 0, marginLeft);
   const rr = isReachableRight(wrapper, nextElSpace, 0, marginLeft);
   return (
-    isReachableLeft(wrapper, nextElSpace, 0, marginLeft) &&
+    isReachableLeft(nextElSpace, 0, marginLeft) &&
     isReachableRight(wrapper, nextElSpace, 0, marginLeft)
   );
 };
