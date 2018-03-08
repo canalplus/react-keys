@@ -151,10 +151,10 @@ export const isReachableTop = (wrapper, selectedEl, gap, marginTop) => {
 export const isReachableDown = (wrapper, selectedEl, gap, marginTop) =>
   wrapper.height >= selectedEl.down + marginTop + gap;
 
-export const isReachableLeft = (selectedEl, gap, marginLeft) =>
+export const isReachableLeft = (selectedEl, gap, marginLeft = 0) =>
   selectedEl.left + marginLeft >= gap;
 
-export const isReachableRight = (wrapper, selectedEl, gap, marginLeft) =>
+export const isReachableRight = (wrapper, selectedEl, gap, marginLeft = 0) =>
   wrapper.width >= selectedEl.right + marginLeft + gap;
 
 export const isReachableVertical = (wrapper, nextElSpace, marginTop) => {

@@ -148,7 +148,8 @@ class Carousel extends Component {
       gaps: this.determineGap(
         elements,
         this.isLeftMove(this.state.cursor, cursor, elements),
-        cursor
+        cursor,
+        this.selectedId
       ),
     });
   }
@@ -160,7 +161,7 @@ class Carousel extends Component {
     }
   }
 
-  determineGap(elements, leftMove, cursor) {
+  determineGap(elements, leftMove, cursor, selectedId) {
     const {
       navigation,
       id,
@@ -179,15 +180,22 @@ class Carousel extends Component {
       );
 
     if (navigation === NAVIGATION_BOUND) {
-      const selected = calculateElSpace(
-        document.getElementById(this.selectedId)
-      );
+      const isElemInDOM = document.getElementById(selectedId);
+      const selectedGap =
+        standardGaps[
+          elements.findIndex(
+            el => el && el.props && el.props.id === selectedId
+          ) + (leftMove ? -1 : 1)
+        ];
+      const selected = {
+        left: selectedGap,
+        right: selectedGap + elWidth,
+      };
 
       if (gaps === undefined) return standardGaps;
 
       const wrapper = calculateElSpace(document.getElementById(id));
-
-      if (!selected)
+      if (!isElemInDOM)
         return this.determineJumpGap(wrapper.width, elements, cursor, leftMove);
 
       const jump = elWidth * Math.abs(cursor - currentIndex);
@@ -195,7 +203,7 @@ class Carousel extends Component {
       if (!leftMove && isReachableRight(wrapper, selected, gap))
         return standardGaps.map(stdGap => stdGap + jump);
 
-      if (leftMove && isReachableLeft(wrapper, selected, gap))
+      if (leftMove && isReachableLeft(selected, gap))
         return standardGaps.map(stdGap => stdGap - jump);
 
       return this.determineJumpGap(wrapper.width, elements, cursor, leftMove);
