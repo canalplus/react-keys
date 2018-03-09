@@ -89,7 +89,7 @@ export const boundsMargin = (nextId, state, props) => {
 
   if (
     geo.vertical === 'top' &&
-    !isReachableTop(wrapper, nextElSpace, gap, newMarginTop)
+    !isReachableTop(nextElSpace, gap, newMarginTop)
   ) {
     newMarginTop = calculMarginOnTop(wrapper, nextEl, gap, boundedGap, topGap);
   } else if (
@@ -143,7 +143,7 @@ export const determineGeo = (current, next) => {
   return { vertical, horizontal };
 };
 
-export const isReachableTop = (wrapper, selectedEl, gap, marginTop) =>
+export const isReachableTop = (selectedEl, gap, marginTop) =>
   selectedEl.top + marginTop >= 0 + gap;
 
 export const isReachableDown = (wrapper, selectedEl, gap, marginTop) =>
@@ -157,7 +157,7 @@ export const isReachableRight = (wrapper, selectedEl, gap, marginLeft = 0) =>
 
 export const isReachableVertical = (wrapper, nextElSpace, marginTop) => {
   return (
-    isReachableTop(wrapper, nextElSpace, 0, marginTop) &&
+    isReachableTop(nextElSpace, 0, marginTop) &&
     isReachableDown(wrapper, nextElSpace, 0, marginTop)
   );
 };

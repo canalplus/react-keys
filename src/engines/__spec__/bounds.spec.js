@@ -225,28 +225,25 @@ describe('bounds', () => {
   });
 
   describe('isReachableTop', () => {
-    it('should return false if selected top + marginTop > wrapper height + gap', () => {
-      const wrapper = { height: 100 };
+    it('should return false if selectedEl.top + marginTop < 0 + gap', () => {
       const selectedId = { top: 115 };
-      const gap = 10;
-      const marginTop = 0;
-      isReachableTop(wrapper, selectedId, gap, marginTop).should.be.false;
+      const gap = 120;
+      const marginTop = -15;
+      isReachableTop(selectedId, gap, marginTop).should.be.false;
     });
 
-    it('should return true if selected top + marginTop <= wrapper height + gap', () => {
-      const wrapper = { height: 100 };
-      const selectedId = { top: 15 };
-      const gap = 2;
-      const marginTop = 50;
-      isReachableTop(wrapper, selectedId, gap, marginTop).should.be.true;
+    it('should return true if selectedEl.top + marginTop > 0 + gap', () => {
+      const selectedId = { top: 115 };
+      const gap = 90;
+      const marginTop = -15;
+      isReachableTop(selectedId, gap, marginTop).should.be.true;
     });
 
-    it('should return true if selected top = 0', () => {
-      const wrapper = { height: 100 };
-      const selectedId = { top: 0 };
-      const gap = 5;
-      const marginTop = 0;
-      isReachableTop(wrapper, selectedId, gap, marginTop).should.be.true;
+    it('should return true if selectedEl.top + marginTop = 0 + gap', () => {
+      const selectedId = { top: 115 };
+      const gap = 100;
+      const marginTop = -15;
+      isReachableTop(selectedId, gap, marginTop).should.be.true;
     });
   });
 
