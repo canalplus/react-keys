@@ -143,10 +143,8 @@ export const determineGeo = (current, next) => {
   return { vertical, horizontal };
 };
 
-export const isReachableTop = (wrapper, selectedEl, gap, marginTop) => {
-  const elemPos = selectedEl.top + marginTop;
-  return elemPos <= wrapper.height + gap && elemPos >= 0;
-};
+export const isReachableTop = (wrapper, selectedEl, gap, marginTop) =>
+  selectedEl.top + marginTop >= 0 + gap;
 
 export const isReachableDown = (wrapper, selectedEl, gap, marginTop) =>
   wrapper.height >= selectedEl.down + marginTop + gap;
