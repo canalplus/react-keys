@@ -197,8 +197,11 @@ class Carousel extends Component {
 
       const jump = Math.abs(cursor - currentIndex);
       const jumpGap = elWidth * jump;
+      const reachable =
+        jump + (selectedGap - elWidth) / elWidth <=
+        Math.max(1, Math.floor(wrapper.width / elWidth) - 1);
 
-      if (jump > Math.max(1, Math.floor(wrapper.width / elWidth) - 2))
+      if (!reachable)
         return this.determineJumpGap(wrapper.width, elements, cursor, leftMove);
 
       if (!leftMove && isReachableRight(wrapper, selected, gap))
