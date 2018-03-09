@@ -180,7 +180,6 @@ class Carousel extends Component {
       );
 
     if (navigation === NAVIGATION_BOUND) {
-      const isElemInDOM = document.getElementById(selectedId);
       const selectedGap =
         standardGaps[
           elements.findIndex(
@@ -195,16 +194,18 @@ class Carousel extends Component {
       if (gaps === undefined) return standardGaps;
 
       const wrapper = calculateElSpace(document.getElementById(id));
-      if (!isElemInDOM)
+
+      const jump = Math.abs(cursor - currentIndex);
+      const jumpGap = elWidth * jump;
+
+      if (jump > Math.max(1, Math.floor(wrapper.width / elWidth) - 2))
         return this.determineJumpGap(wrapper.width, elements, cursor, leftMove);
 
-      const jump = elWidth * Math.abs(cursor - currentIndex);
-
       if (!leftMove && isReachableRight(wrapper, selected, gap))
-        return standardGaps.map(stdGap => stdGap + jump);
+        return standardGaps.map(stdGap => stdGap + jumpGap);
 
       if (leftMove && isReachableLeft(selected, gap))
-        return standardGaps.map(stdGap => stdGap - jump);
+        return standardGaps.map(stdGap => stdGap - jumpGap);
 
       return this.determineJumpGap(wrapper.width, elements, cursor, leftMove);
     }
