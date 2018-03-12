@@ -57,10 +57,17 @@ export const updateState = (binder, nextWrapper, nextElements, props) => {
     offset: visibilityOffset,
     wrapper: nextWrapper,
   };
+
+  const oldElements = [...binder.elements];
   const updatedElements = build(nextElements, updatedOptions);
   binder.elements = updatedElements;
 
-  const nextSelection = next(nextElements, binder, refreshStrategy);
+  const nextSelection = next(
+    nextElements,
+    oldElements,
+    binder,
+    refreshStrategy
+  );
 
   const options = {
     marginLeft: nextSelection.marginLeft,

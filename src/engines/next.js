@@ -1,6 +1,6 @@
 import { correctBoundsMargin } from './bounds';
 
-export const next = (elements, binder, refreshStrategy) => {
+export const next = (elements, oldElements, binder, refreshStrategy) => {
   const { selectedId } = binder;
   let nextEl = {};
   if (isPresent(elements, selectedId)) {
@@ -11,7 +11,7 @@ export const next = (elements, binder, refreshStrategy) => {
   if (refreshStrategy === 'previous' && selectedId) {
     const nextEl = findPreviousElement(
       binder.selectedId,
-      binder.elements,
+      oldElements,
       elements
     );
     const margins = correctBoundsMargin(nextEl.id, binder);
