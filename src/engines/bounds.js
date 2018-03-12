@@ -46,24 +46,17 @@ export const boundsMargin = (nextId, state, props) => {
   let newMarginTop = marginTop;
   let newElements = elements;
 
-  if (!props || selectedId === nextId) {
-    return {
-      marginLeft: newMarginLeft,
-      marginTop: newMarginTop,
-      elements: newElements,
-    };
-  }
-
   const current = document.getElementById(selectedId);
   const next = document.getElementById(nextId);
 
-  if (!current || !next || !wrapper) {
+  if (!props || selectedId === nextId || !current || !next || !wrapper) {
     return {
       marginLeft: newMarginLeft,
       marginTop: newMarginTop,
       elements: newElements,
     };
   }
+
   const nextEl = elements.find(el => el.id === nextId);
   const currentElSpace = calculateElSpace(current);
   const nextElSpace = calculateElSpace(next);

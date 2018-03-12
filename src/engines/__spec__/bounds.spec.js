@@ -34,7 +34,7 @@ describe('bounds', () => {
           rightGap: 0,
           leftGap: 0,
           downGap: 0,
-          selectedId: 0,
+          selectedId: '2',
         };
         this.stub(helpers, 'calculateElSpace')
           .onCall(0)
@@ -49,22 +49,21 @@ describe('bounds', () => {
           .returns({
             id: '0',
             top: 5,
-            left: 0,
+            left: -50,
             right: 10,
             down: 5,
           });
-        boundsMargin('1', state).should.eql({
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        document.getElementById.withArgs('2').returns({});
+        boundsMargin('1', state, { test: 'tatatatatat' }).should.eql({
           marginTop: 0,
-          marginLeft: 0,
+          marginLeft: -5,
           elements: [
             {
-              coords: {
-                down: 5,
-                left: 5,
-                right: 5,
-                top: 5,
-              },
               id: '1',
+              coords: { top: 5, left: 5, right: 5, down: 5 },
+              isVisible: false,
             },
           ],
         });
@@ -72,10 +71,10 @@ describe('bounds', () => {
     );
 
     it(
-      'should calcul right dir',
+      'should calcul right dir if geo === right',
       sinon.test(function() {
         const state = {
-          wrapper: { left: 10, top: 10, right: 20, down: 20 },
+          wrapper: { left: 10, top: 10, right: 20, down: 20, width: 2 },
           marginLeft: 0,
           marginTop: 0,
           elements: [
@@ -89,7 +88,7 @@ describe('bounds', () => {
           rightGap: 0,
           leftGap: 0,
           downGap: 0,
-          selectedId: 0,
+          selectedId: '2',
         };
         this.stub(helpers, 'calculateElSpace')
           .onCall(0)
@@ -108,18 +107,71 @@ describe('bounds', () => {
             right: 10,
             down: 5,
           });
-        boundsMargin('1', state).should.eql({
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        document.getElementById.withArgs('2').returns({});
+        boundsMargin('1', state, {}).should.eql({
           marginTop: 0,
-          marginLeft: 0,
+          marginLeft: -3,
           elements: [
             {
-              coords: {
-                down: 5,
-                left: 5,
-                right: 5,
-                top: 5,
-              },
               id: '1',
+              coords: { top: 5, left: 5, right: 5, down: 5 },
+              isVisible: false,
+            },
+          ],
+        });
+      })
+    );
+
+    it(
+      'should calcul right dir if geo === equal',
+      sinon.test(function() {
+        const state = {
+          wrapper: { left: 10, top: 10, right: 20, down: 20, width: 2 },
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          downLimit: 0,
+          rightLimit: 0,
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          rightGap: 0,
+          leftGap: 0,
+          downGap: 0,
+          selectedId: '2',
+        };
+        this.stub(helpers, 'calculateElSpace')
+          .onCall(0)
+          .returns({
+            id: '1',
+            top: 5,
+            left: 20,
+            right: 5,
+            down: 5,
+          })
+          .onCall(1)
+          .returns({
+            id: '0',
+            top: 5,
+            left: 20,
+            right: 10,
+            down: 5,
+          });
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        document.getElementById.withArgs('2').returns({});
+        boundsMargin('1', state, {}).should.eql({
+          marginTop: 0,
+          marginLeft: -3,
+          elements: [
+            {
+              id: '1',
+              coords: { top: 5, left: 5, right: 5, down: 5 },
+              isVisible: false,
             },
           ],
         });
@@ -130,6 +182,121 @@ describe('bounds', () => {
       'should calcul up dir',
       sinon.test(function() {
         const state = {
+          wrapper: { left: 10, top: 10, right: 20, down: 20, width: 2 },
+          marginLeft: -3,
+          marginTop: -50,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          downLimit: 0,
+          rightLimit: 0,
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          rightGap: 0,
+          leftGap: 0,
+          downGap: 0,
+          selectedId: '2',
+        };
+        this.stub(helpers, 'calculateElSpace')
+          .onCall(0)
+          .returns({
+            id: '1',
+            top: 10,
+            left: 20,
+            right: 5,
+            down: 5,
+          })
+          .onCall(1)
+          .returns({
+            id: '0',
+            top: 5,
+            left: 20,
+            right: 10,
+            down: 5,
+          });
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        document.getElementById.withArgs('2').returns({});
+        boundsMargin('1', state, {}).should.eql({
+          marginTop: 0,
+          marginLeft: -3,
+          elements: [
+            {
+              id: '1',
+              coords: { top: 5, left: 5, right: 5, down: 5 },
+              isVisible: false,
+            },
+          ],
+        });
+      })
+    );
+
+    it(
+      'should calcul down dir',
+      sinon.test(function() {
+        const state = {
+          wrapper: {
+            left: 10,
+            top: 10,
+            right: 20,
+            down: 20,
+            width: 2,
+            height: 2,
+          },
+          marginLeft: 0,
+          marginTop: 50,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          downLimit: 0,
+          rightLimit: 0,
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          rightGap: 0,
+          leftGap: 0,
+          downGap: 0,
+          selectedId: '2',
+        };
+        this.stub(helpers, 'calculateElSpace')
+          .onCall(0)
+          .returns({
+            id: '1',
+            top: 5,
+            left: 20,
+            right: 5,
+            down: 5,
+          })
+          .onCall(1)
+          .returns({
+            id: '0',
+            top: 10,
+            left: 20,
+            right: 10,
+            down: 5,
+          });
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        document.getElementById.withArgs('2').returns({});
+        boundsMargin('1', state, {}).should.eql({
+          marginTop: -3,
+          marginLeft: -3,
+          elements: [
+            {
+              id: '1',
+              coords: { top: 5, left: 5, right: 5, down: 5 },
+              isVisible: false,
+            },
+          ],
+        });
+      })
+    );
+
+    it(
+      'should return same values if props BUT selected id !== next id',
+      sinon.test(function() {
+        const state = {
           wrapper: { left: 10, top: 10, right: 10, down: 10 },
           marginLeft: 0,
           marginTop: 0,
@@ -144,26 +311,9 @@ describe('bounds', () => {
           rightGap: 0,
           leftGap: 0,
           downGap: 0,
-          selectedId: 0,
         };
-        this.stub(helpers, 'calculateElSpace')
-          .onCall(0)
-          .returns({
-            id: '1',
-            top: 5,
-            left: 10,
-            right: 5,
-            down: 5,
-          })
-          .onCall(1)
-          .returns({
-            id: '0',
-            top: 5,
-            left: 15,
-            right: 10,
-            down: 5,
-          });
-        boundsMargin('1', state).should.eql({
+
+        boundsMargin('2', state, {}).should.eql({
           marginTop: 0,
           marginLeft: 0,
           elements: [
@@ -182,7 +332,7 @@ describe('bounds', () => {
     );
 
     it(
-      'should calcul down dir',
+      'should return same values if props & selected id !== next id & current BUT no next element',
       sinon.test(function() {
         const state = {
           wrapper: { left: 10, top: 10, right: 10, down: 10 },
@@ -199,15 +349,12 @@ describe('bounds', () => {
           rightGap: 0,
           leftGap: 0,
           downGap: 0,
+          selectedId: '1',
         };
-        this.stub(helpers, 'calculateElSpace').returns({
-          id: '1',
-          top: 5,
-          left: 5,
-          right: 5,
-          down: 5,
-        });
-        boundsMargin('1', state).should.eql({
+
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        boundsMargin('2', state, {}).should.eql({
           marginTop: 0,
           marginLeft: 0,
           elements: [
@@ -225,49 +372,86 @@ describe('bounds', () => {
       })
     );
 
-    // it(
-    //   'should calcul down dir',
-    //   sinon.test(function () {
-    //     const state = {
-    //       wrapper: { left: 10, top: 10, right: 10, down: 10 },
-    //       marginLeft: 0,
-    //       marginTop: 0,
-    //       elements: [
-    //         { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
-    //       ],
-    //       downLimit: 0,
-    //       rightLimit: 0,
-    //       gap: 0,
-    //       boundedGap: 0,
-    //       topGap: 0,
-    //       rightGap: 0,
-    //       leftGap: 0,
-    //       downGap: 0,
-    //     };
-    //     this.stub(helpers, 'calculateElSpace').returns({
-    //       id: '1',
-    //       top: 5,
-    //       left: 5,
-    //       right: 5,
-    //       down: 5,
-    //     });
-    //     boundsMargin('1', state).should.eql({
-    //       marginTop: 0,
-    //       marginLeft: 0,
-    //       elements: [
-    //         {
-    //           coords: {
-    //             down: 5,
-    //             left: 5,
-    //             right: 5,
-    //             top: 5,
-    //           },
-    //           id: '1',
-    //         },
-    //       ],
-    //     });
-    //   })
-    // );
+    it(
+      'should return same values if props & selected id !== next id & current & next BUT no wrapper element',
+      sinon.test(function() {
+        const state = {
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          downLimit: 0,
+          rightLimit: 0,
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          rightGap: 0,
+          leftGap: 0,
+          downGap: 0,
+          selectedId: '1',
+        };
+
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        document.getElementById.withArgs('2').returns({});
+        boundsMargin('2', state, {}).should.eql({
+          marginTop: 0,
+          marginLeft: 0,
+          elements: [
+            {
+              coords: {
+                down: 5,
+                left: 5,
+                right: 5,
+                top: 5,
+              },
+              id: '1',
+            },
+          ],
+        });
+      })
+    );
+
+    it(
+      'should recompute margin on left if geo === horizontal && !isReachableLeft',
+      sinon.test(function() {
+        const state = {
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          downLimit: 0,
+          rightLimit: 0,
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          rightGap: 0,
+          leftGap: 0,
+          downGap: 0,
+          selectedId: '1',
+        };
+
+        this.stub(document, 'getElementById');
+
+        boundsMargin('2', state, {}).should.eql({
+          marginTop: 0,
+          marginLeft: 0,
+          elements: [
+            {
+              coords: {
+                down: 5,
+                left: 5,
+                right: 5,
+                top: 5,
+              },
+              id: '1',
+            },
+          ],
+        });
+      })
+    );
   });
 
   describe('correctBoundsMargin', () => {
