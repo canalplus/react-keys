@@ -4,6 +4,8 @@ import {
   calculMarginOnRight,
   calculMarginOnDown,
   calculMarginOnTop,
+  correctBoundsMargin,
+  determineGeo,
   isReachableRight,
   isReachableLeft,
   isReachableDown,
@@ -222,6 +224,271 @@ describe('bounds', () => {
         });
       })
     );
+
+    // it(
+    //   'should calcul down dir',
+    //   sinon.test(function () {
+    //     const state = {
+    //       wrapper: { left: 10, top: 10, right: 10, down: 10 },
+    //       marginLeft: 0,
+    //       marginTop: 0,
+    //       elements: [
+    //         { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+    //       ],
+    //       downLimit: 0,
+    //       rightLimit: 0,
+    //       gap: 0,
+    //       boundedGap: 0,
+    //       topGap: 0,
+    //       rightGap: 0,
+    //       leftGap: 0,
+    //       downGap: 0,
+    //     };
+    //     this.stub(helpers, 'calculateElSpace').returns({
+    //       id: '1',
+    //       top: 5,
+    //       left: 5,
+    //       right: 5,
+    //       down: 5,
+    //     });
+    //     boundsMargin('1', state).should.eql({
+    //       marginTop: 0,
+    //       marginLeft: 0,
+    //       elements: [
+    //         {
+    //           coords: {
+    //             down: 5,
+    //             left: 5,
+    //             right: 5,
+    //             top: 5,
+    //           },
+    //           id: '1',
+    //         },
+    //       ],
+    //     });
+    //   })
+    // );
+  });
+
+  describe('correctBoundsMargin', () => {
+    it(
+      'should return updated margin left when needed',
+      sinon.test(function() {
+        const state = {
+          wrapper: { left: 10, top: 10, right: 10, down: 10 },
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          leftGap: 0,
+        };
+
+        const focusedId = '1';
+
+        this.stub(helpers, 'calculateElSpace').returns({
+          id: '1',
+          top: 5,
+          left: 5,
+          right: 5,
+          down: 5,
+        });
+
+        correctBoundsMargin(focusedId, state).should.eql({
+          marginLeft: -5,
+          marginTop: 0,
+        });
+      })
+    );
+
+    it(
+      'should return no updated margin left',
+      sinon.test(function() {
+        const state = {
+          wrapper: { left: 5, top: 10, right: 10, down: 10, width: 100 },
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: 5, left: -0, right: 5, down: 5 } },
+          ],
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          leftGap: 0,
+        };
+
+        const focusedId = '1';
+
+        this.stub(helpers, 'calculateElSpace').returns({
+          id: '1',
+          top: 5,
+          left: -0,
+          right: 5,
+          down: 5,
+        });
+
+        correctBoundsMargin(focusedId, state).should.eql({
+          marginLeft: 0,
+          marginTop: 0,
+        });
+      })
+    );
+
+    it(
+      'should return updated margin top when needed',
+      sinon.test(function() {
+        const state = {
+          wrapper: { height: 10, left: 10, top: 10, right: 10, down: 10 },
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: -50, left: 5, right: 5, down: 5 } },
+          ],
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          leftGap: 0,
+        };
+
+        const focusedId = '1';
+
+        this.stub(helpers, 'calculateElSpace').returns({
+          id: '1',
+          top: -50,
+          left: 5,
+          right: 5,
+          down: 5,
+        });
+
+        correctBoundsMargin(focusedId, state).should.eql({
+          marginLeft: -5,
+          marginTop: 60,
+        });
+      })
+    );
+
+    it(
+      'should return no updated margin top',
+      sinon.test(function() {
+        const state = {
+          wrapper: {
+            height: 200,
+            left: 10,
+            top: 10,
+            right: 10,
+            down: 10,
+            width: 100,
+          },
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          leftGap: 0,
+        };
+
+        const focusedId = '1';
+
+        this.stub(helpers, 'calculateElSpace').returns({
+          id: '1',
+          top: 5,
+          left: 5,
+          right: 5,
+          down: 5,
+        });
+
+        correctBoundsMargin(focusedId, state).should.eql({
+          marginLeft: 0,
+          marginTop: 0,
+        });
+      })
+    );
+  });
+
+  describe('determineGeo', () => {
+    it(
+      'should return horizontal left if current el left > next el left',
+      sinon.test(function() {
+        const current = { left: 10 };
+        const next = { left: 5 };
+
+        determineGeo(current, next).should.eql({
+          horizontal: 'left',
+          vertical: 'equal',
+        });
+      })
+    );
+
+    it(
+      'should return horizontal right if current el left < next el left',
+      sinon.test(function() {
+        const current = { left: 5 };
+        const next = { left: 10 };
+
+        determineGeo(current, next).should.eql({
+          horizontal: 'right',
+          vertical: 'equal',
+        });
+      })
+    );
+
+    it(
+      'should return horizontal equal if current el left === next el left',
+      sinon.test(function() {
+        const current = { left: 10 };
+        const next = { left: 10 };
+
+        determineGeo(current, next).should.eql({
+          horizontal: 'equal',
+          vertical: 'equal',
+        });
+      })
+    );
+
+    it(
+      'should return vertical down if current el top > next el top',
+      sinon.test(function() {
+        const current = { top: 10 };
+        const next = { top: 5 };
+
+        determineGeo(current, next).should.eql({
+          horizontal: 'equal',
+          vertical: 'top',
+        });
+      })
+    );
+
+    it(
+      'should return horizontal right if current el top < next el top',
+      sinon.test(function() {
+        const current = { top: 5 };
+        const next = { top: 10 };
+
+        determineGeo(current, next).should.eql({
+          horizontal: 'equal',
+          vertical: 'down',
+        });
+      })
+    );
+
+    it(
+      'should return horizontal right if current el top === next el top',
+      sinon.test(function() {
+        const current = { top: 10 };
+        const next = { top: 10 };
+
+        determineGeo(current, next).should.eql({
+          horizontal: 'equal',
+          vertical: 'equal',
+        });
+      })
+    );
   });
 
   describe('isReachableTop', () => {
@@ -274,6 +541,12 @@ describe('bounds', () => {
   });
 
   describe('isReachableLeft', () => {
+    it('should have margin left value of 0 when no specified', () => {
+      const selectedId = { left: 35 };
+      const gap = 10;
+      isReachableLeft(selectedId, gap).should.be.true;
+    });
+
     it('should return true if selected left + marginLeft > gap', () => {
       const selectedId = { left: 35 };
       const gap = 10;
@@ -297,6 +570,13 @@ describe('bounds', () => {
   });
 
   describe('isReachableRight', () => {
+    it('should have margin left value of 0 when no specified', () => {
+      const wrapper = { width: 10 };
+      const selectedId = { right: 25 };
+      const gap = 10;
+      isReachableRight(wrapper, selectedId, gap).should.be.false;
+    });
+
     it('should return false if wrapper width < selected right - marginLeft + gap', () => {
       const wrapper = { width: 10 };
       const selectedId = { right: 25 };
@@ -468,9 +748,9 @@ describe('bounds', () => {
       ).should.equal(-45);
     });
 
-    it('should use downGap if downLimit does not exist', () => {
+    it('should use last gap if down + last gap > down limit', () => {
       const wrapper = { height: 5 };
-      const selectedEl = { coords: { down: 10 } };
+      const selectedEl = { coords: { down: 50 } };
       const gap = 45;
       const boundedGap = 0;
       const downLimit = 50;
@@ -482,7 +762,24 @@ describe('bounds', () => {
         downLimit,
         boundedGap,
         downGap
-      ).should.equal(-45);
+      ).should.equal(-50);
+    });
+
+    it('should return down selectedEl coords by default', () => {
+      const wrapper = { height: 0 };
+      const selectedEl = { coords: { down: 10 } };
+      const gap = 0;
+      const boundedGap = 0;
+      const downLimit = 50;
+      const downGap = 0;
+      calculMarginOnDown(
+        wrapper,
+        selectedEl,
+        gap,
+        downLimit,
+        boundedGap,
+        downGap
+      ).should.equal(-10);
     });
   });
 
@@ -571,6 +868,23 @@ describe('bounds', () => {
         rightGap
       ).should.equal(-45);
     });
+
+    it('should use last gap if down + last gap > down limit', () => {
+      const wrapper = { width: 0 };
+      const selectedEl = { coords: { right: 10 } };
+      const gap = 0;
+      const boundedGap = 0;
+      const rightLimit = 50;
+      const rightGap = 50;
+      calculMarginOnRight(
+        wrapper,
+        selectedEl,
+        gap,
+        rightLimit,
+        boundedGap,
+        rightGap
+      ).should.equal(-60);
+    });
   });
 
   describe('calculMarginOnLeft', () => {
@@ -618,6 +932,14 @@ describe('bounds', () => {
       const boundedGap = 0;
       const leftGap = 1;
       calculMarginOnLeft(selectedEl, gap, boundedGap, leftGap).should.equal(-9);
+    });
+
+    it('should take last gap when there is no left', () => {
+      const selectedEl = { left: 10, coords: { left: 10 } };
+      const gap = 20;
+      const boundedGap = 0;
+      const leftGap = 1;
+      calculMarginOnLeft(selectedEl, gap, boundedGap, leftGap).should.equal(0);
     });
   });
 });
