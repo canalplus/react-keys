@@ -28,7 +28,7 @@ export const _getBinders = () => () => {
 
 export const _getCurrentBinder = () => () => {
   ensureState();
-  const { binders, current } = globalStore.getState()[NAME];
+  const { binders, current } = getStore();
   return findBinder(binders, current.binderId);
 };
 
