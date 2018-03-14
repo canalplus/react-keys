@@ -15,6 +15,7 @@ export const ADD_BINDER = `${NAME}/ADD_BINDER`;
 export const MOUNT_BINDER = `${NAME}/MOUNT_BINDER`;
 export const UPDATE_BINDER = `${NAME}/UPDATE_BINDER`;
 export const REMOVE_BINDER = `${NAME}/REMOVE_BINDER`;
+export const RESET_STATE = `${NAME}/RESET_STATE`;
 export const ACTIVE_BINDER = `${NAME}/ACTIVE_BINDER`;
 
 export const UPDATE_PRESS_STATUS = `${NAME}/UPDATE_PRESS_STATUS`;

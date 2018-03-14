@@ -4,10 +4,12 @@ import {
   calculMarginOnRight,
   calculMarginOnDown,
   calculMarginOnTop,
-  isInsideRight,
-  isInsideLeft,
-  isInsideDown,
-  isInsideTop,
+  correctBoundsMargin,
+  determineGeo,
+  isReachableRight,
+  isReachableLeft,
+  isReachableDown,
+  isReachableTop,
   boundsMargin,
 } from '../bounds';
 import * as helpers from '../helpers';
@@ -32,7 +34,7 @@ describe('bounds', () => {
           rightGap: 0,
           leftGap: 0,
           downGap: 0,
-          selectedId: 0,
+          selectedId: '2',
         };
         this.stub(helpers, 'calculateElSpace')
           .onCall(0)
@@ -47,22 +49,21 @@ describe('bounds', () => {
           .returns({
             id: '0',
             top: 5,
-            left: 0,
+            left: -50,
             right: 10,
             down: 5,
           });
-        boundsMargin('1', state).should.eql({
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        document.getElementById.withArgs('2').returns({});
+        boundsMargin('1', state, { test: 'tatatatatat' }).should.eql({
           marginTop: 0,
-          marginLeft: 0,
+          marginLeft: -5,
           elements: [
             {
-              coords: {
-                down: 5,
-                left: 5,
-                right: 5,
-                top: 5,
-              },
               id: '1',
+              coords: { top: 5, left: 5, right: 5, down: 5 },
+              isVisible: false,
             },
           ],
         });
@@ -70,10 +71,10 @@ describe('bounds', () => {
     );
 
     it(
-      'should calcul right dir',
+      'should calcul right dir if geo === right',
       sinon.test(function() {
         const state = {
-          wrapper: { left: 10, top: 10, right: 20, down: 20 },
+          wrapper: { left: 10, top: 10, right: 20, down: 20, width: 2 },
           marginLeft: 0,
           marginTop: 0,
           elements: [
@@ -87,7 +88,7 @@ describe('bounds', () => {
           rightGap: 0,
           leftGap: 0,
           downGap: 0,
-          selectedId: 0,
+          selectedId: '2',
         };
         this.stub(helpers, 'calculateElSpace')
           .onCall(0)
@@ -106,18 +107,71 @@ describe('bounds', () => {
             right: 10,
             down: 5,
           });
-        boundsMargin('1', state).should.eql({
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        document.getElementById.withArgs('2').returns({});
+        boundsMargin('1', state, {}).should.eql({
           marginTop: 0,
-          marginLeft: 0,
+          marginLeft: -3,
           elements: [
             {
-              coords: {
-                down: 5,
-                left: 5,
-                right: 5,
-                top: 5,
-              },
               id: '1',
+              coords: { top: 5, left: 5, right: 5, down: 5 },
+              isVisible: false,
+            },
+          ],
+        });
+      })
+    );
+
+    it(
+      'should calcul right dir if geo === equal',
+      sinon.test(function() {
+        const state = {
+          wrapper: { left: 10, top: 10, right: 20, down: 20, width: 2 },
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          downLimit: 0,
+          rightLimit: 0,
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          rightGap: 0,
+          leftGap: 0,
+          downGap: 0,
+          selectedId: '2',
+        };
+        this.stub(helpers, 'calculateElSpace')
+          .onCall(0)
+          .returns({
+            id: '1',
+            top: 5,
+            left: 20,
+            right: 5,
+            down: 5,
+          })
+          .onCall(1)
+          .returns({
+            id: '0',
+            top: 5,
+            left: 20,
+            right: 10,
+            down: 5,
+          });
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        document.getElementById.withArgs('2').returns({});
+        boundsMargin('1', state, {}).should.eql({
+          marginTop: 0,
+          marginLeft: -3,
+          elements: [
+            {
+              id: '1',
+              coords: { top: 5, left: 5, right: 5, down: 5 },
+              isVisible: false,
             },
           ],
         });
@@ -128,6 +182,121 @@ describe('bounds', () => {
       'should calcul up dir',
       sinon.test(function() {
         const state = {
+          wrapper: { left: 10, top: 10, right: 20, down: 20, width: 2 },
+          marginLeft: -3,
+          marginTop: -50,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          downLimit: 0,
+          rightLimit: 0,
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          rightGap: 0,
+          leftGap: 0,
+          downGap: 0,
+          selectedId: '2',
+        };
+        this.stub(helpers, 'calculateElSpace')
+          .onCall(0)
+          .returns({
+            id: '1',
+            top: 10,
+            left: 20,
+            right: 5,
+            down: 5,
+          })
+          .onCall(1)
+          .returns({
+            id: '0',
+            top: 5,
+            left: 20,
+            right: 10,
+            down: 5,
+          });
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        document.getElementById.withArgs('2').returns({});
+        boundsMargin('1', state, {}).should.eql({
+          marginTop: 0,
+          marginLeft: -3,
+          elements: [
+            {
+              id: '1',
+              coords: { top: 5, left: 5, right: 5, down: 5 },
+              isVisible: false,
+            },
+          ],
+        });
+      })
+    );
+
+    it(
+      'should calcul down dir',
+      sinon.test(function() {
+        const state = {
+          wrapper: {
+            left: 10,
+            top: 10,
+            right: 20,
+            down: 20,
+            width: 2,
+            height: 2,
+          },
+          marginLeft: 0,
+          marginTop: 50,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          downLimit: 0,
+          rightLimit: 0,
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          rightGap: 0,
+          leftGap: 0,
+          downGap: 0,
+          selectedId: '2',
+        };
+        this.stub(helpers, 'calculateElSpace')
+          .onCall(0)
+          .returns({
+            id: '1',
+            top: 5,
+            left: 20,
+            right: 5,
+            down: 5,
+          })
+          .onCall(1)
+          .returns({
+            id: '0',
+            top: 10,
+            left: 20,
+            right: 10,
+            down: 5,
+          });
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        document.getElementById.withArgs('2').returns({});
+        boundsMargin('1', state, {}).should.eql({
+          marginTop: -3,
+          marginLeft: -3,
+          elements: [
+            {
+              id: '1',
+              coords: { top: 5, left: 5, right: 5, down: 5 },
+              isVisible: false,
+            },
+          ],
+        });
+      })
+    );
+
+    it(
+      'should return same values if props BUT selected id !== next id',
+      sinon.test(function() {
+        const state = {
           wrapper: { left: 10, top: 10, right: 10, down: 10 },
           marginLeft: 0,
           marginTop: 0,
@@ -142,26 +311,9 @@ describe('bounds', () => {
           rightGap: 0,
           leftGap: 0,
           downGap: 0,
-          selectedId: 0,
         };
-        this.stub(helpers, 'calculateElSpace')
-          .onCall(0)
-          .returns({
-            id: '1',
-            top: 5,
-            left: 10,
-            right: 5,
-            down: 5,
-          })
-          .onCall(1)
-          .returns({
-            id: '0',
-            top: 5,
-            left: 15,
-            right: 10,
-            down: 5,
-          });
-        boundsMargin('1', state).should.eql({
+
+        boundsMargin('2', state, {}).should.eql({
           marginTop: 0,
           marginLeft: 0,
           elements: [
@@ -180,7 +332,7 @@ describe('bounds', () => {
     );
 
     it(
-      'should calcul down dir',
+      'should return same values if props & selected id !== next id & current BUT no next element',
       sinon.test(function() {
         const state = {
           wrapper: { left: 10, top: 10, right: 10, down: 10 },
@@ -197,15 +349,93 @@ describe('bounds', () => {
           rightGap: 0,
           leftGap: 0,
           downGap: 0,
+          selectedId: '1',
         };
-        this.stub(helpers, 'calculateElSpace').returns({
-          id: '1',
-          top: 5,
-          left: 5,
-          right: 5,
-          down: 5,
+
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        boundsMargin('2', state, {}).should.eql({
+          marginTop: 0,
+          marginLeft: 0,
+          elements: [
+            {
+              coords: {
+                down: 5,
+                left: 5,
+                right: 5,
+                top: 5,
+              },
+              id: '1',
+            },
+          ],
         });
-        boundsMargin('1', state).should.eql({
+      })
+    );
+
+    it(
+      'should return same values if props & selected id !== next id & current & next BUT no wrapper element',
+      sinon.test(function() {
+        const state = {
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          downLimit: 0,
+          rightLimit: 0,
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          rightGap: 0,
+          leftGap: 0,
+          downGap: 0,
+          selectedId: '1',
+        };
+
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('1').returns({});
+        document.getElementById.withArgs('2').returns({});
+        boundsMargin('2', state, {}).should.eql({
+          marginTop: 0,
+          marginLeft: 0,
+          elements: [
+            {
+              coords: {
+                down: 5,
+                left: 5,
+                right: 5,
+                top: 5,
+              },
+              id: '1',
+            },
+          ],
+        });
+      })
+    );
+
+    it(
+      'should recompute margin on left if geo === horizontal && !isReachableLeft',
+      sinon.test(function() {
+        const state = {
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          downLimit: 0,
+          rightLimit: 0,
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          rightGap: 0,
+          leftGap: 0,
+          downGap: 0,
+          selectedId: '1',
+        };
+
+        this.stub(document, 'getElementById');
+
+        boundsMargin('2', state, {}).should.eql({
           marginTop: 0,
           marginLeft: 0,
           elements: [
@@ -224,95 +454,335 @@ describe('bounds', () => {
     );
   });
 
-  describe('isInsideTop', () => {
-    it('should return false if selected top < wrapper top + gap', () => {
-      const wrapper = { top: 10 };
-      const selectedId = { top: 5 };
-      const gap = 10;
-      isInsideTop(wrapper, selectedId, gap).should.be.false;
+  describe('correctBoundsMargin', () => {
+    it(
+      'should return updated margin left when needed',
+      sinon.test(function() {
+        const state = {
+          wrapper: { left: 10, top: 10, right: 10, down: 10 },
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          leftGap: 0,
+        };
+
+        const focusedId = '1';
+
+        this.stub(helpers, 'calculateElSpace').returns({
+          id: '1',
+          top: 5,
+          left: 5,
+          right: 5,
+          down: 5,
+        });
+
+        correctBoundsMargin(focusedId, state).should.eql({
+          marginLeft: -5,
+          marginTop: 0,
+        });
+      })
+    );
+
+    it(
+      'should return no updated margin left',
+      sinon.test(function() {
+        const state = {
+          wrapper: { left: 5, top: 10, right: 10, down: 10, width: 100 },
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: 5, left: -0, right: 5, down: 5 } },
+          ],
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          leftGap: 0,
+        };
+
+        const focusedId = '1';
+
+        this.stub(helpers, 'calculateElSpace').returns({
+          id: '1',
+          top: 5,
+          left: -0,
+          right: 5,
+          down: 5,
+        });
+
+        correctBoundsMargin(focusedId, state).should.eql({
+          marginLeft: 0,
+          marginTop: 0,
+        });
+      })
+    );
+
+    it(
+      'should return updated margin top when needed',
+      sinon.test(function() {
+        const state = {
+          wrapper: { height: 10, left: 10, top: 10, right: 10, down: 10 },
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: -50, left: 5, right: 5, down: 5 } },
+          ],
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          leftGap: 0,
+        };
+
+        const focusedId = '1';
+
+        this.stub(helpers, 'calculateElSpace').returns({
+          id: '1',
+          top: -50,
+          left: 5,
+          right: 5,
+          down: 5,
+        });
+
+        correctBoundsMargin(focusedId, state).should.eql({
+          marginLeft: -5,
+          marginTop: 60,
+        });
+      })
+    );
+
+    it(
+      'should return no updated margin top',
+      sinon.test(function() {
+        const state = {
+          wrapper: {
+            height: 200,
+            left: 10,
+            top: 10,
+            right: 10,
+            down: 10,
+            width: 100,
+          },
+          marginLeft: 0,
+          marginTop: 0,
+          elements: [
+            { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+          ],
+          gap: 0,
+          boundedGap: 0,
+          topGap: 0,
+          leftGap: 0,
+        };
+
+        const focusedId = '1';
+
+        this.stub(helpers, 'calculateElSpace').returns({
+          id: '1',
+          top: 5,
+          left: 5,
+          right: 5,
+          down: 5,
+        });
+
+        correctBoundsMargin(focusedId, state).should.eql({
+          marginLeft: 0,
+          marginTop: 0,
+        });
+      })
+    );
+  });
+
+  describe('determineGeo', () => {
+    it(
+      'should return horizontal left if current el left > next el left',
+      sinon.test(function() {
+        const current = { left: 10 };
+        const next = { left: 5 };
+
+        determineGeo(current, next).should.eql({
+          horizontal: 'left',
+          vertical: 'equal',
+        });
+      })
+    );
+
+    it(
+      'should return horizontal right if current el left < next el left',
+      sinon.test(function() {
+        const current = { left: 5 };
+        const next = { left: 10 };
+
+        determineGeo(current, next).should.eql({
+          horizontal: 'right',
+          vertical: 'equal',
+        });
+      })
+    );
+
+    it(
+      'should return horizontal equal if current el left === next el left',
+      sinon.test(function() {
+        const current = { left: 10 };
+        const next = { left: 10 };
+
+        determineGeo(current, next).should.eql({
+          horizontal: 'equal',
+          vertical: 'equal',
+        });
+      })
+    );
+
+    it(
+      'should return vertical down if current el top > next el top',
+      sinon.test(function() {
+        const current = { top: 10 };
+        const next = { top: 5 };
+
+        determineGeo(current, next).should.eql({
+          horizontal: 'equal',
+          vertical: 'top',
+        });
+      })
+    );
+
+    it(
+      'should return horizontal right if current el top < next el top',
+      sinon.test(function() {
+        const current = { top: 5 };
+        const next = { top: 10 };
+
+        determineGeo(current, next).should.eql({
+          horizontal: 'equal',
+          vertical: 'down',
+        });
+      })
+    );
+
+    it(
+      'should return horizontal right if current el top === next el top',
+      sinon.test(function() {
+        const current = { top: 10 };
+        const next = { top: 10 };
+
+        determineGeo(current, next).should.eql({
+          horizontal: 'equal',
+          vertical: 'equal',
+        });
+      })
+    );
+  });
+
+  describe('isReachableTop', () => {
+    it('should return false if selectedEl.top + marginTop < 0 + gap', () => {
+      const selectedId = { top: 115 };
+      const gap = 120;
+      const marginTop = -15;
+      isReachableTop(selectedId, gap, marginTop).should.be.false;
     });
 
-    it('should return true if selected top > wrapper top + gap', () => {
-      const wrapper = { top: 10 };
-      const selectedId = { top: 15 };
-      const gap = 2;
-      isInsideTop(wrapper, selectedId, gap).should.be.true;
+    it('should return true if selectedEl.top + marginTop > 0 + gap', () => {
+      const selectedId = { top: 115 };
+      const gap = 90;
+      const marginTop = -15;
+      isReachableTop(selectedId, gap, marginTop).should.be.true;
     });
 
-    it('should return true if selected top = wrapper top + gap', () => {
-      const wrapper = { top: 10 };
-      const selectedId = { top: 15 };
-      const gap = 5;
-      isInsideTop(wrapper, selectedId, gap).should.be.true;
+    it('should return true if selectedEl.top + marginTop = 0 + gap', () => {
+      const selectedId = { top: 115 };
+      const gap = 100;
+      const marginTop = -15;
+      isReachableTop(selectedId, gap, marginTop).should.be.true;
     });
   });
 
-  describe('isInsideDown', () => {
-    it('should return false if wrapper down < selectedEl down + gap', () => {
-      const wrapper = { down: 10 };
-      const selectedId = { down: 5 };
+  describe('isReachableDown', () => {
+    it('should return false if wrapper height < selected down + marginTop + gap', () => {
+      const wrapper = { height: 200 };
+      const selectedId = { down: 220 };
       const gap = 10;
-      isInsideDown(wrapper, selectedId, gap).should.be.false;
+      const marginTop = -15;
+      isReachableDown(wrapper, selectedId, gap, marginTop).should.be.false;
     });
 
-    it('should return true if wrapper down > selectedEl down + gap', () => {
-      const wrapper = { down: 20 };
+    it('should return true if wrapper height >= selected down + marginTop + gap', () => {
+      const wrapper = { height: 20 };
       const selectedId = { down: 5 };
       const gap = 10;
-      isInsideDown(wrapper, selectedId, gap).should.be.true;
+      const marginTop = 0;
+      isReachableDown(wrapper, selectedId, gap, marginTop).should.be.true;
     });
 
-    it('should return true if wrapper down = selectedEl down + gap', () => {
-      const wrapper = { down: 15 };
+    it('should return true if wrapper height = selected down + marginTop + gap', () => {
+      const wrapper = { height: 15 };
       const selectedId = { down: 5 };
       const gap = 10;
-      isInsideDown(wrapper, selectedId, gap).should.be.true;
+      const marginTop = 0;
+      isReachableDown(wrapper, selectedId, gap, marginTop).should.be.true;
     });
   });
 
-  describe('isInsideLeft', () => {
-    it('should return false if selectedEl left < wrapper left + gap', () => {
-      const wrapper = { left: 10 };
-      const selectedId = { left: 5 };
+  describe('isReachableLeft', () => {
+    it('should have margin left value of 0 when no specified', () => {
+      const selectedId = { left: 35 };
       const gap = 10;
-      isInsideLeft(wrapper, selectedId, gap).should.be.false;
+      isReachableLeft(selectedId, gap).should.be.true;
     });
 
-    it('should return true if selectedEl left > wrapper left + gap', () => {
-      const wrapper = { left: 10 };
+    it('should return true if selected left + marginLeft > gap', () => {
+      const selectedId = { left: 35 };
+      const gap = 10;
+      const marginLeft = -15;
+      isReachableLeft(selectedId, gap, marginLeft).should.be.true;
+    });
+
+    it('should return false if selected left + marginLeft < gap', () => {
       const selectedId = { left: 25 };
       const gap = 10;
-      isInsideLeft(wrapper, selectedId, gap).should.be.true;
+      const marginLeft = -20;
+      isReachableLeft(selectedId, gap, marginLeft).should.be.false;
     });
 
-    it('should return true if selectedEl left > wrapper left + gap', () => {
-      const wrapper = { left: 10 };
+    it('should return true if selected left + marginLeft = gap', () => {
       const selectedId = { left: 20 };
       const gap = 10;
-      isInsideLeft(wrapper, selectedId, gap).should.be.true;
+      const marginLeft = -10;
+      isReachableLeft(selectedId, gap, marginLeft).should.be.true;
     });
   });
 
-  describe('isInsideRight', () => {
-    it('should return false if wrapper right < selectedEl + gap', () => {
-      const wrapper = { right: 10 };
-      const selectedId = { right: 5 };
+  describe('isReachableRight', () => {
+    it('should have margin left value of 0 when no specified', () => {
+      const wrapper = { width: 10 };
+      const selectedId = { right: 25 };
       const gap = 10;
-      isInsideRight(wrapper, selectedId, gap).should.be.false;
+      isReachableRight(wrapper, selectedId, gap).should.be.false;
     });
 
-    it('should retrun true if wrapper right > selectedEl + gap', () => {
-      const wrapper = { right: 10 };
+    it('should return false if wrapper width < selected right - marginLeft + gap', () => {
+      const wrapper = { width: 10 };
+      const selectedId = { right: 25 };
+      const gap = 10;
+      const marginLeft = -10;
+      isReachableRight(wrapper, selectedId, gap, marginLeft).should.be.false;
+    });
+
+    it('should return true if wrapper width > selected right - marginLeft + gap', () => {
+      const wrapper = { width: 20 };
       const selectedId = { right: 5 };
       const gap = 3;
-      isInsideRight(wrapper, selectedId, gap).should.be.true;
+      const marginLeft = -10;
+      isReachableRight(wrapper, selectedId, gap, marginLeft).should.be.true;
     });
 
-    it('should retrun true if wrapper right = selectedEl + gap', () => {
-      const wrapper = { right: 10 };
+    it('should return true if wrapper width = selected right - marginLeft + gap', () => {
+      const wrapper = { width: 20 };
       const selectedId = { right: 5 };
       const gap = 5;
-      isInsideRight(wrapper, selectedId, gap).should.be.true;
+      const marginLeft = -10;
+      isReachableRight(wrapper, selectedId, gap, marginLeft).should.be.true;
     });
   });
 
@@ -395,7 +865,7 @@ describe('bounds', () => {
 
   describe('calculMarginOnDown', () => {
     it('should return down selectedEl coords by default', () => {
-      const wrapper = { down: 0 };
+      const wrapper = { height: 0 };
       const selectedEl = { coords: { down: 10 } };
       const gap = 0;
       const boundedGap = 0;
@@ -412,7 +882,7 @@ describe('bounds', () => {
     });
 
     it('should minor wrapper from selectedEl coords down', () => {
-      const wrapper = { down: 5 };
+      const wrapper = { height: 5 };
       const selectedEl = { coords: { down: 10 } };
       const gap = 0;
       const boundedGap = 0;
@@ -429,7 +899,7 @@ describe('bounds', () => {
     });
 
     it('should add gap from that', () => {
-      const wrapper = { down: 5 };
+      const wrapper = { height: 5 };
       const selectedEl = { coords: { down: 10 } };
       const gap = 3;
       const boundedGap = 0;
@@ -446,7 +916,7 @@ describe('bounds', () => {
     });
 
     it('should use boundedGap if gap > downLimit', () => {
-      const wrapper = { down: 5 };
+      const wrapper = { height: 5 };
       const selectedEl = { coords: { down: 10 } };
       const gap = 45;
       const boundedGap = 10;
@@ -462,9 +932,9 @@ describe('bounds', () => {
       ).should.equal(-45);
     });
 
-    it('should use downGap if downLimit does not exist', () => {
-      const wrapper = { down: 5 };
-      const selectedEl = { coords: { down: 10 } };
+    it('should use last gap if down + last gap > down limit', () => {
+      const wrapper = { height: 5 };
+      const selectedEl = { coords: { down: 50 } };
       const gap = 45;
       const boundedGap = 0;
       const downLimit = 50;
@@ -476,13 +946,30 @@ describe('bounds', () => {
         downLimit,
         boundedGap,
         downGap
-      ).should.equal(-45);
+      ).should.equal(-50);
+    });
+
+    it('should return down selectedEl coords by default', () => {
+      const wrapper = { height: 0 };
+      const selectedEl = { coords: { down: 10 } };
+      const gap = 0;
+      const boundedGap = 0;
+      const downLimit = 50;
+      const downGap = 0;
+      calculMarginOnDown(
+        wrapper,
+        selectedEl,
+        gap,
+        downLimit,
+        boundedGap,
+        downGap
+      ).should.equal(-10);
     });
   });
 
   describe('calculMarginOnRight', () => {
     it('should return right selectedEl coords by default', () => {
-      const wrapper = { right: 0 };
+      const wrapper = { width: 0 };
       const selectedEl = { coords: { right: 10 } };
       const gap = 0;
       const boundedGap = 0;
@@ -499,7 +986,7 @@ describe('bounds', () => {
     });
 
     it('should minor wrapper right from selectedEl coords right', () => {
-      const wrapper = { right: 5 };
+      const wrapper = { width: 5 };
       const selectedEl = { coords: { right: 10 } };
       const gap = 0;
       const boundedGap = 0;
@@ -516,7 +1003,7 @@ describe('bounds', () => {
     });
 
     it('should add gap from that', () => {
-      const wrapper = { right: 5 };
+      const wrapper = { width: 5 };
       const selectedEl = { coords: { right: 10 } };
       const gap = 2;
       const boundedGap = 0;
@@ -533,7 +1020,7 @@ describe('bounds', () => {
     });
 
     it('should use boundedGap if gap > rightLimit', () => {
-      const wrapper = { right: 5 };
+      const wrapper = { width: 5 };
       const selectedEl = { coords: { right: 10 } };
       const gap = 45;
       const boundedGap = 5;
@@ -550,7 +1037,7 @@ describe('bounds', () => {
     });
 
     it('should use right gap if boundedGap does not exist', () => {
-      const wrapper = { right: 5 };
+      const wrapper = { width: 5 };
       const selectedEl = { coords: { right: 10 } };
       const gap = 45;
       const boundedGap = 0;
@@ -565,82 +1052,78 @@ describe('bounds', () => {
         rightGap
       ).should.equal(-45);
     });
+
+    it('should use last gap if down + last gap > down limit', () => {
+      const wrapper = { width: 0 };
+      const selectedEl = { coords: { right: 10 } };
+      const gap = 0;
+      const boundedGap = 0;
+      const rightLimit = 50;
+      const rightGap = 50;
+      calculMarginOnRight(
+        wrapper,
+        selectedEl,
+        gap,
+        rightLimit,
+        boundedGap,
+        rightGap
+      ).should.equal(-60);
+    });
   });
 
   describe('calculMarginOnLeft', () => {
     it('should return left selectedEl coords by default', () => {
-      const wrapper = { left: 0 };
       const selectedEl = { coords: { left: 10 } };
       const gap = 0;
       const boundedGap = 0;
       const leftGap = 0;
-      calculMarginOnLeft(
-        wrapper,
-        selectedEl,
-        gap,
-        boundedGap,
-        leftGap
-      ).should.equal(-10);
+      calculMarginOnLeft(selectedEl, gap, boundedGap, leftGap).should.equal(
+        -10
+      );
     });
 
     it('should minor wrapper left from selectedEl coords left', () => {
-      const wrapper = { left: 5 };
       const selectedEl = { coords: { left: 10 } };
       const gap = 0;
       const boundedGap = 0;
       const leftGap = 0;
-      calculMarginOnLeft(
-        wrapper,
-        selectedEl,
-        gap,
-        boundedGap,
-        leftGap
-      ).should.equal(-5);
+      calculMarginOnLeft(selectedEl, gap, boundedGap, leftGap).should.equal(
+        -10
+      );
     });
 
     it('should minor gap from that', () => {
-      const wrapper = { left: 5 };
       const selectedEl = { coords: { left: 10 } };
       const gap = 2;
       const boundedGap = 0;
       const leftGap = 0;
-      calculMarginOnLeft(
-        wrapper,
-        selectedEl,
-        gap,
-        boundedGap,
-        leftGap
-      ).should.equal(-3);
+      calculMarginOnLeft(selectedEl, gap, boundedGap, leftGap).should.equal(
+        -10
+      );
     });
 
     it('should take bounded gap when gap is > to marginLeft', () => {
-      const wrapper = { left: 5 };
       const selectedEl = { coords: { left: 10 } };
       const gap = 20;
       const boundedGap = 2;
       const leftGap = 1;
-      calculMarginOnLeft(
-        wrapper,
-        selectedEl,
-        gap,
-        boundedGap,
-        leftGap
-      ).should.equal(0);
+      calculMarginOnLeft(selectedEl, gap, boundedGap, leftGap).should.equal(-8);
     });
 
     it('should take left gap when there is no bounded gap', () => {
-      const wrapper = { left: 5 };
       const selectedEl = { coords: { left: 10 } };
       const gap = 20;
       const boundedGap = 0;
       const leftGap = 1;
-      calculMarginOnLeft(
-        wrapper,
-        selectedEl,
-        gap,
-        boundedGap,
-        leftGap
-      ).should.equal(0);
+      calculMarginOnLeft(selectedEl, gap, boundedGap, leftGap).should.equal(-9);
+    });
+
+    it('should take last gap when there is no left', () => {
+      const selectedEl = { left: 10, coords: { left: 10 } };
+      const gap = 20;
+      const boundedGap = 0;
+      const leftGap = 1;
+      calculMarginOnLeft(selectedEl, gap, boundedGap, leftGap).should.equal(0);
     });
   });
 });

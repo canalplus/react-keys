@@ -27,7 +27,9 @@ class Binder extends Component {
 
   componentDidMount() {
     this.setState({ mounted: true });
-    setTimeout(() => this.state.mounted && mountState.apply(this), 0);
+    setTimeout(() => {
+      this.state.mounted && mountState.apply(this);
+    }, 0);
   }
 
   componentDidUpdate() {

@@ -50,7 +50,25 @@ export function mountState() {
 
 export const updateState = (binder, nextWrapper, nextElements, props) => {
   const { id, visibilityOffset, refreshStrategy } = props;
-  const nextSelection = next(nextElements, binder, refreshStrategy);
+
+  const updatedOptions = {
+    marginLeft: 0,
+    marginTop: 0,
+    offset: visibilityOffset,
+    wrapper: nextWrapper,
+  };
+
+  const oldElements = [...binder.elements];
+  const updatedElements = build(nextElements, updatedOptions);
+  binder.elements = updatedElements;
+
+  const nextSelection = next(
+    nextElements,
+    oldElements,
+    binder,
+    refreshStrategy
+  );
+
   const options = {
     marginLeft: nextSelection.marginLeft,
     marginTop: nextSelection.marginTop,

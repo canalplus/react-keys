@@ -3,6 +3,7 @@ import {
   ADD_BINDER,
   MOUNT_BINDER,
   REMOVE_BINDER,
+  RESET_STATE,
   UPDATE_BINDER,
   UPDATE_PRESS_STATUS,
 } from './actions';
@@ -73,7 +74,7 @@ export function reducer(state = initialKeysSate, action) {
         ...state,
         PRESS: { press: action.press, keyCode: action.keyCode },
       };
-    case 'RESET_STATE':
+    case RESET_STATE:
       return initialKeysSate;
     default:
       return state;

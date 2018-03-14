@@ -1,9 +1,15 @@
+import sinon from 'sinon';
 import { C_UP, C_DOWN, C_LEFT, C_RIGHT } from '../../constants';
 import {
-  hasElementsDiff,
-  calculateNewState,
-  flipflop,
   calculateElSpace,
+  calculateNewState,
+  downLimit,
+  hasElementsDiff,
+  hasWrapperDiff,
+  getCurrentChildren,
+  getDomElement,
+  flipflop,
+  rightLimit,
 } from '../helpers';
 
 describe('helpers.js', () => {
@@ -11,19 +17,102 @@ describe('helpers.js', () => {
     it('should return right and bottom values', () => {
       const el = {
         id: 'C+',
-        getBoundingClientRect: () => {
-          return {
-            left: 10,
-            top: 20,
-            width: 30,
-            height: 40,
-          };
-        },
+        offsetLeft: 10,
+        offsetTop: 20,
+        offsetWidth: 30,
+        offsetHeight: 40,
       };
       calculateElSpace(el).id.should.equal('C+');
       calculateElSpace(el).down.should.equal(60);
       calculateElSpace(el).right.should.equal(40);
     });
+
+    it('should return undefined if no el passed', () => {
+      const el = null;
+      (calculateElSpace(el) === undefined).should.be.true;
+    });
+  });
+  describe('downLimit', () => {
+    it('should return right and bottom values', () => {
+      const elements = [
+        {
+          id: '1',
+          coords: {
+            down: 10,
+          },
+        },
+        {
+          id: '2',
+          coords: {
+            down: 20,
+          },
+        },
+        {
+          id: '3',
+          coords: {
+            down: 30,
+          },
+        },
+        {
+          id: '4',
+          coords: {
+            down: 40,
+          },
+        },
+      ];
+      downLimit(elements).should.equal(40);
+    });
+  });
+  describe('rightLimit', () => {
+    it('should return right and bottom values', () => {
+      const elements = [
+        {
+          id: '1',
+          coords: {
+            right: 10,
+          },
+        },
+        {
+          id: '2',
+          coords: {
+            right: 20,
+          },
+        },
+        {
+          id: '3',
+          coords: {
+            right: 30,
+          },
+        },
+        {
+          id: '4',
+          coords: {
+            right: 40,
+          },
+        },
+      ];
+      rightLimit(elements).should.equal(40);
+    });
+  });
+  describe('getCurrentChildren', () => {
+    it('should return current children', () => {
+      const dom = {
+        querySelectorAll: () => ['batman'],
+      };
+
+      getCurrentChildren(dom).should.eql(['batman']);
+    });
+  });
+  describe('getDomElement', () => {
+    it(
+      'should return dom element',
+      sinon.test(function() {
+        this.stub(document, 'getElementById');
+        document.getElementById.withArgs('spiderman').returns({});
+
+        getDomElement('spiderman').should.eql({});
+      })
+    );
   });
   describe('hasElementsDiff', () => {
     it('should return false if nextEls is empty', () => {
@@ -61,6 +150,119 @@ describe('helpers.js', () => {
       const prevEls = [{ id: '2' }, { id: '4' }, { id: '5' }];
       hasElementsDiff(nextEls, prevEls).should.be.true;
     });
+
+    it('should return false when ids are differents and are as props', () => {
+      const nextEls = [
+        { props: { id: '2' } },
+        { props: { id: '3' } },
+        { props: { id: '5' } },
+      ];
+      const prevEls = [
+        { props: { id: '2' } },
+        { props: { id: '4' } },
+        { props: { id: '5' } },
+      ];
+      hasElementsDiff(nextEls, prevEls).should.be.true;
+    });
+  });
+  describe('hasWrapperDiff', () => {
+    it('should return false if no wrapper', () => {
+      hasWrapperDiff(undefined, undefined).should.be.false;
+    });
+    it('should return false if direction === horizontal, then prev & next wrappers have same width - height - left', () => {
+      const nextWrapper = {
+        left: 10,
+        height: 50,
+        width: 50,
+      };
+
+      const prevWrapper = {
+        left: 10,
+        height: 50,
+        width: 50,
+      };
+
+      hasWrapperDiff(nextWrapper, prevWrapper, 'horizontal').should.be.false;
+    });
+    it('should return true if direction === horizontal, then prev & next wrappers have different width - height - left', () => {
+      const nextWrapper = {
+        left: 10,
+        height: 50,
+        width: 50,
+      };
+
+      const prevWrapper = {
+        left: 10,
+        height: 50,
+        width: 40,
+      };
+
+      hasWrapperDiff(nextWrapper, prevWrapper, 'horizontal').should.be.true;
+    });
+    it('should return false if direction === vertical, then prev & next wrappers have same width - height - left', () => {
+      const nextWrapper = {
+        left: 10,
+        height: 50,
+        width: 50,
+      };
+
+      const prevWrapper = {
+        left: 10,
+        height: 50,
+        width: 50,
+      };
+
+      hasWrapperDiff(nextWrapper, prevWrapper, 'vertical').should.be.false;
+    });
+    it('should return true if direction === vertical, then prev & next wrappers have different width - height - left', () => {
+      const nextWrapper = {
+        left: 10,
+        height: 50,
+        width: 50,
+      };
+
+      const prevWrapper = {
+        left: 10,
+        height: 30,
+        width: 50,
+      };
+
+      hasWrapperDiff(nextWrapper, prevWrapper, 'vertical').should.be.true;
+    });
+    it('should return false if no direction provided, then prev & next wrappers have same width - height - left', () => {
+      const nextWrapper = {
+        top: 0,
+        left: 10,
+        height: 50,
+        width: 50,
+      };
+
+      const prevWrapper = {
+        top: 0,
+        left: 10,
+        height: 50,
+        width: 50,
+      };
+
+      hasWrapperDiff(nextWrapper, prevWrapper).should.be.false;
+    });
+    it('should return false if no direction provided, then prev & next wrappers have different width - height - top - left', () => {
+      const nextWrapper = {
+        top: 10,
+        left: 5,
+        height: 30,
+        width: 40,
+      };
+
+      const prevWrapper = {
+        top: 0,
+        left: 10,
+        height: 50,
+        width: 50,
+      };
+
+      hasWrapperDiff(nextWrapper, prevWrapper).should.be.true;
+    });
   });
   describe('flipflop', () => {
     it('should flipflop from down to up', () => {
@@ -89,6 +291,15 @@ describe('helpers.js', () => {
       response.prevDir.should.equal(C_DOWN);
       response.nextEl.should.equal(prevEl);
       response.prevEl.should.equal(nextEl);
+    });
+    it('should flipflop from up to down when prevDir isnt C_UP', () => {
+      const nextEl = { id: 2 };
+      const prevEl = { id: 1 };
+      const response = flipflop(C_DOWN, nextEl, prevEl, C_LEFT);
+      response.hasMoved.should.be.false;
+      response.prevDir.should.equal(C_LEFT);
+      response.nextEl.should.equal(nextEl);
+      response.prevEl.should.equal(prevEl);
     });
     it('should do nothing when not a flipflop from up', () => {
       const nextEl = { id: 2 };
@@ -132,6 +343,15 @@ describe('helpers.js', () => {
       const response = flipflop(C_UP, nextEl, prevEl, C_RIGHT);
       response.hasMoved.should.be.false;
       response.prevDir.should.equal(C_RIGHT);
+      response.nextEl.should.equal(nextEl);
+      response.prevEl.should.equal(prevEl);
+    });
+    it('should do nothing when no direction', () => {
+      const nextEl = { id: 2 };
+      const prevEl = { id: 1 };
+      const response = flipflop(undefined, nextEl, prevEl, undefined);
+      response.hasMoved.should.be.false;
+      (response.prevDir === undefined).should.be.true;
       response.nextEl.should.equal(nextEl);
       response.prevEl.should.equal(prevEl);
     });
