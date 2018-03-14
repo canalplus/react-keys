@@ -9,6 +9,7 @@ import {
   isBinderShouldMount,
   mountBinder,
   computeRemoveBinder,
+  computeResetBinder,
   removeBinder,
   hasMountedBinder,
   mountfreshestBinder,
@@ -223,6 +224,57 @@ describe('redux/helper.js', () => {
       ]);
     });
   });
+  describe('computeResetBinder', () => {
+    it('should return updated bounds', () => {
+      const state = {
+        wrapper: { left: 10, top: 10, right: 10, down: 10 },
+        marginLeft: 0,
+        marginTop: 0,
+        elements: [{ id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } }],
+        downLimit: 0,
+        rightLimit: 0,
+        gap: 0,
+        boundedGap: 0,
+        topGap: 0,
+        rightGap: 0,
+        leftGap: 0,
+        downGap: 0,
+        selectedId: '2',
+      };
+
+      computeResetBinder(state, 'xoxo', '1', false).should.eql({
+        id: 'xoxo',
+        selectedId: '1',
+        hasMoved: true,
+        prevEl: undefined,
+        nextEl: { id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } },
+        prevDir: null,
+        elements: [{ id: '1', coords: { top: 5, left: 5, right: 5, down: 5 } }],
+        marginLeft: 0,
+        marginTop: 0,
+      });
+    });
+    it('should return undefined if no elements', () => {
+      const state = {
+        wrapper: { left: 10, top: 10, right: 10, down: 10 },
+        marginLeft: 0,
+        marginTop: 0,
+        elements: [],
+        downLimit: 0,
+        rightLimit: 0,
+        gap: 0,
+        boundedGap: 0,
+        topGap: 0,
+        rightGap: 0,
+        leftGap: 0,
+        downGap: 0,
+        selectedId: '2',
+      };
+
+      (computeResetBinder(state, 'xoxo', 'xixi', false) === undefined).should.be
+        .true;
+    });
+  });
   describe('removeBinder', () => {
     it('should remove binder', () => {
       const binders = [{ id: '1', mounted: true }, { id: '2', mounted: false }];
@@ -293,6 +345,14 @@ describe('redux/helper.js', () => {
           sleep: false,
         },
       ]);
+    });
+    it('should return same binders if no binders are sleeping', () => {
+      const binders = [
+        { id: '1', mounted: false, sleep: true, mountedTime: 10 },
+        { id: '2', mounted: false, sleep: true, mountedTime: 2 },
+      ];
+      const result = mountfreshestBinder(binders);
+      result.should.eql(binders);
     });
     it('should priorize once mounted binder', () => {
       const binders = [
