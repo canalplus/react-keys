@@ -23,6 +23,7 @@ export const propTypes = {
   onUpExit: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   onEnter: PropTypes.func,
   updateIndex: PropTypes.bool,
+  targetIndexScrollPosition: PropTypes.number,
 };
 
 export const defaultProps = {

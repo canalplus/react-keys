@@ -64,6 +64,12 @@ export const _getBinderMarginTop = id => () => {
   return binder ? binder.marginTop : 0;
 };
 
+export const _getCarouselTargetIndexScrollPosition = id => () => {
+  ensureState();
+  const binder = findBinder(getBinders(), id);
+  return binder && binder.targetIndexScrollPosition;
+};
+
 export const _isBinderActive = id => () => {
   ensureState();
   const binder = findBinder(getBinders(), id);

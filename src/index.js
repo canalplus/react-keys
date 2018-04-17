@@ -19,6 +19,7 @@ import {
   _getBinderMarginLeft,
   _getBinderMarginTop,
   _getBinderSelectedId,
+  _getCarouselTargetIndexScrollPosition,
   _getCurrentSelectedId,
   _getCurrentBinder,
   _getKeyCode,
@@ -45,6 +46,7 @@ export const getBinders = _getBinders;
 export const getBinderMarginLeft = _getBinderMarginLeft;
 export const getBinderMarginTop = _getBinderMarginTop;
 export const getBinderSelectedId = _getBinderSelectedId;
+export const getCarouselTargetIndexScrollPosition = _getCarouselTargetIndexScrollPosition;
 export const getCurrentSelectedId = _getCurrentSelectedId;
 export const getCurrentBinder = _getCurrentBinder;
 export const getCurrentBinderId = _getCurrentBinderId;
