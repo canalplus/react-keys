@@ -9,6 +9,7 @@ module.exports = {
     library: 'ReactKeys',
     libraryTarget: 'umd',
   },
+  mode: 'production',
   module: {
     rules: [
       { test: /\.(js|jsx)$/, exclude: /node_modules/, use: 'babel-loader' },
