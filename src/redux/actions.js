@@ -108,6 +108,7 @@ export function updatePressStatus(press, keyCode = null) {
 
 export function execCb(func, nextEl, _this) {
   if (!func) return;
+  if (Array.isArray(nextEl)) return func.apply(_this, nextEl);
   func.call(_this, nextEl || {});
 }
 

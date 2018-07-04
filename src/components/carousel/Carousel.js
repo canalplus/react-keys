@@ -33,6 +33,7 @@ class Carousel extends Component {
         props.speed
       ));
     this.state = { cursor: props.index, elements: [] };
+    this.leftMove = false;
   }
 
   componentWillMount() {
@@ -65,7 +66,9 @@ class Carousel extends Component {
       return returnValue;
     }
     let inc = 1;
-    while (returnValue.length <= this.props.size + 4) {
+    const { navigation, size } = this.props;
+    const _size = navigation === NAVIGATION_BOUND ? size + 2 : size + 4;
+    while (returnValue.length <= _size) {
       const addedValues = returnValue.map(child => {
         const props = {
           ...child.props,
@@ -97,10 +100,12 @@ class Carousel extends Component {
       switch (keyCode) {
         case userConfig.left:
           if (!circular && cursor === 0) return;
+          this.leftMove = true;
           this.performAction(getPrev(children.length, cursor));
           break;
         case userConfig.right:
           if (!circular && cursor === children.length - 1) return;
+          this.leftMove = false;
           this.performAction(getNext(children.length, cursor));
           break;
         case userConfig.down:
@@ -118,10 +123,12 @@ class Carousel extends Component {
   }
 
   isLeftMove(currentCursor, nextCursor, children) {
-    return (
+    if (this.leftMove && currentCursor === nextCursor) return true;
+    if (!this.leftMove && currentCursor === nextCursor) return false;
+    this.leftMove =
       nextCursor < currentCursor ||
-      (currentCursor === 0 && nextCursor === children.length - 1)
-    );
+      (currentCursor === 0 && nextCursor === children.length - 1);
+    return this.leftMove;
   }
 
   performAction(cursor) {
@@ -130,19 +137,20 @@ class Carousel extends Component {
     clearTimeout(this.timeout);
     this.updateState(cursor, children);
     this.movingCountDown();
-    execCb(onChange, this.selectedId, this);
+    execCb(onChange, [this.selectedId, cursor], this);
   }
 
   updateState(cursor, children) {
     const computedChildren = this.computeChildren(children);
-    const { id, size, circular } = this.props;
+    const { id, size, circular, navigation } = this.props;
 
     if (!computedChildren[cursor]) {
       return;
     }
     this.selectedId = computedChildren[cursor].props.id;
     _updateBinder({ id, selectedId: this.selectedId, cursor, moving: true });
-    const elements = build(computedChildren, size + 4, cursor, circular);
+    const _size = navigation === NAVIGATION_BOUND ? size + 2 : size + 4;
+    const elements = build(computedChildren, _size, cursor, circular);
     this.setState({
       cursor,
       elements,
@@ -178,7 +186,7 @@ class Carousel extends Component {
       gaps ||
       elements.map(
         (el, inc) =>
-          (inc - (navigation === NAVIGATION_BOUND ? size - 1 : 2)) * elWidth +
+          (inc - (navigation === NAVIGATION_BOUND ? size - 2 : 2)) * elWidth +
           gap
       );
 
