@@ -44,7 +44,7 @@ const store = createStore(
 //TWO
 keysInit({ store: store }); // add the store there
 
-//TRHEE
+//THREE
 const Mosaic = connect(() => getCurrentBinderId()())(PureMosaic); // listen every changes of your mosaic like that
 ```
 
