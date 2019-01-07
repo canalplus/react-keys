@@ -14,7 +14,7 @@ The need a fast way to bind keys to a react-powered UI with awesome redux for st
 
 `react-keys` requires **React 15 or later**
 
-`npm install reacy-keys` or `yarn add react-keys`
+`npm install react-keys` or `yarn add react-keys`
 
 ## Dependencies
 
