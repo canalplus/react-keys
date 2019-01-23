@@ -13,7 +13,7 @@ class Binder extends Component {
   constructor(props) {
     super(props);
     this.innerProps = compatibility(props);
-    this.state = { mounted: false };
+    this.mounted = false;
   }
 
   componentWillMount() {
@@ -26,9 +26,9 @@ class Binder extends Component {
   }
 
   componentDidMount() {
-    this.setState({ mounted: true });
+    this.mounted = true;
     setTimeout(() => {
-      this.state.mounted && mountState.apply(this);
+      this.mounted && mountState.apply(this);
     }, 0);
   }
 
@@ -37,7 +37,7 @@ class Binder extends Component {
   }
 
   componentWillUnmount() {
-    this.setState({ mounted: false });
+    this.mounted = false;
     this.listenerId = removeListener(this.listenerId);
     _removeBinder(this.innerProps.id);
   }
