@@ -29,7 +29,7 @@ yarn add redux
 # Link it with Redux (Otherwise it doesn't work !)
 
 ```javascript
-import { keysInit, keyReducer, getCurrentBinderId } from 'react-keys';
+import { keysInit, keysReducer, getCurrentBinderId } from 'react-keys';
 import { createStore, combineReducers } from 'redux';
 import { connect } from 'react-redux';
 import PureMosaic from '../PureMosaic'; // Pure React Component
